@@ -1,0 +1,1 @@
+{"version":3,"file":"VersionPublishingPolicy.js","sourceRoot":"","sources":["../../../../../src/modules/ontology/domain/policies/VersionPublishingPolicy.ts"],"names":[],"mappings":";;;AACA,uDAAoD;AAEpD,MAAa,uBAAuB;IAC3B,QAAQ,CAAC,OAAwB;QACtC,IAAI,OAAO,CAAC,WAAW,EAAE,CAAC;YACxB,MAAM,IAAI,yBAAW,CAAC,6CAA6C,CAAC,CAAC;QACvE,CAAC;IACH,CAAC;CACF;AAND,0DAMC"}

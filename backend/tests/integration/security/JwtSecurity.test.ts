@@ -10,7 +10,7 @@ jest.mock('@config/app', () => ({
 
 describe('JWT Security', () => {
   it('should throw error for expired token', async () => {
-    const jwtProvider = new JwtProvider('super-secret-key-that-is-long-enough-32-chars');
+    const jwtProvider = new JwtProvider();
     const token = jwtProvider.generateToken('user123');
     
     // Simulate expiry delay

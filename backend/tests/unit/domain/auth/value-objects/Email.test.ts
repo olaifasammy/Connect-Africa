@@ -1,5 +1,5 @@
-import { Email } from '@domain/auth/value-objects/Email';
-import { InvalidEmailError } from '@domain/auth/errors/UserErrors';
+import { Email } from '@modules/auth/domain/value-objects/Email';
+import { InvalidEmailError } from '@modules/auth/domain/errors/UserErrors';
 
 describe('Email Value Object', () => {
   it('should create a valid email', () => {

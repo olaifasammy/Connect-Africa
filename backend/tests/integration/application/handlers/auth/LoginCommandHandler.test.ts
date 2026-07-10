@@ -1,9 +1,9 @@
 import 'reflect-metadata';
-import { LoginCommandHandler } from '@application/handlers/auth/LoginCommandHandler';
-import { User } from '@domain/auth/entities/User';
-import { Email } from '@domain/auth/value-objects/Email';
-import { PasswordHash } from '@domain/auth/value-objects/PasswordHash';
-import { UniqueEntityId } from '@domain/shared/UniqueEntityId';
+import { LoginCommandHandler } from '@modules/auth/application/handlers/LoginCommandHandler';
+import { User } from '@modules/auth/domain/entities/User';
+import { Email } from '@modules/auth/domain/value-objects/Email';
+import { PasswordHash } from '@modules/auth/domain/value-objects/PasswordHash';
+import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 
 describe('LoginCommandHandler', () => {
   const mockUserRepo = {
@@ -14,7 +14,21 @@ describe('LoginCommandHandler', () => {
   const mockHasher = { hash: jest.fn(), compare: jest.fn() };
   const mockJwt = { generateToken: jest.fn(), verifyToken: jest.fn() };
 
-  const handler = new LoginCommandHandler(mockUserRepo as any, mockHasher as any, mockJwt as any);
+  const mockEventBus = {
+    publish: jest.fn(),
+  };
+  const mockAuditRepository = {
+    save: jest.fn(),
+    log: jest.fn(),
+  };
+  
+  const handler = new LoginCommandHandler(
+    mockUserRepo as any,
+    mockHasher as any,
+    mockJwt as any,
+    mockAuditRepository as any,
+    mockEventBus as any,
+  );
 
   it('should return token for valid credentials', async () => {
     const user = new User({ email: new Email('test@test.com'), passwordHash: new PasswordHash('hash') });

@@ -1,0 +1,1 @@
+{"version":3,"file":"SlugGenerationService.js","sourceRoot":"","sources":["../../../../../src/modules/entity/domain/services/SlugGenerationService.ts"],"names":[],"mappings":";;;AAGA,MAAa,qBAAqB;IAChC,QAAQ,CAAC,IAAgB;QACvB,OAAO,IAAI,CAAC,KAAK;aACd,WAAW,EAAE;aACb,OAAO,CAAC,aAAa,EAAE,GAAG,CAAC;aAC3B,OAAO,CAAC,WAAW,EAAE,EAAE,CAAC,CAAC;IAC9B,CAAC;CACF;AAPD,sDAOC"}

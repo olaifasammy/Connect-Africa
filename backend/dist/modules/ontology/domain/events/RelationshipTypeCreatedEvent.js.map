@@ -1,0 +1,1 @@
+{"version":3,"file":"RelationshipTypeCreatedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/ontology/domain/events/RelationshipTypeCreatedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,4BAA6B,SAAQ,yBAAW;IAC/B;IAA5B,YAA4B,kBAAkC;QAC5D,KAAK,CAAC,kBAAkB,CAAC,CAAC;QADA,uBAAkB,GAAlB,kBAAkB,CAAgB;IAE9D,CAAC;CACF;AAJD,oEAIC"}

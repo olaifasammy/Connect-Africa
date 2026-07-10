@@ -1,0 +1,1 @@
+{"version":3,"file":"OwnershipPolicy.js","sourceRoot":"","sources":["../../../../../../src/modules/auth/domain/policies/rbac/OwnershipPolicy.ts"],"names":[],"mappings":";;;AAEA,MAAa,eAAe;IAC1B,MAAM,CAAC,OAAO,CAAC,IAAU,EAAE,eAAuB;QAChD,OAAO,IAAI,CAAC,EAAE,CAAC,QAAQ,EAAE,KAAK,eAAe,CAAC;IAChD,CAAC;CACF;AAJD,0CAIC"}

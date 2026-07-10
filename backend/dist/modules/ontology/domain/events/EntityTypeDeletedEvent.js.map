@@ -1,0 +1,1 @@
+{"version":3,"file":"EntityTypeDeletedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/ontology/domain/events/EntityTypeDeletedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,sBAAuB,SAAQ,yBAAW;IACzB;IAA5B,YAA4B,YAA4B;QACtD,KAAK,CAAC,YAAY,CAAC,CAAC;QADM,iBAAY,GAAZ,YAAY,CAAgB;IAExD,CAAC;CACF;AAJD,wDAIC"}

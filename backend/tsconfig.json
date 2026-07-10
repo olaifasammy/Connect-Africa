@@ -11,10 +11,11 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
+      "@modules/*": ["src/modules/*"],
       "@application/*": ["src/application/*"],
-      "@domain/*": ["src/domain/*"],
       "@infrastructure/*": ["src/infrastructure/*"],
       "@interfaces/*": ["src/interfaces/*"],
+      "@domain/*": ["src/domain/*"],
       "@shared/*": ["src/shared/*"],
       "@config/*": ["src/config/*"],
       "@bootstrap/*": ["src/bootstrap/*"],

@@ -1,0 +1,1 @@
+{"version":3,"file":"EntityVersionCreatedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/entity/domain/events/EntityVersionCreatedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,yBAA0B,SAAQ,yBAAW;IAC5B;IAA5B,YAA4B,OAAsB;QAChD,KAAK,CAAC,OAAO,CAAC,EAAE,CAAC,CAAC;QADQ,YAAO,GAAP,OAAO,CAAe;IAElD,CAAC;CACF;AAJD,8DAIC"}

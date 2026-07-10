@@ -1,4 +1,4 @@
-import { PasswordPolicy } from '@domain/auth/policies/PasswordPolicy';
+import { PasswordPolicy } from '@modules/auth/domain/policies/PasswordPolicy';
 
 describe('PasswordPolicy', () => {
   it('should accept strong password', () => {

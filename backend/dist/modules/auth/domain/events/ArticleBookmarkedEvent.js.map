@@ -1,0 +1,1 @@
+{"version":3,"file":"ArticleBookmarkedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/auth/domain/events/ArticleBookmarkedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,sBAAuB,SAAQ,yBAAW;IACzB;IAAwC;IAApE,YAA4B,MAAsB,EAAkB,SAAyB;QAC3F,KAAK,CAAC,MAAM,CAAC,CAAC;QADY,WAAM,GAAN,MAAM,CAAgB;QAAkB,cAAS,GAAT,SAAS,CAAgB;IAE7F,CAAC;CACF;AAJD,wDAIC"}

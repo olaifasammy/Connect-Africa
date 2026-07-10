@@ -1,0 +1,1 @@
+{"version":3,"file":"OntologyPublishedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/ontology/domain/events/OntologyPublishedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,sBAAuB,SAAQ,yBAAW;IACzB;IAA5B,YAA4B,UAAsB;QAChD,KAAK,CAAC,UAAU,CAAC,CAAC;QADQ,eAAU,GAAV,UAAU,CAAY;IAElD,CAAC;CACF;AAJD,wDAIC"}

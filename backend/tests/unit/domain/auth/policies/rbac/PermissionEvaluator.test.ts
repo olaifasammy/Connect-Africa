@@ -1,7 +1,7 @@
-import { PermissionEvaluator } from '@domain/auth/policies/rbac/PermissionEvaluator';
-import { Roles } from '@domain/auth/policies/rbac/Role';
-import { Permission } from '@domain/auth/policies/rbac/Permissions';
-import { AuthenticationError } from '@domain/auth/errors/AuthErrors';
+import { PermissionEvaluator } from '@modules/auth/domain/policies/rbac/PermissionEvaluator';
+import { Roles } from '@modules/auth/domain/policies/rbac/Role';
+import { Permission } from '@modules/auth/domain/policies/rbac/Permissions';
+import { AuthenticationError } from '@modules/auth/domain/errors/AuthErrors';
 
 describe('PermissionEvaluator', () => {
   it('should allow authorized role', () => {

@@ -1,0 +1,1 @@
+{"version":3,"file":"OntologyVersionCreatedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/ontology/domain/events/OntologyVersionCreatedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,2BAA4B,SAAQ,yBAAW;IAC9B;IAA5B,YAA4B,iBAAiC;QAC3D,KAAK,CAAC,iBAAiB,CAAC,CAAC;QADC,sBAAiB,GAAjB,iBAAiB,CAAgB;IAE7D,CAAC;CACF;AAJD,kEAIC"}

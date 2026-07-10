@@ -1,0 +1,7 @@
+.featured { padding: 2rem 0; }
+.featured h2 { font-size: 1.5rem; font-weight: bold; margin-bottom: 1.5rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.card { padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; background-color: #fff; transition: shadow 0.2s; }
+.card:hover { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+.card h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: #1f2937; }
+.card p { font-size: 0.875rem; color: #4b5563; }

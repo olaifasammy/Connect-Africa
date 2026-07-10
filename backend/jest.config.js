@@ -1,13 +1,23 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  rootDir: './src',
+  rootDir: '.',
+  roots: ['<rootDir>/src', '<rootDir>/tests'],
+  setupFiles: ['<rootDir>/tests/setup.ts'],
+
   moduleNameMapper: {
-    '^@domain/(.*)$': '<rootDir>/domain/$1',
-    '^@application/(.*)$': '<rootDir>/application/$1',
-    '^@infrastructure/(.*)$': '<rootDir>/infrastructure/$1',
-    '^@interfaces/(.*)$': '<rootDir>/interfaces/$1',
-    '^@shared/(.*)$': '<rootDir>/shared/$1',
-    '^@config/(.*)$': '<rootDir>/config/$1',
+    '^@modules/(.*)$': '<rootDir>/src/modules/$1',
+    '^@domain/shared/(.*)$': '<rootDir>/src/shared/domain/$1',
+    '^@application/(.*)$': '<rootDir>/src/application/$1',
+    '^@domain/(.*)$': '<rootDir>/src/domain/$1',
+    '^@infrastructure/(.*)$': '<rootDir>/src/infrastructure/$1',
+    '^@interfaces/(.*)$': '<rootDir>/src/interfaces/$1',
+    '^@shared/(.*)$': '<rootDir>/src/shared/$1',
+    '^@config/(.*)$': '<rootDir>/src/config/$1',
+    '^@bootstrap/(.*)$': '<rootDir>/src/bootstrap/$1',
+    '^@workers/(.*)$': '<rootDir>/src/workers/$1',
+    '^@types/(.*)$': '<rootDir>/src/types/$1'
   },
+
+  transformIgnorePatterns: ['/node_modules/']
 };

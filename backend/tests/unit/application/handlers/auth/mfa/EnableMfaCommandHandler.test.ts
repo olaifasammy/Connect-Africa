@@ -1,4 +1,4 @@
-import { EnableMfaCommandHandler } from '@application/handlers/auth/mfa/EnableMfaCommandHandler';
+import { EnableMfaCommandHandler } from '@modules/auth/application/handlers/mfa/EnableMfaCommandHandler';
 
 describe('EnableMfaCommandHandler', () => {
   it('should generate MFA secret', async () => {

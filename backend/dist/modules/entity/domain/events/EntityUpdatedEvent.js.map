@@ -1,0 +1,1 @@
+{"version":3,"file":"EntityUpdatedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/entity/domain/events/EntityUpdatedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,kBAAmB,SAAQ,yBAAW;IACrB;IAA5B,YAA4B,MAAc;QACxC,KAAK,CAAC,MAAM,CAAC,EAAE,CAAC,CAAC;QADS,WAAM,GAAN,MAAM,CAAQ;IAE1C,CAAC;CACF;AAJD,gDAIC"}

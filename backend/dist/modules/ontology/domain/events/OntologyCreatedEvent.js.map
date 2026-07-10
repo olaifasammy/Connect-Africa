@@ -1,0 +1,1 @@
+{"version":3,"file":"OntologyCreatedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/ontology/domain/events/OntologyCreatedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,oBAAqB,SAAQ,yBAAW;IACvB;IAAwC;IAApE,YAA4B,UAAsB,EAAkB,IAAY;QAC9E,KAAK,CAAC,UAAU,CAAC,CAAC;QADQ,eAAU,GAAV,UAAU,CAAY;QAAkB,SAAI,GAAJ,IAAI,CAAQ;IAEhF,CAAC;CACF;AAJD,oDAIC"}
