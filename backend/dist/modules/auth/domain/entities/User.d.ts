@@ -13,4 +13,5 @@ export declare class User extends AggregateRoot<UserProps> {
     get passwordHash(): PasswordHash;
     get isActive(): boolean;
     activate(): void;
+    ban(): void;
 }

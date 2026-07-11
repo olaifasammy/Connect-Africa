@@ -1,0 +1,1 @@
+{"version":3,"file":"PlaceholderMentionExtractionService.js","sourceRoot":"","sources":["../../../../../src/modules/article/infrastructure/services/PlaceholderMentionExtractionService.ts"],"names":[],"mappings":";;;AAMA,MAAa,mCAAmC;IAC9C,2DAA2D;IAC3D,KAAK,CAAC,eAAe,CAAC,OAAe;QACnC,OAAO,CAAC,IAAI,CAAC,8FAA8F,CAAC,CAAC;QAC7G,OAAO,EAAE,CAAC;IACZ,CAAC;CACF;AAND,kFAMC"}

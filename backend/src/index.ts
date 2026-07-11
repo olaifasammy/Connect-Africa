@@ -4,17 +4,35 @@ import { appConfig } from '@config/app';
 import { logger } from '@shared/logger/Logger';
 import { BootstrapService } from '@bootstrap/startup/BootstrapService';
 
-const start = async () => {
-  await BootstrapService.run();
+/**
+ * Initializes and starts the application server.
+ */
+async function bootstrap(): Promise<void> {
+  try {
+    // 1. Run essential startup services (DB connections, migrations, etc.)
+    await BootstrapService.run();
 
-  const app = createApp();
+    // 2. Initialize the Express/Fastify application instance
+    const app = createApp();
 
-  app.listen(appConfig.port, () => {
-    logger.info(`Server running on port ${appConfig.port} in ${appConfig.nodeEnv} mode`);
-  });
-};
+    // 3. Start listening for incoming traffic
+    const { port, nodeEnv } = appConfig;
+    
+    app.listen(port, () => {
+      logger.info(`🚀 Server successfully running on port ${port} [Mode: ${nodeEnv}]`);
+    });
+    
+  } catch (error) {
+    logger.error('💥 Critical failure during application startup:', error);
+    process.exit(1);
+  }
+}
 
-start().catch((err) => {
-  logger.error('Failed to start application', err);
+// Handle unexpected global rejections outside the main lifecycle
+process.on('unhandledRejection', (reason) => {
+  logger.error('⚠️ Unhandled Promise Rejection detected:', reason);
   process.exit(1);
 });
+
+// Execute the bootstrap sequence
+void bootstrap();

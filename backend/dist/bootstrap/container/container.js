@@ -19,6 +19,7 @@ const UniqueOntologyPolicy_1 = require("../../modules/ontology/domain/policies/U
 const PostgresOntologyRepository_1 = require("../../modules/ontology/infrastructure/PostgresOntologyRepository");
 const PrometheusMetricsProvider_1 = require("../../shared/infrastructure/monitoring/PrometheusMetricsProvider");
 const PostgresUserRepository_1 = require("../../modules/auth/infrastructure/PostgresUserRepository");
+const PostgresUserProfileRepository_1 = require("../../modules/auth/infrastructure/PostgresUserProfileRepository");
 const PostgresAuditRepository_1 = require("../../modules/audit/infrastructure/audit/PostgresAuditRepository");
 const PostgresProvider_1 = require("../../shared/infrastructure/database/PostgresProvider");
 const LoginCommandHandler_1 = require("../../modules/auth/application/handlers/LoginCommandHandler");
@@ -30,6 +31,9 @@ const AuthController_1 = require("../../modules/auth/interfaces/AuthController")
 const LogoutCommandHandler_1 = require("../../modules/auth/application/handlers/LogoutCommandHandler");
 const RefreshCommandHandler_1 = require("../../modules/auth/application/handlers/RefreshCommandHandler");
 const ResetPasswordCommandHandler_1 = require("../../modules/auth/application/handlers/ResetPasswordCommandHandler");
+const VerifyEmailCommandHandler_1 = require("../../modules/auth/application/handlers/VerifyEmailCommandHandler");
+const UpdateProfileCommandHandler_1 = require("../../modules/auth/application/handlers/UpdateProfileCommandHandler");
+const BanUserCommandHandler_1 = require("../../modules/auth/application/handlers/BanUserCommandHandler");
 const RedisSessionRepository_1 = require("../../modules/auth/infrastructure/RedisSessionRepository");
 const pg_1 = require("pg");
 exports.container = new inversify_1.Container();
@@ -41,6 +45,9 @@ exports.container.bind('IAuditRepository').toDynamicValue((context) => {
     return new PostgresAuditRepository_1.PostgresAuditRepository(context.container.get(pg_1.Pool));
 }).inSingletonScope();
 exports.container.bind('IUserRepository').to(PostgresUserRepository_1.PostgresUserRepository);
+exports.container.bind('IUserProfileRepository').toDynamicValue((context) => {
+    return new PostgresUserProfileRepository_1.PostgresUserProfileRepository(context.container.get(pg_1.Pool));
+});
 exports.container.bind('ISessionRepository').to(RedisSessionRepository_1.RedisSessionRepository);
 exports.container.bind('IPasswordHasher').to(BcryptPasswordHasher_1.BcryptPasswordHasher);
 exports.container.bind('IJwtProvider').to(JwtProvider_1.JwtProvider);
@@ -69,8 +76,17 @@ exports.container.bind(RefreshCommandHandler_1.RefreshCommandHandler).toSelf();
 exports.container.bind(ResetPasswordCommandHandler_1.ResetPasswordCommandHandler).toDynamicValue((context) => {
     return new ResetPasswordCommandHandler_1.ResetPasswordCommandHandler(context.container.get('IUserRepository'), context.container.get('IPasswordHasher'), context.container.get('EventBus'));
 });
+exports.container.bind(VerifyEmailCommandHandler_1.VerifyEmailCommandHandler).toDynamicValue((context) => {
+    return new VerifyEmailCommandHandler_1.VerifyEmailCommandHandler(context.container.get('IUserRepository'), context.container.get('EventBus'));
+});
+exports.container.bind(UpdateProfileCommandHandler_1.UpdateProfileCommandHandler).toDynamicValue((context) => {
+    return new UpdateProfileCommandHandler_1.UpdateProfileCommandHandler(context.container.get('IUserProfileRepository'), context.container.get('EventBus'));
+});
+exports.container.bind(BanUserCommandHandler_1.BanUserCommandHandler).toDynamicValue((context) => {
+    return new BanUserCommandHandler_1.BanUserCommandHandler(context.container.get('IUserRepository'), context.container.get('EventBus'));
+});
 exports.container.bind(AuthController_1.AuthController).toDynamicValue((context) => {
-    return new AuthController_1.AuthController(context.container.get(LoginCommandHandler_1.LoginCommandHandler), context.container.get(LogoutCommandHandler_1.LogoutCommandHandler), context.container.get(RefreshCommandHandler_1.RefreshCommandHandler), context.container.get(RegisterUserCommandHandler_1.RegisterUserCommandHandler), context.container.get(ResetPasswordCommandHandler_1.ResetPasswordCommandHandler));
+    return new AuthController_1.AuthController(context.container.get(LoginCommandHandler_1.LoginCommandHandler), context.container.get(LogoutCommandHandler_1.LogoutCommandHandler), context.container.get(RefreshCommandHandler_1.RefreshCommandHandler), context.container.get(RegisterUserCommandHandler_1.RegisterUserCommandHandler), context.container.get(ResetPasswordCommandHandler_1.ResetPasswordCommandHandler), context.container.get(VerifyEmailCommandHandler_1.VerifyEmailCommandHandler), context.container.get(UpdateProfileCommandHandler_1.UpdateProfileCommandHandler), context.container.get(BanUserCommandHandler_1.BanUserCommandHandler));
 });
 // Ontology
 exports.container.bind('IOntologyRepository').to(PostgresOntologyRepository_1.PostgresOntologyRepository);

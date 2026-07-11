@@ -23,7 +23,7 @@ export class BanUserCommandHandler implements ICommandHandler<BanUserCommand, vo
         throw new AuthenticationError('User not found');
       }
 
-      // user.ban();
+      user.ban();
       await this.userRepository.save(user);
       
       AuditLogger.log({

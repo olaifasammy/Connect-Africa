@@ -1,0 +1,1 @@
+{"version":3,"file":"SearchIndexedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/search/domain/events/SearchIndexedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,kBAAmB,SAAQ,yBAAW;IACrB;IAA5B,YAA4B,UAA0B;QACpD,KAAK,CAAC,UAAU,CAAC,CAAC;QADQ,eAAU,GAAV,UAAU,CAAgB;IAEtD,CAAC;CACF;AAJD,gDAIC"}

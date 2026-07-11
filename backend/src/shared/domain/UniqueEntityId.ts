@@ -7,7 +7,7 @@ export class UniqueEntityId {
     this.value = value || uuidv4();
   }
 
-  toString(): string {
+  public toString(): string {
     return this.value;
   }
 

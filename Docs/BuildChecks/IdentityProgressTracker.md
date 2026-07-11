@@ -2,14 +2,14 @@
 
 ## Status
 - [x] E2E: Password Reset
-- [ ] E2E: Email Verification
-- [ ] E2E: Update Profile
-- [ ] E2E: Ban User
-- [ ] Docs: README
-- [ ] Docs: OpenAPI
-- [ ] Docs: Architecture
-- [ ] Docs: Changelog
-- [ ] Infrastructure: Settings Module
-- [ ] Frontend: Profile UI
-- [ ] Frontend: Settings UI
-- [ ] Frontend: Admin UI
+- [x] E2E: Email Verification
+- [x] E2E: Update Profile
+- [x] E2E: Ban User
+- [x] Docs: README
+- [x] Docs: OpenAPI
+- [x] Docs: Architecture
+- [x] Docs: Changelog
+- [x] Infrastructure: Settings Module
+- [ ] Frontend: Profile UI (Postponed)
+- [ ] Frontend: Settings UI (Postponed)
+- [ ] Frontend: Admin UI (Postponed)

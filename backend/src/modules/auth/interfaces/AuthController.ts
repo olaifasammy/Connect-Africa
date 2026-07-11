@@ -7,7 +7,13 @@ import { ICommandHandler } from '@shared/application/handlers/ICommandHandler';
 import { logger } from '@shared/logger/Logger';
 import { RegisterUserCommand } from '@modules/auth/application/commands/RegisterUserCommand';
 import { ResetPasswordCommandHandler } from '@modules/auth/application/handlers/ResetPasswordCommandHandler';
+import { VerifyEmailCommandHandler } from '@modules/auth/application/handlers/VerifyEmailCommandHandler';
+import { UpdateProfileCommandHandler } from '@modules/auth/application/handlers/UpdateProfileCommandHandler';
+import { BanUserCommandHandler } from '@modules/auth/application/handlers/BanUserCommandHandler';
 import { ResetPasswordCommand } from '@modules/auth/application/commands/ResetPasswordCommand';
+import { VerifyEmailCommand } from '@modules/auth/application/commands/VerifyEmailCommand';
+import { UpdateProfileCommand } from '@modules/auth/application/commands/UpdateProfileCommand';
+import { BanUserCommand } from '@modules/auth/application/commands/BanUserCommand';
 
 export class AuthController extends BaseController {
   constructor(
@@ -15,9 +21,47 @@ export class AuthController extends BaseController {
     private logoutHandler: LogoutCommandHandler,
     private refreshHandler: RefreshCommandHandler,
     private registerUserHandler: ICommandHandler<RegisterUserCommand, void>,
-    private resetPasswordHandler: ResetPasswordCommandHandler
+    private resetPasswordHandler: ResetPasswordCommandHandler,
+    private verifyEmailHandler: VerifyEmailCommandHandler,
+    private updateProfileHandler: UpdateProfileCommandHandler,
+    private banUserHandler: BanUserCommandHandler
   ) {
     super();
+  }
+
+  async banUser(req: Request, res: Response): Promise<void> {
+    try {
+        const adminUserId = (req as any).user?.id || '';
+        const { userIdToBan } = req.body;
+        const ipAddress = req.ip || '';
+        await this.banUserHandler.handle(new BanUserCommand(adminUserId, userIdToBan, ipAddress));
+        res.status(200).json({ success: true });
+    } catch (error: any) {
+        this.handleError(res, error);
+    }
+  }
+
+  async updateProfile(req: Request, res: Response): Promise<void> {
+    try {
+        const userId = (req as any).user?.id || '';
+        const { displayName } = req.body;
+        const ipAddress = req.ip || '';
+        await this.updateProfileHandler.handle(new UpdateProfileCommand(userId, displayName, ipAddress));
+        res.status(200).json({ success: true });
+    } catch (error: any) {
+        this.handleError(res, error);
+    }
+  }
+
+  async verifyEmail(req: Request, res: Response): Promise<void> {
+    try {
+        const { userId } = req.body;
+        const ipAddress = req.ip || '';
+        await this.verifyEmailHandler.handle(new VerifyEmailCommand(userId, ipAddress));
+        res.status(200).json({ success: true });
+    } catch (error: any) {
+        this.handleError(res, error);
+    }
   }
 
   async register(req: Request, res: Response): Promise<void> {

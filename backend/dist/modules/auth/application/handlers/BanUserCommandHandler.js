@@ -19,7 +19,7 @@ class BanUserCommandHandler {
             if (!user) {
                 throw new AuthErrors_1.AuthenticationError('User not found');
             }
-            // user.ban();
+            user.ban();
             await this.userRepository.save(user);
             AuditLogger_1.AuditLogger.log({
                 user: command.adminUserId,

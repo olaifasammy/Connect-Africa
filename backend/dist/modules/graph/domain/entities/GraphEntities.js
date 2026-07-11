@@ -5,12 +5,22 @@ const GraphErrors_1 = require("../errors/GraphErrors");
 class GraphNode {
     entityId;
     type;
+    labels;
     metadata;
-    constructor(entityId, type, metadata) {
+    sources;
+    constructor(entityId, type, labels, metadata, sources = []) {
         this.entityId = entityId;
         this.type = type;
+        this.labels = labels;
         this.metadata = metadata;
+        this.sources = sources;
         this.validate();
+    }
+    updateMetadata(newMetadata) {
+        Object.assign(this.metadata, newMetadata);
+    }
+    addSource(source) {
+        this.sources.push(source);
     }
     validate() {
         if (!this.entityId || this.entityId.length === 0) {
@@ -26,11 +36,18 @@ class GraphEdge {
     sourceEntityId;
     targetEntityId;
     relationshipType;
-    constructor(sourceEntityId, targetEntityId, relationshipType) {
+    properties;
+    sources;
+    constructor(sourceEntityId, targetEntityId, relationshipType, properties, sources = []) {
         this.sourceEntityId = sourceEntityId;
         this.targetEntityId = targetEntityId;
         this.relationshipType = relationshipType;
+        this.properties = properties;
+        this.sources = sources;
         this.validate();
+    }
+    addSource(source) {
+        this.sources.push(source);
     }
     validate() {
         if (!this.sourceEntityId || !this.targetEntityId || !this.relationshipType) {

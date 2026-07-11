@@ -16,6 +16,7 @@ import { UniqueOntologyPolicy } from '@modules/ontology/domain/policies/UniqueOn
 import { PostgresOntologyRepository } from '@modules/ontology/infrastructure/PostgresOntologyRepository';
 import { PrometheusMetricsProvider } from '@shared/infrastructure/monitoring/PrometheusMetricsProvider';
 import { PostgresUserRepository } from '@modules/auth/infrastructure/PostgresUserRepository';
+import { PostgresUserProfileRepository } from '@modules/auth/infrastructure/PostgresUserProfileRepository';
 import { PostgresAuditRepository } from '@modules/audit/infrastructure/audit/PostgresAuditRepository';
 import { IAuditRepository } from '@modules/audit/domain/repositories/IAuditRepository';
 import { PostgresProvider } from '@shared/infrastructure/database/PostgresProvider';
@@ -28,6 +29,9 @@ import { AuthController } from '@modules/auth/interfaces/AuthController';
 import { LogoutCommandHandler } from '@modules/auth/application/handlers/LogoutCommandHandler';
 import { RefreshCommandHandler } from '@modules/auth/application/handlers/RefreshCommandHandler';
 import { ResetPasswordCommandHandler } from '@modules/auth/application/handlers/ResetPasswordCommandHandler';
+import { VerifyEmailCommandHandler } from '@modules/auth/application/handlers/VerifyEmailCommandHandler';
+import { UpdateProfileCommandHandler } from '@modules/auth/application/handlers/UpdateProfileCommandHandler';
+import { BanUserCommandHandler } from '@modules/auth/application/handlers/BanUserCommandHandler';
 import { RedisSessionRepository } from '@modules/auth/infrastructure/RedisSessionRepository';
 import { Pool } from 'pg';
 import Redis from 'ioredis';
@@ -42,6 +46,9 @@ container.bind<IAuditRepository>('IAuditRepository').toDynamicValue((context) =>
     return new PostgresAuditRepository(context.container.get(Pool));
 }).inSingletonScope();
 container.bind('IUserRepository').to(PostgresUserRepository);
+container.bind('IUserProfileRepository').toDynamicValue((context) => {
+    return new PostgresUserProfileRepository(context.container.get(Pool));
+});
 container.bind('ISessionRepository').to(RedisSessionRepository);
 container.bind('IPasswordHasher').to(BcryptPasswordHasher);
 container.bind('IJwtProvider').to(JwtProvider);
@@ -84,13 +91,34 @@ container.bind(ResetPasswordCommandHandler).toDynamicValue((context) => {
         context.container.get('EventBus')
     );
 });
+container.bind(VerifyEmailCommandHandler).toDynamicValue((context) => {
+    return new VerifyEmailCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(UpdateProfileCommandHandler).toDynamicValue((context) => {
+    return new UpdateProfileCommandHandler(
+        context.container.get('IUserProfileRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(BanUserCommandHandler).toDynamicValue((context) => {
+    return new BanUserCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
 container.bind(AuthController).toDynamicValue((context) => {
   return new AuthController(
     context.container.get(LoginCommandHandler),
     context.container.get(LogoutCommandHandler),
     context.container.get(RefreshCommandHandler),
     context.container.get(RegisterUserCommandHandler),
-    context.container.get(ResetPasswordCommandHandler)
+    context.container.get(ResetPasswordCommandHandler),
+    context.container.get(VerifyEmailCommandHandler),
+    context.container.get(UpdateProfileCommandHandler),
+    context.container.get(BanUserCommandHandler)
   );
 });
 

@@ -1,3 +1,8 @@
+- Identity Bounded Context full implementation:
+  - Domain models (User, Role, Permission)
+  - Authentication, Authorization, RBAC
+  - API endpoints (Register, Login, Logout, Refresh, Password Reset, Email Verification, Profile Update, Admin Ban)
+  - Security, Audit logging
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -5,6 +10,11 @@ All notable changes to this project will be documented in this file.
 ## [2.0.0] - 2026-07-08
 
 ### Added
+- Identity Bounded Context full implementation:
+  - Domain models (User, Role, Permission)
+  - Authentication, Authorization, RBAC
+  - API endpoints (Register, Login, Logout, Refresh, Password Reset, Email Verification, Profile Update, Admin Ban)
+  - Security, Audit logging
 - Ontology Bounded Context full implementation:
   - Domain models (Ontology, OntologyVersion, EntityType, RelationshipType)
   - Persistence layer with SQL migrations

@@ -22,6 +22,9 @@ class User extends AggregateRoot_1.AggregateRoot {
     activate() {
         this.props.isActive = true;
     }
+    ban() {
+        this.props.isActive = false;
+    }
 }
 exports.User = User;
 //# sourceMappingURL=User.js.map

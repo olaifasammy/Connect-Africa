@@ -1,7 +1,7 @@
 import type { SignOptions } from 'jsonwebtoken';
 export declare const appConfig: {
     port: number;
-    nodeEnv: "development" | "production" | "test";
+    nodeEnv: "production" | "development" | "test";
     databaseUrl: string;
     redisHost: string;
     redisPort: number;

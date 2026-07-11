@@ -8,19 +8,63 @@ const RefreshCommandHandler_1 = require("../../auth/application/handlers/Refresh
 const Logger_1 = require("../../../shared/logger/Logger");
 const RegisterUserCommand_1 = require("../../auth/application/commands/RegisterUserCommand");
 const ResetPasswordCommand_1 = require("../../auth/application/commands/ResetPasswordCommand");
+const VerifyEmailCommand_1 = require("../../auth/application/commands/VerifyEmailCommand");
+const UpdateProfileCommand_1 = require("../../auth/application/commands/UpdateProfileCommand");
+const BanUserCommand_1 = require("../../auth/application/commands/BanUserCommand");
 class AuthController extends BaseController_1.BaseController {
     loginHandler;
     logoutHandler;
     refreshHandler;
     registerUserHandler;
     resetPasswordHandler;
-    constructor(loginHandler, logoutHandler, refreshHandler, registerUserHandler, resetPasswordHandler) {
+    verifyEmailHandler;
+    updateProfileHandler;
+    banUserHandler;
+    constructor(loginHandler, logoutHandler, refreshHandler, registerUserHandler, resetPasswordHandler, verifyEmailHandler, updateProfileHandler, banUserHandler) {
         super();
         this.loginHandler = loginHandler;
         this.logoutHandler = logoutHandler;
         this.refreshHandler = refreshHandler;
         this.registerUserHandler = registerUserHandler;
         this.resetPasswordHandler = resetPasswordHandler;
+        this.verifyEmailHandler = verifyEmailHandler;
+        this.updateProfileHandler = updateProfileHandler;
+        this.banUserHandler = banUserHandler;
+    }
+    async banUser(req, res) {
+        try {
+            const adminUserId = req.user?.id || '';
+            const { userIdToBan } = req.body;
+            const ipAddress = req.ip || '';
+            await this.banUserHandler.handle(new BanUserCommand_1.BanUserCommand(adminUserId, userIdToBan, ipAddress));
+            res.status(200).json({ success: true });
+        }
+        catch (error) {
+            this.handleError(res, error);
+        }
+    }
+    async updateProfile(req, res) {
+        try {
+            const userId = req.user?.id || '';
+            const { displayName } = req.body;
+            const ipAddress = req.ip || '';
+            await this.updateProfileHandler.handle(new UpdateProfileCommand_1.UpdateProfileCommand(userId, displayName, ipAddress));
+            res.status(200).json({ success: true });
+        }
+        catch (error) {
+            this.handleError(res, error);
+        }
+    }
+    async verifyEmail(req, res) {
+        try {
+            const { userId } = req.body;
+            const ipAddress = req.ip || '';
+            await this.verifyEmailHandler.handle(new VerifyEmailCommand_1.VerifyEmailCommand(userId, ipAddress));
+            res.status(200).json({ success: true });
+        }
+        catch (error) {
+            this.handleError(res, error);
+        }
     }
     async register(req, res) {
         try {

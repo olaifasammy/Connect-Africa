@@ -1,6 +1,7 @@
-import { UniqueEntityId } from '../../../../shared/domain/UniqueEntityId';
+import { Source } from '../entities/Source';
+import { SourceId } from '../value-objects/SourceValueObjects';
 export interface ISourceRepository {
-    findById(id: UniqueEntityId): Promise<any | null>;
-    save(entity: any): Promise<void>;
-    delete(id: UniqueEntityId): Promise<void>;
+    findById(id: SourceId): Promise<Source | null>;
+    save(source: Source): Promise<void>;
+    delete(id: SourceId): Promise<void>;
 }

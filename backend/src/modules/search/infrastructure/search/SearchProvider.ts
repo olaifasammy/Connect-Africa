@@ -1,4 +1,16 @@
+import { SearchDocument } from '../../domain/models/SearchDocument';
+
 export abstract class SearchProvider {
-  abstract index(id: string, data: any): Promise<void>;
-  abstract search(query: string): Promise<string[]>;
+  // Index Operations
+  abstract createIndex(name: string): Promise<void>;
+  abstract deleteIndex(name: string): Promise<void>;
+  abstract rebuildIndex(name: string): Promise<void>;
+
+  // Document Operations
+  abstract findById(id: string): Promise<SearchDocument | null>;
+  abstract index(document: SearchDocument): Promise<void>; // Create
+  abstract update(document: SearchDocument): Promise<void>; // Update
+  abstract search(query: string): Promise<SearchDocument[]>;
+  abstract bulkIndex(documents: SearchDocument[]): Promise<void>;
+  abstract delete(id: string): Promise<void>;
 }

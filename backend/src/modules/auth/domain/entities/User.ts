@@ -33,4 +33,8 @@ export class User extends AggregateRoot<UserProps> {
   activate(): void {
     this.props.isActive = true;
   }
+
+  ban(): void {
+    this.props.isActive = false;
+  }
 }

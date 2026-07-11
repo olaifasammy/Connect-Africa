@@ -1,0 +1,1 @@
+{"version":3,"file":"ArticleDeletedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/article/domain/events/ArticleDeletedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,mBAAoB,SAAQ,yBAAW;IAClD,YAAY,SAAyB;QACnC,KAAK,CAAC,SAAS,CAAC,CAAC;IACnB,CAAC;CACF;AAJD,kDAIC"}

@@ -6,13 +6,22 @@ import { RefreshCommandHandler } from '../../auth/application/handlers/RefreshCo
 import { ICommandHandler } from '../../../shared/application/handlers/ICommandHandler';
 import { RegisterUserCommand } from '../../auth/application/commands/RegisterUserCommand';
 import { ResetPasswordCommandHandler } from '../../auth/application/handlers/ResetPasswordCommandHandler';
+import { VerifyEmailCommandHandler } from '../../auth/application/handlers/VerifyEmailCommandHandler';
+import { UpdateProfileCommandHandler } from '../../auth/application/handlers/UpdateProfileCommandHandler';
+import { BanUserCommandHandler } from '../../auth/application/handlers/BanUserCommandHandler';
 export declare class AuthController extends BaseController {
     private loginHandler;
     private logoutHandler;
     private refreshHandler;
     private registerUserHandler;
     private resetPasswordHandler;
-    constructor(loginHandler: ICommandHandler<LoginCommand, string>, logoutHandler: LogoutCommandHandler, refreshHandler: RefreshCommandHandler, registerUserHandler: ICommandHandler<RegisterUserCommand, void>, resetPasswordHandler: ResetPasswordCommandHandler);
+    private verifyEmailHandler;
+    private updateProfileHandler;
+    private banUserHandler;
+    constructor(loginHandler: ICommandHandler<LoginCommand, string>, logoutHandler: LogoutCommandHandler, refreshHandler: RefreshCommandHandler, registerUserHandler: ICommandHandler<RegisterUserCommand, void>, resetPasswordHandler: ResetPasswordCommandHandler, verifyEmailHandler: VerifyEmailCommandHandler, updateProfileHandler: UpdateProfileCommandHandler, banUserHandler: BanUserCommandHandler);
+    banUser(req: Request, res: Response): Promise<void>;
+    updateProfile(req: Request, res: Response): Promise<void>;
+    verifyEmail(req: Request, res: Response): Promise<void>;
     register(req: Request, res: Response): Promise<void>;
     login(req: Request, res: Response): Promise<void>;
     logout(req: Request, res: Response): Promise<void>;
