@@ -10,6 +10,8 @@ import { AuthController } from '@modules/auth/interfaces/AuthController';
 import { OntologyController } from '@modules/ontology/interfaces/controllers/OntologyController';
 import { RelationshipController } from '@modules/relationship/interfaces/controllers/RelationshipController';
 import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/AuthenticationMiddleware';
+import { graphRoutes } from '@modules/graph/interfaces/routes/GraphRoutes';
+import { GraphController } from '@modules/graph/interfaces/controllers/GraphController';
 
 export const createApp = (): Application => {
   const app = express();
@@ -33,6 +35,10 @@ export const createApp = (): Application => {
   // Relationship
   const relationshipController = container.get(RelationshipController);
   app.use('/api/v1/relationship', relationshipRoutes(relationshipController, authMiddleware));
+
+  // Graph
+  const graphController = container.get(GraphController);
+  app.use('/graph', graphRoutes(graphController, authMiddleware));
 
   return app;
 };

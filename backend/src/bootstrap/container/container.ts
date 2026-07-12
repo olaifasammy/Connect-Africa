@@ -34,7 +34,15 @@ import { UpdateProfileCommandHandler } from '@modules/auth/application/handlers/
 import { BanUserCommandHandler } from '@modules/auth/application/handlers/BanUserCommandHandler';
 import { RedisSessionRepository } from '@modules/auth/infrastructure/RedisSessionRepository';
 import { Pool } from 'pg';
-import Redis from 'ioredis';
+import { PostgresGraphRepository } from '@modules/graph/infrastructure/PostgresGraphRepository';
+import { CreateGraphNodeHandler } from '@modules/graph/application/handlers/CreateGraphNodeHandler';
+import { CreateGraphEdgeHandler } from '@modules/graph/application/handlers/CreateGraphEdgeHandler';
+import { GetNodeHandler } from '@modules/graph/application/handlers/GetNodeHandler';
+import { SearchGraphHandler } from '@modules/graph/application/handlers/SearchGraphHandler';
+import { FindShortestPathHandler } from '@modules/graph/application/handlers/FindShortestPathHandler';
+import { GraphController } from '@modules/graph/interfaces/controllers/GraphController';
+import { OntologyValidator } from '@modules/graph/domain/services/OntologyValidator';
+import { logger } from '@shared/logger/Logger';
 
 export const container = new Container();
 
@@ -168,3 +176,42 @@ container.bind(RelationshipService).toDynamicValue((context) => {
     );
 });
 container.bind(RelationshipController).toSelf();
+// Graph
+container.bind('IGraphRepository').toDynamicValue((context) => {
+    return new PostgresGraphRepository(context.container.get(Pool));
+});
+container.bind('IOntologyGraphService').toConstantValue({ validateEntityType: async () => true, validateRelationshipType: async () => true });
+container.bind(OntologyValidator).toDynamicValue((context) => {
+    return new OntologyValidator(context.container.get('IOntologyGraphService'));
+});
+container.bind(CreateGraphNodeHandler).toDynamicValue((context) => {
+    return new CreateGraphNodeHandler(
+        context.container.get('IGraphRepository'),
+        context.container.get(OntologyValidator),
+        logger
+    );
+});
+container.bind(CreateGraphEdgeHandler).toDynamicValue((context) => {
+    return new CreateGraphEdgeHandler(
+        context.container.get('IGraphRepository'),
+        context.container.get(OntologyValidator)
+    );
+});
+container.bind(GetNodeHandler).toDynamicValue((context) => {
+    return new GetNodeHandler(context.container.get('IGraphRepository'));
+});
+container.bind(SearchGraphHandler).toDynamicValue((context) => {
+    return new SearchGraphHandler(context.container.get('IGraphRepository'));
+});
+container.bind(FindShortestPathHandler).toDynamicValue((context) => {
+    return new FindShortestPathHandler(context.container.get('IGraphRepository'));
+});
+container.bind(GraphController).toDynamicValue((context) => {
+    return new GraphController(
+        context.container.get(CreateGraphNodeHandler),
+        context.container.get(CreateGraphEdgeHandler),
+        context.container.get(GetNodeHandler),
+        context.container.get(SearchGraphHandler),
+        context.container.get(FindShortestPathHandler)
+    );
+});

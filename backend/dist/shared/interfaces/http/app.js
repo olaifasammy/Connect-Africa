@@ -16,6 +16,8 @@ const AuthController_1 = require("../../../modules/auth/interfaces/AuthControlle
 const OntologyController_1 = require("../../../modules/ontology/interfaces/controllers/OntologyController");
 const RelationshipController_1 = require("../../../modules/relationship/interfaces/controllers/RelationshipController");
 const AuthenticationMiddleware_1 = require("../../interfaces/http/middleware/AuthenticationMiddleware");
+const GraphRoutes_1 = require("../../../modules/graph/interfaces/routes/GraphRoutes");
+const GraphController_1 = require("../../../modules/graph/interfaces/controllers/GraphController");
 const createApp = () => {
     const app = (0, express_1.default)();
     app.use((0, helmet_1.default)());
@@ -33,6 +35,9 @@ const createApp = () => {
     // Relationship
     const relationshipController = container_1.container.get(RelationshipController_1.RelationshipController);
     app.use('/api/v1/relationship', (0, RelationshipRoutes_1.relationshipRoutes)(relationshipController, authMiddleware));
+    // Graph
+    const graphController = container_1.container.get(GraphController_1.GraphController);
+    app.use('/graph', (0, GraphRoutes_1.graphRoutes)(graphController, authMiddleware));
     return app;
 };
 exports.createApp = createApp;

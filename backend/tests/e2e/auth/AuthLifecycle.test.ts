@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { createApp } from '@interfaces/http/app';
+import { createApp } from '@shared/interfaces/http/app';
 const app = createApp();
 
 describe('Auth E2E Lifecycle', () => {

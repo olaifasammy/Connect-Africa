@@ -36,6 +36,15 @@ const UpdateProfileCommandHandler_1 = require("../../modules/auth/application/ha
 const BanUserCommandHandler_1 = require("../../modules/auth/application/handlers/BanUserCommandHandler");
 const RedisSessionRepository_1 = require("../../modules/auth/infrastructure/RedisSessionRepository");
 const pg_1 = require("pg");
+const PostgresGraphRepository_1 = require("../../modules/graph/infrastructure/PostgresGraphRepository");
+const CreateGraphNodeHandler_1 = require("../../modules/graph/application/handlers/CreateGraphNodeHandler");
+const CreateGraphEdgeHandler_1 = require("../../modules/graph/application/handlers/CreateGraphEdgeHandler");
+const GetNodeHandler_1 = require("../../modules/graph/application/handlers/GetNodeHandler");
+const SearchGraphHandler_1 = require("../../modules/graph/application/handlers/SearchGraphHandler");
+const FindShortestPathHandler_1 = require("../../modules/graph/application/handlers/FindShortestPathHandler");
+const GraphController_1 = require("../../modules/graph/interfaces/controllers/GraphController");
+const OntologyValidator_1 = require("../../modules/graph/domain/services/OntologyValidator");
+const Logger_1 = require("../../shared/logger/Logger");
 exports.container = new inversify_1.Container();
 // Database/Infrastructure
 const pool = PostgresProvider_1.PostgresProvider.getPool();
@@ -118,4 +127,30 @@ exports.container.bind(RelationshipService_1.RelationshipService).toDynamicValue
     return new RelationshipService_1.RelationshipService(context.container.get('IRelationshipRepository'), context.container.get(RelationshipValidationService_1.RelationshipValidationService), context.container.get('EventBus'));
 });
 exports.container.bind(RelationshipController_1.RelationshipController).toSelf();
+// Graph
+exports.container.bind('IGraphRepository').toDynamicValue((context) => {
+    return new PostgresGraphRepository_1.PostgresGraphRepository(context.container.get(pg_1.Pool));
+});
+exports.container.bind('IOntologyGraphService').toConstantValue({ validateEntityType: async () => true, validateRelationshipType: async () => true });
+exports.container.bind(OntologyValidator_1.OntologyValidator).toDynamicValue((context) => {
+    return new OntologyValidator_1.OntologyValidator(context.container.get('IOntologyGraphService'));
+});
+exports.container.bind(CreateGraphNodeHandler_1.CreateGraphNodeHandler).toDynamicValue((context) => {
+    return new CreateGraphNodeHandler_1.CreateGraphNodeHandler(context.container.get('IGraphRepository'), context.container.get(OntologyValidator_1.OntologyValidator), Logger_1.logger);
+});
+exports.container.bind(CreateGraphEdgeHandler_1.CreateGraphEdgeHandler).toDynamicValue((context) => {
+    return new CreateGraphEdgeHandler_1.CreateGraphEdgeHandler(context.container.get('IGraphRepository'), context.container.get(OntologyValidator_1.OntologyValidator));
+});
+exports.container.bind(GetNodeHandler_1.GetNodeHandler).toDynamicValue((context) => {
+    return new GetNodeHandler_1.GetNodeHandler(context.container.get('IGraphRepository'));
+});
+exports.container.bind(SearchGraphHandler_1.SearchGraphHandler).toDynamicValue((context) => {
+    return new SearchGraphHandler_1.SearchGraphHandler(context.container.get('IGraphRepository'));
+});
+exports.container.bind(FindShortestPathHandler_1.FindShortestPathHandler).toDynamicValue((context) => {
+    return new FindShortestPathHandler_1.FindShortestPathHandler(context.container.get('IGraphRepository'));
+});
+exports.container.bind(GraphController_1.GraphController).toDynamicValue((context) => {
+    return new GraphController_1.GraphController(context.container.get(CreateGraphNodeHandler_1.CreateGraphNodeHandler), context.container.get(CreateGraphEdgeHandler_1.CreateGraphEdgeHandler), context.container.get(GetNodeHandler_1.GetNodeHandler), context.container.get(SearchGraphHandler_1.SearchGraphHandler), context.container.get(FindShortestPathHandler_1.FindShortestPathHandler));
+});
 //# sourceMappingURL=container.js.map

@@ -261,16 +261,16 @@ Every item must be completed before the Knowledge Graph context is considered En
 
 ## Unit Tests
 
-- [ ] Graph aggregate
-- [ ] Traversal logic
-- [ ] Validation
-- [ ] Policies
+- [x] Graph aggregate
+- [x] Traversal logic
+- [x] Validation
+- [x] Policies
 
 ## Integration Tests
 
-- [ ] Repository
-- [ ] Services
-- [ ] API
+- [x] Repository
+- [x] Services
+- [x] API
 
 ## End-to-End Tests
 

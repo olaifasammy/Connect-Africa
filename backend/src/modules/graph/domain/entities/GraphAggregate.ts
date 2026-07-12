@@ -7,6 +7,7 @@ import {
   GraphEdgeUpdatedEvent,
   GraphEdgeDeletedEvent 
 } from '../events/GraphEvents';
+import { UniqueNodePolicy } from '../policies/UniqueNodePolicy';
 
 export type GraphDomainEvent = 
   | GraphNodeCreatedEvent 
@@ -25,7 +26,7 @@ export class GraphAggregate {
   ) {}
 
   public addNode(node: GraphNode): void {
-    if (this.nodes.some(n => n.entityId === node.entityId)) {
+    if (!UniqueNodePolicy.check(this.nodes, node)) {
       throw new Error('Node already exists in aggregate');
     }
     this.nodes.push(node);

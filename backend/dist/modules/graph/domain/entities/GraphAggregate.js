@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GraphAggregate = void 0;
 const GraphEvents_1 = require("../events/GraphEvents");
+const UniqueNodePolicy_1 = require("../policies/UniqueNodePolicy");
 class GraphAggregate {
     nodes;
     edges;
@@ -11,7 +12,7 @@ class GraphAggregate {
         this.edges = edges;
     }
     addNode(node) {
-        if (this.nodes.some(n => n.entityId === node.entityId)) {
+        if (!UniqueNodePolicy_1.UniqueNodePolicy.check(this.nodes, node)) {
             throw new Error('Node already exists in aggregate');
         }
         this.nodes.push(node);
