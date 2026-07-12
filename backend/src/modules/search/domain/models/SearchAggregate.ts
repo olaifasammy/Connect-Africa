@@ -10,11 +10,14 @@ export class SearchAggregate extends AggregateRoot<SearchDocument> {
   }
 
   private validateInvariants(document: SearchDocument): void {
-    if (!document.id) {
-      throw new Error('Search Document must have an ID');
+    if (!document.id || document.id.toString().trim() === '') {
+      throw new Error('Search Document must have a valid ID');
     }
     if (!document.resourceType || document.resourceType.trim() === '') {
-      throw new Error('Search Document must have a resource type');
+      throw new Error('Search Document must have a valid resource type');
+    }
+    if (!document.resourceId || document.resourceId.toString().trim() === '') {
+      throw new Error('Search Document must have a valid resource ID');
     }
   }
 

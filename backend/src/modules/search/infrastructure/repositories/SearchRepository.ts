@@ -26,8 +26,19 @@ export class SearchRepository implements ISearchRepository {
     await this.searchProvider.delete(id.toString());
   }
 
-  async search(query: string): Promise<SearchDocument[]> {
-    return await this.searchProvider.search(query);
+  async autocomplete(query: string): Promise<string[]> {
+    return await this.searchProvider.autocomplete(query);
+  }
+
+  async search(
+    query: string, 
+    filters?: Record<string, any>, 
+    sortBy?: 'relevance' | 'alphabetical' | 'dateCreated' | 'dateUpdated' | 'popularity',
+    sortOrder?: 'asc' | 'desc',
+    limit?: number,
+    offset?: number
+  ): Promise<SearchDocument[]> {
+    return await this.searchProvider.search(query, filters, sortBy, sortOrder, limit, offset);
   }
 
   async bulkSave(documents: SearchDocument[]): Promise<void> {

@@ -35,43 +35,43 @@ Every item must be completed before the Search bounded context is considered Ent
 # 2. Search Index
 
 - [x] Search index abstraction
-- [ ] Index creation
-- [ ] Index update
-- [ ] Index deletion
-- [ ] Index rebuild
-- [ ] Bulk indexing
+- [x] Index creation
+- [x] Index update
+- [x] Index deletion
+- [x] Index rebuild
+- [x] Bulk indexing
 
 ---
 
 # 3. Indexed Resources
 
-- [ ] Entities
-- [ ] Relationships
-- [ ] Articles
-- [ ] Ontologies
-- [ ] Sources
-- [ ] Media
-- [ ] Users (where applicable)
+- [x] Entities
+- [x] Relationships
+- [x] Articles
+- [x] Ontologies
+- [x] Sources
+- [ ] Media (Missing Domain Events)
+- [x] Users (where applicable)
 
 ---
 
 # 4. Search Features
 
-- [ ] Full-text search
-- [ ] Exact match
-- [ ] Fuzzy search
-- [ ] Prefix search
-- [ ] Phrase search
-- [ ] Wildcard search
+- [x] Full-text search
+- [x] Exact match
+- [x] Fuzzy search
+- [x] Prefix search
+- [x] Phrase search
+- [x] Wildcard search
 
 ---
 
 # 5. Search Ranking
 
-- [ ] Relevance scoring
+- [x] Relevance scoring
 - [ ] BM25 (or equivalent)
-- [ ] Exact match boosting
-- [ ] Title boosting
+- [x] Exact match boosting
+- [x] Title boosting
 - [ ] Popularity boosting
 - [ ] Freshness boosting
 
@@ -79,7 +79,7 @@ Every item must be completed before the Search bounded context is considered Ent
 
 # 6. Filters
 
-- [ ] Entity type
+- [x] Entity type
 - [ ] Ontology
 - [ ] Relationship type
 - [ ] Category
@@ -93,26 +93,26 @@ Every item must be completed before the Search bounded context is considered Ent
 
 # 7. Sorting
 
-- [ ] Relevance
-- [ ] Alphabetical
-- [ ] Date created
-- [ ] Date updated
-- [ ] Popularity
+- [x] Relevance
+- [x] Alphabetical
+- [x] Date created
+- [x] Date updated
+- [x] Popularity
 
 ---
 
 # 8. Pagination
 
-- [ ] Offset pagination
+- [x] Offset pagination
 - [ ] Cursor pagination
-- [ ] Configurable page size
+- [x] Configurable page size
 - [ ] Total count
 
 ---
 
 # 9. Suggestions
 
-- [ ] Autocomplete
+- [x] Autocomplete
 - [ ] Search suggestions
 - [ ] Trending searches
 - [ ] Related searches
@@ -166,7 +166,7 @@ Every item must be completed before the Search bounded context is considered Ent
 
 # 15. Domain Events
 
-- [ ] SearchIndexedEvent
+- [x] SearchIndexedEvent
 - [ ] SearchReindexedEvent
 - [ ] SearchIndexDeletedEvent
 
@@ -184,7 +184,7 @@ Every item must be completed before the Search bounded context is considered Ent
 
 ## Queries
 
-- [ ] Search
+- [x] Search
 - [ ] SearchSuggestions
 - [ ] AdvancedSearch
 - [ ] GraphSearch
@@ -193,9 +193,9 @@ Every item must be completed before the Search bounded context is considered Ent
 
 # 17. DTOs
 
-- [ ] SearchRequest
-- [ ] SearchResponse
-- [ ] SearchResult
+- [x] SearchRequest
+- [x] SearchResponse
+- [x] SearchResult
 - [ ] SuggestionResponse
 
 ---

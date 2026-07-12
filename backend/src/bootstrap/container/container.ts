@@ -68,10 +68,26 @@ if (process.env.NODE_ENV === 'test') {
 
 import { GetCurrentUserQueryHandler } from '@modules/auth/application/handlers/queries/GetCurrentUserQueryHandler';
 import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/AuthenticationMiddleware';
-// ... (previous imports)
+import { SearchProvider } from '@modules/search/infrastructure/search/SearchProvider';
+import { PostgresSearchProvider } from '@modules/search/infrastructure/search/PostgresSearchProvider';
+import { SearchRepository } from '@modules/search/infrastructure/repositories/SearchRepository';
+import { SearchController } from '@modules/search/interfaces/controllers/SearchController';
+import { AutocompleteController } from '@modules/search/interfaces/controllers/AutocompleteController';
+import { SearchQueryHandler } from '@modules/search/application/handlers/SearchQueryHandler';
+import { AutocompleteQueryHandler } from '@modules/search/application/handlers/AutocompleteQueryHandler';
 
-// Auth
-container.bind(LoginCommandHandler).toSelf();
+// ... (other imports)
+
+// Search
+container.bind(SearchProvider).to(PostgresSearchProvider);
+container.bind('ISearchRepository').toDynamicValue((context) => {
+    return new SearchRepository(context.container.get(SearchProvider));
+});
+container.bind(SearchQueryHandler).toSelf();
+container.bind(AutocompleteQueryHandler).toSelf();
+container.bind(SearchController).toSelf();
+container.bind(AutocompleteController).toSelf();
+
 container.bind(GetCurrentUserQueryHandler).toDynamicValue((context) => {
     return new GetCurrentUserQueryHandler(
         context.container.get('IUserRepository')
