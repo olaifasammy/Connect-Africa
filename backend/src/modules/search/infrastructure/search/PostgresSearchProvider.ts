@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
 import { Pool } from 'pg';
-import { SearchProvider } from '../search/SearchProvider';
+import { SearchProvider, SearchResult } from './SearchProvider';
 import { SearchDocument } from '../../domain/models/SearchDocument';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 
@@ -55,8 +55,9 @@ export class PostgresSearchProvider extends SearchProvider {
     sortBy?: 'relevance' | 'alphabetical' | 'dateCreated' | 'dateUpdated' | 'popularity',
     sortOrder: 'asc' | 'desc' = 'desc',
     limit: number = 10,
-    offset: number = 0
-  ): Promise<SearchDocument[]> {
+    offset: number = 0,
+    includeFacets?: string[]
+  ): Promise<SearchResult> {
     let whereClause = `(to_tsvector('english', COALESCE(content->>'title', '') || ' ' || COALESCE(content->>'snippet', '')) @@ phraseto_tsquery('english', $1)
        OR to_tsvector('english', COALESCE(content->>'title', '') || ' ' || COALESCE(content->>'snippet', '')) @@ to_tsquery('english', $1 || ':*')
        OR content::text ILIKE $2
@@ -83,10 +84,15 @@ export class PostgresSearchProvider extends SearchProvider {
 
     const result = await this.pool.query(
       `SELECT id, resource_id as "resourceId", resource_type as "resourceType", content,
-              ts_rank(
-                setweight(to_tsvector('english', COALESCE(content->>'title', '')), 'A') || 
-                setweight(to_tsvector('english', COALESCE(content->>'snippet', '')), 'B'),
-                plainto_tsquery('english', $1)
+              (
+                ts_rank_cd(
+                  setweight(to_tsvector('english', COALESCE(content->>'title', '')), 'A') || 
+                  setweight(to_tsvector('english', COALESCE(content->>'snippet', '')), 'B'),
+                  plainto_tsquery('english', $1),
+                  32
+                ) *
+                COALESCE((content->>'popularity')::numeric, 1.0) *
+                (1.0 / (1.0 + EXTRACT(EPOCH FROM (NOW() - (content->>'createdAt')::timestamp)) / 864000))
               ) as rank
        FROM search_documents 
        WHERE ${whereClause}
@@ -94,12 +100,33 @@ export class PostgresSearchProvider extends SearchProvider {
        LIMIT ${limitParam} OFFSET ${offsetParam}`,
       params
     );
-    return result.rows.map(row => new SearchDocument(
+
+    const documents = result.rows.map(row => new SearchDocument(
         new UniqueEntityId(row.id), 
         row.resourceType, 
         new UniqueEntityId(row.resourceId), 
         row.content
     ));
+
+    let facets: Record<string, Record<string, number>> | undefined;
+    if (includeFacets && includeFacets.length > 0) {
+      facets = {};
+      for (const facet of includeFacets) {
+        facets[facet] = {};
+        const facetResult = await this.pool.query(
+          `SELECT content->>$1 as value, COUNT(*) as count
+           FROM search_documents
+           WHERE ${whereClause}
+           GROUP BY content->>$1`,
+          [facet, ...params.slice(0, 2), ...params.slice(2, params.length - 2)]
+        );
+        for (const row of facetResult.rows) {
+          if (row.value) facets[facet][row.value] = parseInt(row.count);
+        }
+      }
+    }
+    
+    return { documents, facets };
   }
 
   async bulkIndex(documents: SearchDocument[]): Promise<void> {
@@ -128,6 +155,27 @@ export class PostgresSearchProvider extends SearchProvider {
        WHERE content->>'title' ILIKE $1 
        LIMIT 10`,
       [`${query}%`]
+    );
+    return result.rows.map(row => row.title);
+  }
+
+  async getSuggestions(query: string): Promise<string[]> {
+    const result = await this.pool.query(
+      `SELECT DISTINCT content->>'title' as title 
+       FROM search_documents 
+       WHERE content->>'title' ILIKE $1 
+       LIMIT 10`,
+      [`%${query}%`]
+    );
+    return result.rows.map(row => row.title);
+  }
+
+  async getTrending(): Promise<string[]> {
+    const result = await this.pool.query(
+      `SELECT content->>'title' as title
+       FROM search_documents
+       ORDER BY COALESCE((content->>'popularity')::numeric, 0) DESC
+       LIMIT 10`
     );
     return result.rows.map(row => row.title);
   }

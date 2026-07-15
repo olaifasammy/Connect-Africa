@@ -1,0 +1,1 @@
+{"version":3,"file":"VideoValidator.js","sourceRoot":"","sources":["../../../../../src/modules/media/domain/validators/VideoValidator.ts"],"names":[],"mappings":";;;AAEA,MAAa,cAAc;IACzB,MAAM,CAAC,OAAO,CAAC,QAAkB;QAC/B,MAAM,eAAe,GAAG,CAAC,WAAW,EAAE,YAAY,EAAE,YAAY,EAAE,WAAW,CAAC,CAAC;QAC/E,OAAO,eAAe,CAAC,QAAQ,CAAC,QAAQ,CAAC,KAAK,CAAC,CAAC;IAClD,CAAC;CACF;AALD,wCAKC"}

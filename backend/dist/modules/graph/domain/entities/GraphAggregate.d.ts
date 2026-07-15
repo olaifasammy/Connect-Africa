@@ -9,6 +9,7 @@ export declare class GraphAggregate {
     addNode(node: GraphNode): void;
     addEdge(edge: GraphEdge): void;
     updateNode(entityId: string, metadata: Record<string, any>): void;
+    updateEdge(sourceEntityId: string, targetEntityId: string, relationshipType: string, properties: Record<string, any>): void;
     getDomainEvents(): GraphDomainEvent[];
     clearDomainEvents(): void;
 }

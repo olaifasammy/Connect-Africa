@@ -8,14 +8,17 @@ class UpdateGraphEdgeHandler {
         this.repository = repository;
     }
     async handle(command, userId, ipAddress) {
-        // Edge properties update logic (placeholder for actual projection update if supported)
-        // For now, logged as successful operation.
-        AuditLogger_1.AuditLogger.log({
-            status: 'SUCCESS',
-            action: 'UPDATE_EDGE',
-            resource: `${command.sourceEntityId}-${command.targetEntityId}`,
-            user: userId,
-            ipAddress
+        await this.repository.runInTransaction(async (client) => {
+            // In a real implementation, we would load the aggregate here.
+            // For now, we update the repository directly to perform the update.
+            await this.repository.updateEdge(command.sourceEntityId, command.targetEntityId, command.relationshipType, command.properties);
+            AuditLogger_1.AuditLogger.log({
+                status: 'SUCCESS',
+                action: 'UPDATE_EDGE',
+                resource: `${command.sourceEntityId}-${command.targetEntityId}`,
+                user: userId,
+                ipAddress
+            });
         });
     }
 }

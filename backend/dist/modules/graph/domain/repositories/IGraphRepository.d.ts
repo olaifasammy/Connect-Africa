@@ -9,6 +9,7 @@ export interface IGraphRepository {
     updateNode(entityId: string, metadata: Record<string, any>): Promise<void>;
     deleteNode(entityId: string): Promise<void>;
     saveEdge(edge: GraphEdge): Promise<void>;
+    updateEdge(sourceEntityId: string, targetEntityId: string, relationshipType: string, properties: Record<string, any>): Promise<void>;
     deleteEdge(sourceEntityId: string, targetEntityId: string, relationshipType: string): Promise<void>;
     existsEdge(sourceEntityId: string, targetEntityId: string, relationshipType: string): Promise<boolean>;
     depthTraversal(entityId: string, maxDepth: number): Promise<GraphNode[]>;

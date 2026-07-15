@@ -20,6 +20,7 @@ export class CreateGraphEdgeHandler {
     }
 
     await this.ontologyValidator.validateEdge(command.relationshipType, sourceNode.type, targetNode.type);
+    await this.ontologyValidator.validateCardinality(command.relationshipType, sourceNode.type);
 
     const edge = new GraphEdge(command.sourceEntityId, command.targetEntityId, command.relationshipType, {});
     const aggregate = new GraphAggregate([], [edge]);

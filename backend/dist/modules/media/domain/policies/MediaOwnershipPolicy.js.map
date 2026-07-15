@@ -1,0 +1,1 @@
+{"version":3,"file":"MediaOwnershipPolicy.js","sourceRoot":"","sources":["../../../../../src/modules/media/domain/policies/MediaOwnershipPolicy.ts"],"names":[],"mappings":";;;AAGA,MAAa,oBAAoB;IAC/B,MAAM,CAAC,OAAO,CAAC,KAAY,EAAE,MAAsB;QACjD,OAAO,KAAK,CAAC,OAAO,CAAC,MAAM,CAAC,MAAM,CAAC,CAAC;IACtC,CAAC;CACF;AAJD,oDAIC"}

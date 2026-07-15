@@ -39,6 +39,16 @@ class GraphAggregate {
         node.updateMetadata(metadata);
         this._domainEvents.push(new GraphEvents_1.GraphNodeUpdatedEvent(entityId, metadata));
     }
+    updateEdge(sourceEntityId, targetEntityId, relationshipType, properties) {
+        const edge = this.edges.find(e => e.sourceEntityId === sourceEntityId &&
+            e.targetEntityId === targetEntityId &&
+            e.relationshipType === relationshipType);
+        if (!edge) {
+            throw new Error('Edge not found');
+        }
+        Object.assign(edge.properties, properties);
+        this._domainEvents.push(new GraphEvents_1.GraphEdgeUpdatedEvent(sourceEntityId, targetEntityId, relationshipType, properties));
+    }
     getDomainEvents() {
         return [...this._domainEvents];
     }

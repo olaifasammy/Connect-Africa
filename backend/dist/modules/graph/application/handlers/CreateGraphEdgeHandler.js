@@ -18,6 +18,7 @@ class CreateGraphEdgeHandler {
             throw new Error('Source or target node not found');
         }
         await this.ontologyValidator.validateEdge(command.relationshipType, sourceNode.type, targetNode.type);
+        await this.ontologyValidator.validateCardinality(command.relationshipType, sourceNode.type);
         const edge = new GraphEntities_1.GraphEdge(command.sourceEntityId, command.targetEntityId, command.relationshipType, {});
         const aggregate = new GraphAggregate_1.GraphAggregate([], [edge]);
         await this.repository.saveEdge(edge);

@@ -20,6 +20,7 @@ describe('Graph E2E Lifecycle', () => {
     await request(app)
       .post('/graph/nodes')
       .set('Authorization', `Bearer ${authToken}`)
+      .set('x-test-role', 'ADMIN') // Use ADMIN role for testing
       .send({ entityId: 'n1', type: 'person' })
       .expect(201);
 
@@ -27,6 +28,7 @@ describe('Graph E2E Lifecycle', () => {
     await request(app)
       .post('/graph/nodes')
       .set('Authorization', `Bearer ${authToken}`)
+      .set('x-test-role', 'ADMIN') // Use ADMIN role for testing
       .send({ entityId: 'n2', type: 'person' })
       .expect(201);
 
@@ -34,17 +36,30 @@ describe('Graph E2E Lifecycle', () => {
     await request(app)
       .post('/graph/edges')
       .set('Authorization', `Bearer ${authToken}`)
+      .set('x-test-role', 'ADMIN') // Use ADMIN role for testing
       .send({ sourceEntityId: 'n1', targetEntityId: 'n2', relationshipType: 'KNOWS' })
       .expect(201);
 
-    // 4. Find Shortest Path
+    // 4. Search Graph
+    const searchRes = await request(app)
+      .get('/graph/search')
+      .set('Authorization', `Bearer ${authToken}`)
+      .set('x-test-role', 'ADMIN')
+      .query({ label: 'person' })
+      .expect(200);
+
+    expect(Array.isArray(searchRes.body)).toBe(true);
+    expect(searchRes.body.some((n: any) => n.entityId === 'n1')).toBe(true);
+
+    // 5. Find Shortest Path
     const res = await request(app)
       .get('/graph/path')
       .set('Authorization', `Bearer ${authToken}`)
+      .set('x-test-role', 'ADMIN') 
       .query({ start: 'n1', end: 'n2' })
       .expect(200);
 
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBeGreaterThan(0);
-  });
-});
+    expect(res.body[0].entityId).toBe('n1');
+    expect(res.body[res.body.length - 1].entityId).toBe('n2');

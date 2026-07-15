@@ -27,4 +27,22 @@ export class OntologyGraphService implements IOntologyGraphService {
       relType.targetEntityTypeId.equals(new UniqueEntityId(targetEntityTypeId))
     );
   }
+
+  async validateCardinality(relationshipTypeId: string, sourceEntityTypeId: string): Promise<boolean> {
+    const relType = await this.relationshipTypeRepository.findById(new UniqueEntityId(relationshipTypeId));
+    if (!relType) return false;
+    
+    // Logic to check cardinality constraints based on the relationship definition
+    // For now, this is a stub as per the requirement in Phase 3
+    return true;
+  }
+
+  async validateMetadataSchema(entityTypeId: string, metadata: Record<string, any>): Promise<boolean> {
+    const entityType = await this.entityTypeRepository.findById(new UniqueEntityId(entityTypeId));
+    if (!entityType) return false;
+    
+    // Logic to validate metadata against the entityType definition
+    // For now, this is a stub
+    return true;
+  }
 }

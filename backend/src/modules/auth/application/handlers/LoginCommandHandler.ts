@@ -5,22 +5,22 @@ import { IPasswordHasher } from '@modules/auth/domain/interfaces/IPasswordHasher
 import { IJwtProvider } from '@modules/auth/domain/interfaces/IJwtProvider';
 import { AuthenticationService } from '@modules/auth/domain/services/AuthenticationService';
 import { AuthenticationError } from '@modules/auth/domain/errors/AuthErrors';
-import { AuditLogger } from '@shared/infrastructure/logging/AuditLogger';
-import { PostgresAuditRepository } from '@modules/audit/infrastructure/audit/PostgresAuditRepository';
+import { IAuditRepository } from '@modules/audit/domain/repositories/IAuditRepository';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { UserLoggedInEvent } from '@modules/auth/domain/events/UserLoggedInEvent';
+import { AuditLogger } from '@modules/auth/infrastructure/AuditLogger';
 
 export class LoginCommandHandler implements ICommandHandler<LoginCommand, string> {
   constructor(
     private userRepository: IUserRepository,
     private passwordHasher: IPasswordHasher,
     private jwtProvider: IJwtProvider,
-    private auditRepository: PostgresAuditRepository,
+    private auditRepository: IAuditRepository,
     private eventBus: EventBus
   ) {}
 
   async handle(command: LoginCommand): Promise<string> {
-    const authService = new AuthenticationService(this.passwordHasher);
+    const authService = new AuthenticationService(this.passwordHasher, new AuditLogger());
     const user = await this.userRepository.findByEmail(command.email);
 
     if (!user || !(await authService.verifyPassword(user, command.password))) {

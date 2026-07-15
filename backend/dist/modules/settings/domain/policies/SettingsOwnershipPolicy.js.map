@@ -1,0 +1,1 @@
+{"version":3,"file":"SettingsOwnershipPolicy.js","sourceRoot":"","sources":["../../../../../src/modules/settings/domain/policies/SettingsOwnershipPolicy.ts"],"names":[],"mappings":";;;AAEA,MAAa,uBAAuB;IAClC,MAAM,CAAC,OAAO,CAAC,QAAkB,EAAE,MAAc;QAC/C,OAAO,QAAQ,CAAC,MAAM,KAAK,MAAM,CAAC;IACpC,CAAC;CACF;AAJD,0DAIC"}

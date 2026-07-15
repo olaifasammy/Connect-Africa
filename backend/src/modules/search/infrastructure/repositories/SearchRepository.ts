@@ -1,6 +1,6 @@
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 import { SearchDocument } from '../../domain/models/SearchDocument';
-import { ISearchRepository } from '../../domain/repositories/ISearchRepository';
+import { ISearchRepository, ISearchResult } from '../../domain/repositories/ISearchRepository';
 import { SearchProvider } from '../search/SearchProvider';
 
 export class SearchRepository implements ISearchRepository {
@@ -30,18 +30,33 @@ export class SearchRepository implements ISearchRepository {
     return await this.searchProvider.autocomplete(query);
   }
 
+  async getSuggestions(query: string): Promise<string[]> {
+    return await this.searchProvider.getSuggestions(query);
+  }
+
+  async getTrending(): Promise<string[]> {
+    return await this.searchProvider.getTrending();
+  }
+
   async search(
     query: string, 
     filters?: Record<string, any>, 
     sortBy?: 'relevance' | 'alphabetical' | 'dateCreated' | 'dateUpdated' | 'popularity',
     sortOrder?: 'asc' | 'desc',
     limit?: number,
-    offset?: number
-  ): Promise<SearchDocument[]> {
-    return await this.searchProvider.search(query, filters, sortBy, sortOrder, limit, offset);
+    offset?: number,
+    includeFacets?: string[]
+  ): Promise<ISearchResult> {
+    return await this.searchProvider.search(query, filters, sortBy, sortOrder, limit, offset, includeFacets);
   }
 
   async bulkSave(documents: SearchDocument[]): Promise<void> {
     await this.searchProvider.bulkIndex(documents);
+  }
+
+  async runInTransaction<T>(callback: (repo: ISearchRepository) => Promise<T>): Promise<T> {
+    // For now, PostgresSearchProvider bulkIndex already handles simple transactions.
+    // Full repository-level transaction support would require further infrastructure work.
+    return await callback(this);
   }
 }

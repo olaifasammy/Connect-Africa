@@ -5,7 +5,7 @@ import { CreateEntityCommandHandler } from '@modules/entity/application/handlers
 import { EntityController } from '@modules/entity/interfaces/EntityController';
 import { PostgresRelationshipRepository } from '@modules/relationship/infrastructure/repositories/PostgresRelationshipRepository';
 import { CreateRelationshipHandler } from '@modules/relationship/application/handlers/CreateRelationshipHandler';
-import { PostgresUserSettingsRepository } from '@modules/settings/infrastructure/PostgresUserSettingsRepository';
+import { PostgresSettingsRepository } from '@modules/settings/infrastructure/PostgresSettingsRepository';
 import { RelationshipController } from '@modules/relationship/interfaces/controllers/RelationshipController';
 import { RelationshipService } from '@modules/relationship/application/services/RelationshipService';
 import { RelationshipValidationService } from '@modules/relationship/domain/services/RelationshipValidationService';
@@ -17,7 +17,7 @@ import { PostgresOntologyRepository } from '@modules/ontology/infrastructure/Pos
 import { PrometheusMetricsProvider } from '@shared/infrastructure/monitoring/PrometheusMetricsProvider';
 import { PostgresUserRepository } from '@modules/auth/infrastructure/PostgresUserRepository';
 import { PostgresUserProfileRepository } from '@modules/auth/infrastructure/PostgresUserProfileRepository';
-import { PostgresAuditRepository } from '@modules/audit/infrastructure/audit/PostgresAuditRepository';
+import { AuditLogger } from '@modules/auth/infrastructure/AuditLogger';
 import { IAuditRepository } from '@modules/audit/domain/repositories/IAuditRepository';
 import { PostgresProvider } from '@shared/infrastructure/database/PostgresProvider';
 import { LoginCommandHandler } from '@modules/auth/application/handlers/LoginCommandHandler';
@@ -43,9 +43,17 @@ import { FindShortestPathHandler } from '@modules/graph/application/handlers/Fin
 import { GraphController } from '@modules/graph/interfaces/controllers/GraphController';
 import { OntologyValidator } from '@modules/graph/domain/services/OntologyValidator';
 import { logger } from '@shared/logger/Logger';
+import { AuthenticationService } from '@modules/auth/domain/services/AuthenticationService';
 
 export const container = new Container();
 
+container.bind('IAuditLogger').to(AuditLogger);
+container.bind(AuthenticationService).toDynamicValue((context) => {
+    return new AuthenticationService(
+        context.container.get('IPasswordHasher'),
+        context.container.get('IAuditLogger')
+    );
+});
 // Database/Infrastructure
 const pool = PostgresProvider.getPool();
 container.bind(Pool).toConstantValue(pool);
@@ -53,7 +61,9 @@ container.bind(PostgresProvider).toSelf();
 container.bind<IAuditRepository>('IAuditRepository').toDynamicValue((context) => {
     return new PostgresAuditRepository(context.container.get(Pool));
 }).inSingletonScope();
-container.bind('IUserRepository').to(PostgresUserRepository);
+container.bind('IUserRepository').toDynamicValue((context) => {
+    return new PostgresUserRepository(context.container.get(Pool));
+});
 container.bind('IUserProfileRepository').toDynamicValue((context) => {
     return new PostgresUserProfileRepository(context.container.get(Pool));
 });
@@ -75,6 +85,7 @@ import { SearchController } from '@modules/search/interfaces/controllers/SearchC
 import { AutocompleteController } from '@modules/search/interfaces/controllers/AutocompleteController';
 import { SearchQueryHandler } from '@modules/search/application/handlers/SearchQueryHandler';
 import { AutocompleteQueryHandler } from '@modules/search/application/handlers/AutocompleteQueryHandler';
+import { PostgresAuditRepository } from '@modules/audit/infrastructure/audit/PostgresAuditRepository';
 
 // ... (other imports)
 
@@ -103,6 +114,15 @@ container.bind(RegisterUserCommandHandler).toDynamicValue((context) => {
     return new RegisterUserCommandHandler(
         context.container.get('IUserRepository'),
         context.container.get('IPasswordHasher'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(LoginCommandHandler).toDynamicValue((context) => {
+    return new LoginCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('IPasswordHasher'),
+        context.container.get('IJwtProvider'),
+        context.container.get<IAuditRepository>('IAuditRepository'),
         context.container.get('EventBus')
     );
 });
@@ -167,7 +187,7 @@ container.bind(EntityController).toSelf();
 
 // Settings
 container.bind('ISettingsRepository').toDynamicValue((context) => {
-    return new PostgresUserSettingsRepository(context.container.get(PostgresProvider));
+    return new PostgresSettingsRepository(context.container.get(PostgresProvider));
 });
 
 // Relationship

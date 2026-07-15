@@ -1,7 +1,7 @@
 export declare const env: {
     REDIS_URL: string;
     PORT: string;
-    NODE_ENV: "production" | "development" | "test";
+    NODE_ENV: "production" | "test" | "development";
     DATABASE_URL: string;
     REDIS_HOST: string;
     REDIS_PORT: string;

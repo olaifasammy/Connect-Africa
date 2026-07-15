@@ -16,6 +16,7 @@ class CreateGraphNodeHandler {
     async handle(command, userId, ipAddress) {
         try {
             await this.ontologyValidator.validateNode(command.type);
+            await this.ontologyValidator.validateMetadata(command.type, command.metadata);
             const node = new GraphEntities_1.GraphNode(command.entityId, command.type, [], command.metadata);
             const aggregate = new GraphAggregate_1.GraphAggregate([node], []);
             await this.repository.saveNode(node);

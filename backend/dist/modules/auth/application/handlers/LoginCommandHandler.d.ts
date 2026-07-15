@@ -3,7 +3,7 @@ import { LoginCommand } from '../commands/LoginCommand';
 import { IUserRepository } from '../../../auth/domain/repositories/UserRepository';
 import { IPasswordHasher } from '../../../auth/domain/interfaces/IPasswordHasher';
 import { IJwtProvider } from '../../../auth/domain/interfaces/IJwtProvider';
-import { PostgresAuditRepository } from '../../../audit/infrastructure/audit/PostgresAuditRepository';
+import { IAuditRepository } from '../../../audit/domain/repositories/IAuditRepository';
 import { EventBus } from '../../../../shared/infrastructure/queue/EventBus';
 export declare class LoginCommandHandler implements ICommandHandler<LoginCommand, string> {
     private userRepository;
@@ -11,6 +11,6 @@ export declare class LoginCommandHandler implements ICommandHandler<LoginCommand
     private jwtProvider;
     private auditRepository;
     private eventBus;
-    constructor(userRepository: IUserRepository, passwordHasher: IPasswordHasher, jwtProvider: IJwtProvider, auditRepository: PostgresAuditRepository, eventBus: EventBus);
+    constructor(userRepository: IUserRepository, passwordHasher: IPasswordHasher, jwtProvider: IJwtProvider, auditRepository: IAuditRepository, eventBus: EventBus);
     handle(command: LoginCommand): Promise<string>;
 }

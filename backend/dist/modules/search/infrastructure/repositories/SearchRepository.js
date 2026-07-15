@@ -24,11 +24,25 @@ class SearchRepository {
     async delete(id) {
         await this.searchProvider.delete(id.toString());
     }
-    async search(query) {
-        return await this.searchProvider.search(query);
+    async autocomplete(query) {
+        return await this.searchProvider.autocomplete(query);
+    }
+    async getSuggestions(query) {
+        return await this.searchProvider.getSuggestions(query);
+    }
+    async getTrending() {
+        return await this.searchProvider.getTrending();
+    }
+    async search(query, filters, sortBy, sortOrder, limit, offset, includeFacets) {
+        return await this.searchProvider.search(query, filters, sortBy, sortOrder, limit, offset, includeFacets);
     }
     async bulkSave(documents) {
         await this.searchProvider.bulkIndex(documents);
+    }
+    async runInTransaction(callback) {
+        // For now, PostgresSearchProvider bulkIndex already handles simple transactions.
+        // Full repository-level transaction support would require further infrastructure work.
+        return await callback(this);
     }
 }
 exports.SearchRepository = SearchRepository;

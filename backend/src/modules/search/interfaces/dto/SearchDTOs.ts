@@ -5,6 +5,7 @@ export interface SearchRequestDto {
   filters?: Record<string, any>;
   sortBy?: 'relevance' | 'alphabetical' | 'dateCreated' | 'dateUpdated' | 'popularity';
   sortOrder?: 'asc' | 'desc';
+  includeFacets?: string[];
 }
 
 export interface SearchResultDto {
@@ -20,4 +21,5 @@ export interface SearchResponseDto {
   total: number;
   page: number;
   limit: number;
+  facets?: Record<string, Record<string, number>>;
 }

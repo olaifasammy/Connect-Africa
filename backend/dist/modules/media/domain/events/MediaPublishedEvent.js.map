@@ -1,0 +1,1 @@
+{"version":3,"file":"MediaPublishedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/media/domain/events/MediaPublishedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,mBAAoB,SAAQ,yBAAW;IAClD,YAAY,WAA2B;QACrC,KAAK,CAAC,WAAW,CAAC,CAAC;IACrB,CAAC;CACF;AAJD,kDAIC"}

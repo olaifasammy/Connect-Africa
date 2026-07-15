@@ -8,7 +8,7 @@ const CreateEntityCommandHandler_1 = require("../../modules/entity/application/h
 const EntityController_1 = require("../../modules/entity/interfaces/EntityController");
 const PostgresRelationshipRepository_1 = require("../../modules/relationship/infrastructure/repositories/PostgresRelationshipRepository");
 const CreateRelationshipHandler_1 = require("../../modules/relationship/application/handlers/CreateRelationshipHandler");
-const PostgresUserSettingsRepository_1 = require("../../modules/settings/infrastructure/PostgresUserSettingsRepository");
+const PostgresSettingsRepository_1 = require("../../modules/settings/infrastructure/PostgresSettingsRepository");
 const RelationshipController_1 = require("../../modules/relationship/interfaces/controllers/RelationshipController");
 const RelationshipService_1 = require("../../modules/relationship/application/services/RelationshipService");
 const RelationshipValidationService_1 = require("../../modules/relationship/domain/services/RelationshipValidationService");
@@ -20,7 +20,7 @@ const PostgresOntologyRepository_1 = require("../../modules/ontology/infrastruct
 const PrometheusMetricsProvider_1 = require("../../shared/infrastructure/monitoring/PrometheusMetricsProvider");
 const PostgresUserRepository_1 = require("../../modules/auth/infrastructure/PostgresUserRepository");
 const PostgresUserProfileRepository_1 = require("../../modules/auth/infrastructure/PostgresUserProfileRepository");
-const PostgresAuditRepository_1 = require("../../modules/audit/infrastructure/audit/PostgresAuditRepository");
+const AuditLogger_1 = require("../../modules/auth/infrastructure/AuditLogger");
 const PostgresProvider_1 = require("../../shared/infrastructure/database/PostgresProvider");
 const LoginCommandHandler_1 = require("../../modules/auth/application/handlers/LoginCommandHandler");
 const RegisterUserCommandHandler_1 = require("../../modules/auth/application/handlers/RegisterUserCommandHandler");
@@ -45,7 +45,12 @@ const FindShortestPathHandler_1 = require("../../modules/graph/application/handl
 const GraphController_1 = require("../../modules/graph/interfaces/controllers/GraphController");
 const OntologyValidator_1 = require("../../modules/graph/domain/services/OntologyValidator");
 const Logger_1 = require("../../shared/logger/Logger");
+const AuthenticationService_1 = require("../../modules/auth/domain/services/AuthenticationService");
 exports.container = new inversify_1.Container();
+exports.container.bind('IAuditLogger').to(AuditLogger_1.AuditLogger);
+exports.container.bind(AuthenticationService_1.AuthenticationService).toDynamicValue((context) => {
+    return new AuthenticationService_1.AuthenticationService(context.container.get('IPasswordHasher'), context.container.get('IAuditLogger'));
+});
 // Database/Infrastructure
 const pool = PostgresProvider_1.PostgresProvider.getPool();
 exports.container.bind(pg_1.Pool).toConstantValue(pool);
@@ -53,7 +58,9 @@ exports.container.bind(PostgresProvider_1.PostgresProvider).toSelf();
 exports.container.bind('IAuditRepository').toDynamicValue((context) => {
     return new PostgresAuditRepository_1.PostgresAuditRepository(context.container.get(pg_1.Pool));
 }).inSingletonScope();
-exports.container.bind('IUserRepository').to(PostgresUserRepository_1.PostgresUserRepository);
+exports.container.bind('IUserRepository').toDynamicValue((context) => {
+    return new PostgresUserRepository_1.PostgresUserRepository(context.container.get(pg_1.Pool));
+});
 exports.container.bind('IUserProfileRepository').toDynamicValue((context) => {
     return new PostgresUserProfileRepository_1.PostgresUserProfileRepository(context.container.get(pg_1.Pool));
 });
@@ -68,9 +75,24 @@ else {
 }
 const GetCurrentUserQueryHandler_1 = require("../../modules/auth/application/handlers/queries/GetCurrentUserQueryHandler");
 const AuthenticationMiddleware_1 = require("../../shared/interfaces/http/middleware/AuthenticationMiddleware");
-// ... (previous imports)
-// Auth
-exports.container.bind(LoginCommandHandler_1.LoginCommandHandler).toSelf();
+const SearchProvider_1 = require("../../modules/search/infrastructure/search/SearchProvider");
+const PostgresSearchProvider_1 = require("../../modules/search/infrastructure/search/PostgresSearchProvider");
+const SearchRepository_1 = require("../../modules/search/infrastructure/repositories/SearchRepository");
+const SearchController_1 = require("../../modules/search/interfaces/controllers/SearchController");
+const AutocompleteController_1 = require("../../modules/search/interfaces/controllers/AutocompleteController");
+const SearchQueryHandler_1 = require("../../modules/search/application/handlers/SearchQueryHandler");
+const AutocompleteQueryHandler_1 = require("../../modules/search/application/handlers/AutocompleteQueryHandler");
+const PostgresAuditRepository_1 = require("../../modules/audit/infrastructure/audit/PostgresAuditRepository");
+// ... (other imports)
+// Search
+exports.container.bind(SearchProvider_1.SearchProvider).to(PostgresSearchProvider_1.PostgresSearchProvider);
+exports.container.bind('ISearchRepository').toDynamicValue((context) => {
+    return new SearchRepository_1.SearchRepository(context.container.get(SearchProvider_1.SearchProvider));
+});
+exports.container.bind(SearchQueryHandler_1.SearchQueryHandler).toSelf();
+exports.container.bind(AutocompleteQueryHandler_1.AutocompleteQueryHandler).toSelf();
+exports.container.bind(SearchController_1.SearchController).toSelf();
+exports.container.bind(AutocompleteController_1.AutocompleteController).toSelf();
 exports.container.bind(GetCurrentUserQueryHandler_1.GetCurrentUserQueryHandler).toDynamicValue((context) => {
     return new GetCurrentUserQueryHandler_1.GetCurrentUserQueryHandler(context.container.get('IUserRepository'));
 });
@@ -79,6 +101,9 @@ exports.container.bind(AuthenticationMiddleware_1.AuthenticationMiddleware).toDy
 });
 exports.container.bind(RegisterUserCommandHandler_1.RegisterUserCommandHandler).toDynamicValue((context) => {
     return new RegisterUserCommandHandler_1.RegisterUserCommandHandler(context.container.get('IUserRepository'), context.container.get('IPasswordHasher'), context.container.get('EventBus'));
+});
+exports.container.bind(LoginCommandHandler_1.LoginCommandHandler).toDynamicValue((context) => {
+    return new LoginCommandHandler_1.LoginCommandHandler(context.container.get('IUserRepository'), context.container.get('IPasswordHasher'), context.container.get('IJwtProvider'), context.container.get('IAuditRepository'), context.container.get('EventBus'));
 });
 exports.container.bind(LogoutCommandHandler_1.LogoutCommandHandler).toSelf();
 exports.container.bind(RefreshCommandHandler_1.RefreshCommandHandler).toSelf();
@@ -112,7 +137,7 @@ exports.container.bind(CreateEntityCommandHandler_1.CreateEntityCommandHandler).
 exports.container.bind(EntityController_1.EntityController).toSelf();
 // Settings
 exports.container.bind('ISettingsRepository').toDynamicValue((context) => {
-    return new PostgresUserSettingsRepository_1.PostgresUserSettingsRepository(context.container.get(PostgresProvider_1.PostgresProvider));
+    return new PostgresSettingsRepository_1.PostgresSettingsRepository(context.container.get(PostgresProvider_1.PostgresProvider));
 });
 // Relationship
 exports.container.bind('IRelationshipRepository').toDynamicValue((context) => {

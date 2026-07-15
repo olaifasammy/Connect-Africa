@@ -58,6 +58,17 @@ export class GraphAggregate {
     this._domainEvents.push(new GraphNodeUpdatedEvent(entityId, metadata));
   }
 
+  public updateEdge(sourceEntityId: string, targetEntityId: string, relationshipType: string, properties: Record<string, any>): void {
+    const edge = this.edges.find(e => e.sourceEntityId === sourceEntityId && 
+                                    e.targetEntityId === targetEntityId && 
+                                    e.relationshipType === relationshipType);
+    if (!edge) {
+      throw new Error('Edge not found');
+    }
+    Object.assign(edge.properties, properties);
+    this._domainEvents.push(new GraphEdgeUpdatedEvent(sourceEntityId, targetEntityId, relationshipType, properties));
+  }
+
   public getDomainEvents(): GraphDomainEvent[] {
     return [...this._domainEvents];
   }

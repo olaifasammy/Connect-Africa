@@ -109,6 +109,10 @@ class PostgresGraphRepository {
         const id = (0, crypto_1.randomUUID)();
         await this.db.query(query, [id, edge.sourceEntityId, edge.targetEntityId, edge.relationshipType]);
     }
+    async updateEdge(sourceEntityId, targetEntityId, relationshipType, properties) {
+        const query = `UPDATE relationships SET properties = properties || $4 WHERE source_id = $1 AND target_id = $2 AND type_id = $3`;
+        await this.db.query(query, [sourceEntityId, targetEntityId, relationshipType, JSON.stringify(properties)]);
+    }
     async deleteEdge(sourceEntityId, targetEntityId, relationshipType) {
         const query = `DELETE FROM relationships WHERE source_id = $1 AND target_id = $2 AND type_id = $3`;
         await this.db.query(query, [sourceEntityId, targetEntityId, relationshipType]);

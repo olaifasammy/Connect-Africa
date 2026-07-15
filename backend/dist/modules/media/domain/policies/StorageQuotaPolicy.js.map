@@ -1,0 +1,1 @@
+{"version":3,"file":"StorageQuotaPolicy.js","sourceRoot":"","sources":["../../../../../src/modules/media/domain/policies/StorageQuotaPolicy.ts"],"names":[],"mappings":";;;AAAA,MAAa,kBAAkB;IAC7B,MAAM,CAAC,aAAa,CAAC,YAAoB,EAAE,QAAgB,EAAE,KAAa;QACxE,OAAO,YAAY,GAAG,QAAQ,IAAI,KAAK,CAAC;IAC1C,CAAC;CACF;AAJD,gDAIC"}

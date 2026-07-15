@@ -16,6 +16,7 @@ describe('GetGraphPathHandler', () => {
             updateNode: jest.fn(),
             deleteNode: jest.fn(),
             saveEdge: jest.fn(),
+            updateEdge: jest.fn(),
             deleteEdge: jest.fn(),
             existsEdge: jest.fn(),
             depthTraversal: jest.fn(),

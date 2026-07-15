@@ -9,6 +9,8 @@ describe('OntologyValidator', () => {
         mockOntologyService = {
             validateEntityType: jest.fn(),
             validateRelationshipType: jest.fn(),
+            validateCardinality: jest.fn(),
+            validateMetadataSchema: jest.fn(),
         };
         ontologyValidator = new OntologyValidator_1.OntologyValidator(mockOntologyService);
     });

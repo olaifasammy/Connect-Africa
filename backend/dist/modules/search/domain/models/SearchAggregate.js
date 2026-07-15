@@ -9,11 +9,14 @@ class SearchAggregate extends AggregateRoot_1.AggregateRoot {
         this.validateInvariants(props);
     }
     validateInvariants(document) {
-        if (!document.id) {
-            throw new Error('Search Document must have an ID');
+        if (!document.id || document.id.toString().trim() === '') {
+            throw new Error('Search Document must have a valid ID');
         }
         if (!document.resourceType || document.resourceType.trim() === '') {
-            throw new Error('Search Document must have a resource type');
+            throw new Error('Search Document must have a valid resource type');
+        }
+        if (!document.resourceId || document.resourceId.toString().trim() === '') {
+            throw new Error('Search Document must have a valid resource ID');
         }
     }
     static create(document) {

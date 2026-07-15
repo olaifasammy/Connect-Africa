@@ -16,6 +16,7 @@ export class CreateGraphNodeHandler {
   async handle(command: CreateGraphNodeCommand, userId: string, ipAddress: string): Promise<void> {
     try {
       await this.ontologyValidator.validateNode(command.type);
+      await this.ontologyValidator.validateMetadata(command.type, command.metadata);
       
       const node = new GraphNode(command.entityId, command.type, [], command.metadata);
       const aggregate = new GraphAggregate([node], []);

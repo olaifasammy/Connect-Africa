@@ -4,6 +4,7 @@ exports.LoginCommandHandler = void 0;
 const AuthenticationService_1 = require("../../../auth/domain/services/AuthenticationService");
 const AuthErrors_1 = require("../../../auth/domain/errors/AuthErrors");
 const UserLoggedInEvent_1 = require("../../../auth/domain/events/UserLoggedInEvent");
+const AuditLogger_1 = require("../../../auth/infrastructure/AuditLogger");
 class LoginCommandHandler {
     userRepository;
     passwordHasher;
@@ -18,7 +19,7 @@ class LoginCommandHandler {
         this.eventBus = eventBus;
     }
     async handle(command) {
-        const authService = new AuthenticationService_1.AuthenticationService(this.passwordHasher);
+        const authService = new AuthenticationService_1.AuthenticationService(this.passwordHasher, new AuditLogger_1.AuditLogger());
         const user = await this.userRepository.findByEmail(command.email);
         if (!user || !(await authService.verifyPassword(user, command.password))) {
             await this.auditRepository.log({ user: command.email, action: 'LOGIN', resource: 'AUTH', status: 'FAILURE' });

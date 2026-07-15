@@ -116,6 +116,11 @@ export class PostgresGraphRepository implements IGraphRepository {
     await this.db.query(query, [id, edge.sourceEntityId, edge.targetEntityId, edge.relationshipType]);
   }
 
+  async updateEdge(sourceEntityId: string, targetEntityId: string, relationshipType: string, properties: Record<string, any>): Promise<void> {
+    const query = `UPDATE relationships SET properties = properties || $4 WHERE source_id = $1 AND target_id = $2 AND type_id = $3`;
+    await this.db.query(query, [sourceEntityId, targetEntityId, relationshipType, JSON.stringify(properties)]);
+  }
+
   async deleteEdge(sourceEntityId: string, targetEntityId: string, relationshipType: string): Promise<void> {
     const query = `DELETE FROM relationships WHERE source_id = $1 AND target_id = $2 AND type_id = $3`;
     await this.db.query(query, [sourceEntityId, targetEntityId, relationshipType]);

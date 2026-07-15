@@ -1,3 +1,284 @@
+  /api/v1/media:
+    post:
+      summary: Upload new media
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                fileName:
+                  type: string
+                mimeType:
+                  type: string
+      responses:
+        '201':
+          description: Media uploaded successfully
+  /api/v1/media/{mediaId}/attach:
+    post:
+      summary: Attach media to a KG object
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [resourceType, resourceId]
+              properties:
+                resourceType: { type: string }
+                resourceId: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Media attached successfully
+  /api/v1/sources:
+    post:
+      summary: Create a new source
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSourceRequest'
+      responses:
+        '201':
+          description: Source created
+  /api/v1/sources/{id}:
+    get:
+      summary: Get source by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Source details
+  /api/v1/search:
+    get:
+      summary: Perform a search
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string }
+        - name: page
+          in: query
+          schema: { type: integer }
+        - name: limit
+          in: query
+          schema: { type: integer }
+        - name: resourceType
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Search results
+  /api/v1/relationships:
+    post:
+      summary: Create a new relationship
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRelationshipRequest'
+      responses:
+        '201':
+          description: Relationship created
+  /api/v1/articles:
+    post:
+      summary: Create a new article
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateArticleRequest'
+      responses:
+        '201':
+          description: Article created
+  /api/v1/articles/{id}:
+    put:
+      summary: Update article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateArticleRequest'
+      responses:
+        '200':
+          description: Article updated
+    delete:
+      summary: Delete article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204':
+          description: Article deleted
+  /api/v1/articles/{id}/publish:
+    post:
+      summary: Publish article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Article published
+  /api/v1/articles/{id}/archive:
+    post:
+      summary: Archive article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Article archived
+  /api/v1/articles/{id}/submit:
+    post:
+      summary: Submit article for review
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Article submitted
+  /api/v1/articles/{id}/approve:
+    post:
+      summary: Approve article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Article approved
+  /api/v1/entities:
+    post:
+      summary: Create a new entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEntityRequest'
+      responses:
+        '201':
+          description: Entity created successfully
+    post:
+      summary: Merge entities
+      description: Merge two entities together
+      responses:
+        '200':
+          description: Entities merged successfully
+  /api/v1/entities/{id}:
+    put:
+      summary: Update entity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEntityRequest'
+      responses:
+        '200':
+          description: Entity updated
+    delete:
+      summary: Delete entity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204':
+          description: Entity deleted
+  /api/v1/entities/{id}/publish:
+    post:
+      summary: Publish entity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Entity published
+  /api/v1/entities/{id}/archive:
+    post:
+      summary: Archive entity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Entity archived
+  /api/v1/entities/{id}/restore:
+    post:
+      summary: Restore entity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Entity restored
+  /api/v1/entities/{id}/alias:
+    post:
+      summary: Add alias
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Alias added
+    delete:
+      summary: Remove alias
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Alias removed
+  /api/v1/entities/{id}/version:
+    post:
+      summary: Create version
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Version created
 openapi: 3.0.0
 info:
   title: Connect Africa Identity API
@@ -147,25 +428,76 @@ paths:
       responses:
         '200':
           description: Ontology published successfully
-  /api/v1/ontology/{id}/entity-types:
+  /api/v1/graph/nodes:
     post:
-      summary: Create an entity type
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema: { type: string, format: uuid }
+      summary: Create a new graph node
       requestBody:
         content:
           application/json:
             schema:
               type: object
+              required: [entityId, type]
               properties:
-                name: { type: string }
-                description: { type: string }
+                entityId: { type: string, format: uuid }
+                type: { type: string }
+                metadata: { type: object }
       responses:
         '201':
-          description: Entity type created successfully
+          description: Node created successfully
+  /api/v1/graph/edges:
+    post:
+      summary: Create a new graph edge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sourceEntityId, targetEntityId, relationshipType]
+              properties:
+                sourceEntityId: { type: string, format: uuid }
+                targetEntityId: { type: string, format: uuid }
+                relationshipType: { type: string }
+      responses:
+        '201':
+          description: Edge created successfully
+  /api/v1/graph/nodes/{id}:
+    get:
+      summary: Get node by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Node details
+        '404':
+          description: Node not found
+  /api/v1/graph/search:
+    get:
+      summary: Search graph
+      parameters:
+        - name: label
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Search results
+  /api/v1/graph/path:
+    get:
+      summary: Find shortest path
+      parameters:
+        - name: start
+          in: query
+          required: true
+          schema: { type: string, format: uuid }
+        - name: end
+          in: query
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Path details
 components:
   schemas:
     LoginRequest:
@@ -187,10 +519,37 @@ components:
         name: { type: string }
         description: { type: string }
         version: { type: integer }
-    OntologyResponse:
+    CreateEntityRequest:
       type: object
+      required: [name, type]
       properties:
-        id: { type: string, format: uuid }
         name: { type: string }
+        type: { type: string }
         description: { type: string }
-        version: { type: integer }
+        source: { type: string }
+        tags: { type: array, items: { type: string } }
+    CreateArticleRequest:
+      type: object
+      required: [title, summary, content, authorId]
+      properties:
+        title: { type: string }
+        summary: { type: string }
+        content: { type: string }
+        authorId: { type: string, format: uuid }
+    CreateRelationshipRequest:
+      type: object
+      required: [sourceEntityId, targetEntityId, relationshipTypeId]
+      properties:
+        sourceEntityId: { type: string, format: uuid }
+        targetEntityId: { type: string, format: uuid }
+        relationshipTypeId: { type: string, format: uuid }
+    CreateSourceRequest:
+      type: object
+      required: [title, type, author, publishedAt]
+      properties:
+        title: { type: string }
+        type: { type: string, enum: [WEB, BOOK, ACADEMIC_PAPER, INTERVIEW, OTHER] }
+        author: { type: string }
+        publishedAt: { type: string, format: date-time }
+        url: { type: string, format: uri }
+        publisher: { type: string }
