@@ -157,7 +157,6 @@ container.bind(LoginCommandHandler).toDynamicValue((context) => {
         context.container.get('IUserRepository'),
         context.container.get('IPasswordHasher'),
         context.container.get('IJwtProvider'),
-        context.container.get<IAuditRepository>('IAuditRepository'),
         context.container.get('EventBus')
     );
 });

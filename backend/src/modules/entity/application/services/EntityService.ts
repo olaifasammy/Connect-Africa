@@ -1,8 +1,9 @@
 import { IEntityRepository } from '@modules/entity/domain/repositories/IEntityRepository';
 import { Entity } from '@modules/entity/domain/entities/Entity';
 import { EntityId } from '@modules/entity/domain/value-objects/EntityId';
+import { IEntityService } from '../../domain/interfaces/IEntityService';
 
-export class EntityService {
+export class EntityService implements IEntityService {
   constructor(private readonly entityRepository: IEntityRepository) {}
 
   async findById(id: string): Promise<Entity | null> {

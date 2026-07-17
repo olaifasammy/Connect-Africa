@@ -1,4 +1,4 @@
-import { ExpansionRequestService } from '@modules/ai/application/services/ExpansionRequestService';
+import { ExpansionRequestService } from '@modules/ai/public';
 import { Media } from '../../domain/models/Media';
 
 export class MediaAIService {

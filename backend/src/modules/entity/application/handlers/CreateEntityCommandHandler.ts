@@ -9,11 +9,18 @@ import { EntityValidator } from '@modules/entity/domain/validators/EntityValidat
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 import { IAuditRepository } from '@modules/audit/public';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
-import { AuditEntry } from '@modules/audit/domain/aggregates/AuditEntry';
-import { AuditActor } from '@modules/audit/domain/entities/AuditActor';
-import { AuditResource } from '@modules/audit/domain/entities/AuditResource';
-import { AuditMetadata } from '@modules/audit/domain/entities/AuditMetadata';
-import { CorrelationId, Timestamp, UserId, ResourceId, IPAddress, UserAgent } from '@modules/audit/domain/value-objects/AuditValueObjects';
+import { 
+  AuditEntry, 
+  AuditActor, 
+  AuditResource, 
+  AuditMetadata, 
+  CorrelationId, 
+  Timestamp, 
+  UserId, 
+  ResourceId, 
+  IPAddress, 
+  UserAgent 
+} from '@modules/audit/public';
 
 export class CreateEntityCommandHandler implements ICommandHandler<CreateEntityCommand, void> {
   constructor(

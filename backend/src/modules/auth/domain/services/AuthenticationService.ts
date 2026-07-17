@@ -1,8 +1,9 @@
 import { User } from '../entities/User';
 import { IPasswordHasher } from '../interfaces/IPasswordHasher';
 import { IAuditLogger } from '../interfaces/IAuditLogger';
+import { IAuthenticationService } from '../interfaces/IAuthenticationService';
 
-export class AuthenticationService {
+export class AuthenticationService implements IAuthenticationService {
   constructor(
     private passwordHasher: IPasswordHasher,
     private auditLogger: IAuditLogger
