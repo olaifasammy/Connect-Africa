@@ -1,4 +1,4 @@
-import { ArticleUpdatedEvent } from '@modules/article/domain/events/ArticleUpdatedEvent';
+import { ArticleUpdatedEvent } from '@modules/article/public';
 import { IGraphRepository } from '../../domain/repositories/IGraphRepository';
 
 export class ArticleUpdatedHandler {

@@ -1,4 +1,4 @@
-import { EntityDeletedEvent } from '@modules/entity/domain/events/EntityDeletedEvent';
+import { EntityDeletedEvent } from '@modules/entity/public';
 import { IGraphRepository } from '../../domain/repositories/IGraphRepository';
 
 export class EntityDeletedHandler {

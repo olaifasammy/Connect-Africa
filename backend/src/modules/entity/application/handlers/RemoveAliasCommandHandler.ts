@@ -3,10 +3,16 @@ import { RemoveAliasCommand } from '@modules/entity/application/commands/RemoveA
 import { EntityId } from '@modules/entity/domain/value-objects/EntityId';
 import { IEntityAliasRepository } from '@modules/entity/domain/repositories/IEntityAliasRepository';
 import { AliasName } from '@modules/entity/domain/value-objects/EntityValueObjects';
-import { IAuditRepository } from '@modules/audit/domain/repositories/IAuditRepository';
+import { IAuditRepository } from '@modules/audit/public';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { EntityAliasRemovedEvent } from '@modules/entity/domain/events/EntityAliasRemovedEvent';
 import { EntityAlias } from '@modules/entity/domain/entities/EntityAlias';
+import { AuditEntry } from '@modules/audit/domain/aggregates/AuditEntry';
+import { AuditActor } from '@modules/audit/domain/entities/AuditActor';
+import { AuditResource } from '@modules/audit/domain/entities/AuditResource';
+import { AuditMetadata } from '@modules/audit/domain/entities/AuditMetadata';
+import { CorrelationId, Timestamp, UserId, ResourceId, IPAddress, UserAgent } from '@modules/audit/domain/value-objects/AuditValueObjects';
+import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 
 export class RemoveAliasCommandHandler implements ICommandHandler<RemoveAliasCommand, void> {
   constructor(
@@ -30,11 +36,23 @@ export class RemoveAliasCommandHandler implements ICommandHandler<RemoveAliasCom
     await this.entityAliasRepository.delete(aliasToRemove);
     await this.eventBus.publish(new EntityAliasRemovedEvent(id, alias));
 
-    await this.auditRepository.log({
-      user: userId,
+    const auditEntry = AuditEntry.create({
       action: 'REMOVE_ALIAS',
-      resource: `entity:${entityId}`,
-      status: 'SUCCESS'
+      actor: AuditActor.create({
+        userId: new UserId(userId),
+        actorType: 'USER',
+        ipAddress: new IPAddress('127.0.0.1'),
+        userAgent: new UserAgent('unknown')
+      }),
+      resource: AuditResource.create({
+        id: new ResourceId(entityId),
+        type: 'ENTITY'
+      }),
+      metadata: [AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
+      correlationId: new CorrelationId(new UniqueEntityId().toString()),
+      timestamp: new Timestamp(new Date())
     });
+
+    await this.auditRepository.log(auditEntry);
   }
 }

@@ -1,4 +1,4 @@
-import { EntityCreatedEvent } from '@modules/entity/domain/events/EntityCreatedEvent';
+import { EntityCreatedEvent } from '@modules/entity/public';
 import { IGraphRepository } from '../../domain/repositories/IGraphRepository';
 import { GraphNode } from '../../domain/entities/GraphEntities';
 

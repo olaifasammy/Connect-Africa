@@ -1,4 +1,4 @@
-import { RelationshipCreatedEvent } from '@modules/relationship/domain/events/RelationshipCreatedEvent';
+import { RelationshipCreatedEvent } from '@modules/relationship/public';
 import { IGraphRepository } from '../../domain/repositories/IGraphRepository';
 import { GraphEdge } from '../../domain/entities/GraphEntities';
 import { OntologyValidator } from '../../domain/services/OntologyValidator';

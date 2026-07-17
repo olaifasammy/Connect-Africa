@@ -7,7 +7,18 @@ interface PreferenceSettingsProps {
 }
 
 export class PreferenceSettings extends Entity<PreferenceSettingsProps> {
-  constructor(props: PreferenceSettingsProps, id?: UniqueEntityId) {
-    super(props, id);
+  private constructor(props: PreferenceSettingsProps, id?: UniqueEntityId) {
+    super(props, id || new UniqueEntityId());
+  }
+
+  static create(props: PreferenceSettingsProps, id?: UniqueEntityId): PreferenceSettings {
+    return new PreferenceSettings(props, id);
+  }
+
+  get key(): string { return this.props.key; }
+  get value(): string { return this.props.value; }
+
+  updateValue(value: string): void {
+    this.props.value = value;
   }
 }

@@ -1,5 +1,4 @@
-import { IEntityTypeRepository } from '@modules/ontology/domain/repositories/IEntityTypeRepository';
-import { IRelationshipTypeRepository } from '@modules/ontology/domain/repositories/IRelationshipTypeRepository';
+import { IEntityTypeRepository, IRelationshipTypeRepository } from '@modules/ontology/public';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 
 export class ArticleOntologyValidator {

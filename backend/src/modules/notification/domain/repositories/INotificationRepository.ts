@@ -1,7 +1,4 @@
-import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
-
 export interface INotificationRepository {
-  findById(id: UniqueEntityId): Promise<any | null>;
-  save(entity: any): Promise<void>;
-  delete(id: UniqueEntityId): Promise<void>;
+  save(notification: any): Promise<void>;
+  findById(id: string): Promise<any>;
 }

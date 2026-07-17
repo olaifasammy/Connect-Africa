@@ -1,5 +1,7 @@
+import { PrivacyLevel } from '../value-objects/SettingsValueObjects';
+
 export class PrivacyValidator {
-  static validate(level: string): boolean {
-    return ['public', 'private'].includes(level);
+  static validate(level: string): void {
+    new PrivacyLevel(level);
   }
 }

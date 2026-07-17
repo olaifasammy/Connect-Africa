@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import { IOntologyGraphService } from '@modules/ontology/application/services/IOntologyGraphService';
+import { IOntologyGraphService } from '@modules/ontology/public';
 import { ISearchRepository } from '@modules/search/domain/repositories/ISearchRepository';
 import { ISearchResult } from '@modules/search/domain/repositories/ISearchRepository';
 

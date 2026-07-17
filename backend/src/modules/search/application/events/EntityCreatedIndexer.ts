@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import { EntityCreatedEvent } from '@modules/entity/domain/events/EntityCreatedEvent';
+import { EntityCreatedEvent } from '@modules/entity/public';
 import { ISearchRepository } from '@modules/search/domain/repositories/ISearchRepository';
 import { SearchAggregate } from '@modules/search/domain/models/SearchAggregate';
 import { SearchDocument } from '@modules/search/domain/models/SearchDocument';

@@ -1,12 +1,12 @@
-import { AIProvider } from '@shared/infrastructure/ai/AIProvider';
+import { ExpansionRequestService } from '@modules/ai/application/services/ExpansionRequestService';
 import { Media } from '../../domain/models/Media';
 
 export class MediaAIService {
-  constructor(private readonly aiProvider: AIProvider) {}
+  constructor(private readonly aiGateway: ExpansionRequestService) {}
 
   async processMedia(media: Media): Promise<void> {
-    // TODO: Implement AI features (Captioning, OCR, Detection, Moderation, Tagging)
-    // Dependency: Await implementation of the AI Bounded Context.
-    await this.aiProvider.analyze(media.filePath);
+    // Utilize AI Bounded Context via Gateway/Service
+    const description = await this.aiGateway.requestExpansion(`Describe this media: ${media.filePath}`);
+    console.log(`[MEDIA_AI] Processed media ${media.id}: ${description}`);
   }
 }

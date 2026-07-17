@@ -6,7 +6,7 @@ import { validate } from '@shared/interfaces/http/middleware/ZodValidationMiddle
 import { metricsMiddleware } from '@shared/interfaces/http/middleware/MetricsMiddleware';
 import { CreateEntitySchema } from '@modules/entity/application/dto/CreateEntityRequest';
 import { UpdateEntitySchema } from '@modules/entity/application/dto/UpdateEntityRequest';
-import { Permission } from '@modules/auth/domain/policies/rbac/Permissions';
+import { Permission } from '@modules/auth/public';
 
 export const createEntityRoutes = (controller: EntityController, authMiddleware: AuthenticationMiddleware): Router => {
   const router = Router();

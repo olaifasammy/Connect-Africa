@@ -1,6 +1,6 @@
-import { RelationshipDeletedEvent } from '@modules/relationship/domain/events/RelationshipEvents';
+import { RelationshipDeletedEvent } from '@modules/relationship/public';
 import { IGraphRepository } from '../../domain/repositories/IGraphRepository';
-import { IRelationshipRepository } from '@modules/relationship/domain/repositories/IRelationshipRepository';
+import { IRelationshipRepository } from '@modules/relationship/public';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 
 export class RelationshipDeletedHandler {

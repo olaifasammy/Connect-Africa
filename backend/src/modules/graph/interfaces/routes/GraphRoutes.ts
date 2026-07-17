@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { GraphController } from '../controllers/GraphController';
 import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/AuthenticationMiddleware';
 import { authorize } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
-import { Permission } from '@modules/auth/domain/policies/rbac/Permissions';
+import { Permission } from '@modules/auth/public';
 
 export const graphRoutes = (graphController: GraphController, authMiddleware: AuthenticationMiddleware) => {
   const router = Router();

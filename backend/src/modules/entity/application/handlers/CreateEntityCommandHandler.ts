@@ -7,8 +7,13 @@ import { EntityMetadata } from '@modules/entity/domain/value-objects/EntityMetad
 import { IEntityRepository } from '@modules/entity/domain/repositories/IEntityRepository';
 import { EntityValidator } from '@modules/entity/domain/validators/EntityValidator';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
-import { IAuditRepository } from '@modules/audit/domain/repositories/IAuditRepository';
+import { IAuditRepository } from '@modules/audit/public';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
+import { AuditEntry } from '@modules/audit/domain/aggregates/AuditEntry';
+import { AuditActor } from '@modules/audit/domain/entities/AuditActor';
+import { AuditResource } from '@modules/audit/domain/entities/AuditResource';
+import { AuditMetadata } from '@modules/audit/domain/entities/AuditMetadata';
+import { CorrelationId, Timestamp, UserId, ResourceId, IPAddress, UserAgent } from '@modules/audit/domain/value-objects/AuditValueObjects';
 
 export class CreateEntityCommandHandler implements ICommandHandler<CreateEntityCommand, void> {
   constructor(
@@ -38,11 +43,23 @@ export class CreateEntityCommandHandler implements ICommandHandler<CreateEntityC
     entity.clearDomainEvents();
 
     // Audit logging
-    await this.auditRepository.log({
-        user: command.userId,
-        action: 'CREATE_ENTITY',
-        resource: `entity:${entity.entityId.value}`,
-        status: 'SUCCESS'
+    const auditEntry = AuditEntry.create({
+      action: 'CREATE_ENTITY',
+      actor: AuditActor.create({
+        userId: new UserId(command.userId),
+        actorType: 'USER',
+        ipAddress: new IPAddress('127.0.0.1'),
+        userAgent: new UserAgent('unknown')
+      }),
+      resource: AuditResource.create({
+        id: new ResourceId(entity.entityId.value),
+        type: 'ENTITY'
+      }),
+      metadata: [AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
+      correlationId: new CorrelationId(new UniqueEntityId().toString()),
+      timestamp: new Timestamp(new Date())
     });
+    
+    await this.auditRepository.log(auditEntry);
   }
 }

@@ -1,4 +1,4 @@
-import { IOntologyGraphService } from '@modules/ontology/application/services/IOntologyGraphService';
+import { IOntologyGraphService } from '@modules/ontology/public';
 import { GraphValidationError } from '../errors/GraphErrors';
 
 export class OntologyValidator {

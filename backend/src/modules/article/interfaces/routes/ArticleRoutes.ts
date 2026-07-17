@@ -4,7 +4,7 @@ import { validate } from '@shared/interfaces/http/middleware/ZodValidationMiddle
 import { CreateArticleSchema, UpdateArticleSchema } from '../../application/validators/ArticleValidators';
 import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/AuthenticationMiddleware';
 import { authorize } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
-import { Permission } from '@modules/auth/domain/policies/rbac/Permissions';
+import { Permission } from '@modules/auth/public';
 import { authRateLimiter } from '@shared/interfaces/http/middleware/RateLimitMiddleware';
 
 export function createArticleRoutes(controller: ArticleController, authMiddleware: AuthenticationMiddleware): Router {

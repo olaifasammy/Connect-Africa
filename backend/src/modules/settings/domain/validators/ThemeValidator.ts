@@ -1,5 +1,7 @@
+import { Theme } from '../value-objects/SettingsValueObjects';
+
 export class ThemeValidator {
-  static validate(theme: string): boolean {
-    return ['light', 'dark'].includes(theme);
+  static validate(theme: string): void {
+    new Theme(theme); // Will throw if invalid
   }
 }

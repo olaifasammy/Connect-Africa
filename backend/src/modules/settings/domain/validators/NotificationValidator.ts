@@ -1,5 +1,7 @@
+import { NotificationPreference } from '../value-objects/SettingsValueObjects';
+
 export class NotificationValidator {
-  static validate(enabled: boolean): boolean {
-    return typeof enabled === 'boolean';
+  static validate(preference: string): void {
+    new NotificationPreference(preference);
   }
 }

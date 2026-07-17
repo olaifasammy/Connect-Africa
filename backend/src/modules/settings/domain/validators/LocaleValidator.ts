@@ -1,5 +1,7 @@
+import { Locale } from '../value-objects/SettingsValueObjects';
+
 export class LocaleValidator {
-  static validate(locale: string): boolean {
-    return locale.length > 0;
+  static validate(locale: string): void {
+    new Locale(locale);
   }
 }

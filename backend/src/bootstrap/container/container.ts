@@ -1,11 +1,19 @@
 import { Container } from 'inversify';
 import 'reflect-metadata';
+import { GeminiProvider } from '@modules/ai/infrastructure/providers/GeminiProvider';
+import { ProviderRegistry } from '@modules/ai/infrastructure/providers/ProviderRegistry';
+import { ProviderSelectionService } from '@modules/ai/domain/services/ProviderSelectionService';
+import { AIGatewayService } from '@modules/ai/application/services/AIGatewayService';
+import { PostgresProviderRepository } from '@modules/ai/infrastructure/repositories/PostgresProviderRepository';
+import { ExpansionRequestService } from '@modules/ai/application/services/ExpansionRequestService';
+import { ProcessAiRequestHandler } from '@modules/ai/application/handlers/ProcessAiRequestHandler';
+import { AiController } from '@modules/ai/interfaces/controllers/AiController';
 import { PostgresEntityRepository } from '@modules/entity/infrastructure/PostgresEntityRepository';
 import { CreateEntityCommandHandler } from '@modules/entity/application/handlers/CreateEntityCommandHandler';
 import { EntityController } from '@modules/entity/interfaces/EntityController';
 import { PostgresRelationshipRepository } from '@modules/relationship/infrastructure/repositories/PostgresRelationshipRepository';
 import { CreateRelationshipHandler } from '@modules/relationship/application/handlers/CreateRelationshipHandler';
-import { PostgresSettingsRepository } from '@modules/settings/infrastructure/PostgresSettingsRepository';
+import { PostgresNotificationRepository, PreferenceService, DeliveryService } from '@modules/notification/public';
 import { RelationshipController } from '@modules/relationship/interfaces/controllers/RelationshipController';
 import { RelationshipService } from '@modules/relationship/application/services/RelationshipService';
 import { RelationshipValidationService } from '@modules/relationship/domain/services/RelationshipValidationService';
@@ -18,7 +26,7 @@ import { PrometheusMetricsProvider } from '@shared/infrastructure/monitoring/Pro
 import { PostgresUserRepository } from '@modules/auth/infrastructure/PostgresUserRepository';
 import { PostgresUserProfileRepository } from '@modules/auth/infrastructure/PostgresUserProfileRepository';
 import { AuditLogger } from '@modules/auth/infrastructure/AuditLogger';
-import { IAuditRepository } from '@modules/audit/domain/repositories/IAuditRepository';
+import { IAuditRepository } from '@modules/audit/public';
 import { PostgresProvider } from '@shared/infrastructure/database/PostgresProvider';
 import { LoginCommandHandler } from '@modules/auth/application/handlers/LoginCommandHandler';
 import { RegisterUserCommandHandler } from '@modules/auth/application/handlers/RegisterUserCommandHandler';
@@ -34,26 +42,65 @@ import { UpdateProfileCommandHandler } from '@modules/auth/application/handlers/
 import { BanUserCommandHandler } from '@modules/auth/application/handlers/BanUserCommandHandler';
 import { RedisSessionRepository } from '@modules/auth/infrastructure/RedisSessionRepository';
 import { Pool } from 'pg';
-import { PostgresGraphRepository } from '@modules/graph/infrastructure/PostgresGraphRepository';
-import { CreateGraphNodeHandler } from '@modules/graph/application/handlers/CreateGraphNodeHandler';
-import { CreateGraphEdgeHandler } from '@modules/graph/application/handlers/CreateGraphEdgeHandler';
-import { GetNodeHandler } from '@modules/graph/application/handlers/GetNodeHandler';
-import { SearchGraphHandler } from '@modules/graph/application/handlers/SearchGraphHandler';
-import { FindShortestPathHandler } from '@modules/graph/application/handlers/FindShortestPathHandler';
-import { GraphController } from '@modules/graph/interfaces/controllers/GraphController';
-import { OntologyValidator } from '@modules/graph/domain/services/OntologyValidator';
+import { PostgresGraphRepository } from '@modules/graph/public';
+import { CreateGraphNodeHandler } from '@modules/graph/public';
+import { CreateGraphEdgeHandler } from '@modules/graph/public';
+import { GetNodeHandler } from '@modules/graph/public';
+import { SearchGraphHandler } from '@modules/graph/public';
+import { FindShortestPathHandler } from '@modules/graph/public';
+import { GraphController } from '@modules/graph/public';
+import { OntologyValidator } from '@modules/graph/public';
 import { logger } from '@shared/logger/Logger';
 import { AuthenticationService } from '@modules/auth/domain/services/AuthenticationService';
+import { GetCurrentUserQueryHandler } from '@modules/auth/application/handlers/queries/GetCurrentUserQueryHandler';
+import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/AuthenticationMiddleware';
+import { SearchProvider, PostgresSearchProvider, SearchRepository, SearchController, AutocompleteController, SearchQueryHandler, AutocompleteQueryHandler } from '@modules/search/public';
+import { PostgresAuditRepository } from '@modules/audit/infrastructure/audit/PostgresAuditRepository';
+import { ChangeThemeHandler, GetSettingsHandler, CreateSettingsHandler } from '@modules/settings/public';
+import { EventBus } from '@shared/infrastructure/queue/EventBus';
+import { UpdateSettingsHandler, UpdateLanguageHandler, UpdatePrivacyHandler, UpdateNotificationSettingsHandler, UpdateSecuritySettingsHandler, ResetSettingsHandler } from '@modules/settings/public';
+import { SettingsController } from '@modules/settings/interfaces/controllers/SettingsController';
+import { CacheProvider } from '@shared/infrastructure/cache/CacheProvider';
+import { RedisCacheProvider } from '@shared/infrastructure/cache/RedisCacheProvider';
+import { PostgresSettingsRepository } from '@modules/settings/infrastructure/PostgresSettingsRepository';
+import { NotificationService } from '@modules/notification/domain/services/NotificationService';
 
 export const container = new Container();
 
 container.bind('IAuditLogger').to(AuditLogger);
+
+// AI Context
+container.bind(PostgresProviderRepository).toSelf();
+container.bind(ProviderRegistry).toDynamicValue((context) => {
+    const registry = new ProviderRegistry();
+    registry.register({ id: 'gemini-id', name: 'Gemini', isEnabled: true, priority: 10 } as any, new GeminiProvider());
+    return registry;
+});
+container.bind(ProviderSelectionService).toDynamicValue((context) => {
+    return new ProviderSelectionService(context.container.get(PostgresProviderRepository));
+});
+container.bind(AIGatewayService).toDynamicValue((context) => {
+    return new AIGatewayService(
+        context.container.get(ProviderSelectionService),
+        context.container.get(ProviderRegistry)
+    );
+});
+container.bind(ExpansionRequestService).toDynamicValue((context) => {
+    return new ExpansionRequestService(context.container.get(AIGatewayService));
+});
+container.bind(ProcessAiRequestHandler).toDynamicValue((context) => {
+    return new ProcessAiRequestHandler(context.container.get(AIGatewayService));
+});
+container.bind(AiController).toDynamicValue((context) => {
+    return new AiController(context.container.get(ProcessAiRequestHandler));
+});
 container.bind(AuthenticationService).toDynamicValue((context) => {
     return new AuthenticationService(
         context.container.get('IPasswordHasher'),
         context.container.get('IAuditLogger')
     );
 });
+
 // Database/Infrastructure
 const pool = PostgresProvider.getPool();
 container.bind(Pool).toConstantValue(pool);
@@ -70,24 +117,12 @@ container.bind('IUserProfileRepository').toDynamicValue((context) => {
 container.bind('ISessionRepository').to(RedisSessionRepository);
 container.bind('IPasswordHasher').to(BcryptPasswordHasher);
 container.bind('IJwtProvider').to(JwtProvider);
+container.bind(CacheProvider).to(RedisCacheProvider).inSingletonScope();
 if (process.env.NODE_ENV === 'test') {
   container.bind('EventBus').toConstantValue({ publish: jest.fn() });
 } else {
   container.bind('EventBus').to(BullMqEventBus);
 }
-
-import { GetCurrentUserQueryHandler } from '@modules/auth/application/handlers/queries/GetCurrentUserQueryHandler';
-import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/AuthenticationMiddleware';
-import { SearchProvider } from '@modules/search/infrastructure/search/SearchProvider';
-import { PostgresSearchProvider } from '@modules/search/infrastructure/search/PostgresSearchProvider';
-import { SearchRepository } from '@modules/search/infrastructure/repositories/SearchRepository';
-import { SearchController } from '@modules/search/interfaces/controllers/SearchController';
-import { AutocompleteController } from '@modules/search/interfaces/controllers/AutocompleteController';
-import { SearchQueryHandler } from '@modules/search/application/handlers/SearchQueryHandler';
-import { AutocompleteQueryHandler } from '@modules/search/application/handlers/AutocompleteQueryHandler';
-import { PostgresAuditRepository } from '@modules/audit/infrastructure/audit/PostgresAuditRepository';
-
-// ... (other imports)
 
 // Search
 container.bind(SearchProvider).to(PostgresSearchProvider);
@@ -187,10 +222,64 @@ container.bind(EntityController).toSelf();
 
 // Settings
 container.bind('ISettingsRepository').toDynamicValue((context) => {
-    return new PostgresSettingsRepository(context.container.get(PostgresProvider));
+    return new PostgresSettingsRepository(context.container.get(PostgresProvider), context.container.get(CacheProvider));
+});
+container.bind(CreateSettingsHandler).toDynamicValue((context) => {
+    return new CreateSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+});
+container.bind(ChangeThemeHandler).toDynamicValue((context) => {
+    return new ChangeThemeHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+});
+container.bind(GetSettingsHandler).toDynamicValue((context) => {
+    return new GetSettingsHandler(context.container.get('ISettingsRepository'));
+});
+container.bind(UpdateSettingsHandler).toDynamicValue((context) => {
+    return new UpdateSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+});
+container.bind(UpdateLanguageHandler).toDynamicValue((context) => {
+    return new UpdateLanguageHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+});
+container.bind(UpdatePrivacyHandler).toDynamicValue((context) => {
+    return new UpdatePrivacyHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+});
+container.bind(UpdateNotificationSettingsHandler).toDynamicValue((context) => {
+    return new UpdateNotificationSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+});
+container.bind(UpdateSecuritySettingsHandler).toDynamicValue((context) => {
+    return new UpdateSecuritySettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+});
+container.bind(ResetSettingsHandler).toDynamicValue((context) => {
+    return new ResetSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+});
+container.bind(SettingsController).toDynamicValue((context) => {
+  return new SettingsController(
+    context.container.get(ChangeThemeHandler),
+    context.container.get(GetSettingsHandler),
+    context.container.get(UpdateSettingsHandler),
+    context.container.get(UpdateLanguageHandler),
+    context.container.get(UpdatePrivacyHandler),
+    context.container.get(UpdateNotificationSettingsHandler),
+    context.container.get(UpdateSecuritySettingsHandler),
+    context.container.get(ResetSettingsHandler)
+  );
 });
 
-// Relationship
+// Notification
+container.bind('INotificationRepository').toDynamicValue((context) => {
+    return new PostgresNotificationRepository(context.container.get(PostgresProvider));
+});
+container.bind(PreferenceService).toDynamicValue((context) => {
+    return new PreferenceService(context.container.get('INotificationRepository'));
+});
+container.bind(DeliveryService).toSelf();
+container.bind(NotificationService).toDynamicValue((context) => {
+    return new NotificationService(
+        context.container.get('INotificationRepository'),
+        context.container.get(PreferenceService),
+        context.container.get('EventBus'),
+        context.container.get('IAuditLogger')
+    );
+});
 container.bind('IRelationshipRepository').toDynamicValue((context) => {
     return new PostgresRelationshipRepository(context.container.get(PostgresProvider));
 });

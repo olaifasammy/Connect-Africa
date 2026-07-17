@@ -4,7 +4,7 @@ import multer from 'multer';
 import { uploadRateLimiter, validateFile, virusScanHook } from './middleware/MediaMiddleware';
 import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/AuthenticationMiddleware';
 import { authorize } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
-import { Permission } from '@modules/auth/domain/policies/rbac/Permissions';
+import { Permission } from '@modules/auth/public';
 
 const upload = multer({ storage: multer.memoryStorage() });
 

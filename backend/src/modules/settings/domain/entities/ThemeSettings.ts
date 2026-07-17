@@ -7,7 +7,19 @@ interface ThemeSettingsProps {
 }
 
 export class ThemeSettings extends Entity<ThemeSettingsProps> {
-  constructor(props: ThemeSettingsProps, id?: UniqueEntityId) {
-    super(props, id);
+  private constructor(props: ThemeSettingsProps, id?: UniqueEntityId) {
+    super(props, id || new UniqueEntityId());
+  }
+
+  static create(props: ThemeSettingsProps, id?: UniqueEntityId): ThemeSettings {
+    return new ThemeSettings(props, id);
+  }
+
+  get theme(): Theme {
+    return this.props.theme;
+  }
+
+  update(theme: Theme): void {
+    this.props.theme = theme;
   }
 }

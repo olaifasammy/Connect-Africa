@@ -1,4 +1,4 @@
-import { EntityUpdatedEvent } from '@modules/entity/domain/events/EntityUpdatedEvent';
+import { EntityUpdatedEvent } from '@modules/entity/public';
 import { IGraphRepository } from '../../domain/repositories/IGraphRepository';
 
 export class EntityUpdatedHandler {

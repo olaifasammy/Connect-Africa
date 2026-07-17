@@ -1,6 +1,6 @@
 import { AggregateRoot } from '@shared/domain/AggregateRoot';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
-import { UserId } from '@modules/auth/domain/value-objects/UserId';
+import { UserId } from '@modules/auth/public';
 
 export interface UserSettingsProps {
   userId: UserId;

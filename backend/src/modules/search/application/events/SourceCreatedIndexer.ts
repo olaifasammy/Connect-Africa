@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import { SourceCreatedEvent } from '@modules/source/domain/events/SourceCreatedEvent';
+import { SourceCreatedEvent } from '@modules/source/public';
 import { ISearchRepository } from '@modules/search/domain/repositories/ISearchRepository';
 import { SearchAggregate } from '@modules/search/domain/models/SearchAggregate';
 import { SearchDocument } from '@modules/search/domain/models/SearchDocument';

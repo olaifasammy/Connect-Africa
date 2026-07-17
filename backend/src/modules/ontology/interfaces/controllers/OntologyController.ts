@@ -3,7 +3,7 @@ import { BaseController } from '@shared/interfaces/http/controllers/BaseControll
 import { CreateOntologyCommandHandler } from '@modules/ontology/application/handlers/CreateOntologyCommandHandler';
 import { CreateOntologySchema } from '@modules/ontology/application/dto/OntologyValidationDto';
 import { authorize } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
-import { Permission } from '@modules/auth/domain/policies/rbac/Permissions';
+import { Permission } from '@modules/auth/public';
 
 export class OntologyController extends BaseController {
   constructor(private readonly createOntologyCommandHandler: CreateOntologyCommandHandler) {

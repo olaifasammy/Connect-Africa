@@ -4,7 +4,7 @@ import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/Aut
 import { authorize } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
 import { validate } from '@shared/interfaces/http/middleware/ZodValidationMiddleware';
 import { CreateRelationshipSchema } from '../../application/validators/RelationshipValidators';
-import { Permission } from '@modules/auth/domain/policies/rbac/Permissions';
+import { Permission } from '@modules/auth/public';
 
 export const relationshipRoutes = (controller: RelationshipController, authMiddleware: AuthenticationMiddleware): Router => {
   const router = Router();

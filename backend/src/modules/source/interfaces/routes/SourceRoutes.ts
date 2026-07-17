@@ -4,7 +4,7 @@ import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/Aut
 import { validate } from '@shared/interfaces/http/middleware/ZodValidationMiddleware';
 import { CreateSourceSchema } from '../../application/validators/SourceValidators';
 import { authorize } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
-import { Permission } from '@modules/auth/domain/policies/rbac/Permissions';
+import { Permission } from '@modules/auth/public';
 import { authRateLimiter } from '@shared/interfaces/http/middleware/RateLimitMiddleware';
 
 export function createSourceRoutes(controller: SourceController, authMiddleware: AuthenticationMiddleware): Router {
