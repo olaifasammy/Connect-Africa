@@ -1,6 +1,6 @@
 import { IGraphIntegrationService } from '../../domain/interfaces/IGraphIntegrationService';
 import { UniqueEntityId } from '../../../../shared/domain/UniqueEntityId';
-import { CreateGraphEdgeHandler } from '../../../graph/application/handlers/CreateGraphEdgeHandler';
+import { CreateGraphEdgeHandler } from '../../../graph/public';
 export declare class GraphIntegrationService implements IGraphIntegrationService {
     private readonly createEdgeHandler;
     constructor(createEdgeHandler: CreateGraphEdgeHandler);

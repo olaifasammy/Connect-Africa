@@ -1,7 +1,7 @@
 import { UniqueEntityId } from '../../../../shared/domain/UniqueEntityId';
 import { SearchDocument } from '../../domain/models/SearchDocument';
 import { ISearchRepository, ISearchResult } from '../../domain/repositories/ISearchRepository';
-import { SearchProvider } from '../search/SearchProvider';
+import { SearchProvider } from '../../../search/public';
 export declare class SearchRepository implements ISearchRepository {
     private readonly searchProvider;
     constructor(searchProvider: SearchProvider);

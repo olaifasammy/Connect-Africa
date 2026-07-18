@@ -1,3 +1,3 @@
 export declare class ThemeValidator {
-    static validate(theme: string): boolean;
+    static validate(theme: string): void;
 }

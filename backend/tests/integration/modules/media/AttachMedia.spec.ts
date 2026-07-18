@@ -11,14 +11,25 @@ describe('AttachMedia Integration', () => {
   let repository: PostgresMediaRepository;
   let postgresProvider: PostgresProvider;
 
+  let userId: string;
+
   beforeAll(async () => {
-    // Assuming PostgresProvider uses process.env.DATABASE_URL from setup.ts
     postgresProvider = new PostgresProvider();
     await postgresProvider.connect();
+    
+    const email = `test-${Date.now()}@example.com`;
+    const userResult = await postgresProvider.query(
+      'INSERT INTO users (id, email, password_hash) VALUES (gen_random_uuid(), $1, $2) RETURNING id',
+      [email, 'hash']
+    );
+    userId = userResult.rows[0].id;
+
     repository = new PostgresMediaRepository(postgresProvider);
   });
 
   afterAll(async () => {
+    await postgresProvider.query('DELETE FROM media WHERE owner_id = $1', [userId]);
+    await postgresProvider.query('DELETE FROM users WHERE id = $1', [userId]);
     await postgresProvider.disconnect();
   });
 
@@ -29,8 +40,9 @@ describe('AttachMedia Integration', () => {
       filePath: '/path/to/test.jpg',
       fileSize: 1024,
       uploadedAt: new Date(),
-      status: MediaStatus.create(MediaStatusType.DRAFT),
+      status: MediaStatus.create(MediaStatusType.PENDING),
       title: 'Test Media',
+      ownerId: new UniqueEntityId(userId),
     });
     await repository.save(media);
 

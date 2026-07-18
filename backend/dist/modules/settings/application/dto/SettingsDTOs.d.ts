@@ -1,3 +1,7 @@
+export interface PreferenceResponseDto {
+    key: string;
+    value: string;
+}
 export interface CreateSettingsDto {
     userId: string;
     theme: string;
@@ -27,7 +31,12 @@ export interface SettingsResponseDto {
 export interface ThemeResponseDto {
     theme: string;
 }
-export interface PreferenceResponseDto {
-    key: string;
-    value: string;
+export interface UserSettingsResponseDto {
+    userId: string;
+    theme: string;
+    notificationsEnabled: boolean;
+}
+export interface SystemSettingsResponseDto {
+    maintenanceMode: boolean;
+    registrationEnabled: boolean;
 }

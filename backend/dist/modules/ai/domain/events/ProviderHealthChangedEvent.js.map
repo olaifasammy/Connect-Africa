@@ -1,0 +1,1 @@
+{"version":3,"file":"ProviderHealthChangedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/ai/domain/events/ProviderHealthChangedEvent.ts"],"names":[],"mappings":";;;AAAA,MAAa,0BAA0B;IAEnB;IACA;IACA;IAHlB,YACkB,UAAkB,EAClB,MAA+B,EAC/B,SAAe;QAFf,eAAU,GAAV,UAAU,CAAQ;QAClB,WAAM,GAAN,MAAM,CAAyB;QAC/B,cAAS,GAAT,SAAS,CAAM;IAC9B,CAAC;CACL;AAND,gEAMC"}

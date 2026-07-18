@@ -11,6 +11,7 @@ describe('PostgresUserRepository Integration', () => {
     let userRepository;
     beforeAll(async () => {
         pool = PostgresProvider_1.PostgresProvider.getPool();
+        await pool.query("DELETE FROM users WHERE email = $1", ["integration@test.com"]);
         userRepository = new PostgresUserRepository_1.PostgresUserRepository(pool);
     });
     afterAll(async () => {

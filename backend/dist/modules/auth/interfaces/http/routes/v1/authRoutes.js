@@ -15,6 +15,7 @@ const authRoutes = (authController, authMiddleware) => {
     router.post('/refresh', authMiddleware.authenticate, (0, ZodValidationMiddleware_1.validate)(AuthSchemas_1.RefreshSchema), (req, res) => authController.refresh(req, res));
     router.post('/reset-password', RateLimitMiddleware_1.authRateLimiter, (0, ZodValidationMiddleware_1.validate)(AuthSchemas_1.ResetPasswordSchema), (req, res) => authController.resetPassword(req, res));
     router.post('/verify-email', RateLimitMiddleware_1.authRateLimiter, (0, ZodValidationMiddleware_1.validate)(AuthSchemas_1.VerifyEmailSchema), (req, res) => authController.verifyEmail(req, res));
+    router.put('/profile', authMiddleware.authenticate, (0, ZodValidationMiddleware_1.validate)(AuthSchemas_1.UpdateProfileSchema), (req, res) => authController.updateProfile(req, res));
     return router;
 };
 exports.authRoutes = authRoutes;

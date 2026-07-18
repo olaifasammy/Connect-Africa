@@ -483,21 +483,107 @@ paths:
       responses:
         '200':
           description: Search results
-  /api/v1/graph/path:
-    get:
-      summary: Find shortest path
+  /api/v1/notifications:
+    post:
+      summary: Send a notification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendNotificationRequest'
+      responses:
+        '200':
+          description: Notification sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+  /api/v1/notifications/{id}/read:
+    post:
+      summary: Mark notification as read
       parameters:
-        - name: start
-          in: query
-          required: true
-          schema: { type: string, format: uuid }
-        - name: end
-          in: query
+        - name: id
+          in: path
           required: true
           schema: { type: string, format: uuid }
       responses:
         '200':
-          description: Path details
+          description: Notification marked as read
+  /api/v1/notifications/{id}/preferences:
+    patch:
+      summary: Update notification preferences
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled: { type: boolean }
+      responses:
+        '200':
+          description: Preferences updated
+  /api/v1/ai/process:
+    post:
+      summary: Process an AI request
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [prompt]
+              properties:
+                prompt: { type: string }
+                provider: { type: string }
+      responses:
+        '200':
+          description: AI request processed successfully
+  /api/v1/ai/providers/{id}/health:
+    get:
+      summary: Get provider health
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Provider health status
+  /api/v1/ai/admin/knowledge-gaps:
+    post:
+      summary: Record a knowledge gap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [topic, prompt]
+              properties:
+                topic: { type: string }
+                prompt: { type: string }
+      responses:
+        '200':
+          description: Knowledge gap recorded
+  /api/v1/ai/admin/crawl/start:
+    post:
+      summary: Start a crawler
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [targetUrl]
+              properties:
+                targetUrl: { type: string }
+      responses:
+        '200':
+          description: Crawler started
 components:
   schemas:
     LoginRequest:
@@ -543,13 +629,15 @@ components:
         sourceEntityId: { type: string, format: uuid }
         targetEntityId: { type: string, format: uuid }
         relationshipTypeId: { type: string, format: uuid }
-    CreateSourceRequest:
+    SendNotificationRequest:
       type: object
-      required: [title, type, author, publishedAt]
+      required: [recipientId, templateId, channel]
       properties:
-        title: { type: string }
-        type: { type: string, enum: [WEB, BOOK, ACADEMIC_PAPER, INTERVIEW, OTHER] }
-        author: { type: string }
-        publishedAt: { type: string, format: date-time }
-        url: { type: string, format: uri }
-        publisher: { type: string }
+        recipientId: { type: string, format: uuid }
+        templateId: { type: string, format: uuid }
+        channel: { type: string, enum: [IN_APP, EMAIL, PUSH] }
+    NotificationResponse:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        status: { type: string }

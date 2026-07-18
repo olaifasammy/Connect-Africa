@@ -1,4 +1,4 @@
-import { IOntologyGraphService } from '../../../ontology/application/services/IOntologyGraphService';
+import { IOntologyGraphService } from '../../../ontology/public';
 import { ISearchRepository } from '../../../search/domain/repositories/ISearchRepository';
 import { ISearchResult } from '../../../search/domain/repositories/ISearchRepository';
 export declare class OntologyAwareSearchService {

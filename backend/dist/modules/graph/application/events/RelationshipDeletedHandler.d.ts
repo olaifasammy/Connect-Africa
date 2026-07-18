@@ -1,6 +1,6 @@
-import { RelationshipDeletedEvent } from '../../../relationship/domain/events/RelationshipEvents';
+import { RelationshipDeletedEvent } from '../../../relationship/public';
 import { IGraphRepository } from '../../domain/repositories/IGraphRepository';
-import { IRelationshipRepository } from '../../../relationship/domain/repositories/IRelationshipRepository';
+import { IRelationshipRepository } from '../../../relationship/public';
 export declare class RelationshipDeletedHandler {
     private readonly repository;
     private readonly relationshipRepository;

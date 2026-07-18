@@ -1,4 +1,4 @@
-import { RelationshipCreatedEvent } from '../../../relationship/domain/events/RelationshipCreatedEvent';
+import { RelationshipCreatedEvent } from '../../../relationship/public';
 import { IGraphRepository } from '../../domain/repositories/IGraphRepository';
 import { OntologyValidator } from '../../domain/services/OntologyValidator';
 export declare class RelationshipCreatedHandler {

@@ -1,4 +1,4 @@
-import { EntityDeletedEvent } from '../../../entity/domain/events/EntityDeletedEvent';
+import { EntityDeletedEvent } from '../../../entity/public';
 import { IGraphRepository } from '../../domain/repositories/IGraphRepository';
 export declare class EntityDeletedHandler {
     private readonly repository;

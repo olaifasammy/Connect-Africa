@@ -1,4 +1,4 @@
-import { EntityCreatedEvent } from '../../../entity/domain/events/EntityCreatedEvent';
+import { EntityCreatedEvent } from '../../../entity/public';
 import { ISearchRepository } from '../../../search/domain/repositories/ISearchRepository';
 export interface IDomainEventHandler<T> {
     handle(event: T): Promise<void>;

@@ -1,7 +1,7 @@
 import { CreateEntityCommandHandler } from '@modules/entity/application/handlers/CreateEntityCommandHandler';
 import { PostgresEntityRepository } from '@modules/entity/infrastructure/PostgresEntityRepository';
 import { PostgresAuditRepository } from '@modules/audit/infrastructure/audit/PostgresAuditRepository';
-import { PostgresProvider } from '@infrastructure/database/PostgresProvider';
+import { PostgresProvider } from '@shared/infrastructure/database/PostgresProvider';
 import { Pool } from 'pg';
 
 describe('CreateEntityCommandHandler Integration', () => {
@@ -22,7 +22,8 @@ describe('CreateEntityCommandHandler Integration', () => {
   afterEach(async () => {
     const pool = PostgresProvider.getPool();
     await pool.query('DELETE FROM entities WHERE name LIKE $1', ['Integration Test%']);
-    await pool.query('DELETE FROM audit_logs WHERE action = $1', ['CREATE_ENTITY']);
+    await pool.query('DELETE FROM entities WHERE name = $1', ['Repo Test']);
+    await pool.query('DELETE FROM audit_logs');
   });
 
   afterAll(async () => {
@@ -36,19 +37,19 @@ describe('CreateEntityCommandHandler Integration', () => {
         type: 'Person',
         description: 'Test Description Live',
       },
-      userId: 'test-user'
+      userId: '00000000-0000-0000-0000-000000000000'
     } as any;
 
     await handler.handle(command);
 
     // Verify persistence using the real repository
-    const savedEntity = await entityRepository.findByName(command.dto.name);
-    expect(savedEntity).not.toBeNull();
-    expect(savedEntity?.name.value).toBe(command.dto.name);
+    const pool = PostgresProvider.getPool();
+    const dbRes = await pool.query('SELECT * FROM entities WHERE name = $1', [command.dto.name]);
+    expect(dbRes.rowCount).toBe(1);
+    expect(dbRes.rows[0].name).toBe(command.dto.name);
 
     // Verify audit log creation
-    const pool = PostgresProvider.getPool();
-    const auditRes = await pool.query('SELECT * FROM audit_logs WHERE action = $1', ['CREATE_ENTITY']);
+    const auditRes = await pool.query('SELECT * FROM audit_entries WHERE action = $1', ['CREATE_ENTITY']);
     expect(auditRes.rowCount).toBeGreaterThan(0);
   });
 });

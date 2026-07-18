@@ -1,5 +1,4 @@
-import { IEntityTypeRepository } from '../../../ontology/domain/repositories/IEntityTypeRepository';
-import { IRelationshipTypeRepository } from '../../../ontology/domain/repositories/IRelationshipTypeRepository';
+import { IEntityTypeRepository, IRelationshipTypeRepository } from '../../../ontology/public';
 export declare class ArticleOntologyValidator {
     private readonly entityTypeRepository;
     private readonly relationshipTypeRepository;

@@ -1,7 +1,7 @@
 import { ICommandHandler } from '../../../../shared/application/handlers/ICommandHandler';
 import { RemoveAliasCommand } from '../../../entity/application/commands/RemoveAliasCommand';
 import { IEntityAliasRepository } from '../../../entity/domain/repositories/IEntityAliasRepository';
-import { IAuditRepository } from '../../../audit/domain/repositories/IAuditRepository';
+import { IAuditRepository } from '../../../audit/public';
 import { EventBus } from '../../../../shared/infrastructure/queue/EventBus';
 export declare class RemoveAliasCommandHandler implements ICommandHandler<RemoveAliasCommand, void> {
     private readonly entityAliasRepository;

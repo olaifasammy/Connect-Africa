@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const PostgresProvider_1 = require("../../../../shared/infrastructure/database/PostgresProvider");
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = require("../../../../shared/interfaces/http/app");
 const app = (0, app_1.createApp)();
@@ -14,6 +15,10 @@ describe('Update Profile E2E', () => {
         await (0, supertest_1.default)(app)
             .post('/api/v1/auth/register')
             .send({ email, password });
+        const pool = PostgresProvider_1.PostgresProvider.getPool();
+        const userRes = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
+        const userId = userRes.rows[0].id;
+        await pool.query("INSERT INTO user_profiles (id, user_id, display_name) VALUES (gen_random_uuid(), $1, $2)", [userId, "Test User"]);
         const loginRes = await (0, supertest_1.default)(app)
             .post('/api/v1/auth/login')
             .send({ email, password });
@@ -25,6 +30,9 @@ describe('Update Profile E2E', () => {
             .send({ displayName: 'New Name' });
         expect(updateRes.status).toBe(200);
         expect(updateRes.body.success).toBe(true);
+    });
+    afterAll(async () => {
+        await PostgresProvider_1.PostgresProvider.getPool().end();
     });
 });
 //# sourceMappingURL=UpdateProfile.test.js.map

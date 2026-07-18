@@ -20,11 +20,12 @@ describe('CreateRelationshipHandler', () => {
   });
 
   it('should create relationship successfully', async () => {
-    const command: CreateRelationshipCommand = {
-      sourceEntityId: 'ent1',
-      targetEntityId: 'ent2',
-      relationshipTypeId: 'type1'
-    };
+    const command = new CreateRelationshipCommand(
+      'ent1',
+      'ent2',
+      'type1',
+      'user1'
+    );
 
     const result = await handler.handle(command);
 

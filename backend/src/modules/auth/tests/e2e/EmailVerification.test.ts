@@ -1,3 +1,4 @@
+import { PostgresProvider } from "@shared/infrastructure/database/PostgresProvider";
 import request from 'supertest';
 import { createApp } from '@shared/interfaces/http/app';
 const app = createApp();
@@ -13,9 +14,10 @@ describe('Email Verification E2E', () => {
       .send({ email, password });
     
     // In a real system, we'd get a user ID from the registration response
-    // or a database. Assuming for this test registration returns the userId
-    // or we can fetch it. For simplicity, let's assume we can get it from the registration.
-    const userId = registerRes.body.data?.userId;
+    // or a database. 
+    const pool = PostgresProvider.getPool();
+    const userRes = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
+    const userId = userRes.rows[0].id;
 
     // 2. Verify Email
     const verifyRes = await request(app)
@@ -24,5 +26,9 @@ describe('Email Verification E2E', () => {
       
     expect(verifyRes.status).toBe(200);
     expect(verifyRes.body.success).toBe(true);
+  });
+
+  afterAll(async () => {
+    await PostgresProvider.getPool().end();
   });
 });

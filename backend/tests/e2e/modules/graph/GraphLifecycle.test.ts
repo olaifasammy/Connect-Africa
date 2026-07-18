@@ -63,3 +63,5 @@ describe('Graph E2E Lifecycle', () => {
     expect(res.body.length).toBeGreaterThan(0);
     expect(res.body[0].entityId).toBe('n1');
     expect(res.body[res.body.length - 1].entityId).toBe('n2');
+  });
+});

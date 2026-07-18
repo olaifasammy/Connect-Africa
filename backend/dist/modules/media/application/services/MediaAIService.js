@@ -2,14 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MediaAIService = void 0;
 class MediaAIService {
-    aiProvider;
-    constructor(aiProvider) {
-        this.aiProvider = aiProvider;
+    aiGateway;
+    constructor(aiGateway) {
+        this.aiGateway = aiGateway;
     }
     async processMedia(media) {
-        // TODO: Implement AI features (Captioning, OCR, Detection, Moderation, Tagging)
-        // Dependency: Await implementation of the AI Bounded Context.
-        await this.aiProvider.analyze(media.filePath);
+        // Utilize AI Bounded Context via Gateway/Service
+        const description = await this.aiGateway.requestExpansion(`Describe this media: ${media.filePath}`);
+        console.log(`[MEDIA_AI] Processed media ${media.id}: ${description}`);
     }
 }
 exports.MediaAIService = MediaAIService;

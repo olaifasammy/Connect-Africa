@@ -1,4 +1,4 @@
-import { UserCreatedEvent } from '../../../auth/domain/events/UserCreatedEvent';
+import { UserCreatedEvent } from '../../../auth/public';
 import { ISearchRepository } from '../../../search/domain/repositories/ISearchRepository';
 import { IDomainEventHandler } from '../../../search/application/events/EntityCreatedIndexer';
 export declare class UserCreatedIndexer implements IDomainEventHandler<UserCreatedEvent> {

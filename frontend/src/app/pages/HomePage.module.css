@@ -1,0 +1,37 @@
+.loading, .error { padding: 2rem; text-align: center; }
+.error { color: #dc2626; }
+.page {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1f2937;
+  background-color: #ffffff;
+}
+
+.hero {
+  background-color: #0b1120;
+  color: white;
+  padding: 2.5rem 1.5rem;
+}
+
+.heroTitle { font-size: 2.25rem; font-weight: bold; margin-bottom: 1rem; line-height: 1.2; }
+.heroDesc { margin-bottom: 1.5rem; color: #d1d5db; line-height: 1.6; }
+
+.searchContainer { display: flex; flex-direction: column; gap: 1rem; }
+.searchBar { display: flex; background: white; padding: 0.5rem; border-radius: 0.5rem; }
+.searchBar input { flex: 1; border: none; padding: 0.5rem; outline: none; }
+.searchBtn { background: #ffcc00; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer; }
+
+.popularSearches { display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.875rem; color: #9ca3af; }
+.tag { background: #1f2937; color: white; border: none; padding: 0.25rem 0.75rem; border-radius: 1rem; cursor: pointer; }
+
+.section { padding: 1.5rem; }
+.sectionHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.sectionHeader h2 { font-size: 1.25rem; margin: 0; }
+.sectionHeader a { color: #d97706; text-decoration: none; font-size: 0.875rem; }
+
+.categoriesGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.categoryCard { padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; font-weight: 500; }
+
+.listItem { padding: 1rem 0; border-bottom: 1px solid #f3f4f6; color: #374151; }
+
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; padding: 2rem 1.5rem; background: #f9fafb; text-align: center; }
+.statItem strong { font-size: 1.5rem; color: #111827; }

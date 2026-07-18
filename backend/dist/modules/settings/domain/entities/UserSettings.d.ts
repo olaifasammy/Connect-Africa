@@ -1,6 +1,6 @@
 import { AggregateRoot } from '../../../../shared/domain/AggregateRoot';
 import { UniqueEntityId } from '../../../../shared/domain/UniqueEntityId';
-import { UserId } from '../../../auth/domain/value-objects/UserId';
+import { UserId } from '../../../auth/public';
 export interface UserSettingsProps {
     userId: UserId;
     theme: 'light' | 'dark';

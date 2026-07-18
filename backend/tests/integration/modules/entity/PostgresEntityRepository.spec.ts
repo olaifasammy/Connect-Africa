@@ -1,10 +1,10 @@
 import { Pool } from 'pg';
-import { PostgresEntityRepository } from '../../../../../src/modules/entity/infrastructure/persistence/PostgresEntityRepository';
-import { Entity } from '../../../../../src/modules/entity/domain/entities/Entity';
-import { EntityId } from '../../../../../src/modules/entity/domain/value-objects/EntityId';
-import { EntityName } from '../../../../../src/modules/entity/domain/value-objects/EntityName';
-import { EntityMetadata } from '../../../../../src/modules/entity/domain/value-objects/EntityMetadata';
-import { UniqueEntityId } from '../../../../../src/shared/domain/UniqueEntityId';
+import { PostgresEntityRepository } from '@modules/entity/infrastructure/PostgresEntityRepository';
+import { Entity } from '@modules/entity/domain/entities/Entity';
+import { EntityId } from '@modules/entity/domain/value-objects/EntityId';
+import { EntityName } from '@modules/entity/domain/value-objects/EntityName';
+import { EntityMetadata } from '@modules/entity/domain/value-objects/EntityMetadata';
+import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 
 describe('PostgresEntityRepository', () => {
   let pool: Pool;

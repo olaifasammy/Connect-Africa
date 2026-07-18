@@ -12,6 +12,7 @@ describe('PostgresUserRepository Integration', () => {
 
   beforeAll(async () => {
     pool = PostgresProvider.getPool();
+    await pool.query("DELETE FROM users WHERE email = $1", ["integration@test.com"]);
     userRepository = new PostgresUserRepository(pool);
   });
 

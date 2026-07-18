@@ -1,4 +1,4 @@
-import { ArticleUpdatedEvent } from '../../../article/domain/events/ArticleUpdatedEvent';
+import { ArticleUpdatedEvent } from '../../../article/public';
 import { IGraphRepository } from '../../domain/repositories/IGraphRepository';
 export declare class ArticleUpdatedHandler {
     private readonly repository;

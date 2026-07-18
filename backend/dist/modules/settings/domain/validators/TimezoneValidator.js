@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TimezoneValidator = void 0;
+const SettingsValueObjects_1 = require("../value-objects/SettingsValueObjects");
 class TimezoneValidator {
     static validate(timezone) {
-        return timezone.length > 0;
+        new SettingsValueObjects_1.Timezone(timezone);
     }
 }
 exports.TimezoneValidator = TimezoneValidator;

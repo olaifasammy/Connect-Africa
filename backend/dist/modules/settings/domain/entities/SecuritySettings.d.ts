@@ -4,6 +4,10 @@ interface SecuritySettingsProps {
     mfaEnabled: boolean;
 }
 export declare class SecuritySettings extends Entity<SecuritySettingsProps> {
-    constructor(props: SecuritySettingsProps, id?: UniqueEntityId);
+    private constructor();
+    static create(props: SecuritySettingsProps, id?: UniqueEntityId): SecuritySettings;
+    get mfaEnabled(): boolean;
+    enableMfa(): void;
+    disableMfa(): void;
 }
 export {};

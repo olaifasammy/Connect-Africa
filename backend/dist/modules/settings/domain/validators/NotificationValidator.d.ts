@@ -1,3 +1,3 @@
 export declare class NotificationValidator {
-    static validate(enabled: boolean): boolean;
+    static validate(preference: string): void;
 }

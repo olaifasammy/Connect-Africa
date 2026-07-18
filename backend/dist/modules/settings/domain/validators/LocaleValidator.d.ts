@@ -1,3 +1,3 @@
 export declare class LocaleValidator {
-    static validate(locale: string): boolean;
+    static validate(locale: string): void;
 }

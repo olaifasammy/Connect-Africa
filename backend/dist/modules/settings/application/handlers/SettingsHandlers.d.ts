@@ -1,32 +1,46 @@
 import { UpdateSettingsCommand, UpdateLanguageCommand, UpdatePrivacyCommand, UpdateNotificationSettingsCommand, UpdateSecuritySettingsCommand, ResetSettingsCommand } from '../commands/SettingsCommands';
 import { ISettingsRepository } from '../../domain/repositories/ISettingsRepository';
+import { IAuditLogger } from '../../../auth/public';
+import { EventBus } from '../../../../shared/infrastructure/queue/EventBus';
 export declare class UpdateSettingsHandler {
     private readonly settingsRepository;
-    constructor(settingsRepository: ISettingsRepository);
+    private readonly auditLogger;
+    private readonly eventBus;
+    constructor(settingsRepository: ISettingsRepository, auditLogger: IAuditLogger, eventBus: EventBus);
     handle(command: UpdateSettingsCommand): Promise<void>;
 }
 export declare class UpdateLanguageHandler {
     private readonly settingsRepository;
-    constructor(settingsRepository: ISettingsRepository);
+    private readonly auditLogger;
+    private readonly eventBus;
+    constructor(settingsRepository: ISettingsRepository, auditLogger: IAuditLogger, eventBus: EventBus);
     handle(command: UpdateLanguageCommand): Promise<void>;
 }
 export declare class UpdatePrivacyHandler {
     private readonly settingsRepository;
-    constructor(settingsRepository: ISettingsRepository);
+    private readonly auditLogger;
+    private readonly eventBus;
+    constructor(settingsRepository: ISettingsRepository, auditLogger: IAuditLogger, eventBus: EventBus);
     handle(command: UpdatePrivacyCommand): Promise<void>;
 }
 export declare class UpdateNotificationSettingsHandler {
     private readonly settingsRepository;
-    constructor(settingsRepository: ISettingsRepository);
+    private readonly auditLogger;
+    private readonly eventBus;
+    constructor(settingsRepository: ISettingsRepository, auditLogger: IAuditLogger, eventBus: EventBus);
     handle(command: UpdateNotificationSettingsCommand): Promise<void>;
 }
 export declare class UpdateSecuritySettingsHandler {
     private readonly settingsRepository;
-    constructor(settingsRepository: ISettingsRepository);
+    private readonly auditLogger;
+    private readonly eventBus;
+    constructor(settingsRepository: ISettingsRepository, auditLogger: IAuditLogger, eventBus: EventBus);
     handle(command: UpdateSecuritySettingsCommand): Promise<void>;
 }
 export declare class ResetSettingsHandler {
     private readonly settingsRepository;
-    constructor(settingsRepository: ISettingsRepository);
+    private readonly auditLogger;
+    private readonly eventBus;
+    constructor(settingsRepository: ISettingsRepository, auditLogger: IAuditLogger, eventBus: EventBus);
     handle(command: ResetSettingsCommand): Promise<void>;
 }

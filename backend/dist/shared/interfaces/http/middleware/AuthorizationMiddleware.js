@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authorize = void 0;
+exports.authorizeRole = exports.authorize = void 0;
 const PermissionEvaluator_1 = require("../../../../modules/auth/domain/policies/rbac/PermissionEvaluator");
 const Role_1 = require("../../../../modules/auth/domain/policies/rbac/Role");
 const authorize = (permission) => (req, res, next) => {
@@ -16,7 +16,7 @@ const authorize = (permission) => (req, res, next) => {
             next();
             return;
         }
-        const userRole = user.role || Role_1.Roles.USER;
+        const userRole = user.role || Role_1.Roles.USER.name;
         PermissionEvaluator_1.PermissionEvaluator.evaluate(userRole, permission, user.id.toString());
         next();
     }
@@ -25,4 +25,16 @@ const authorize = (permission) => (req, res, next) => {
     }
 };
 exports.authorize = authorize;
+const authorizeRole = (role) => (req, res, next) => {
+    const user = req.user;
+    if (!user) {
+        return res.status(401).json({ success: false, errors: [{ code: 'UNAUTHORIZED', message: 'User not authenticated' }] });
+    }
+    const userRole = user.role || Role_1.Roles.USER.name;
+    if (userRole !== role) {
+        return res.status(403).json({ success: false, errors: [{ code: 'FORBIDDEN', message: 'Insufficient role' }] });
+    }
+    next();
+};
+exports.authorizeRole = authorizeRole;
 //# sourceMappingURL=AuthorizationMiddleware.js.map

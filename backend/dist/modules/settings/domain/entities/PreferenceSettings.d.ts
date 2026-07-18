@@ -5,6 +5,10 @@ interface PreferenceSettingsProps {
     value: string;
 }
 export declare class PreferenceSettings extends Entity<PreferenceSettingsProps> {
-    constructor(props: PreferenceSettingsProps, id?: UniqueEntityId);
+    private constructor();
+    static create(props: PreferenceSettingsProps, id?: UniqueEntityId): PreferenceSettings;
+    get key(): string;
+    get value(): string;
+    updateValue(value: string): void;
 }
 export {};

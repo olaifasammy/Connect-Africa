@@ -1,4 +1,4 @@
-import { IOntologyGraphService } from '../../../ontology/application/services/IOntologyGraphService';
+import { IOntologyGraphService } from '../../../ontology/public';
 export declare class OntologyValidator {
     private readonly ontologyGraphService;
     constructor(ontologyGraphService: IOntologyGraphService);

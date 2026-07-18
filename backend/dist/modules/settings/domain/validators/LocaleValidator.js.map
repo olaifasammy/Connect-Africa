@@ -1,1 +1,1 @@
-{"version":3,"file":"LocaleValidator.js","sourceRoot":"","sources":["../../../../../src/modules/settings/domain/validators/LocaleValidator.ts"],"names":[],"mappings":";;;AAAA,MAAa,eAAe;IAC1B,MAAM,CAAC,QAAQ,CAAC,MAAc;QAC5B,OAAO,MAAM,CAAC,MAAM,GAAG,CAAC,CAAC;IAC3B,CAAC;CACF;AAJD,0CAIC"}
+{"version":3,"file":"LocaleValidator.js","sourceRoot":"","sources":["../../../../../src/modules/settings/domain/validators/LocaleValidator.ts"],"names":[],"mappings":";;;AAAA,gFAA+D;AAE/D,MAAa,eAAe;IAC1B,MAAM,CAAC,QAAQ,CAAC,MAAc;QAC5B,IAAI,6BAAM,CAAC,MAAM,CAAC,CAAC;IACrB,CAAC;CACF;AAJD,0CAIC"}

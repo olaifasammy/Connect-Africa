@@ -1,4 +1,4 @@
-import { BcryptPasswordHasher } from '@infrastructure/security/BcryptPasswordHasher';
+import { BcryptPasswordHasher } from '@shared/infrastructure/security/BcryptPasswordHasher';
 
 describe('BcryptPasswordHasher', () => {
   it('should hash and compare correctly', async () => {

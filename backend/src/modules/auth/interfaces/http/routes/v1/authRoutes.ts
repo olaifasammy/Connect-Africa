@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AuthController } from '@modules/auth/interfaces/AuthController';
 import { validate } from '@shared/interfaces/http/middleware/ZodValidationMiddleware';
-import { LoginSchema, RefreshSchema, RegisterSchema, ResetPasswordSchema, VerifyEmailSchema } from '@shared/interfaces/http/schemas/AuthSchemas';
+import { LoginSchema, RefreshSchema, RegisterSchema, ResetPasswordSchema, VerifyEmailSchema, UpdateProfileSchema } from '@shared/interfaces/http/schemas/AuthSchemas';
 import { authorize } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
 import { Permission } from '@modules/auth/domain/policies/rbac/Permissions';
 import { authRateLimiter } from '@shared/interfaces/http/middleware/RateLimitMiddleware';
@@ -15,5 +15,6 @@ export const authRoutes = (authController: AuthController, authMiddleware: Authe
   router.post('/refresh', authMiddleware.authenticate, validate(RefreshSchema), (req, res) => authController.refresh(req, res));
   router.post('/reset-password', authRateLimiter, validate(ResetPasswordSchema), (req, res) => authController.resetPassword(req, res));
   router.post('/verify-email', authRateLimiter, validate(VerifyEmailSchema), (req, res) => authController.verifyEmail(req, res));
+  router.put('/profile', authMiddleware.authenticate, validate(UpdateProfileSchema), (req, res) => authController.updateProfile(req, res));
   return router;
 };

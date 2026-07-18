@@ -1,4 +1,4 @@
-import { EntityCreatedEvent } from '../../../entity/domain/events/EntityCreatedEvent';
+import { EntityCreatedEvent } from '../../../entity/public';
 import { IGraphRepository } from '../../domain/repositories/IGraphRepository';
 export declare class EntityCreatedHandler {
     private readonly repository;
