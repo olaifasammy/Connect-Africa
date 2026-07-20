@@ -13,10 +13,10 @@ describe('Update Profile E2E', () => {
       .post('/api/v1/auth/register')
       .send({ email, password });
     
-    const pool = PostgresProvider.getPool();
-    const userRes = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
+    const pgProvider = new PostgresProvider();
+    const userRes = await pgProvider.query('SELECT id FROM users WHERE email = $1', [email]);
     const userId = userRes.rows[0].id;
-    await pool.query("INSERT INTO user_profiles (id, user_id, display_name) VALUES (gen_random_uuid(), $1, $2)", [userId, "Test User"]);
+    await pgProvider.query("INSERT INTO user_profiles (id, user_id, display_name) VALUES (gen_random_uuid(), $1, $2)", [userId, "Test User"]);
       
     const loginRes = await request(app)
       .post('/api/v1/auth/login')
@@ -35,6 +35,7 @@ describe('Update Profile E2E', () => {
   });
 
   afterAll(async () => {
-    await PostgresProvider.getPool().end();
+    const pgProvider = new PostgresProvider();
+    await pgProvider.disconnect();
   });
 });

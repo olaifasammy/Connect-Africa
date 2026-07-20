@@ -7,25 +7,29 @@ import { PostgresProvider } from '@shared/infrastructure/database/PostgresProvid
 import { Pool } from 'pg';
 
 describe('PostgresUserRepository Integration', () => {
+  let pgProvider: PostgresProvider;
   let pool: Pool;
   let userRepository: PostgresUserRepository;
 
   beforeAll(async () => {
-    pool = PostgresProvider.getPool();
+    pgProvider = new PostgresProvider();
+    pool = pgProvider.pool;
     await pool.query("DELETE FROM users WHERE email = $1", ["integration@test.com"]);
     userRepository = new PostgresUserRepository(pool);
   });
 
   afterAll(async () => {
-    await pool.end();
+    await pgProvider.disconnect();
   });
 
   it('should save and find a user', async () => {
     const user = new User({
       email: new Email('integration@test.com'),
-      passwordHash: new PasswordHash('hashed_password'),
+      passwordHash: new PasswordHash('hash'),
       isActive: true,
+      role: 'USER'
     }, new UniqueEntityId());
+
 
     await userRepository.save(user);
 

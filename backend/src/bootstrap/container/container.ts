@@ -1,5 +1,7 @@
 import { Container } from 'inversify';
 import 'reflect-metadata';
+import Redis from 'ioredis';
+import { env } from '@config/env';
 import { GeminiProvider } from '@modules/ai/infrastructure/providers/GeminiProvider';
 import { ProviderRegistry } from '@modules/ai/infrastructure/providers/ProviderRegistry';
 import { ProviderSelectionService } from '@modules/ai/domain/services/ProviderSelectionService';
@@ -67,7 +69,11 @@ import { NotificationService } from '@modules/notification/domain/services/Notif
 
 export const container = new Container();
 
-container.bind('IAuditLogger').to(AuditLogger);
+if (process.env.NODE_ENV === 'test') {
+  container.bind('IAuditLogger').toConstantValue({ log: async () => {} });
+} else {
+  container.bind('IAuditLogger').to(AuditLogger);
+}
 
 // AI Context
 container.bind(PostgresProviderRepository).toSelf();
@@ -102,9 +108,8 @@ container.bind(AuthenticationService).toDynamicValue((context) => {
 });
 
 // Database/Infrastructure
-const pool = PostgresProvider.getPool();
-container.bind(Pool).toConstantValue(pool);
-container.bind(PostgresProvider).toSelf();
+container.bind(PostgresProvider).toSelf().inSingletonScope();
+container.bind(Pool).toDynamicValue((context) => context.container.get(PostgresProvider).pool);
 container.bind<IAuditRepository>('IAuditRepository').toDynamicValue((context) => {
     return new PostgresAuditRepository(context.container.get(Pool));
 }).inSingletonScope();
@@ -114,7 +119,10 @@ container.bind('IUserRepository').toDynamicValue((context) => {
 container.bind('IUserProfileRepository').toDynamicValue((context) => {
     return new PostgresUserProfileRepository(context.container.get(Pool));
 });
-container.bind('ISessionRepository').to(RedisSessionRepository);
+container.bind('ISessionRepository').toDynamicValue((context) => {
+    const redisClient = new Redis({ host: env.REDIS_HOST, port: parseInt(env.REDIS_PORT, 10) });
+    return new RedisSessionRepository(redisClient);
+});
 container.bind('IPasswordHasher').to(BcryptPasswordHasher);
 container.bind('IJwtProvider').to(JwtProvider);
 container.bind(CacheProvider).to(RedisCacheProvider).inSingletonScope();
@@ -160,7 +168,12 @@ container.bind(LoginCommandHandler).toDynamicValue((context) => {
         context.container.get('EventBus')
     );
 });
-container.bind(LogoutCommandHandler).toSelf();
+container.bind(LogoutCommandHandler).toDynamicValue((context) => {
+    return new LogoutCommandHandler(
+        context.container.get('ISessionRepository'),
+        context.container.get('EventBus')
+    );
+});
 container.bind(RefreshCommandHandler).toSelf();
 container.bind(ResetPasswordCommandHandler).toDynamicValue((context) => {
     return new ResetPasswordCommandHandler(
@@ -283,7 +296,6 @@ container.bind('IRelationshipRepository').toDynamicValue((context) => {
     return new PostgresRelationshipRepository(context.container.get(PostgresProvider));
 });
 container.bind('IOntologyService').toConstantValue({ validateRelationshipType: async () => {} });
-container.bind('IAuditLogger').toConstantValue({ log: async () => {} }); // Should be bound to a real audit service
 container.bind(CreateRelationshipHandler).toDynamicValue((context) => {
     return new CreateRelationshipHandler(
         context.container.get('IRelationshipRepository'),

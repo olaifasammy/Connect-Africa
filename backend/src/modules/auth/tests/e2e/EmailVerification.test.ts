@@ -15,8 +15,8 @@ describe('Email Verification E2E', () => {
     
     // In a real system, we'd get a user ID from the registration response
     // or a database. 
-    const pool = PostgresProvider.getPool();
-    const userRes = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
+    const pgProvider = new PostgresProvider();
+    const userRes = await pgProvider.query('SELECT id FROM users WHERE email = $1', [email]);
     const userId = userRes.rows[0].id;
 
     // 2. Verify Email
@@ -29,6 +29,7 @@ describe('Email Verification E2E', () => {
   });
 
   afterAll(async () => {
-    await PostgresProvider.getPool().end();
+    const pgProvider = new PostgresProvider();
+    await pgProvider.disconnect();
   });
 });

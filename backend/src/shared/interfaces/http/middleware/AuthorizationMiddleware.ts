@@ -10,16 +10,9 @@ export const authorize = (permission: Permission) => (req: Request, res: Respons
   }
 
   try {
-    // For test scenarios, we allow bypassing via a special header or test environment check
-    if (process.env.NODE_ENV === 'test' && req.headers['x-test-role']) {
-        const role = (Roles as any)[req.headers['x-test-role'] as string] || Roles.USER;
-        PermissionEvaluator.evaluate(role, permission, user.id.toString());
-        next();
-        return;
-    }
-
-    const userRole = (user as any).role || Roles.USER.name; 
-    PermissionEvaluator.evaluate(userRole, permission, user.id.toString());
+    const userRoleIdentifier = (user as any).role || Roles.USER.name;
+    const role = (Roles as any)[userRoleIdentifier] || Roles.USER;
+    PermissionEvaluator.evaluate(role, permission, user.id.toString());
     next();
   } catch (err: any) {
     res.status(403).json({ success: false, errors: [{ code: 'FORBIDDEN', message: err.message }] });
@@ -32,7 +25,8 @@ export const authorizeRole = (role: Role) => (req: Request, res: Response, next:
     return res.status(401).json({ success: false, errors: [{ code: 'UNAUTHORIZED', message: 'User not authenticated' }] });
   }
 
-  const userRole = (user as any).role || Roles.USER.name;
+  const userRoleIdentifier = (user as any).role || Roles.USER.name;
+  const userRole = (Roles as any)[userRoleIdentifier] || Roles.USER;
   if (userRole !== role) {
     return res.status(403).json({ success: false, errors: [{ code: 'FORBIDDEN', message: 'Insufficient role' }] });
   }

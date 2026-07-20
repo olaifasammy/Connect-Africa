@@ -1,9 +1,10 @@
+import { logger } from '@shared/logger/Logger';
 import { KnowledgeGap } from '../../domain/entities/KnowledgeGap';
 
 export class KnowledgeGapEngine {
   async recordTopic(topic: string): Promise<void> {
     // Implement logic to record topic frequency
-    console.log(`[GAP_ENGINE] Recording topic frequency: ${topic}`);
+    logger.info(`[GAP_ENGINE] Recording topic frequency: ${topic}`);
   }
 
   async generateSuggestions(topic: string): Promise<{
@@ -23,6 +24,6 @@ export class KnowledgeGapEngine {
 
   async addToEditorialQueue(gap: KnowledgeGap): Promise<void> {
     // Implement logic to add to editorial queue
-    console.log(`[GAP_ENGINE] Adding gap ${gap.id} to editorial queue`);
+    logger.info(`[GAP_ENGINE] Adding gap ${gap.id} to editorial queue`);
   }
 }

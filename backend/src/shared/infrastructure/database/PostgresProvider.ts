@@ -4,24 +4,22 @@ import { appConfig } from '@config/app';
 import { DatabaseProvider } from './DatabaseProvider';
 
 export class PostgresProvider extends DatabaseProvider {
-  private static _pool: Pool;
+  private _pool: Pool;
 
-  static getPool(): Pool {
-    if (!this._pool) {
-      logger.info('Initializing PostgreSQL connection pool');
-      this._pool = new Pool({
-        connectionString: appConfig.databaseUrl,
-      });
+  constructor() {
+    super();
+    logger.info('Initializing PostgreSQL connection pool');
+    this._pool = new Pool({
+      connectionString: appConfig.databaseUrl,
+    });
 
-      this._pool.on('error', (err) => {
-        logger.error('Unexpected error on idle PostgreSQL client', err);
-      });
-    }
-    return this._pool;
+    this._pool.on('error', (err) => {
+      logger.error('Unexpected error on idle PostgreSQL client', err);
+    });
   }
 
   get pool(): Pool {
-    return PostgresProvider.getPool();
+    return this._pool;
   }
 
   async connect(): Promise<void> {
