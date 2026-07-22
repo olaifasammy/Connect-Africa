@@ -77,7 +77,8 @@ import { CacheProvider } from '@shared/infrastructure/cache/CacheProvider';
 import { RedisCacheProvider } from '@shared/infrastructure/cache/RedisCacheProvider';
 import { PostgresSettingsRepository } from '@modules/settings/infrastructure/PostgresSettingsRepository';
 import { NotificationService } from '@modules/notification/domain/services/NotificationService';
-
+import { PromptSanitizationService } from '@modules/ai/infrastructure/security/PromptSanitizationService';
+import { TokenUsageService } from '@modules/ai/infrastructure/services/TokenUsageService';
 export const container = new Container();
 
 if (process.env.NODE_ENV === 'test') {
@@ -97,13 +98,46 @@ container.bind(ProviderSelectionService).toDynamicValue((context) => {
     return new ProviderSelectionService(context.container.get(PostgresProviderRepository));
 });
 container.bind(AIGatewayService).toDynamicValue((context) => {
-    return new AIGatewayService(
-        context.container.get(ProviderSelectionService),
-        context.container.get(ProviderRegistry)
-    );
+  return new AIGatewayService(
+    context.container.get(ProviderSelectionService),
+    context.container.get(ProviderRegistry),
+    context.container.get('IPromptRepository'),
+    context.container.get(PromptSanitizationService),
+    context.container.get('ITokenUsageService')
+  );
 });
+// Prompt repository (infrastructure)
+container.bind('IPromptRepository')
+  .toDynamicValue((context) => {
+    const { PostgresPromptRepository } = require('@modules/ai/infrastructure/repositories/PostgresPromptRepository');
+    return new PostgresPromptRepository(context.container.get(PostgresProvider));
+  })
+  .inSingletonScope();
+
+// Prompt sanitization service
+container.bind(PromptSanitizationService).toSelf().inSingletonScope();
+
+// Token‑usage repository
+container.bind('ITokenUsageRepository')
+  .toDynamicValue((context) => {
+    const { PostgresTokenUsageRepository } = require('@modules/ai/infrastructure/repositories/PostgresTokenUsageRepository');
+    return new PostgresTokenUsageRepository(context.container.get(PostgresProvider));
+  })
+  .inSingletonScope();
+
+// Token‑usage service
+container.bind('ITokenUsageService')
+  .toDynamicValue((context) => {
+    const { TokenUsageService } = require('@modules/ai/infrastructure/services/TokenUsageService');
+    return new TokenUsageService(
+      context.container.get('ITokenUsageRepository'),
+      context.container.get('IAuditLogger')
+    );
+  })
+  .inSingletonScope();
+
 container.bind(ExpansionRequestService).toDynamicValue((context) => {
-    return new ExpansionRequestService(context.container.get(AIGatewayService));
+  return new ExpansionRequestService(context.container.get(AIGatewayService));
 });
 container.bind(OntologySuggestionService).toDynamicValue((context) => {
     return new OntologySuggestionService(context.container.get<IOntologyGraphService>('IOntologyGraphService'));
@@ -248,7 +282,6 @@ container.bind(CreateEntityCommandHandler).toDynamicValue((context) => {
     return new CreateEntityCommandHandler(
         context.container.get('IEntityRepository'),
         context.container.get<IOntologyGraphService>('IOntologyGraphService'),
-        context.container.get<IAuditRepository>('IAuditRepository'),
         context.container.get('EventBus')
     );
 });
@@ -259,31 +292,31 @@ container.bind('ISettingsRepository').toDynamicValue((context) => {
     return new PostgresSettingsRepository(context.container.get(PostgresProvider), context.container.get(CacheProvider));
 });
 container.bind(CreateSettingsHandler).toDynamicValue((context) => {
-    return new CreateSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+    return new CreateSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get('EventBus'));
 });
 container.bind(ChangeThemeHandler).toDynamicValue((context) => {
-    return new ChangeThemeHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+    return new ChangeThemeHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get('EventBus'));
 });
 container.bind(GetSettingsHandler).toDynamicValue((context) => {
     return new GetSettingsHandler(context.container.get('ISettingsRepository'));
 });
 container.bind(UpdateSettingsHandler).toDynamicValue((context) => {
-    return new UpdateSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+    return new UpdateSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('EventBus'));
 });
 container.bind(UpdateLanguageHandler).toDynamicValue((context) => {
-    return new UpdateLanguageHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+    return new UpdateLanguageHandler(context.container.get('ISettingsRepository'), context.container.get('EventBus'));
 });
 container.bind(UpdatePrivacyHandler).toDynamicValue((context) => {
-    return new UpdatePrivacyHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+    return new UpdatePrivacyHandler(context.container.get('ISettingsRepository'), context.container.get('EventBus'));
 });
 container.bind(UpdateNotificationSettingsHandler).toDynamicValue((context) => {
-    return new UpdateNotificationSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+    return new UpdateNotificationSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('EventBus'));
 });
 container.bind(UpdateSecuritySettingsHandler).toDynamicValue((context) => {
-    return new UpdateSecuritySettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+    return new UpdateSecuritySettingsHandler(context.container.get('ISettingsRepository'), context.container.get('EventBus'));
 });
 container.bind(ResetSettingsHandler).toDynamicValue((context) => {
-    return new ResetSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus));
+    return new ResetSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('EventBus'));
 });
 container.bind(SettingsController).toDynamicValue((context) => {
   return new SettingsController(
@@ -310,8 +343,7 @@ container.bind(NotificationService).toDynamicValue((context) => {
     return new NotificationService(
         context.container.get('INotificationRepository'),
         context.container.get(PreferenceService),
-        context.container.get('EventBus'),
-        context.container.get('IAuditLogger')
+        context.container.get('EventBus')
     );
 });
 container.bind('IRelationshipRepository').toDynamicValue((context) => {
@@ -326,7 +358,6 @@ container.bind(CreateRelationshipHandler).toDynamicValue((context) => {
     return new CreateRelationshipHandler(
         context.container.get('IRelationshipRepository'),
         context.container.get<IOntologyService>('IOntologyService'),
-        context.container.get('IAuditRepository'),
         context.container.get('EventBus')
     );
 });
