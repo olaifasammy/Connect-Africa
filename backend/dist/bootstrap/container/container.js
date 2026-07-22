@@ -72,13 +72,13 @@ const AuthenticationMiddleware_1 = require("../../shared/interfaces/http/middlew
 const public_10 = require("../../modules/search/public");
 const PostgresAuditRepository_1 = require("../../modules/audit/infrastructure/audit/PostgresAuditRepository");
 const public_11 = require("../../modules/settings/public");
-const EventBus_1 = require("../../shared/infrastructure/queue/EventBus");
 const public_12 = require("../../modules/settings/public");
 const SettingsController_1 = require("../../modules/settings/interfaces/controllers/SettingsController");
 const CacheProvider_1 = require("../../shared/infrastructure/cache/CacheProvider");
 const RedisCacheProvider_1 = require("../../shared/infrastructure/cache/RedisCacheProvider");
 const PostgresSettingsRepository_1 = require("../../modules/settings/infrastructure/PostgresSettingsRepository");
 const NotificationService_1 = require("../../modules/notification/domain/services/NotificationService");
+const PromptSanitizationService_1 = require("../../modules/ai/infrastructure/security/PromptSanitizationService");
 exports.container = new inversify_1.Container();
 if (process.env.NODE_ENV === 'test') {
     exports.container.bind('IAuditLogger').toConstantValue({ log: async () => { } });
@@ -97,8 +97,31 @@ exports.container.bind(ProviderSelectionService_1.ProviderSelectionService).toDy
     return new ProviderSelectionService_1.ProviderSelectionService(context.container.get(PostgresProviderRepository_1.PostgresProviderRepository));
 });
 exports.container.bind(AIGatewayService_1.AIGatewayService).toDynamicValue((context) => {
-    return new AIGatewayService_1.AIGatewayService(context.container.get(ProviderSelectionService_1.ProviderSelectionService), context.container.get(ProviderRegistry_1.ProviderRegistry));
+    return new AIGatewayService_1.AIGatewayService(context.container.get(ProviderSelectionService_1.ProviderSelectionService), context.container.get(ProviderRegistry_1.ProviderRegistry), context.container.get('IPromptRepository'), context.container.get(PromptSanitizationService_1.PromptSanitizationService), context.container.get('ITokenUsageService'));
 });
+// Prompt repository (infrastructure)
+exports.container.bind('IPromptRepository')
+    .toDynamicValue((context) => {
+    const { PostgresPromptRepository } = require('../../modules/ai/infrastructure/repositories/PostgresPromptRepository');
+    return new PostgresPromptRepository(context.container.get(PostgresProvider_1.PostgresProvider));
+})
+    .inSingletonScope();
+// Prompt sanitization service
+exports.container.bind(PromptSanitizationService_1.PromptSanitizationService).toSelf().inSingletonScope();
+// Token‑usage repository
+exports.container.bind('ITokenUsageRepository')
+    .toDynamicValue((context) => {
+    const { PostgresTokenUsageRepository } = require('@modules/ai/infrastructure/repositories/PostgresTokenUsageRepository');
+    return new PostgresTokenUsageRepository(context.container.get(PostgresProvider_1.PostgresProvider));
+})
+    .inSingletonScope();
+// Token‑usage service
+exports.container.bind('ITokenUsageService')
+    .toDynamicValue((context) => {
+    const { TokenUsageService } = require('../../modules/ai/infrastructure/services/TokenUsageService');
+    return new TokenUsageService(context.container.get('ITokenUsageRepository'), context.container.get('IAuditLogger'));
+})
+    .inSingletonScope();
 exports.container.bind(ExpansionRequestService_1.ExpansionRequestService).toDynamicValue((context) => {
     return new ExpansionRequestService_1.ExpansionRequestService(context.container.get(AIGatewayService_1.AIGatewayService));
 });
@@ -192,7 +215,7 @@ exports.container.bind('IOntologyGraphService').toDynamicValue((context) => {
 // Entity
 exports.container.bind('IEntityRepository').to(PostgresEntityRepository_1.PostgresEntityRepository);
 exports.container.bind(CreateEntityCommandHandler_1.CreateEntityCommandHandler).toDynamicValue((context) => {
-    return new CreateEntityCommandHandler_1.CreateEntityCommandHandler(context.container.get('IEntityRepository'), context.container.get('IOntologyGraphService'), context.container.get('IAuditRepository'), context.container.get('EventBus'));
+    return new CreateEntityCommandHandler_1.CreateEntityCommandHandler(context.container.get('IEntityRepository'), context.container.get('IOntologyGraphService'), context.container.get('EventBus'));
 });
 exports.container.bind(EntityController_1.EntityController).toSelf();
 // Settings
@@ -200,31 +223,31 @@ exports.container.bind('ISettingsRepository').toDynamicValue((context) => {
     return new PostgresSettingsRepository_1.PostgresSettingsRepository(context.container.get(PostgresProvider_1.PostgresProvider), context.container.get(CacheProvider_1.CacheProvider));
 });
 exports.container.bind(public_11.CreateSettingsHandler).toDynamicValue((context) => {
-    return new public_11.CreateSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus_1.EventBus));
+    return new public_11.CreateSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get('EventBus'));
 });
 exports.container.bind(public_11.ChangeThemeHandler).toDynamicValue((context) => {
-    return new public_11.ChangeThemeHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus_1.EventBus));
+    return new public_11.ChangeThemeHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get('EventBus'));
 });
 exports.container.bind(public_11.GetSettingsHandler).toDynamicValue((context) => {
     return new public_11.GetSettingsHandler(context.container.get('ISettingsRepository'));
 });
 exports.container.bind(public_12.UpdateSettingsHandler).toDynamicValue((context) => {
-    return new public_12.UpdateSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus_1.EventBus));
+    return new public_12.UpdateSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('EventBus'));
 });
 exports.container.bind(public_12.UpdateLanguageHandler).toDynamicValue((context) => {
-    return new public_12.UpdateLanguageHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus_1.EventBus));
+    return new public_12.UpdateLanguageHandler(context.container.get('ISettingsRepository'), context.container.get('EventBus'));
 });
 exports.container.bind(public_12.UpdatePrivacyHandler).toDynamicValue((context) => {
-    return new public_12.UpdatePrivacyHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus_1.EventBus));
+    return new public_12.UpdatePrivacyHandler(context.container.get('ISettingsRepository'), context.container.get('EventBus'));
 });
 exports.container.bind(public_12.UpdateNotificationSettingsHandler).toDynamicValue((context) => {
-    return new public_12.UpdateNotificationSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus_1.EventBus));
+    return new public_12.UpdateNotificationSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('EventBus'));
 });
 exports.container.bind(public_12.UpdateSecuritySettingsHandler).toDynamicValue((context) => {
-    return new public_12.UpdateSecuritySettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus_1.EventBus));
+    return new public_12.UpdateSecuritySettingsHandler(context.container.get('ISettingsRepository'), context.container.get('EventBus'));
 });
 exports.container.bind(public_12.ResetSettingsHandler).toDynamicValue((context) => {
-    return new public_12.ResetSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('IAuditLogger'), context.container.get(EventBus_1.EventBus));
+    return new public_12.ResetSettingsHandler(context.container.get('ISettingsRepository'), context.container.get('EventBus'));
 });
 exports.container.bind(SettingsController_1.SettingsController).toDynamicValue((context) => {
     return new SettingsController_1.SettingsController(context.container.get(public_11.ChangeThemeHandler), context.container.get(public_11.GetSettingsHandler), context.container.get(public_12.UpdateSettingsHandler), context.container.get(public_12.UpdateLanguageHandler), context.container.get(public_12.UpdatePrivacyHandler), context.container.get(public_12.UpdateNotificationSettingsHandler), context.container.get(public_12.UpdateSecuritySettingsHandler), context.container.get(public_12.ResetSettingsHandler));
@@ -238,7 +261,7 @@ exports.container.bind(public_1.PreferenceService).toDynamicValue((context) => {
 });
 exports.container.bind(public_1.DeliveryService).toSelf();
 exports.container.bind(NotificationService_1.NotificationService).toDynamicValue((context) => {
-    return new NotificationService_1.NotificationService(context.container.get('INotificationRepository'), context.container.get(public_1.PreferenceService), context.container.get('EventBus'), context.container.get('IAuditLogger'));
+    return new NotificationService_1.NotificationService(context.container.get('INotificationRepository'), context.container.get(public_1.PreferenceService), context.container.get('EventBus'));
 });
 exports.container.bind('IRelationshipRepository').toDynamicValue((context) => {
     return new PostgresRelationshipRepository_1.PostgresRelationshipRepository(context.container.get(PostgresProvider_1.PostgresProvider));
@@ -247,7 +270,7 @@ exports.container.bind('IOntologyService').toDynamicValue((context) => {
     return new OntologyIntegrationService_1.OntologyIntegrationService(context.container.get('IOntologyGraphService'));
 });
 exports.container.bind(CreateRelationshipHandler_1.CreateRelationshipHandler).toDynamicValue((context) => {
-    return new CreateRelationshipHandler_1.CreateRelationshipHandler(context.container.get('IRelationshipRepository'), context.container.get('IOntologyService'), context.container.get('IAuditRepository'), context.container.get('EventBus'));
+    return new CreateRelationshipHandler_1.CreateRelationshipHandler(context.container.get('IRelationshipRepository'), context.container.get('IOntologyService'), context.container.get('EventBus'));
 });
 exports.container.bind(RelationshipService_1.RelationshipService).toDynamicValue((context) => {
     return new RelationshipService_1.RelationshipService(context.container.get('IRelationshipRepository'), context.container.get(RelationshipValidationService_1.RelationshipValidationService), context.container.get('EventBus'));

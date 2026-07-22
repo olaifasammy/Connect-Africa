@@ -10,6 +10,7 @@ class GeminiProvider {
             return {
                 content: `Gemini processed: ${request.prompt}`,
                 tokensUsed: 10,
+                tokenCount: 10,
                 provider: 'gemini',
             };
         }

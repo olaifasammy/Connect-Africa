@@ -7,27 +7,14 @@ import { EntityMetadata } from '@modules/entity/domain/value-objects/EntityMetad
 import { IEntityRepository } from '@modules/entity/domain/repositories/IEntityRepository';
 import { EntityValidator } from '@modules/entity/domain/validators/EntityValidator';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
-import { IAuditRepository } from '@modules/audit/public';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { IOntologyGraphService } from '@modules/ontology/public';
-import { 
-  AuditEntry, 
-  AuditActor, 
-  AuditResource, 
-  AuditMetadata, 
-  CorrelationId, 
-  Timestamp, 
-  UserId, 
-  ResourceId, 
-  IPAddress, 
-  UserAgent 
-} from '@modules/audit/public';
+import { AuditLogRequestedEvent } from '@modules/audit/domain/events/AuditLogRequestedEvent';
 
 export class CreateEntityCommandHandler implements ICommandHandler<CreateEntityCommand, void> {
   constructor(
     private readonly entityRepository: IEntityRepository,
     private readonly ontologyGraphService: IOntologyGraphService,
-    private readonly auditRepository: IAuditRepository,
     private readonly eventBus: EventBus
   ) {}
 
@@ -56,24 +43,16 @@ export class CreateEntityCommandHandler implements ICommandHandler<CreateEntityC
     }
     entity.clearDomainEvents();
 
-    // Audit logging
-    const auditEntry = AuditEntry.create({
+    // Decoupled audit logging
+    await this.eventBus.publish(new AuditLogRequestedEvent({
       action: 'CREATE_ENTITY',
-      actor: AuditActor.create({
-        userId: new UserId(command.userId),
-        actorType: 'USER',
-        ipAddress: new IPAddress('127.0.0.1'),
-        userAgent: new UserAgent('unknown')
-      }),
-      resource: AuditResource.create({
-        id: new ResourceId(entity.entityId.value),
-        type: 'ENTITY'
-      }),
-      metadata: [AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-      correlationId: new CorrelationId(new UniqueEntityId().toString()),
-      timestamp: new Timestamp(new Date())
-    });
-    
-    await this.auditRepository.log(auditEntry);
+      actorId: command.userId,
+      actorType: 'USER',
+      ipAddress: '127.0.0.1',
+      userAgent: 'unknown',
+      resourceId: entity.entityId.value,
+      resourceType: 'ENTITY',
+      metadata: [{ key: 'status', value: 'SUCCESS' }]
+    }));
   }
 }

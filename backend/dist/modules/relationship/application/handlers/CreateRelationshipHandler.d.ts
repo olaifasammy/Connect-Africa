@@ -1,12 +1,11 @@
 import { CreateRelationshipCommand } from '../commands/RelationshipCommands';
 import { IRelationshipRepository } from '../../domain/repositories/IRelationshipRepository';
-import { IOntologyService, IEventBus } from '../../domain/interfaces/RelationshipServices';
-import { IAuditRepository } from '../../../audit/public';
+import { IOntologyService } from '../../domain/interfaces/RelationshipServices';
+import { EventBus } from '../../../../shared/infrastructure/queue/EventBus';
 export declare class CreateRelationshipHandler {
     private readonly repository;
     private readonly ontologyService;
-    private readonly auditRepository;
     private readonly eventBus;
-    constructor(repository: IRelationshipRepository, ontologyService: IOntologyService, auditRepository: IAuditRepository, eventBus: IEventBus);
+    constructor(repository: IRelationshipRepository, ontologyService: IOntologyService, eventBus: EventBus);
     handle(command: CreateRelationshipCommand): Promise<string>;
 }

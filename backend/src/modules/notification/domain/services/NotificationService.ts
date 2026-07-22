@@ -5,15 +5,14 @@ import { DeliveryPolicy, UserPreferencePolicy } from '../policies/NotificationPo
 import { PreferenceService } from '../services/PreferenceService';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { NotificationSentEvent } from '../events/NotificationEvents';
-import { IAuditLogger } from '@modules/auth/public'; // Assuming this interface
+import { AuditLogRequestedEvent } from '@modules/audit/domain/events/AuditLogRequestedEvent';
 
 @injectable()
 export class NotificationService {
   constructor(
     @inject('INotificationRepository') private readonly repository: INotificationRepository,
     @inject(PreferenceService) private readonly preferenceService: PreferenceService,
-    @inject('EventBus') private readonly eventBus: EventBus,
-    @inject('IAuditLogger') private readonly auditLogger: IAuditLogger
+    @inject('EventBus') private readonly eventBus: EventBus
   ) {}
 
   async send(notification: Notification): Promise<void> {
@@ -29,6 +28,17 @@ export class NotificationService {
 
     await this.repository.save(notification);
     await this.eventBus.publish(new NotificationSentEvent(notification.id));
-    await this.auditLogger.log({ status: "SUCCESS", action: "NotificationSent", resource: notification.id.value, user: notification.recipientId.value });
+    
+    // Decoupled audit logging
+    await this.eventBus.publish(new AuditLogRequestedEvent({
+      action: "NotificationSent",
+      actorId: "SYSTEM",
+      actorType: "SYSTEM",
+      ipAddress: "0.0.0.0",
+      userAgent: "SYSTEM",
+      resourceId: notification.id.value,
+      resourceType: "Notification",
+      metadata: [{ key: "recipientId", value: notification.recipientId.value }]
+    }));
   }
 }

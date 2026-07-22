@@ -1,11 +1,13 @@
 import { ApproveArticleCommand } from '../commands/ApproveArticleCommand';
 import { IArticleRepository } from '../../domain/repositories/IArticleRepository';
-import { IAuditLogger } from '../../domain/interfaces/ArticleServices';
+import { EventBus } from '@shared/infrastructure/queue/EventBus';
+import { AuditLogRequestedEvent } from '@modules/audit/domain/events/AuditLogRequestedEvent';
+import { ArticleApprovedEvent } from '../../domain/events/ArticleApprovedEvent';
 
 export class ApproveArticleHandler {
   constructor(
     private readonly repository: IArticleRepository,
-    private readonly auditLogger: IAuditLogger
+    private readonly eventBus: EventBus
   ) {}
 
   async handle(command: ApproveArticleCommand): Promise<void> {
@@ -16,6 +18,20 @@ export class ApproveArticleHandler {
 
     article.approve();
     await this.repository.save(article);
-    await this.auditLogger.log('ARTICLE_APPROVED', { articleId: command.articleId.toString() });
+    
+    // Domain event
+    await this.eventBus.publish(new ArticleApprovedEvent(article.id));
+    
+    // Decoupled audit logging
+    await this.eventBus.publish(new AuditLogRequestedEvent({
+      action: 'ARTICLE_APPROVED',
+      actorId: 'SYSTEM',
+      actorType: 'USER',
+      ipAddress: '127.0.0.1',
+      userAgent: 'unknown',
+      resourceId: article.id.toString(),
+      resourceType: 'ARTICLE',
+      metadata: [{ key: 'status', value: 'SUCCESS' }]
+    }));
   }
 }

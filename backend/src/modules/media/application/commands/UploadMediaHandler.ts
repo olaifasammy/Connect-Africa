@@ -7,25 +7,14 @@ import { MediaResponseDto } from '../dtos/MediaResponseDto';
 import { StorageProvider } from '@shared/infrastructure/storage/StorageProvider';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 import { MediaStatus, MediaStatusType } from '../../domain/value-objects/MediaStatus';
-import { IAuditRepository } from '@modules/audit/public';
-import { 
-  AuditEntry, 
-  AuditActor, 
-  AuditResource, 
-  AuditMetadata, 
-  CorrelationId, 
-  Timestamp, 
-  UserId, 
-  ResourceId, 
-  IPAddress, 
-  UserAgent 
-} from '@modules/audit/public';
+import { EventBus } from '@shared/infrastructure/queue/EventBus';
+import { AuditLogRequestedEvent } from '@modules/audit/domain/events/AuditLogRequestedEvent';
 
 export class UploadMediaHandler {
   constructor(
     private readonly mediaRepository: IMediaRepository,
     private readonly storageProvider: StorageProvider,
-    private readonly auditRepository: IAuditRepository
+    private readonly eventBus: EventBus
   ) {}
 
   async handle(command: UploadMediaCommand): Promise<MediaResponseDto> {
@@ -46,24 +35,17 @@ export class UploadMediaHandler {
 
       await this.mediaRepository.save(media);
       
-      const auditEntry = AuditEntry.create({
+      // Decoupled audit logging
+      await this.eventBus.publish(new AuditLogRequestedEvent({
         action: 'UPLOAD_MEDIA',
-        actor: AuditActor.create({
-          userId: new UserId(command.userId),
-          actorType: 'USER',
-          ipAddress: new IPAddress('127.0.0.1'),
-          userAgent: new UserAgent('unknown')
-        }),
-        resource: AuditResource.create({
-          id: new ResourceId(media.id.toString()),
-          type: 'MEDIA'
-        }),
-        metadata: [AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-        correlationId: new CorrelationId(new UniqueEntityId().toString()),
-        timestamp: new Timestamp(new Date())
-      });
-      
-      await this.auditRepository.log(auditEntry);
+        actorId: command.userId,
+        actorType: 'USER',
+        ipAddress: '127.0.0.1',
+        userAgent: 'unknown',
+        resourceId: media.id.toString(),
+        resourceType: 'MEDIA',
+        metadata: [{ key: 'status', value: 'SUCCESS' }]
+      }));
 
       return {
         id: media.id.toString(),
@@ -72,7 +54,16 @@ export class UploadMediaHandler {
         uploadedAt: media.uploadedAt.toISOString(),
       };
     } catch (error) {
-      // Log failure with audit repository as well
+      await this.eventBus.publish(new AuditLogRequestedEvent({
+        action: 'UPLOAD_MEDIA',
+        actorId: command.userId,
+        actorType: 'USER',
+        ipAddress: '127.0.0.1',
+        userAgent: 'unknown',
+        resourceId: 'MEDIA',
+        resourceType: 'MEDIA',
+        metadata: [{ key: 'status', value: 'FAILURE' }]
+      }));
       throw error;
     }
   }

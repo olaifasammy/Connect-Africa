@@ -2,29 +2,17 @@ import { CreateRelationshipCommand } from '../commands/RelationshipCommands';
 import { IRelationshipRepository } from '../../domain/repositories/IRelationshipRepository';
 import { Relationship } from '../../domain/entities/Relationship';
 import { v4 as uuidv4 } from 'uuid';
-import { IOntologyService, IEventBus } from '../../domain/interfaces/RelationshipServices';
+import { IOntologyService } from '../../domain/interfaces/RelationshipServices';
 import { RelationshipId, EntityId, RelationshipTypeId } from '../../domain/value-objects/RelationshipValueObjects';
-import { IAuditRepository } from '@modules/audit/public';
-import { 
-  AuditEntry, 
-  AuditActor, 
-  AuditResource, 
-  AuditMetadata, 
-  CorrelationId, 
-  Timestamp, 
-  UserId, 
-  ResourceId, 
-  IPAddress, 
-  UserAgent 
-} from '@modules/audit/public';
+import { EventBus } from '@shared/infrastructure/queue/EventBus';
+import { AuditLogRequestedEvent } from '@modules/audit/domain/events/AuditLogRequestedEvent';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 
 export class CreateRelationshipHandler {
   constructor(
     private readonly repository: IRelationshipRepository,
     private readonly ontologyService: IOntologyService,
-    private readonly auditRepository: IAuditRepository,
-    private readonly eventBus: IEventBus
+    private readonly eventBus: EventBus
   ) {}
 
   async handle(command: CreateRelationshipCommand): Promise<string> {
@@ -44,25 +32,17 @@ export class CreateRelationshipHandler {
     
     await this.repository.save(relationship);
 
-    // Audit logging
-    const auditEntry = AuditEntry.create({
+    // Decoupled audit logging
+    await this.eventBus.publish(new AuditLogRequestedEvent({
       action: 'CREATE_RELATIONSHIP',
-      actor: AuditActor.create({
-        userId: new UserId(command.userId),
-        actorType: 'USER',
-        ipAddress: new IPAddress('127.0.0.1'),
-        userAgent: new UserAgent('unknown')
-      }),
-      resource: AuditResource.create({
-        id: new ResourceId(id.toString()),
-        type: 'RELATIONSHIP'
-      }),
-      metadata: [AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-      correlationId: new CorrelationId(new UniqueEntityId().toString()),
-      timestamp: new Timestamp(new Date())
-    });
-    
-    await this.auditRepository.log(auditEntry);
+      actorId: command.userId,
+      actorType: 'USER',
+      ipAddress: '127.0.0.1',
+      userAgent: 'unknown',
+      resourceId: id.toString(),
+      resourceType: 'RELATIONSHIP',
+      metadata: [{ key: 'status', value: 'SUCCESS' }]
+    }));
 
     for (const event of relationship.domainEvents) {
         await this.eventBus.publish(event);

@@ -7,16 +7,14 @@ const EntityName_1 = require("../../../entity/domain/value-objects/EntityName");
 const EntityMetadata_1 = require("../../../entity/domain/value-objects/EntityMetadata");
 const EntityValidator_1 = require("../../../entity/domain/validators/EntityValidator");
 const UniqueEntityId_1 = require("../../../../shared/domain/UniqueEntityId");
-const public_1 = require("../../../audit/public");
+const AuditLogRequestedEvent_1 = require("../../../audit/domain/events/AuditLogRequestedEvent");
 class CreateEntityCommandHandler {
     entityRepository;
     ontologyGraphService;
-    auditRepository;
     eventBus;
-    constructor(entityRepository, ontologyGraphService, auditRepository, eventBus) {
+    constructor(entityRepository, ontologyGraphService, eventBus) {
         this.entityRepository = entityRepository;
         this.ontologyGraphService = ontologyGraphService;
-        this.auditRepository = auditRepository;
         this.eventBus = eventBus;
     }
     async handle(command) {
@@ -33,24 +31,17 @@ class CreateEntityCommandHandler {
             await this.eventBus.publish(event);
         }
         entity.clearDomainEvents();
-        // Audit logging
-        const auditEntry = public_1.AuditEntry.create({
+        // Decoupled audit logging
+        await this.eventBus.publish(new AuditLogRequestedEvent_1.AuditLogRequestedEvent({
             action: 'CREATE_ENTITY',
-            actor: public_1.AuditActor.create({
-                userId: new public_1.UserId(command.userId),
-                actorType: 'USER',
-                ipAddress: new public_1.IPAddress('127.0.0.1'),
-                userAgent: new public_1.UserAgent('unknown')
-            }),
-            resource: public_1.AuditResource.create({
-                id: new public_1.ResourceId(entity.entityId.value),
-                type: 'ENTITY'
-            }),
-            metadata: [public_1.AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-            correlationId: new public_1.CorrelationId(new UniqueEntityId_1.UniqueEntityId().toString()),
-            timestamp: new public_1.Timestamp(new Date())
-        });
-        await this.auditRepository.log(auditEntry);
+            actorId: command.userId,
+            actorType: 'USER',
+            ipAddress: '127.0.0.1',
+            userAgent: 'unknown',
+            resourceId: entity.entityId.value,
+            resourceType: 'ENTITY',
+            metadata: [{ key: 'status', value: 'SUCCESS' }]
+        }));
     }
 }
 exports.CreateEntityCommandHandler = CreateEntityCommandHandler;

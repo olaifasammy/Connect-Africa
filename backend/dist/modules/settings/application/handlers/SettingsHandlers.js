@@ -1,18 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ResetSettingsHandler = exports.UpdateSecuritySettingsHandler = exports.UpdateNotificationSettingsHandler = exports.UpdatePrivacyHandler = exports.UpdateLanguageHandler = exports.UpdateSettingsHandler = void 0;
-const public_1 = require("../../../audit/public");
-const UniqueEntityId_1 = require("../../../../shared/domain/UniqueEntityId");
 const SettingsValueObjects_1 = require("../../domain/value-objects/SettingsValueObjects");
+const AuditLogRequestedEvent_1 = require("../../../audit/domain/events/AuditLogRequestedEvent");
 const SettingsError_1 = require("../../domain/errors/SettingsError");
 const ThemeSettings_1 = require("../../domain/entities/ThemeSettings");
 class UpdateSettingsHandler {
     settingsRepository;
-    auditRepository;
     eventBus;
-    constructor(settingsRepository, auditRepository, eventBus) {
+    constructor(settingsRepository, eventBus) {
         this.settingsRepository = settingsRepository;
-        this.auditRepository = auditRepository;
         this.eventBus = eventBus;
     }
     async handle(command) {
@@ -30,33 +27,24 @@ class UpdateSettingsHandler {
             await this.eventBus.publish(event);
         }
         settings.clearDomainEvents();
-        const auditEntry = public_1.AuditEntry.create({
+        await this.eventBus.publish(new AuditLogRequestedEvent_1.AuditLogRequestedEvent({
             action: 'UPDATE_SETTINGS',
-            actor: public_1.AuditActor.create({
-                userId: new public_1.UserId(command.userId),
-                actorType: 'USER',
-                ipAddress: new public_1.IPAddress('127.0.0.1'),
-                userAgent: new public_1.UserAgent('unknown')
-            }),
-            resource: public_1.AuditResource.create({
-                id: new public_1.ResourceId('SETTINGS'),
-                type: 'SETTINGS'
-            }),
-            metadata: [public_1.AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-            correlationId: new public_1.CorrelationId(new UniqueEntityId_1.UniqueEntityId().toString()),
-            timestamp: new public_1.Timestamp(new Date())
-        });
-        await this.auditRepository.log(auditEntry);
+            actorId: command.userId,
+            actorType: 'USER',
+            ipAddress: '127.0.0.1',
+            userAgent: 'unknown',
+            resourceId: 'SETTINGS',
+            resourceType: 'SETTINGS',
+            metadata: [{ key: 'status', value: 'SUCCESS' }]
+        }));
     }
 }
 exports.UpdateSettingsHandler = UpdateSettingsHandler;
 class UpdateLanguageHandler {
     settingsRepository;
-    auditRepository;
     eventBus;
-    constructor(settingsRepository, auditRepository, eventBus) {
+    constructor(settingsRepository, eventBus) {
         this.settingsRepository = settingsRepository;
-        this.auditRepository = auditRepository;
         this.eventBus = eventBus;
     }
     async handle(command) {
@@ -69,33 +57,24 @@ class UpdateLanguageHandler {
             await this.eventBus.publish(event);
         }
         settings.clearDomainEvents();
-        const auditEntry = public_1.AuditEntry.create({
+        await this.eventBus.publish(new AuditLogRequestedEvent_1.AuditLogRequestedEvent({
             action: 'UPDATE_LANGUAGE',
-            actor: public_1.AuditActor.create({
-                userId: new public_1.UserId(command.userId),
-                actorType: 'USER',
-                ipAddress: new public_1.IPAddress('127.0.0.1'),
-                userAgent: new public_1.UserAgent('unknown')
-            }),
-            resource: public_1.AuditResource.create({
-                id: new public_1.ResourceId('SETTINGS'),
-                type: 'SETTINGS'
-            }),
-            metadata: [public_1.AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-            correlationId: new public_1.CorrelationId(new UniqueEntityId_1.UniqueEntityId().toString()),
-            timestamp: new public_1.Timestamp(new Date())
-        });
-        await this.auditRepository.log(auditEntry);
+            actorId: command.userId,
+            actorType: 'USER',
+            ipAddress: '127.0.0.1',
+            userAgent: 'unknown',
+            resourceId: 'SETTINGS',
+            resourceType: 'SETTINGS',
+            metadata: [{ key: 'status', value: 'SUCCESS' }]
+        }));
     }
 }
 exports.UpdateLanguageHandler = UpdateLanguageHandler;
 class UpdatePrivacyHandler {
     settingsRepository;
-    auditRepository;
     eventBus;
-    constructor(settingsRepository, auditRepository, eventBus) {
+    constructor(settingsRepository, eventBus) {
         this.settingsRepository = settingsRepository;
-        this.auditRepository = auditRepository;
         this.eventBus = eventBus;
     }
     async handle(command) {
@@ -108,33 +87,24 @@ class UpdatePrivacyHandler {
             await this.eventBus.publish(event);
         }
         settings.clearDomainEvents();
-        const auditEntry = public_1.AuditEntry.create({
+        await this.eventBus.publish(new AuditLogRequestedEvent_1.AuditLogRequestedEvent({
             action: 'UPDATE_PRIVACY',
-            actor: public_1.AuditActor.create({
-                userId: new public_1.UserId(command.userId),
-                actorType: 'USER',
-                ipAddress: new public_1.IPAddress('127.0.0.1'),
-                userAgent: new public_1.UserAgent('unknown')
-            }),
-            resource: public_1.AuditResource.create({
-                id: new public_1.ResourceId('SETTINGS'),
-                type: 'SETTINGS'
-            }),
-            metadata: [public_1.AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-            correlationId: new public_1.CorrelationId(new UniqueEntityId_1.UniqueEntityId().toString()),
-            timestamp: new public_1.Timestamp(new Date())
-        });
-        await this.auditRepository.log(auditEntry);
+            actorId: command.userId,
+            actorType: 'USER',
+            ipAddress: '127.0.0.1',
+            userAgent: 'unknown',
+            resourceId: 'SETTINGS',
+            resourceType: 'SETTINGS',
+            metadata: [{ key: 'status', value: 'SUCCESS' }]
+        }));
     }
 }
 exports.UpdatePrivacyHandler = UpdatePrivacyHandler;
 class UpdateNotificationSettingsHandler {
     settingsRepository;
-    auditRepository;
     eventBus;
-    constructor(settingsRepository, auditRepository, eventBus) {
+    constructor(settingsRepository, eventBus) {
         this.settingsRepository = settingsRepository;
-        this.auditRepository = auditRepository;
         this.eventBus = eventBus;
     }
     async handle(command) {
@@ -150,33 +120,24 @@ class UpdateNotificationSettingsHandler {
             await this.eventBus.publish(event);
         }
         settings.clearDomainEvents();
-        const auditEntry = public_1.AuditEntry.create({
+        await this.eventBus.publish(new AuditLogRequestedEvent_1.AuditLogRequestedEvent({
             action: 'UPDATE_NOTIFICATIONS',
-            actor: public_1.AuditActor.create({
-                userId: new public_1.UserId(command.userId),
-                actorType: 'USER',
-                ipAddress: new public_1.IPAddress('127.0.0.1'),
-                userAgent: new public_1.UserAgent('unknown')
-            }),
-            resource: public_1.AuditResource.create({
-                id: new public_1.ResourceId('SETTINGS'),
-                type: 'SETTINGS'
-            }),
-            metadata: [public_1.AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-            correlationId: new public_1.CorrelationId(new UniqueEntityId_1.UniqueEntityId().toString()),
-            timestamp: new public_1.Timestamp(new Date())
-        });
-        await this.auditRepository.log(auditEntry);
+            actorId: command.userId,
+            actorType: 'USER',
+            ipAddress: '127.0.0.1',
+            userAgent: 'unknown',
+            resourceId: 'SETTINGS',
+            resourceType: 'SETTINGS',
+            metadata: [{ key: 'status', value: 'SUCCESS' }]
+        }));
     }
 }
 exports.UpdateNotificationSettingsHandler = UpdateNotificationSettingsHandler;
 class UpdateSecuritySettingsHandler {
     settingsRepository;
-    auditRepository;
     eventBus;
-    constructor(settingsRepository, auditRepository, eventBus) {
+    constructor(settingsRepository, eventBus) {
         this.settingsRepository = settingsRepository;
-        this.auditRepository = auditRepository;
         this.eventBus = eventBus;
     }
     async handle(command) {
@@ -192,54 +153,38 @@ class UpdateSecuritySettingsHandler {
             await this.eventBus.publish(event);
         }
         settings.clearDomainEvents();
-        const auditEntry = public_1.AuditEntry.create({
+        await this.eventBus.publish(new AuditLogRequestedEvent_1.AuditLogRequestedEvent({
             action: 'UPDATE_SECURITY',
-            actor: public_1.AuditActor.create({
-                userId: new public_1.UserId(command.userId),
-                actorType: 'USER',
-                ipAddress: new public_1.IPAddress('127.0.0.1'),
-                userAgent: new public_1.UserAgent('unknown')
-            }),
-            resource: public_1.AuditResource.create({
-                id: new public_1.ResourceId('SETTINGS'),
-                type: 'SETTINGS'
-            }),
-            metadata: [public_1.AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-            correlationId: new public_1.CorrelationId(new UniqueEntityId_1.UniqueEntityId().toString()),
-            timestamp: new public_1.Timestamp(new Date())
-        });
-        await this.auditRepository.log(auditEntry);
+            actorId: command.userId,
+            actorType: 'USER',
+            ipAddress: '127.0.0.1',
+            userAgent: 'unknown',
+            resourceId: 'SETTINGS',
+            resourceType: 'SETTINGS',
+            metadata: [{ key: 'status', value: 'SUCCESS' }]
+        }));
     }
 }
 exports.UpdateSecuritySettingsHandler = UpdateSecuritySettingsHandler;
 class ResetSettingsHandler {
     settingsRepository;
-    auditRepository;
     eventBus;
-    constructor(settingsRepository, auditRepository, eventBus) {
+    constructor(settingsRepository, eventBus) {
         this.settingsRepository = settingsRepository;
-        this.auditRepository = auditRepository;
         this.eventBus = eventBus;
     }
     async handle(command) {
         // ... logic for resetting to defaults
-        const auditEntry = public_1.AuditEntry.create({
+        await this.eventBus.publish(new AuditLogRequestedEvent_1.AuditLogRequestedEvent({
             action: 'RESET_SETTINGS',
-            actor: public_1.AuditActor.create({
-                userId: new public_1.UserId(command.userId),
-                actorType: 'USER',
-                ipAddress: new public_1.IPAddress('127.0.0.1'),
-                userAgent: new public_1.UserAgent('unknown')
-            }),
-            resource: public_1.AuditResource.create({
-                id: new public_1.ResourceId('SETTINGS'),
-                type: 'SETTINGS'
-            }),
-            metadata: [public_1.AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-            correlationId: new public_1.CorrelationId(new UniqueEntityId_1.UniqueEntityId().toString()),
-            timestamp: new public_1.Timestamp(new Date())
-        });
-        await this.auditRepository.log(auditEntry);
+            actorId: command.userId,
+            actorType: 'USER',
+            ipAddress: '127.0.0.1',
+            userAgent: 'unknown',
+            resourceId: 'SETTINGS',
+            resourceType: 'SETTINGS',
+            metadata: [{ key: 'status', value: 'SUCCESS' }]
+        }));
     }
 }
 exports.ResetSettingsHandler = ResetSettingsHandler;

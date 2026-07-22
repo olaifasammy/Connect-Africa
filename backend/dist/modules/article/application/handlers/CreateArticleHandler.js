@@ -2,14 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateArticleHandler = void 0;
 const Article_1 = require("../../domain/entities/Article");
-const public_1 = require("../../../audit/public");
-const UniqueEntityId_1 = require("../../../../shared/domain/UniqueEntityId");
+const AuditLogRequestedEvent_1 = require("../../../audit/domain/events/AuditLogRequestedEvent");
+const ArticleCreatedEvent_1 = require("../../domain/events/ArticleCreatedEvent");
 class CreateArticleHandler {
     repository;
-    auditRepository;
-    constructor(repository, auditRepository) {
+    eventBus;
+    constructor(repository, eventBus) {
         this.repository = repository;
-        this.auditRepository = auditRepository;
+        this.eventBus = eventBus;
     }
     async handle(command) {
         const article = Article_1.Article.create({
@@ -18,26 +18,22 @@ class CreateArticleHandler {
             content: command.content,
             authorId: command.authorId,
             language: command.language,
-            slug: command.title.toLowerCase().replace(/ /g, '-') // Basic slugification
+            slug: command.title.toLowerCase().replace(/ /g, '-')
         });
         await this.repository.save(article);
-        const auditEntry = public_1.AuditEntry.create({
+        // Domain event
+        await this.eventBus.publish(new ArticleCreatedEvent_1.ArticleCreatedEvent(article.id));
+        // Decoupled audit logging
+        await this.eventBus.publish(new AuditLogRequestedEvent_1.AuditLogRequestedEvent({
             action: 'CREATE_ARTICLE',
-            actor: public_1.AuditActor.create({
-                userId: new public_1.UserId(command.authorId.toString()),
-                actorType: 'USER',
-                ipAddress: new public_1.IPAddress('127.0.0.1'),
-                userAgent: new public_1.UserAgent('unknown')
-            }),
-            resource: public_1.AuditResource.create({
-                id: new public_1.ResourceId(article.id.toString()),
-                type: 'ARTICLE'
-            }),
-            metadata: [public_1.AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-            correlationId: new public_1.CorrelationId(new UniqueEntityId_1.UniqueEntityId().toString()),
-            timestamp: new public_1.Timestamp(new Date())
-        });
-        await this.auditRepository.log(auditEntry);
+            actorId: command.authorId.toString(),
+            actorType: 'USER',
+            ipAddress: '127.0.0.1',
+            userAgent: 'unknown',
+            resourceId: article.id.toString(),
+            resourceType: 'ARTICLE',
+            metadata: [{ key: 'status', value: 'SUCCESS' }]
+        }));
         return article.id.toString();
     }
 }

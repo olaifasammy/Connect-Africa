@@ -1,9 +1,9 @@
 import { ApproveArticleCommand } from '../commands/ApproveArticleCommand';
 import { IArticleRepository } from '../../domain/repositories/IArticleRepository';
-import { IAuditLogger } from '../../domain/interfaces/ArticleServices';
+import { EventBus } from '../../../../shared/infrastructure/queue/EventBus';
 export declare class ApproveArticleHandler {
     private readonly repository;
-    private readonly auditLogger;
-    constructor(repository: IArticleRepository, auditLogger: IAuditLogger);
+    private readonly eventBus;
+    constructor(repository: IArticleRepository, eventBus: EventBus);
     handle(command: ApproveArticleCommand): Promise<void>;
 }

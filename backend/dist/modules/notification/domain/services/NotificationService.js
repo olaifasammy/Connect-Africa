@@ -18,16 +18,15 @@ const NotificationPolicies_1 = require("../policies/NotificationPolicies");
 const PreferenceService_1 = require("../services/PreferenceService");
 const EventBus_1 = require("../../../../shared/infrastructure/queue/EventBus");
 const NotificationEvents_1 = require("../events/NotificationEvents");
+const AuditLogRequestedEvent_1 = require("../../../audit/domain/events/AuditLogRequestedEvent");
 let NotificationService = class NotificationService {
     repository;
     preferenceService;
     eventBus;
-    auditLogger;
-    constructor(repository, preferenceService, eventBus, auditLogger) {
+    constructor(repository, preferenceService, eventBus) {
         this.repository = repository;
         this.preferenceService = preferenceService;
         this.eventBus = eventBus;
-        this.auditLogger = auditLogger;
     }
     async send(notification) {
         const preference = await this.preferenceService.getPreference(notification.recipientId);
@@ -39,7 +38,17 @@ let NotificationService = class NotificationService {
         }
         await this.repository.save(notification);
         await this.eventBus.publish(new NotificationEvents_1.NotificationSentEvent(notification.id));
-        await this.auditLogger.log({ status: "SUCCESS", action: "NotificationSent", resource: notification.id.value, user: notification.recipientId.value });
+        // Decoupled audit logging
+        await this.eventBus.publish(new AuditLogRequestedEvent_1.AuditLogRequestedEvent({
+            action: "NotificationSent",
+            actorId: "SYSTEM",
+            actorType: "SYSTEM",
+            ipAddress: "0.0.0.0",
+            userAgent: "SYSTEM",
+            resourceId: notification.id.value,
+            resourceType: "Notification",
+            metadata: [{ key: "recipientId", value: notification.recipientId.value }]
+        }));
     }
 };
 exports.NotificationService = NotificationService;
@@ -48,8 +57,7 @@ exports.NotificationService = NotificationService = __decorate([
     __param(0, (0, inversify_1.inject)('INotificationRepository')),
     __param(1, (0, inversify_1.inject)(PreferenceService_1.PreferenceService)),
     __param(2, (0, inversify_1.inject)('EventBus')),
-    __param(3, (0, inversify_1.inject)('IAuditLogger')),
     __metadata("design:paramtypes", [Object, PreferenceService_1.PreferenceService,
-        EventBus_1.EventBus, Object])
+        EventBus_1.EventBus])
 ], NotificationService);
 //# sourceMappingURL=NotificationService.js.map

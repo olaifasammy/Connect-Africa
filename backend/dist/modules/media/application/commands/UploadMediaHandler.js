@@ -6,15 +6,15 @@ const FileName_1 = require("../../domain/value-objects/FileName");
 const MimeType_1 = require("../../domain/value-objects/MimeType");
 const UniqueEntityId_1 = require("../../../../shared/domain/UniqueEntityId");
 const MediaStatus_1 = require("../../domain/value-objects/MediaStatus");
-const public_1 = require("../../../audit/public");
+const AuditLogRequestedEvent_1 = require("../../../audit/domain/events/AuditLogRequestedEvent");
 class UploadMediaHandler {
     mediaRepository;
     storageProvider;
-    auditRepository;
-    constructor(mediaRepository, storageProvider, auditRepository) {
+    eventBus;
+    constructor(mediaRepository, storageProvider, eventBus) {
         this.mediaRepository = mediaRepository;
         this.storageProvider = storageProvider;
-        this.auditRepository = auditRepository;
+        this.eventBus = eventBus;
     }
     async handle(command) {
         const filePath = `media/${new UniqueEntityId_1.UniqueEntityId().toString()}-${command.data.fileName}`;
@@ -31,23 +31,17 @@ class UploadMediaHandler {
                 ownerId: new UniqueEntityId_1.UniqueEntityId(command.userId),
             });
             await this.mediaRepository.save(media);
-            const auditEntry = public_1.AuditEntry.create({
+            // Decoupled audit logging
+            await this.eventBus.publish(new AuditLogRequestedEvent_1.AuditLogRequestedEvent({
                 action: 'UPLOAD_MEDIA',
-                actor: public_1.AuditActor.create({
-                    userId: new public_1.UserId(command.userId),
-                    actorType: 'USER',
-                    ipAddress: new public_1.IPAddress('127.0.0.1'),
-                    userAgent: new public_1.UserAgent('unknown')
-                }),
-                resource: public_1.AuditResource.create({
-                    id: new public_1.ResourceId(media.id.toString()),
-                    type: 'MEDIA'
-                }),
-                metadata: [public_1.AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-                correlationId: new public_1.CorrelationId(new UniqueEntityId_1.UniqueEntityId().toString()),
-                timestamp: new public_1.Timestamp(new Date())
-            });
-            await this.auditRepository.log(auditEntry);
+                actorId: command.userId,
+                actorType: 'USER',
+                ipAddress: '127.0.0.1',
+                userAgent: 'unknown',
+                resourceId: media.id.toString(),
+                resourceType: 'MEDIA',
+                metadata: [{ key: 'status', value: 'SUCCESS' }]
+            }));
             return {
                 id: media.id.toString(),
                 fileName: media.fileName.value,
@@ -56,7 +50,16 @@ class UploadMediaHandler {
             };
         }
         catch (error) {
-            // Log failure with audit repository as well
+            await this.eventBus.publish(new AuditLogRequestedEvent_1.AuditLogRequestedEvent({
+                action: 'UPLOAD_MEDIA',
+                actorId: command.userId,
+                actorType: 'USER',
+                ipAddress: '127.0.0.1',
+                userAgent: 'unknown',
+                resourceId: 'MEDIA',
+                resourceType: 'MEDIA',
+                metadata: [{ key: 'status', value: 'FAILURE' }]
+            }));
             throw error;
         }
     }

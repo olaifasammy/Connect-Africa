@@ -1,6 +1,5 @@
-import { UniqueEntityId } from '../../../../shared/domain/UniqueEntityId';
+import { SystemMetric } from '../entities/SystemMetric';
 export interface IAnalyticsRepository {
-    findById(id: UniqueEntityId): Promise<any | null>;
-    save(entity: any): Promise<void>;
-    delete(id: UniqueEntityId): Promise<void>;
+    save(metric: SystemMetric): Promise<void>;
+    getMetricsByContext(context: string): Promise<SystemMetric[]>;
 }

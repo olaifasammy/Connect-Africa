@@ -1,25 +1,17 @@
 import { ICommandHandler } from '@shared/application/handlers/ICommandHandler';
 import { UpdateEntityCommand } from '@modules/entity/application/commands/UpdateEntityCommand';
 import { EntityId } from '@modules/entity/domain/value-objects/EntityId';
-import { EntityName } from '@modules/entity/domain/value-objects/EntityName';
 import { EntityMetadata } from '@modules/entity/domain/value-objects/EntityMetadata';
 import { IEntityRepository } from '@modules/entity/domain/repositories/IEntityRepository';
 import { EntityValidator } from '@modules/entity/domain/validators/EntityValidator';
-import { IAuditRepository } from '@modules/audit/public';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { Entity } from '@modules/entity/domain/entities/Entity';
 import { EntityUpdatedEvent } from '@modules/entity/domain/events/EntityUpdatedEvent';
-import { AuditEntry } from '@modules/audit/domain/aggregates/AuditEntry';
-import { AuditActor } from '@modules/audit/domain/entities/AuditActor';
-import { AuditResource } from '@modules/audit/domain/entities/AuditResource';
-import { AuditMetadata } from '@modules/audit/domain/entities/AuditMetadata';
-import { CorrelationId, Timestamp, UserId, ResourceId, IPAddress, UserAgent } from '@modules/audit/domain/value-objects/AuditValueObjects';
-import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
+import { AuditLogRequestedEvent } from '@modules/audit/domain/events/AuditLogRequestedEvent';
 
 export class UpdateEntityCommandHandler implements ICommandHandler<UpdateEntityCommand, void> {
   constructor(
     private readonly entityRepository: IEntityRepository,
-    private readonly auditRepository: IAuditRepository,
     private readonly eventBus: EventBus
   ) {}
 
@@ -64,23 +56,15 @@ export class UpdateEntityCommandHandler implements ICommandHandler<UpdateEntityC
     await this.eventBus.publish(new EntityUpdatedEvent(entity));
 
     // Audit logging
-    const auditEntry = AuditEntry.create({
+    await this.eventBus.publish(new AuditLogRequestedEvent({
       action: 'UPDATE_ENTITY',
-      actor: AuditActor.create({
-        userId: new UserId(userId),
-        actorType: 'USER',
-        ipAddress: new IPAddress('127.0.0.1'),
-        userAgent: new UserAgent('unknown')
-      }),
-      resource: AuditResource.create({
-        id: new ResourceId(entityId),
-        type: 'ENTITY'
-      }),
-      metadata: [AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
-      correlationId: new CorrelationId(new UniqueEntityId().toString()),
-      timestamp: new Timestamp(new Date())
-    });
-
-    await this.auditRepository.log(auditEntry);
+      actorId: userId,
+      actorType: 'USER',
+      ipAddress: '127.0.0.1',
+      userAgent: 'unknown',
+      resourceId: entityId,
+      resourceType: 'ENTITY',
+      metadata: [{ key: 'status', value: 'SUCCESS' }]
+    }));
   }
 }
