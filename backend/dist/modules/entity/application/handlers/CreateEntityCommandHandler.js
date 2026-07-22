@@ -10,15 +10,21 @@ const UniqueEntityId_1 = require("../../../../shared/domain/UniqueEntityId");
 const public_1 = require("../../../audit/public");
 class CreateEntityCommandHandler {
     entityRepository;
+    ontologyGraphService;
     auditRepository;
     eventBus;
-    constructor(entityRepository, auditRepository, eventBus) {
+    constructor(entityRepository, ontologyGraphService, auditRepository, eventBus) {
         this.entityRepository = entityRepository;
+        this.ontologyGraphService = ontologyGraphService;
         this.auditRepository = auditRepository;
         this.eventBus = eventBus;
     }
     async handle(command) {
         const { name, type, description, source, tags } = command.dto;
+        const isValidType = await this.ontologyGraphService.validateEntityType(type);
+        if (!isValidType) {
+            throw new Error(`Invalid entity type: ${type}`);
+        }
         const entity = Entity_1.Entity.create(EntityId_1.EntityId.create(new UniqueEntityId_1.UniqueEntityId().toString()), EntityName_1.EntityName.create(name), type, EntityMetadata_1.EntityMetadata.create({ description, source, tags: tags || [] }));
         EntityValidator_1.EntityValidator.validate(entity);
         await this.entityRepository.save(entity);

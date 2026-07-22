@@ -1,10 +1,12 @@
 import { ICommand } from '../../../../shared/application/commands/ICommand';
 export declare class CreateRelationshipCommand implements ICommand {
     readonly sourceEntityId: string;
+    readonly sourceEntityTypeId: string;
     readonly targetEntityId: string;
+    readonly targetEntityTypeId: string;
     readonly relationshipTypeId: string;
     readonly userId: string;
-    constructor(sourceEntityId: string, targetEntityId: string, relationshipTypeId: string, userId: string);
+    constructor(sourceEntityId: string, sourceEntityTypeId: string, targetEntityId: string, targetEntityTypeId: string, relationshipTypeId: string, userId: string);
 }
 export declare class UpdateRelationshipCommand implements ICommand {
     readonly id: string;

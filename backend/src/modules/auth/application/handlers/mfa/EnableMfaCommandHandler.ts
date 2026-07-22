@@ -4,7 +4,7 @@ import { IUserRepository } from '@modules/auth/domain/repositories/UserRepositor
 import { ITotpProvider } from '@modules/auth/domain/interfaces/ITotpProvider';
 import { MfaEnabledEvent } from '@modules/auth/domain/events/MfaEnabledEvent';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
-import { AuditLogger } from '@modules/auth/infrastructure/AuditLogger';
+import { AuditLogRequestedEvent } from '@modules/audit/public';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 import { AuthenticationError } from '@modules/auth/domain/errors/AuthErrors';
 
@@ -25,25 +25,31 @@ export class EnableMfaCommandHandler implements ICommandHandler<EnableMfaCommand
       
       // Assume user repository update logic would go here
       
-      AuditLogger.log({
-        user: command.userId,
+      await this.eventBus.publish(new AuditLogRequestedEvent({
         action: 'ENABLE_MFA',
-        resource: 'AUTH',
-        status: 'SUCCESS',
-        ipAddress: command.ipAddress
-      });
+        actorId: command.userId,
+        actorType: 'USER',
+        resourceId: 'AUTH',
+        resourceType: 'AUTH',
+        ipAddress: command.ipAddress || '127.0.0.1',
+        userAgent: 'unknown',
+        metadata: [{ key: 'status', value: 'SUCCESS' }]
+      }));
       
       await this.eventBus.publish(new MfaEnabledEvent(new UniqueEntityId(command.userId)));
       
       return { secret };
     } catch (error) {
-      AuditLogger.log({
-        user: command.userId,
+      await this.eventBus.publish(new AuditLogRequestedEvent({
         action: 'ENABLE_MFA',
-        resource: 'AUTH',
-        status: 'FAILURE',
-        ipAddress: command.ipAddress
-      });
+        actorId: command.userId,
+        actorType: 'USER',
+        resourceId: 'AUTH',
+        resourceType: 'AUTH',
+        ipAddress: command.ipAddress || '127.0.0.1',
+        userAgent: 'unknown',
+        metadata: [{ key: 'status', value: 'FAILURE' }]
+      }));
       throw new AuthenticationError('Failed to enable MFA');
     }
   }

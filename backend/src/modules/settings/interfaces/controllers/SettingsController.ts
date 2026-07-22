@@ -18,7 +18,11 @@ export class SettingsController {
   ) {}
 
   async getSettings(req: Request, res: Response): Promise<void> {
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
+    if (!userId) {
+        res.status(401).json({ success: false, message: 'Unauthorized' });
+        return;
+    }
     const settings = await this.getSettingsHandler.handle(userId);
     if (!settings) {
       res.status(404).json({ success: false, message: 'Settings not found' });
@@ -28,14 +32,22 @@ export class SettingsController {
   }
 
   async updateSettings(req: Request, res: Response): Promise<void> {
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
+    if (!userId) {
+        res.status(401).json({ success: false, message: 'Unauthorized' });
+        return;
+    }
     const { theme, timezone, locale } = req.body;
     await this.updateSettingsHandler.handle(new UpdateSettingsCommand(userId, theme, timezone, locale));
     res.status(200).json({ success: true });
   }
 
   async changeTheme(req: Request, res: Response): Promise<void> {
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
+    if (!userId) {
+        res.status(401).json({ success: false, message: 'Unauthorized' });
+        return;
+    }
     const { theme } = req.body;
     
     await this.changeThemeHandler.handle(new ChangeThemeCommand(userId, theme));
@@ -43,35 +55,55 @@ export class SettingsController {
   }
 
   async updateLanguage(req: Request, res: Response): Promise<void> {
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
+    if (!userId) {
+        res.status(401).json({ success: false, message: 'Unauthorized' });
+        return;
+    }
     const { locale } = req.body;
     await this.updateLanguageHandler.handle(new UpdateLanguageCommand(userId, locale));
     res.status(200).json({ success: true });
   }
 
   async updatePrivacy(req: Request, res: Response): Promise<void> {
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
+    if (!userId) {
+        res.status(401).json({ success: false, message: 'Unauthorized' });
+        return;
+    }
     const { level } = req.body;
     await this.updatePrivacyHandler.handle(new UpdatePrivacyCommand(userId, level));
     res.status(200).json({ success: true });
   }
 
   async updateNotificationSettings(req: Request, res: Response): Promise<void> {
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
+    if (!userId) {
+        res.status(401).json({ success: false, message: 'Unauthorized' });
+        return;
+    }
     const { enabled } = req.body;
     await this.updateNotificationSettingsHandler.handle(new UpdateNotificationSettingsCommand(userId, enabled));
     res.status(200).json({ success: true });
   }
 
   async updateSecuritySettings(req: Request, res: Response): Promise<void> {
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
+    if (!userId) {
+        res.status(401).json({ success: false, message: 'Unauthorized' });
+        return;
+    }
     const { mfaEnabled } = req.body;
     await this.updateSecuritySettingsHandler.handle(new UpdateSecuritySettingsCommand(userId, mfaEnabled));
     res.status(200).json({ success: true });
   }
 
   async resetSettings(req: Request, res: Response): Promise<void> {
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
+    if (!userId) {
+        res.status(401).json({ success: false, message: 'Unauthorized' });
+        return;
+    }
     await this.resetSettingsHandler.handle(new ResetSettingsCommand(userId));
     res.status(200).json({ success: true });
   }

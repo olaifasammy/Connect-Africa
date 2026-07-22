@@ -3,7 +3,9 @@ import { ICommand } from '@shared/application/commands/ICommand';
 export class CreateRelationshipCommand implements ICommand {
   constructor(
     public readonly sourceEntityId: string,
+    public readonly sourceEntityTypeId: string,
     public readonly targetEntityId: string,
+    public readonly targetEntityTypeId: string,
     public readonly relationshipTypeId: string,
     public readonly userId: string
   ) {}

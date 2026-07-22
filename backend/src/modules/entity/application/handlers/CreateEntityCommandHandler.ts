@@ -9,6 +9,7 @@ import { EntityValidator } from '@modules/entity/domain/validators/EntityValidat
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 import { IAuditRepository } from '@modules/audit/public';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
+import { IOntologyGraphService } from '@modules/ontology/public';
 import { 
   AuditEntry, 
   AuditActor, 
@@ -25,12 +26,18 @@ import {
 export class CreateEntityCommandHandler implements ICommandHandler<CreateEntityCommand, void> {
   constructor(
     private readonly entityRepository: IEntityRepository,
+    private readonly ontologyGraphService: IOntologyGraphService,
     private readonly auditRepository: IAuditRepository,
     private readonly eventBus: EventBus
   ) {}
 
   async handle(command: CreateEntityCommand): Promise<void> {
     const { name, type, description, source, tags } = command.dto;
+
+    const isValidType = await this.ontologyGraphService.validateEntityType(type);
+    if (!isValidType) {
+        throw new Error(`Invalid entity type: ${type}`);
+    }
 
     const entity = Entity.create(
       EntityId.create(new UniqueEntityId().toString()),

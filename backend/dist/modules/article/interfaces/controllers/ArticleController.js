@@ -32,8 +32,13 @@ class ArticleController {
         this.metrics.incrementCounter('article_operations_total', { action });
     }
     async create(req, res) {
-        const { title, summary, content, authorId } = req.body;
-        const command = new CreateArticleCommand_1.CreateArticleCommand(title, summary, content, new UniqueEntityId_1.UniqueEntityId(authorId));
+        const userId = req.user?.id;
+        if (!userId) {
+            res.status(401).json({ success: false, error: 'Unauthorized' });
+            return;
+        }
+        const { title, summary, content } = req.body;
+        const command = new CreateArticleCommand_1.CreateArticleCommand(title, summary, content, new UniqueEntityId_1.UniqueEntityId(userId));
         const articleId = await this.createArticleHandler.handle(command);
         this.track('create');
         res.status(201).json({ id: articleId });

@@ -1,9 +1,9 @@
 import { CreateArticleCommand } from '../commands/CreateArticleCommand';
 import { IArticleRepository } from '../../domain/repositories/IArticleRepository';
-import { IAuditLogger } from '../../domain/interfaces/ArticleServices';
+import { IAuditRepository } from '../../../audit/public';
 export declare class CreateArticleHandler {
     private readonly repository;
-    private readonly auditLogger;
-    constructor(repository: IArticleRepository, auditLogger: IAuditLogger);
+    private readonly auditRepository;
+    constructor(repository: IArticleRepository, auditRepository: IAuditRepository);
     handle(command: CreateArticleCommand): Promise<string>;
 }

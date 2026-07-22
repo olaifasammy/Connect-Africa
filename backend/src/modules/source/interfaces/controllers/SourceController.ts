@@ -22,8 +22,14 @@ export class SourceController {
   }
 
   async create(req: Request, res: Response): Promise<void> {
+    const userId = req.user?.id;
+    if (!userId) {
+        res.status(401).json({ success: false, error: 'Unauthorized' });
+        return;
+    }
     const { title, type, author, publishedAt, url, publisher } = req.body;
     const command = new CreateSourceCommand(
+      userId,
       title,
       type as SourceType,
       new Provenance(author, new Date(publishedAt), url, publisher)

@@ -3,12 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateRelationshipVersionCommand = exports.MergeRelationshipsCommand = exports.RestoreRelationshipCommand = exports.ArchiveRelationshipCommand = exports.PublishRelationshipCommand = exports.DeleteRelationshipCommand = exports.UpdateRelationshipCommand = exports.CreateRelationshipCommand = void 0;
 class CreateRelationshipCommand {
     sourceEntityId;
+    sourceEntityTypeId;
     targetEntityId;
+    targetEntityTypeId;
     relationshipTypeId;
     userId;
-    constructor(sourceEntityId, targetEntityId, relationshipTypeId, userId) {
+    constructor(sourceEntityId, sourceEntityTypeId, targetEntityId, targetEntityTypeId, relationshipTypeId, userId) {
         this.sourceEntityId = sourceEntityId;
+        this.sourceEntityTypeId = sourceEntityTypeId;
         this.targetEntityId = targetEntityId;
+        this.targetEntityTypeId = targetEntityTypeId;
         this.relationshipTypeId = relationshipTypeId;
         this.userId = userId;
     }

@@ -1,7 +1,9 @@
 import { z } from 'zod';
 export declare const CreateRelationshipSchema: z.ZodObject<{
     sourceEntityId: z.ZodString;
+    sourceEntityTypeId: z.ZodString;
     targetEntityId: z.ZodString;
+    targetEntityTypeId: z.ZodString;
     relationshipTypeId: z.ZodString;
 }, z.core.$strip>;
 export declare const UpdateRelationshipSchema: z.ZodObject<{

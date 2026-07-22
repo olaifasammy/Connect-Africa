@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KnowledgeGapEngine = void 0;
+const Logger_1 = require("../../../../shared/logger/Logger");
 class KnowledgeGapEngine {
     async recordTopic(topic) {
         // Implement logic to record topic frequency
-        console.log(`[GAP_ENGINE] Recording topic frequency: ${topic}`);
+        Logger_1.logger.info(`[GAP_ENGINE] Recording topic frequency: ${topic}`);
     }
     async generateSuggestions(topic) {
         // Implement logic to generate suggestions based on topic
@@ -17,7 +18,7 @@ class KnowledgeGapEngine {
     }
     async addToEditorialQueue(gap) {
         // Implement logic to add to editorial queue
-        console.log(`[GAP_ENGINE] Adding gap ${gap.id} to editorial queue`);
+        Logger_1.logger.info(`[GAP_ENGINE] Adding gap ${gap.id} to editorial queue`);
     }
 }
 exports.KnowledgeGapEngine = KnowledgeGapEngine;

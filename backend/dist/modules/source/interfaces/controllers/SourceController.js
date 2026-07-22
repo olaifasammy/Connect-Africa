@@ -22,8 +22,13 @@ class SourceController {
         this.metrics.incrementCounter('source_operations_total', { action });
     }
     async create(req, res) {
+        const userId = req.user?.id;
+        if (!userId) {
+            res.status(401).json({ success: false, error: 'Unauthorized' });
+            return;
+        }
         const { title, type, author, publishedAt, url, publisher } = req.body;
-        const command = new CreateSourceCommand_1.CreateSourceCommand(title, type, new SourceValueObjects_1.Provenance(author, new Date(publishedAt), url, publisher));
+        const command = new CreateSourceCommand_1.CreateSourceCommand(userId, title, type, new SourceValueObjects_1.Provenance(author, new Date(publishedAt), url, publisher));
         const sourceId = await this.createSourceHandler.handle(command);
         this.track('create');
         res.status(201).json({ id: sourceId });

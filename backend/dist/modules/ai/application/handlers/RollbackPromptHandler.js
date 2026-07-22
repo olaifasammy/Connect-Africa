@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RollbackPromptHandler = void 0;
+const Logger_1 = require("../../../../shared/logger/Logger");
 class RollbackPromptHandler {
     promptRepository;
     constructor(promptRepository) {
@@ -11,7 +12,7 @@ class RollbackPromptHandler {
         if (!prompt)
             throw new Error('Prompt not found');
         // In production, implement rollback logic to specific version
-        console.log(`[PROMPT] Rolling back ${command.promptId} to version ${command.version}`);
+        Logger_1.logger.info(`[PROMPT] Rolling back ${command.promptId} to version ${command.version}`);
     }
 }
 exports.RollbackPromptHandler = RollbackPromptHandler;

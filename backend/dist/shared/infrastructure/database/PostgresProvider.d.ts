@@ -1,8 +1,8 @@
 import { Pool } from 'pg';
 import { DatabaseProvider } from './DatabaseProvider';
 export declare class PostgresProvider extends DatabaseProvider {
-    private static _pool;
-    static getPool(): Pool;
+    private _pool;
+    constructor();
     get pool(): Pool;
     connect(): Promise<void>;
     disconnect(): Promise<void>;

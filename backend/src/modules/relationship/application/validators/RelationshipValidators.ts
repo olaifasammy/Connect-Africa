@@ -2,7 +2,9 @@ import { z } from 'zod';
 
 export const CreateRelationshipSchema = z.object({
   sourceEntityId: z.string().uuid(),
+  sourceEntityTypeId: z.string().uuid(),
   targetEntityId: z.string().uuid(),
+  targetEntityTypeId: z.string().uuid(),
   relationshipTypeId: z.string().uuid(),
 });
 

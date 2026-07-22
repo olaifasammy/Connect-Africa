@@ -1,12 +1,15 @@
 import { Router } from 'express';
 import { SettingsController } from '../controllers/SettingsController';
 import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/AuthenticationMiddleware';
+import { authorize } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
 import { validate } from '../middleware/SettingsValidationMiddleware';
 import { ChangeThemeDtoSchema, UpdateSettingsDtoSchema } from '../validation/SettingsValidation';
+import { Permission } from '@modules/auth/public';
 
 export const settingsRoutes = (controller: SettingsController, authMiddleware: AuthenticationMiddleware): Router => {
   const router = Router();
   router.use(authMiddleware.authenticate);
+  router.use(authorize(Permission.USER_WRITE));
 
   router.get('/', (req, res) => controller.getSettings(req, res));
   router.put('/', validate(UpdateSettingsDtoSchema), (req, res) => controller.updateSettings(req, res));

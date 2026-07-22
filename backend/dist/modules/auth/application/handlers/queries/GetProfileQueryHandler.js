@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetProfileQueryHandler = void 0;
-const AuditLogger_1 = require("../../../../auth/infrastructure/AuditLogger");
+const public_1 = require("../../../../audit/public");
 const AuthErrors_1 = require("../../../../auth/domain/errors/AuthErrors");
 const UserProfileId_1 = require("../../../../auth/domain/value-objects/UserProfileId");
 class GetProfileQueryHandler {
     profileRepository;
-    constructor(profileRepository) {
+    eventBus;
+    constructor(profileRepository, eventBus) {
         this.profileRepository = profileRepository;
+        this.eventBus = eventBus;
     }
     async handle(query) {
         try {
@@ -15,23 +17,29 @@ class GetProfileQueryHandler {
             if (!profile) {
                 throw new AuthErrors_1.AuthenticationError('Profile not found');
             }
-            AuditLogger_1.AuditLogger.log({
-                user: query.adminUserId || query.userId,
+            await this.eventBus.publish(new public_1.AuditLogRequestedEvent({
                 action: 'GET_PROFILE',
-                resource: query.userId,
-                status: 'SUCCESS',
-                ipAddress: query.ipAddress
-            });
+                actorId: query.adminUserId || query.userId,
+                actorType: 'USER',
+                resourceId: query.userId,
+                resourceType: 'USER_PROFILE',
+                ipAddress: query.ipAddress || '127.0.0.1',
+                userAgent: 'unknown',
+                metadata: [{ key: 'status', value: 'SUCCESS' }]
+            }));
             return profile;
         }
         catch (error) {
-            AuditLogger_1.AuditLogger.log({
-                user: query.adminUserId || query.userId,
+            await this.eventBus.publish(new public_1.AuditLogRequestedEvent({
                 action: 'GET_PROFILE',
-                resource: query.userId,
-                status: 'FAILURE',
-                ipAddress: query.ipAddress
-            });
+                actorId: query.adminUserId || query.userId,
+                actorType: 'USER',
+                resourceId: query.userId,
+                resourceType: 'USER_PROFILE',
+                ipAddress: query.ipAddress || '127.0.0.1',
+                userAgent: 'unknown',
+                metadata: [{ key: 'status', value: 'FAILURE' }]
+            }));
             throw error instanceof AuthErrors_1.AuthenticationError ? error : new AuthErrors_1.AuthenticationError('Failed to get profile');
         }
     }

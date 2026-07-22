@@ -2,19 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArticleOntologyValidator = void 0;
 class ArticleOntologyValidator {
-    entityTypeRepository;
-    relationshipTypeRepository;
-    constructor(entityTypeRepository, relationshipTypeRepository) {
-        this.entityTypeRepository = entityTypeRepository;
-        this.relationshipTypeRepository = relationshipTypeRepository;
+    ontologyGraphService;
+    constructor(ontologyGraphService) {
+        this.ontologyGraphService = ontologyGraphService;
     }
-    async validateEntityType(typeName) {
-        const type = await this.entityTypeRepository.findByName(typeName);
-        return !!type;
+    async validateEntityType(typeId) {
+        return await this.ontologyGraphService.validateEntityType(typeId);
     }
-    async validateRelationshipType(typeName) {
-        const type = await this.relationshipTypeRepository.findByName(typeName);
-        return !!type;
+    async validateRelationshipType(relationshipTypeId, sourceEntityTypeId, targetEntityTypeId) {
+        return await this.ontologyGraphService.validateRelationshipType(relationshipTypeId, sourceEntityTypeId, targetEntityTypeId);
     }
 }
 exports.ArticleOntologyValidator = ArticleOntologyValidator;

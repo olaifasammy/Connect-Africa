@@ -7,6 +7,8 @@ exports.createApp = void 0;
 const express_1 = __importDefault(require("express"));
 const helmet_1 = __importDefault(require("helmet"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const cors_1 = __importDefault(require("cors"));
+const RateLimitMiddleware_1 = require("../../interfaces/http/middleware/RateLimitMiddleware");
 const authRoutes_1 = require("../../../modules/auth/interfaces/http/routes/v1/authRoutes");
 const ontologyRoutes_1 = require("../../../modules/ontology/interfaces/http/routes/v1/ontologyRoutes");
 const RelationshipRoutes_1 = require("../../../modules/relationship/interfaces/routes/RelationshipRoutes");
@@ -18,9 +20,13 @@ const RelationshipController_1 = require("../../../modules/relationship/interfac
 const AuthenticationMiddleware_1 = require("../../interfaces/http/middleware/AuthenticationMiddleware");
 const GraphRoutes_1 = require("../../../modules/graph/interfaces/routes/GraphRoutes");
 const GraphController_1 = require("../../../modules/graph/interfaces/controllers/GraphController");
+const AiController_1 = require("../../../modules/ai/interfaces/controllers/AiController");
+const AiRoutes_1 = require("../../../modules/ai/interfaces/routes/AiRoutes");
+const SearchRoutes_1 = require("../../../modules/search/interfaces/routes/SearchRoutes");
 const createApp = () => {
     const app = (0, express_1.default)();
     app.use((0, helmet_1.default)());
+    app.use((0, cors_1.default)()); // Basic CORS, should be configured in production env
     app.use(express_1.default.json());
     app.use((0, cookie_parser_1.default)());
     // Routes
@@ -28,7 +34,7 @@ const createApp = () => {
     // Auth
     const authController = container_1.container.get(AuthController_1.AuthController);
     const authMiddleware = container_1.container.get(AuthenticationMiddleware_1.AuthenticationMiddleware);
-    app.use('/api/v1/auth', (0, authRoutes_1.authRoutes)(authController, authMiddleware));
+    app.use('/api/v1/auth', RateLimitMiddleware_1.authRateLimiter, (0, authRoutes_1.authRoutes)(authController, authMiddleware)); // Applied Rate Limiting
     // Ontology
     const ontologyController = container_1.container.get(OntologyController_1.OntologyController);
     app.use('/api/v1/ontology', (0, ontologyRoutes_1.ontologyRoutes)(ontologyController));
@@ -38,6 +44,11 @@ const createApp = () => {
     // Graph
     const graphController = container_1.container.get(GraphController_1.GraphController);
     app.use('/graph', (0, GraphRoutes_1.graphRoutes)(graphController, authMiddleware));
+    // AI
+    const aiController = container_1.container.get(AiController_1.AiController);
+    app.use('/api/v1/ai', AiRoutes_1.AiRoutes);
+    // Search
+    app.use('/api/search', SearchRoutes_1.SearchRoutes);
     return app;
 };
 exports.createApp = createApp;

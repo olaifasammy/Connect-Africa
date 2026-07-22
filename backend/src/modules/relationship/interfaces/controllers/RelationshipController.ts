@@ -14,16 +14,18 @@ export class RelationshipController {
    * Requires: Authentication, Valid DTO, Authorization.
    */
   async create(req: Request, res: Response): Promise<void> {
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
     // 1. Validation (delegated to middleware, but schema available for reference)
     const validatedData = CreateRelationshipSchema.parse(req.body);
 
     // 2. Command mapping
     const command = new CreateRelationshipCommand(
       validatedData.sourceEntityId,
+      validatedData.sourceEntityTypeId,
       validatedData.targetEntityId,
+      validatedData.targetEntityTypeId,
       validatedData.relationshipTypeId,
-      userId
+      userId!
     );
     
     // 3. Service orchestration

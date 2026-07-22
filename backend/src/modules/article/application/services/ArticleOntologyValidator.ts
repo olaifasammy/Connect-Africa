@@ -1,19 +1,19 @@
-import { IEntityTypeRepository, IRelationshipTypeRepository } from '@modules/ontology/public';
-import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
+import { IOntologyGraphService } from '@modules/ontology/public';
 
 export class ArticleOntologyValidator {
   constructor(
-    private readonly entityTypeRepository: IEntityTypeRepository,
-    private readonly relationshipTypeRepository: IRelationshipTypeRepository
+    private readonly ontologyGraphService: IOntologyGraphService
   ) {}
 
-  async validateEntityType(typeName: string): Promise<boolean> {
-    const type = await this.entityTypeRepository.findByName(typeName);
-    return !!type;
+  async validateEntityType(typeId: string): Promise<boolean> {
+    return await this.ontologyGraphService.validateEntityType(typeId);
   }
 
-  async validateRelationshipType(typeName: string): Promise<boolean> {
-    const type = await this.relationshipTypeRepository.findByName(typeName);
-    return !!type;
+  async validateRelationshipType(relationshipTypeId: string, sourceEntityTypeId: string, targetEntityTypeId: string): Promise<boolean> {
+    return await this.ontologyGraphService.validateRelationshipType(
+      relationshipTypeId,
+      sourceEntityTypeId,
+      targetEntityTypeId
+    );
   }
 }

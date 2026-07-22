@@ -33,7 +33,7 @@ class EntityController {
             res.status(400).json({ success: false, errors: validationResult.error.issues });
             return;
         }
-        await this.createHandler.handle({ dto: validationResult.data, userId });
+        await this.createHandler.handle({ dto: validationResult.data, userId: userId });
         res.status(201).json({ success: true });
     }
     async update(req, res) {
@@ -44,58 +44,58 @@ class EntityController {
             res.status(400).json({ success: false, errors: validationResult.error.issues });
             return;
         }
-        await this.updateHandler.handle({ entityId: id, dto: validationResult.data, userId });
+        await this.updateHandler.handle({ entityId: id, dto: validationResult.data, userId: userId });
         res.status(200).json({ success: true });
     }
     async delete(req, res) {
         const userId = req.user?.id;
         const id = req.params.id;
-        await this.deleteHandler.handle({ entityId: id, userId });
+        await this.deleteHandler.handle({ entityId: id, userId: userId });
         res.status(204).send();
     }
     async publish(req, res) {
         const userId = req.user?.id;
         const id = req.params.id;
-        await this.publishHandler.handle({ entityId: id, userId });
+        await this.publishHandler.handle({ entityId: id, userId: userId });
         res.status(200).json({ success: true });
     }
     async archive(req, res) {
         const userId = req.user?.id;
         const id = req.params.id;
-        await this.archiveHandler.handle({ entityId: id, userId });
+        await this.archiveHandler.handle({ entityId: id, userId: userId });
         res.status(200).json({ success: true });
     }
     async restore(req, res) {
         const userId = req.user?.id;
         const id = req.params.id;
-        await this.restoreHandler.handle({ entityId: id, userId });
+        await this.restoreHandler.handle({ entityId: id, userId: userId });
         res.status(200).json({ success: true });
     }
     async merge(req, res) {
         const userId = req.user?.id;
         const sourceId = req.body.sourceId;
         const targetId = req.body.targetId;
-        await this.mergeHandler.handle({ sourceEntityId: sourceId, targetEntityId: targetId, userId });
+        await this.mergeHandler.handle({ sourceEntityId: sourceId, targetEntityId: targetId, userId: userId });
         res.status(200).json({ success: true });
     }
     async addAlias(req, res) {
         const userId = req.user?.id;
         const id = req.params.id;
         const alias = req.body.alias;
-        await this.addAliasHandler.handle({ entityId: id, alias, userId });
+        await this.addAliasHandler.handle({ entityId: id, alias, userId: userId });
         res.status(200).json({ success: true });
     }
     async removeAlias(req, res) {
         const userId = req.user?.id;
         const id = req.params.id;
         const alias = req.body.alias;
-        await this.removeAliasHandler.handle({ entityId: id, alias, userId });
+        await this.removeAliasHandler.handle({ entityId: id, alias, userId: userId });
         res.status(200).json({ success: true });
     }
     async createVersion(req, res) {
         const userId = req.user?.id;
         const id = req.params.id;
-        await this.createVersionHandler.handle({ entityId: id, userId });
+        await this.createVersionHandler.handle({ entityId: id, userId: userId });
         res.status(201).json({ success: true });
     }
 }

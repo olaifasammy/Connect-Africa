@@ -8,6 +8,7 @@ import { ProviderSelectionService } from '@modules/ai/domain/services/ProviderSe
 import { AIGatewayService } from '@modules/ai/application/services/AIGatewayService';
 import { PostgresProviderRepository } from '@modules/ai/infrastructure/repositories/PostgresProviderRepository';
 import { ExpansionRequestService } from '@modules/ai/application/services/ExpansionRequestService';
+import { OntologySuggestionService } from '@modules/ai/application/services/OntologySuggestionService';
 import { ProcessAiRequestHandler } from '@modules/ai/application/handlers/ProcessAiRequestHandler';
 import { AiController } from '@modules/ai/interfaces/controllers/AiController';
 import { PostgresEntityRepository } from '@modules/entity/infrastructure/PostgresEntityRepository';
@@ -15,9 +16,12 @@ import { CreateEntityCommandHandler } from '@modules/entity/application/handlers
 import { EntityController } from '@modules/entity/interfaces/EntityController';
 import { PostgresRelationshipRepository } from '@modules/relationship/infrastructure/repositories/PostgresRelationshipRepository';
 import { CreateRelationshipHandler } from '@modules/relationship/application/handlers/CreateRelationshipHandler';
+import { EnableMfaCommandHandler } from '@modules/auth/application/handlers/mfa/EnableMfaCommandHandler';
 import { PostgresNotificationRepository, PreferenceService, DeliveryService } from '@modules/notification/public';
 import { RelationshipController } from '@modules/relationship/interfaces/controllers/RelationshipController';
+import { OntologyIntegrationService } from '@modules/relationship/infrastructure/services/OntologyIntegrationService';
 import { RelationshipService } from '@modules/relationship/application/services/RelationshipService';
+import { IOntologyService } from '@modules/relationship/domain/interfaces/RelationshipServices';
 import { RelationshipValidationService } from '@modules/relationship/domain/services/RelationshipValidationService';
 import { CreateOntologyCommandHandler } from '@modules/ontology/application/handlers/CreateOntologyCommandHandler';
 import { OntologyService } from '@modules/ontology/application/services/OntologyService';
@@ -46,7 +50,14 @@ import { RedisSessionRepository } from '@modules/auth/infrastructure/RedisSessio
 import { Pool } from 'pg';
 import { PostgresGraphRepository } from '@modules/graph/public';
 import { CreateGraphNodeHandler } from '@modules/graph/public';
-import { CreateGraphEdgeHandler } from '@modules/graph/public';
+import { CreateGraphEdgeHandler, UpdateGraphNodeHandler, DeleteGraphNodeHandler, UpdateGraphEdgeHandler, DeleteGraphEdgeHandler } from '@modules/graph/public';
+import { CreateArticleHandler } from '@modules/article/application/handlers/CreateArticleHandler';
+import { PostgresArticleRepository } from '@modules/article/infrastructure/postgres/PostgresArticleRepository';
+import { ArticleOntologyValidator } from '@modules/article/application/services/ArticleOntologyValidator';
+import { IOntologyGraphService } from '@modules/ontology/application/services/IOntologyGraphService';
+import { OntologyGraphService } from '@modules/ontology/application/services/OntologyGraphService';
+import { GraphContextRetrievalService } from '@modules/graph/infrastructure/services/GraphContextRetrievalService';
+import { IGraphContextRetrievalService } from '@modules/graph/application/services/IGraphContextRetrievalService';
 import { GetNodeHandler } from '@modules/graph/public';
 import { SearchGraphHandler } from '@modules/graph/public';
 import { FindShortestPathHandler } from '@modules/graph/public';
@@ -93,6 +104,9 @@ container.bind(AIGatewayService).toDynamicValue((context) => {
 });
 container.bind(ExpansionRequestService).toDynamicValue((context) => {
     return new ExpansionRequestService(context.container.get(AIGatewayService));
+});
+container.bind(OntologySuggestionService).toDynamicValue((context) => {
+    return new OntologySuggestionService(context.container.get<IOntologyGraphService>('IOntologyGraphService'));
 });
 container.bind(ProcessAiRequestHandler).toDynamicValue((context) => {
     return new ProcessAiRequestHandler(context.container.get(AIGatewayService));
@@ -194,9 +208,10 @@ container.bind(UpdateProfileCommandHandler).toDynamicValue((context) => {
         context.container.get('EventBus')
     );
 });
-container.bind(BanUserCommandHandler).toDynamicValue((context) => {
-    return new BanUserCommandHandler(
+container.bind(EnableMfaCommandHandler).toDynamicValue((context) => {
+    return new EnableMfaCommandHandler(
         context.container.get('IUserRepository'),
+        context.container.get('ITotpProvider'),
         context.container.get('EventBus')
     );
 });
@@ -220,12 +235,19 @@ container.bind(OntologyService).toSelf();
 container.bind(CreateOntologyCommandHandler).toSelf();
 container.bind(OntologyController).toSelf();
 container.bind('IMetricsProvider').to(PrometheusMetricsProvider).inSingletonScope();
+container.bind<IOntologyGraphService>('IOntologyGraphService').toDynamicValue((context) => {
+    return new OntologyGraphService(
+        context.container.get('IEntityTypeRepository'),
+        context.container.get('IRelationshipTypeRepository')
+    );
+});
 
 // Entity
 container.bind('IEntityRepository').to(PostgresEntityRepository);
 container.bind(CreateEntityCommandHandler).toDynamicValue((context) => {
     return new CreateEntityCommandHandler(
         context.container.get('IEntityRepository'),
+        context.container.get<IOntologyGraphService>('IOntologyGraphService'),
         context.container.get<IAuditRepository>('IAuditRepository'),
         context.container.get('EventBus')
     );
@@ -295,12 +317,16 @@ container.bind(NotificationService).toDynamicValue((context) => {
 container.bind('IRelationshipRepository').toDynamicValue((context) => {
     return new PostgresRelationshipRepository(context.container.get(PostgresProvider));
 });
-container.bind('IOntologyService').toConstantValue({ validateRelationshipType: async () => {} });
+container.bind('IOntologyService').toDynamicValue((context) => {
+    return new OntologyIntegrationService(
+        context.container.get<IOntologyGraphService>('IOntologyGraphService')
+    );
+});
 container.bind(CreateRelationshipHandler).toDynamicValue((context) => {
     return new CreateRelationshipHandler(
         context.container.get('IRelationshipRepository'),
-        context.container.get('IOntologyService'),
-        context.container.get('IAuditLogger'),
+        context.container.get<IOntologyService>('IOntologyService'),
+        context.container.get('IAuditRepository'),
         context.container.get('EventBus')
     );
 });
@@ -312,11 +338,30 @@ container.bind(RelationshipService).toDynamicValue((context) => {
     );
 });
 container.bind(RelationshipController).toSelf();
+
+// Article
+container.bind('IArticleRepository').toDynamicValue((context) => {
+    return new PostgresArticleRepository(context.container.get(Pool));
+});
+container.bind(ArticleOntologyValidator).toDynamicValue((context) => {
+    return new ArticleOntologyValidator(
+        context.container.get<IOntologyGraphService>('IOntologyGraphService')
+    );
+});
+container.bind(CreateArticleHandler).toDynamicValue((context) => {
+    return new CreateArticleHandler(
+        context.container.get('IArticleRepository'),
+        context.container.get('IAuditLogger')
+    );
+});
+
 // Graph
 container.bind('IGraphRepository').toDynamicValue((context) => {
     return new PostgresGraphRepository(context.container.get(Pool));
 });
-container.bind('IOntologyGraphService').toConstantValue({ validateEntityType: async () => true, validateRelationshipType: async () => true });
+container.bind<IGraphContextRetrievalService>('IGraphContextRetrievalService').toDynamicValue((context) => {
+    return new GraphContextRetrievalService(context.container.get('IGraphRepository'));
+});
 container.bind(OntologyValidator).toDynamicValue((context) => {
     return new OntologyValidator(context.container.get('IOntologyGraphService'));
 });
@@ -324,13 +369,39 @@ container.bind(CreateGraphNodeHandler).toDynamicValue((context) => {
     return new CreateGraphNodeHandler(
         context.container.get('IGraphRepository'),
         context.container.get(OntologyValidator),
+        context.container.get('EventBus'),
         logger
+    );
+});
+container.bind(UpdateGraphNodeHandler).toDynamicValue((context) => {
+    return new UpdateGraphNodeHandler(
+        context.container.get('IGraphRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(DeleteGraphNodeHandler).toDynamicValue((context) => {
+    return new DeleteGraphNodeHandler(
+        context.container.get('IGraphRepository'),
+        context.container.get('EventBus')
     );
 });
 container.bind(CreateGraphEdgeHandler).toDynamicValue((context) => {
     return new CreateGraphEdgeHandler(
         context.container.get('IGraphRepository'),
-        context.container.get(OntologyValidator)
+        context.container.get(OntologyValidator),
+        context.container.get('EventBus')
+    );
+});
+container.bind(UpdateGraphEdgeHandler).toDynamicValue((context) => {
+    return new UpdateGraphEdgeHandler(
+        context.container.get('IGraphRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(DeleteGraphEdgeHandler).toDynamicValue((context) => {
+    return new DeleteGraphEdgeHandler(
+        context.container.get('IGraphRepository'),
+        context.container.get('EventBus')
     );
 });
 container.bind(GetNodeHandler).toDynamicValue((context) => {

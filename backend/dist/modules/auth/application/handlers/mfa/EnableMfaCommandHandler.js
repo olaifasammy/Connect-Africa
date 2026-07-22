@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EnableMfaCommandHandler = exports.EnableMfaCommand = void 0;
 const MfaEnabledEvent_1 = require("../../../../auth/domain/events/MfaEnabledEvent");
-const AuditLogger_1 = require("../../../../auth/infrastructure/AuditLogger");
+const public_1 = require("../../../../audit/public");
 const UniqueEntityId_1 = require("../../../../../shared/domain/UniqueEntityId");
 const AuthErrors_1 = require("../../../../auth/domain/errors/AuthErrors");
 class EnableMfaCommand {
@@ -27,24 +27,30 @@ class EnableMfaCommandHandler {
         try {
             const secret = this.totpProvider.generateSecret();
             // Assume user repository update logic would go here
-            AuditLogger_1.AuditLogger.log({
-                user: command.userId,
+            await this.eventBus.publish(new public_1.AuditLogRequestedEvent({
                 action: 'ENABLE_MFA',
-                resource: 'AUTH',
-                status: 'SUCCESS',
-                ipAddress: command.ipAddress
-            });
+                actorId: command.userId,
+                actorType: 'USER',
+                resourceId: 'AUTH',
+                resourceType: 'AUTH',
+                ipAddress: command.ipAddress || '127.0.0.1',
+                userAgent: 'unknown',
+                metadata: [{ key: 'status', value: 'SUCCESS' }]
+            }));
             await this.eventBus.publish(new MfaEnabledEvent_1.MfaEnabledEvent(new UniqueEntityId_1.UniqueEntityId(command.userId)));
             return { secret };
         }
         catch (error) {
-            AuditLogger_1.AuditLogger.log({
-                user: command.userId,
+            await this.eventBus.publish(new public_1.AuditLogRequestedEvent({
                 action: 'ENABLE_MFA',
-                resource: 'AUTH',
-                status: 'FAILURE',
-                ipAddress: command.ipAddress
-            });
+                actorId: command.userId,
+                actorType: 'USER',
+                resourceId: 'AUTH',
+                resourceType: 'AUTH',
+                ipAddress: command.ipAddress || '127.0.0.1',
+                userAgent: 'unknown',
+                metadata: [{ key: 'status', value: 'FAILURE' }]
+            }));
             throw new AuthErrors_1.AuthenticationError('Failed to enable MFA');
         }
     }

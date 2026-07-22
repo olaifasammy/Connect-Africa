@@ -1,12 +1,25 @@
 import { CreateArticleCommand } from '../commands/CreateArticleCommand';
 import { IArticleRepository } from '../../domain/repositories/IArticleRepository';
 import { Article } from '../../domain/entities/Article';
-import { IAuditLogger } from '../../domain/interfaces/ArticleServices';
+import { IAuditRepository } from '@modules/audit/public';
+import { 
+  AuditEntry, 
+  AuditActor, 
+  AuditResource, 
+  AuditMetadata, 
+  CorrelationId, 
+  Timestamp, 
+  UserId, 
+  ResourceId, 
+  IPAddress, 
+  UserAgent 
+} from '@modules/audit/public';
+import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 
 export class CreateArticleHandler {
   constructor(
     private readonly repository: IArticleRepository,
-    private readonly auditLogger: IAuditLogger
+    private readonly auditRepository: IAuditRepository
   ) {}
 
   async handle(command: CreateArticleCommand): Promise<string> {
@@ -20,7 +33,26 @@ export class CreateArticleHandler {
     });
 
     await this.repository.save(article);
-    await this.auditLogger.log('ARTICLE_CREATED', { articleId: article.id.toString(), ...command });
+
+    const auditEntry = AuditEntry.create({
+      action: 'CREATE_ARTICLE',
+      actor: AuditActor.create({
+        userId: new UserId(command.authorId.toString()),
+        actorType: 'USER',
+        ipAddress: new IPAddress('127.0.0.1'),
+        userAgent: new UserAgent('unknown')
+      }),
+      resource: AuditResource.create({
+        id: new ResourceId(article.id.toString()),
+        type: 'ARTICLE'
+      }),
+      metadata: [AuditMetadata.create({ key: 'status', value: 'SUCCESS' })],
+      correlationId: new CorrelationId(new UniqueEntityId().toString()),
+      timestamp: new Timestamp(new Date())
+    });
+    
+    await this.auditRepository.log(auditEntry);
+
     return article.id.toString();
   }
 }

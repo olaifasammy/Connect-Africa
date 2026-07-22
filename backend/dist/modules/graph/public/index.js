@@ -16,10 +16,15 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("../application/handlers/CreateGraphEdgeHandler"), exports);
 __exportStar(require("../application/handlers/CreateGraphNodeHandler"), exports);
+__exportStar(require("../application/handlers/UpdateGraphNodeHandler"), exports);
+__exportStar(require("../application/handlers/DeleteGraphNodeHandler"), exports);
+__exportStar(require("../application/handlers/UpdateGraphEdgeHandler"), exports);
+__exportStar(require("../application/handlers/DeleteGraphEdgeHandler"), exports);
 __exportStar(require("../application/handlers/GetNodeHandler"), exports);
 __exportStar(require("../application/handlers/SearchGraphHandler"), exports);
 __exportStar(require("../application/handlers/FindShortestPathHandler"), exports);
 __exportStar(require("../application/handlers/GetGraphPathHandler"), exports);
+__exportStar(require("../application/services/IGraphContextRetrievalService"), exports);
 __exportStar(require("../application/commands/CreateGraphEdgeCommand"), exports);
 __exportStar(require("../application/queries/GetGraphPathQuery"), exports);
 __exportStar(require("../domain/entities/GraphAggregate"), exports);

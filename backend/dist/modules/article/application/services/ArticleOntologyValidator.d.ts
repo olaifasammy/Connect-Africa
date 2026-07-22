@@ -1,8 +1,7 @@
-import { IEntityTypeRepository, IRelationshipTypeRepository } from '../../../ontology/public';
+import { IOntologyGraphService } from '../../../ontology/public';
 export declare class ArticleOntologyValidator {
-    private readonly entityTypeRepository;
-    private readonly relationshipTypeRepository;
-    constructor(entityTypeRepository: IEntityTypeRepository, relationshipTypeRepository: IRelationshipTypeRepository);
-    validateEntityType(typeName: string): Promise<boolean>;
-    validateRelationshipType(typeName: string): Promise<boolean>;
+    private readonly ontologyGraphService;
+    constructor(ontologyGraphService: IOntologyGraphService);
+    validateEntityType(typeId: string): Promise<boolean>;
+    validateRelationshipType(relationshipTypeId: string, sourceEntityTypeId: string, targetEntityTypeId: string): Promise<boolean>;
 }

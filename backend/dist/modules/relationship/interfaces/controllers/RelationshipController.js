@@ -20,7 +20,7 @@ class RelationshipController {
         // 1. Validation (delegated to middleware, but schema available for reference)
         const validatedData = RelationshipValidators_1.CreateRelationshipSchema.parse(req.body);
         // 2. Command mapping
-        const command = new RelationshipCommands_1.CreateRelationshipCommand(validatedData.sourceEntityId, validatedData.targetEntityId, validatedData.relationshipTypeId, userId);
+        const command = new RelationshipCommands_1.CreateRelationshipCommand(validatedData.sourceEntityId, validatedData.sourceEntityTypeId, validatedData.targetEntityId, validatedData.targetEntityTypeId, validatedData.relationshipTypeId, userId);
         // 3. Service orchestration
         await this.relationshipService.createRelationship(command);
         // 4. Response

@@ -4,7 +4,9 @@ exports.TimeRangeSchema = exports.MetadataSchema = exports.ConfidenceSchema = ex
 const zod_1 = require("zod");
 exports.CreateRelationshipSchema = zod_1.z.object({
     sourceEntityId: zod_1.z.string().uuid(),
+    sourceEntityTypeId: zod_1.z.string().uuid(),
     targetEntityId: zod_1.z.string().uuid(),
+    targetEntityTypeId: zod_1.z.string().uuid(),
     relationshipTypeId: zod_1.z.string().uuid(),
 });
 exports.UpdateRelationshipSchema = zod_1.z.object({

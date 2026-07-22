@@ -33,8 +33,13 @@ export class ArticleController {
   }
 
   async create(req: Request, res: Response): Promise<void> {
-    const { title, summary, content, authorId } = req.body;
-    const command = new CreateArticleCommand(title, summary, content, new UniqueEntityId(authorId));
+    const userId = req.user?.id;
+    if (!userId) {
+        res.status(401).json({ success: false, error: 'Unauthorized' });
+        return;
+    }
+    const { title, summary, content } = req.body;
+    const command = new CreateArticleCommand(title, summary, content, new UniqueEntityId(userId));
     const articleId = await this.createArticleHandler.handle(command);
     this.track('create');
     res.status(201).json({ id: articleId });

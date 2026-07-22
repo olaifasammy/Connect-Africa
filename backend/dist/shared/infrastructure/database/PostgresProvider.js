@@ -6,21 +6,19 @@ const Logger_1 = require("../../logger/Logger");
 const app_1 = require("../../../config/app");
 const DatabaseProvider_1 = require("./DatabaseProvider");
 class PostgresProvider extends DatabaseProvider_1.DatabaseProvider {
-    static _pool;
-    static getPool() {
-        if (!this._pool) {
-            Logger_1.logger.info('Initializing PostgreSQL connection pool');
-            this._pool = new pg_1.Pool({
-                connectionString: app_1.appConfig.databaseUrl,
-            });
-            this._pool.on('error', (err) => {
-                Logger_1.logger.error('Unexpected error on idle PostgreSQL client', err);
-            });
-        }
-        return this._pool;
+    _pool;
+    constructor() {
+        super();
+        Logger_1.logger.info('Initializing PostgreSQL connection pool');
+        this._pool = new pg_1.Pool({
+            connectionString: app_1.appConfig.databaseUrl,
+        });
+        this._pool.on('error', (err) => {
+            Logger_1.logger.error('Unexpected error on idle PostgreSQL client', err);
+        });
     }
     get pool() {
-        return PostgresProvider.getPool();
+        return this._pool;
     }
     async connect() {
         await this.pool.query('SELECT 1');
