@@ -2,10 +2,18 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   rootDir: '.',
-  roots: ['<rootDir>/src', '<rootDir>/tests'],
-  setupFiles: ['<rootDir>/tests/setup.ts'],
-
+  roots: [
+    '<rootDir>/tests',
+    '<rootDir>/src/modules'
+  ],
+  testMatch: [
+    '<rootDir>/tests/**/*.spec.{ts,js}',
+    '<rootDir>/tests/**/*.test.{ts,js}',
+    '<rootDir>/src/modules/*/tests/**/*.spec.{ts,js}',
+    '<rootDir>/src/modules/*/tests/**/*.test.{ts,js}'
+  ],
   moduleNameMapper: {
+    '^@modules/ai/infrastructure/security/PromptSanitizationService$': '<rootDir>/tests/mocks/mockAiModule.js',
     '^@modules/(.*)$': '<rootDir>/src/modules/$1',
     '^@domain/shared/(.*)$': '<rootDir>/src/shared/domain/$1',
     '^@application/(.*)$': '<rootDir>/src/application/$1',
@@ -19,6 +27,5 @@ module.exports = {
     '^@workers/(.*)$': '<rootDir>/src/workers/$1',
     '^@types/(.*)$': '<rootDir>/src/types/$1'
   },
-
-  transformIgnorePatterns: ['/node_modules/']
+  transformIgnorePatterns: []
 };

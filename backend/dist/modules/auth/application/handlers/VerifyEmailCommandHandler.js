@@ -20,6 +20,8 @@ class VerifyEmailCommandHandler {
             if (!user) {
                 throw new AuthErrors_1.AuthenticationError('User not found');
             }
+            user.activate();
+            await this.userRepository.save(user);
             AuditLogger_1.AuditLogger.log({
                 user: command.userId,
                 action: 'VERIFY_EMAIL',

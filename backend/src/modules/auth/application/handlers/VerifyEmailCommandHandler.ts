@@ -23,6 +23,9 @@ export class VerifyEmailCommandHandler implements ICommandHandler<VerifyEmailCom
         throw new AuthenticationError('User not found');
       }
       
+      user.activate();
+      await this.userRepository.save(user);
+      
       AuditLogger.log({
         user: command.userId,
         action: 'VERIFY_EMAIL',
