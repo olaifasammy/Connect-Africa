@@ -1,1 +1,0 @@
-{"version":3,"file":"DeleteAccountCommand.js","sourceRoot":"","sources":["../../../../../src/modules/auth/application/commands/DeleteAccountCommand.ts"],"names":[],"mappings":";;;AAEA,MAAa,oBAAoB;IACH;IAAgC;IAA5D,YAA4B,MAAc,EAAkB,SAAkB;QAAlD,WAAM,GAAN,MAAM,CAAQ;QAAkB,cAAS,GAAT,SAAS,CAAS;IAAG,CAAC;CACnF;AAFD,oDAEC"}

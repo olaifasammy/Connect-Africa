@@ -1,1 +1,0 @@
-{"version":3,"file":"EmailChangedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/auth/domain/events/EmailChangedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,iBAAkB,SAAQ,yBAAW;IACpB;IAAwC;IAApE,YAA4B,MAAsB,EAAkB,QAAgB;QAClF,KAAK,CAAC,MAAM,CAAC,CAAC;QADY,WAAM,GAAN,MAAM,CAAgB;QAAkB,aAAQ,GAAR,QAAQ,CAAQ;IAEpF,CAAC;CACF;AAJD,8CAIC"}

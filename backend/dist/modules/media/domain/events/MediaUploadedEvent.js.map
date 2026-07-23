@@ -1,1 +1,0 @@
-{"version":3,"file":"MediaUploadedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/media/domain/events/MediaUploadedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,kBAAmB,SAAQ,yBAAW;IACjD,YAAY,WAA2B;QACrC,KAAK,CAAC,WAAW,CAAC,CAAC;IACrB,CAAC;CACF;AAJD,gDAIC"}

@@ -1,1 +1,0 @@
-{"version":3,"file":"ArticlePublishedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/article/domain/events/ArticlePublishedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,qBAAsB,SAAQ,yBAAW;IACpD,YAAY,SAAyB;QACnC,KAAK,CAAC,SAAS,CAAC,CAAC;IACnB,CAAC;CACF;AAJD,sDAIC"}

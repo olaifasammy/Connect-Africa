@@ -1,1 +1,0 @@
-{"version":3,"file":"MfaEnabledEvent.js","sourceRoot":"","sources":["../../../../../src/modules/auth/domain/events/MfaEnabledEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,eAAgB,SAAQ,yBAAW;IAClB;IAA5B,YAA4B,MAAsB;QAChD,KAAK,CAAC,MAAM,CAAC,CAAC;QADY,WAAM,GAAN,MAAM,CAAgB;IAElD,CAAC;CACF;AAJD,0CAIC"}

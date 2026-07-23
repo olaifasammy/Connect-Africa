@@ -1,1 +1,0 @@
-{"version":3,"file":"UserCreatedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/auth/domain/events/UserCreatedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,gBAAiB,SAAQ,yBAAW;IACnB;IAAwC;IAApE,YAA4B,MAAsB,EAAkB,KAAa;QAC/E,KAAK,CAAC,MAAM,CAAC,CAAC;QADY,WAAM,GAAN,MAAM,CAAgB;QAAkB,UAAK,GAAL,KAAK,CAAQ;IAEjF,CAAC;CACF;AAJD,4CAIC"}

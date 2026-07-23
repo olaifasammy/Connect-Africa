@@ -1,1 +1,0 @@
-{"version":3,"file":"RoleAssignedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/auth/domain/events/RoleAssignedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,iBAAkB,SAAQ,yBAAW;IACpB;IAAwC;IAApE,YAA4B,MAAsB,EAAkB,MAAc;QAChF,KAAK,CAAC,MAAM,CAAC,CAAC;QADY,WAAM,GAAN,MAAM,CAAgB;QAAkB,WAAM,GAAN,MAAM,CAAQ;IAElF,CAAC;CACF;AAJD,8CAIC"}

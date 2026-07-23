@@ -1,1 +1,0 @@
-{"version":3,"file":"OntologyDiffService.js","sourceRoot":"","sources":["../../../../../src/modules/ontology/domain/services/OntologyDiffService.ts"],"names":[],"mappings":";;;AAEA,MAAa,mBAAmB;IACvB,IAAI,CAAC,QAAyB,EAAE,QAAyB;QAC9D,oDAAoD;QACpD,OAAO;YACL,QAAQ,EAAE,QAAQ,CAAC,OAAO;YAC1B,QAAQ,EAAE,QAAQ,CAAC,OAAO;YAC1B,IAAI,EAAE,kDAAkD;SACzD,CAAC;IACJ,CAAC;CACF;AATD,kDASC"}

@@ -1,1 +1,0 @@
-{"version":3,"file":"NotificationAggregate.js","sourceRoot":"","sources":["../../../../../src/modules/notification/domain/entities/NotificationAggregate.ts"],"names":[],"mappings":";;;AAEA,MAAa,qBAAqB;IAEd;IACA;IAFlB,YACkB,YAA0B,EAC1B,UAAkC;QADlC,iBAAY,GAAZ,YAAY,CAAc;QAC1B,eAAU,GAAV,UAAU,CAAwB;IACjD,CAAC;CACL;AALD,sDAKC"}

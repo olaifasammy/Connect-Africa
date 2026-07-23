@@ -1,1 +1,0 @@
-{"version":3,"file":"SettingsError.js","sourceRoot":"","sources":["../../../../../src/modules/settings/domain/errors/SettingsError.ts"],"names":[],"mappings":";;;AAAA,wDAAqD;AAErD,MAAa,qBAAsB,SAAQ,qBAAS;IAClD,YAAY,MAAc;QACxB,KAAK,CAAC,+BAA+B,MAAM,EAAE,EAAE,oBAAoB,CAAC,CAAC;IACvE,CAAC;CACF;AAJD,sDAIC"}

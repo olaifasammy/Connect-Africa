@@ -1,1 +1,0 @@
-{"version":3,"file":"AvatarUpdatedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/auth/domain/events/AvatarUpdatedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,kBAAmB,SAAQ,yBAAW;IACrB;IAAwC;IAApE,YAA4B,MAAsB,EAAkB,SAAiB;QACnF,KAAK,CAAC,MAAM,CAAC,CAAC;QADY,WAAM,GAAN,MAAM,CAAgB;QAAkB,cAAS,GAAT,SAAS,CAAQ;IAErF,CAAC;CACF;AAJD,gDAIC"}

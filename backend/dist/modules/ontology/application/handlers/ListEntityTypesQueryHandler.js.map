@@ -1,1 +1,0 @@
-{"version":3,"file":"ListEntityTypesQueryHandler.js","sourceRoot":"","sources":["../../../../../src/modules/ontology/application/handlers/ListEntityTypesQueryHandler.ts"],"names":[],"mappings":";;;AAMA,MAAa,2BAA2B;IACT;IAA7B,YAA6B,oBAA2C;QAA3C,yBAAoB,GAApB,oBAAoB,CAAuB;IAAG,CAAC;IAE5E,KAAK,CAAC,MAAM,CAAC,KAA2B;QACpC,kEAAkE;QAClE,OAAO,EAAE,CAAC;IACd,CAAC;CACF;AAPD,kEAOC"}

@@ -1,1 +1,0 @@
-{"version":3,"file":"OntologyArchivedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/ontology/domain/events/OntologyArchivedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,qBAAsB,SAAQ,yBAAW;IACxB;IAA5B,YAA4B,UAAsB;QAChD,KAAK,CAAC,UAAU,CAAC,CAAC;QADQ,eAAU,GAAV,UAAU,CAAY;IAElD,CAAC;CACF;AAJD,sDAIC"}

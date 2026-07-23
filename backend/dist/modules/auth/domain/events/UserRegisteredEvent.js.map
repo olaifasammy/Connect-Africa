@@ -1,1 +1,0 @@
-{"version":3,"file":"UserRegisteredEvent.js","sourceRoot":"","sources":["../../../../../src/modules/auth/domain/events/UserRegisteredEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,mBAAoB,SAAQ,yBAAW;IACtB;IAAwC;IAApE,YAA4B,MAAsB,EAAkB,KAAa;QAC/E,KAAK,CAAC,MAAM,CAAC,CAAC;QADY,WAAM,GAAN,MAAM,CAAgB;QAAkB,UAAK,GAAL,KAAK,CAAQ;IAEjF,CAAC;CACF;AAJD,kDAIC"}

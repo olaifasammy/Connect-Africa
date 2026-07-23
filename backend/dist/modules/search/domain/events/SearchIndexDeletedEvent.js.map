@@ -1,1 +1,0 @@
-{"version":3,"file":"SearchIndexDeletedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/search/domain/events/SearchIndexDeletedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,uBAAwB,SAAQ,yBAAW;IAC1B;IAA5B,YAA4B,UAA0B;QACpD,KAAK,CAAC,UAAU,CAAC,CAAC;QADQ,eAAU,GAAV,UAAU,CAAgB;IAEtD,CAAC;CACF;AAJD,0DAIC"}

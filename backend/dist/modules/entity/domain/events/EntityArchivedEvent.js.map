@@ -1,1 +1,0 @@
-{"version":3,"file":"EntityArchivedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/entity/domain/events/EntityArchivedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,mBAAoB,SAAQ,yBAAW;IACtB;IAA5B,YAA4B,MAAc;QACxC,KAAK,CAAC,MAAM,CAAC,EAAE,CAAC,CAAC;QADS,WAAM,GAAN,MAAM,CAAQ;IAE1C,CAAC;CACF;AAJD,kDAIC"}

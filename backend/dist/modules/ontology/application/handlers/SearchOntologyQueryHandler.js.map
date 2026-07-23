@@ -1,1 +1,0 @@
-{"version":3,"file":"SearchOntologyQueryHandler.js","sourceRoot":"","sources":["../../../../../src/modules/ontology/application/handlers/SearchOntologyQueryHandler.ts"],"names":[],"mappings":";;;AAKA,MAAa,0BAA0B;IACR;IAA7B,YAA6B,kBAAuC;QAAvC,uBAAkB,GAAlB,kBAAkB,CAAqB;IAAG,CAAC;IAExE,KAAK,CAAC,MAAM,CAAC,KAA0B;QACrC,gDAAgD;QAChD,OAAO,EAAE,CAAC;IACZ,CAAC;CACF;AAPD,gEAOC"}

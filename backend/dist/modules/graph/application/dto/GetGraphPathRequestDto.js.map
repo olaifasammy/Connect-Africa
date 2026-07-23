@@ -1,1 +1,0 @@
-{"version":3,"file":"GetGraphPathRequestDto.js","sourceRoot":"","sources":["../../../../../src/modules/graph/application/dto/GetGraphPathRequestDto.ts"],"names":[],"mappings":";;;AAAA,6BAAwB;AAEX,QAAA,yBAAyB,GAAG,OAAC,CAAC,MAAM,CAAC;IAChD,KAAK,EAAE,OAAC,CAAC,MAAM,EAAE,CAAC,IAAI,EAAE;IACxB,GAAG,EAAE,OAAC,CAAC,MAAM,EAAE,CAAC,IAAI,EAAE;CACvB,CAAC,CAAC"}

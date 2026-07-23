@@ -1,1 +1,0 @@
-{"version":3,"file":"CrawlCompletedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/ai/domain/events/CrawlCompletedEvent.ts"],"names":[],"mappings":";;;AAAA,MAAa,mBAAmB;IAEZ;IACA;IAFlB,YACkB,KAAa,EACb,SAAe;QADf,UAAK,GAAL,KAAK,CAAQ;QACb,cAAS,GAAT,SAAS,CAAM;IAC9B,CAAC;CACL;AALD,kDAKC"}

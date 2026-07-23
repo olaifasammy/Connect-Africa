@@ -1,1 +1,0 @@
-{"version":3,"file":"ArticleApprovedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/article/domain/events/ArticleApprovedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,oBAAqB,SAAQ,yBAAW;IACnD,YAAY,SAAyB;QACnC,KAAK,CAAC,SAAS,CAAC,CAAC;IACnB,CAAC;CACF;AAJD,oDAIC"}

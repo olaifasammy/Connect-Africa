@@ -1,1 +1,0 @@
-{"version":3,"file":"SessionRevokedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/auth/domain/events/SessionRevokedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,mBAAoB,SAAQ,yBAAW;IACtB;IAAwC;IAApE,YAA4B,MAAsB,EAAkB,SAAiB;QACnF,KAAK,CAAC,MAAM,CAAC,CAAC;QADY,WAAM,GAAN,MAAM,CAAgB;QAAkB,cAAS,GAAT,SAAS,CAAQ;IAErF,CAAC;CACF;AAJD,kDAIC"}

@@ -1,1 +1,0 @@
-{"version":3,"file":"AuditRecordedEvent.js","sourceRoot":"","sources":["../../../../../src/modules/audit/domain/events/AuditRecordedEvent.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AAGzD,MAAa,kBAAmB,SAAQ,yBAAW;IACrB;IAA5B,YAA4B,UAAsB;QAChD,KAAK,CAAC,UAAU,CAAC,EAAE,CAAC,CAAC;QADK,eAAU,GAAV,UAAU,CAAY;IAElD,CAAC;CACF;AAJD,gDAIC"}
