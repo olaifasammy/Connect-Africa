@@ -1,0 +1,10 @@
+
+> connect-africa-backend@1.0.0 start
+> node dist/index.js
+
+{"level":"info","message":"Initializing PostgreSQL connection pool"}
+{"level":"info","message":"Starting application bootstrap..."}
+{"level":"info","message":"Initializing PostgreSQL connection pool"}
+{"level":"info","message":"PostgreSQL connected"}
+{"level":"info","message":"Application bootstrap completed successfully."}
+{"level":"info","message":"🚀 Server successfully running on port 3000 [Mode: development]"}
