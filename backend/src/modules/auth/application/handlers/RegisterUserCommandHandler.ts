@@ -39,7 +39,9 @@ export class RegisterUserCommandHandler implements ICommandHandler<RegisterUserC
       const user = new User({
         email: new Email(command.email),
         passwordHash: new PasswordHash(passwordHash),
-        isActive: false
+        isActive: false,
+        failedLoginAttempts: 0,
+        lockedUntil: null
       }, new UniqueEntityId());
 
       await this.userRepository.save(user);

@@ -18,9 +18,25 @@ export class LoginCommandHandler implements ICommandHandler<LoginCommand, string
 
   async handle(command: LoginCommand): Promise<string> {
     const user = await this.userRepository.findByEmail(command.email);
-    if (!user || !(await this.passwordHasher.compare(command.password, user.passwordHash.value))) {
-      throw new AuthenticationError('Invalid credentials');
+    
+    if (!user) {
+        throw new AuthenticationError('Invalid credentials');
     }
+
+    if (user.isLocked()) {
+        throw new AuthenticationError('Account is locked. Please try again later.');
+    }
+
+    const isPasswordValid = await this.passwordHasher.compare(command.password, user.passwordHash.value);
+
+    if (!isPasswordValid) {
+        user.incrementFailedLoginAttempts();
+        await this.userRepository.save(user);
+        throw new AuthenticationError('Invalid credentials');
+    }
+
+    user.resetFailedLoginAttempts();
+    await this.userRepository.save(user);
 
     await this.eventBus.publish(new AuditLogRequestedEvent({
         action: 'LOGIN',

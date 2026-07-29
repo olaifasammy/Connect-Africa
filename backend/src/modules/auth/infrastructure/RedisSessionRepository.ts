@@ -41,4 +41,41 @@ export class RedisSessionRepository implements ISessionRepository {
       throw new AuthenticationError('Failed to invalidate session');
     }
   }
+
+  async listUserSessions(userId: UniqueEntityId): Promise<string[]> {
+    try {
+      const keys = await this.redisClient.keys('session:*');
+      const sessions: string[] = [];
+      for (const key of keys) {
+        const val = await this.redisClient.get(key);
+        if (val === userId.toString()) {
+          sessions.push(key.replace('session:', ''));
+        }
+      }
+      return sessions;
+    } catch (error) {
+      throw new AuthenticationError('Failed to list user sessions');
+    }
+  }
+
+  async revokeAllUserSessions(userId: UniqueEntityId): Promise<void> {
+    try {
+      const keys = await this.redisClient.keys('session:*');
+      for (const key of keys) {
+        const val = await this.redisClient.get(key);
+        if (val === userId.toString()) {
+          await this.redisClient.del(key);
+        }
+      }
+      
+      AuditLogger.log({
+        user: userId.toString(),
+        action: 'ALL_SESSIONS_REVOKED',
+        resource: 'SESSION',
+        status: 'SUCCESS'
+      });
+    } catch (error) {
+      throw new AuthenticationError('Failed to revoke all user sessions');
+    }
+  }
 }

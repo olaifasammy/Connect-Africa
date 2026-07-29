@@ -1,3 +1,13 @@
+import { ActivateAccountCommandHandler } from '@modules/auth/application/handlers/ActivateAccountCommandHandler';
+import { ChangePasswordCommandHandler } from '@modules/auth/application/handlers/ChangePasswordCommandHandler';
+import { DeleteAccountCommandHandler } from '@modules/auth/application/handlers/DeleteAccountCommandHandler';
+import { ChangeEmailCommandHandler } from '@modules/auth/application/handlers/ChangeEmailCommandHandler';
+import { UnbanUserCommandHandler } from '@modules/auth/application/handlers/UnbanUserCommandHandler';
+import { OutboxDispatcher } from '@workers/OutboxDispatcher';
+import { PostgresUnitOfWork } from '@shared/infrastructure/database/PostgresUnitOfWork';
+import { IUnitOfWork } from '@shared/infrastructure/database/IUnitOfWork';
+import { IOutboxRepository } from '@shared/domain/repositories/IOutboxRepository';
+import { PostgresOutboxRepository } from '@shared/infrastructure/repositories/PostgresOutboxRepository';
 import { Container } from 'inversify';
 import 'reflect-metadata';
 import Redis from 'ioredis';
@@ -34,6 +44,8 @@ import { OntologyController } from '@modules/ontology/interfaces/controllers/Ont
 import { UniqueOntologyPolicy } from '@modules/ontology/domain/policies/UniqueOntologyPolicy';
 import { PostgresOntologyRepository } from '@modules/ontology/infrastructure/PostgresOntologyRepository';
 import { PostgresEntityTypeRepository } from '@modules/ontology/infrastructure/PostgresEntityTypeRepository';
+import { EntityTypeService } from '@modules/ontology/application/services/EntityTypeService';
+import { EntityTypeValidator } from '@modules/ontology/domain/validators/EntityTypeValidator';
 import { PostgresRelationshipTypeRepository } from '@modules/ontology/infrastructure/PostgresRelationshipTypeRepository';
 import { PostgresOntologyVersionRepository } from '@modules/ontology/infrastructure/PostgresOntologyVersionRepository';
 import { PrometheusMetricsProvider } from '@shared/infrastructure/monitoring/PrometheusMetricsProvider';
@@ -46,6 +58,7 @@ import { LoginCommandHandler } from '@modules/auth/application/handlers/LoginCom
 import { RegisterUserCommandHandler } from '@modules/auth/application/handlers/RegisterUserCommandHandler';
 import { BcryptPasswordHasher } from '@shared/infrastructure/security/BcryptPasswordHasher';
 import { JwtProvider } from '@shared/infrastructure/security/JwtProvider';
+import { TotpProvider } from '@shared/infrastructure/security/TotpProvider';
 import { BullMqEventBus } from '@shared/infrastructure/queue/BullMqEventBus';
 import { AuthController } from '@modules/auth/interfaces/AuthController';
 import { LogoutCommandHandler } from '@modules/auth/application/handlers/LogoutCommandHandler';
@@ -54,12 +67,25 @@ import { ResetPasswordCommandHandler } from '@modules/auth/application/handlers/
 import { VerifyEmailCommandHandler } from '@modules/auth/application/handlers/VerifyEmailCommandHandler';
 import { UpdateProfileCommandHandler } from '@modules/auth/application/handlers/UpdateProfileCommandHandler';
 import { BanUserCommandHandler } from '@modules/auth/application/handlers/BanUserCommandHandler';
+import { SuspendUserCommandHandler } from '@modules/auth/application/handlers/SuspendUserCommandHandler';
+import { RestoreAccountCommandHandler } from '@modules/auth/application/handlers/RestoreAccountCommandHandler';
+import { AssignRoleCommandHandler } from '@modules/auth/application/handlers/AssignRoleCommandHandler';
+import { RemoveRoleCommandHandler } from '@modules/auth/application/handlers/RemoveRoleCommandHandler';
+import { DisableAccountCommandHandler } from '@modules/auth/application/handlers/DisableAccountCommandHandler';
+import { ListUsersQueryHandler } from '@modules/auth/application/handlers/queries/ListUsersQueryHandler';
+import { SearchUsersQueryHandler } from '@modules/auth/application/handlers/queries/SearchUsersQueryHandler';
+import { ListUserSessionsQueryHandler } from '@modules/auth/application/handlers/queries/ListUserSessionsQueryHandler';
+import { RevokeAllUserSessionsCommandHandler } from '@modules/auth/application/handlers/RevokeAllUserSessionsCommandHandler';
+import { UnlockUserCommandHandler } from '@modules/auth/application/handlers/UnlockUserCommandHandler';
+import { EnableAccountCommandHandler } from '@modules/auth/application/handlers/EnableAccountCommandHandler';
+import { RevokeSessionCommandHandler } from '@modules/auth/application/handlers/RevokeSessionCommandHandler';
 import { RedisSessionRepository } from '@modules/auth/infrastructure/RedisSessionRepository';
 import { Pool } from 'pg';
 import { PostgresGraphRepository } from '@modules/graph/public';
 import { CreateGraphNodeHandler } from '@modules/graph/public';
 import { CreateGraphEdgeHandler, UpdateGraphNodeHandler, DeleteGraphNodeHandler, UpdateGraphEdgeHandler, DeleteGraphEdgeHandler } from '@modules/graph/public';
 import { CreateArticleHandler } from '@modules/article/application/handlers/CreateArticleHandler';
+import { CreateArticleCommandValidator, UpdateArticleCommandValidator, ArticleIdValidator } from '@modules/article/application/validators/ArticleValidators';
 import { PostgresArticleRepository } from '@modules/article/infrastructure/postgres/PostgresArticleRepository';
 import { ArticleOntologyValidator } from '@modules/article/application/services/ArticleOntologyValidator';
 import { IOntologyGraphService } from '@modules/ontology/application/services/IOntologyGraphService';
@@ -185,6 +211,11 @@ container.bind(AuthenticationService).toDynamicValue((context) => {
 
 // Database/Infrastructure
 container.bind(PostgresProvider).toSelf().inSingletonScope();
+container.bind<IUnitOfWork>(PostgresUnitOfWork).toSelf().inSingletonScope();
+container.bind<IUnitOfWork>('IUnitOfWork').to(PostgresUnitOfWork).inSingletonScope();
+container.bind<IOutboxRepository>('IOutboxRepository').toDynamicValue((context) => {
+    return new PostgresOutboxRepository(context.container.get(Pool));
+}).inSingletonScope();
 container.bind(Pool).toDynamicValue((context) => context.container.get(PostgresProvider).pool);
 container.bind<IAuditRepository>('IAuditRepository').toDynamicValue((context) => {
     return new PostgresAuditRepository(context.container.get(Pool));
@@ -201,6 +232,7 @@ container.bind('ISessionRepository').toDynamicValue((context) => {
 });
 container.bind('IPasswordHasher').to(BcryptPasswordHasher);
 container.bind('IJwtProvider').to(JwtProvider);
+container.bind('ITotpProvider').to(TotpProvider);
 container.bind(CacheProvider).to(RedisCacheProvider).inSingletonScope();
 if (process.env.NODE_ENV === 'test') {
   container.bind('EventBus').toConstantValue({ publish: jest.fn() });
@@ -208,8 +240,15 @@ if (process.env.NODE_ENV === 'test') {
   container.bind('EventBus').to(BullMqEventBus);
 }
 
-// Search
-container.bind(SearchProvider).to(PostgresSearchProvider);
+container.bind(OutboxDispatcher).toDynamicValue((context) => {
+  return new OutboxDispatcher(
+      context.container.get('IOutboxRepository'),
+      context.container.get('EventBus'),
+      context.container.get<IUnitOfWork>('IUnitOfWork'),
+      parseInt(env.OUTBOX_POLLING_INTERVAL || '5000', 10),
+      parseInt(env.OUTBOX_BATCH_SIZE || '50', 10)
+  );
+}).inSingletonScope();
 container.bind('ISearchRepository').toDynamicValue((context) => {
     return new SearchRepository(context.container.get(SearchProvider));
 });
@@ -285,6 +324,108 @@ container.bind(BanUserCommandHandler).toDynamicValue((context) => {
         context.container.get('EventBus')
     );
 });
+container.bind(SuspendUserCommandHandler).toDynamicValue((context) => {
+    return new SuspendUserCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(RestoreAccountCommandHandler).toDynamicValue((context) => {
+    return new RestoreAccountCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(AssignRoleCommandHandler).toDynamicValue((context) => {
+    return new AssignRoleCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(RemoveRoleCommandHandler).toDynamicValue((context) => {
+    return new RemoveRoleCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
+
+container.bind(DisableAccountCommandHandler).toDynamicValue((context) => {
+    return new DisableAccountCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(ListUsersQueryHandler).toDynamicValue((context) => {
+    return new ListUsersQueryHandler(
+        context.container.get('IUserRepository')
+    );
+});
+container.bind(SearchUsersQueryHandler).toDynamicValue((context) => {
+    return new SearchUsersQueryHandler(
+        context.container.get('IUserRepository')
+    );
+});
+container.bind(ListUserSessionsQueryHandler).toDynamicValue((context) => {
+    return new ListUserSessionsQueryHandler(
+        context.container.get('ISessionRepository')
+    );
+});
+container.bind(RevokeAllUserSessionsCommandHandler).toDynamicValue((context) => {
+    return new RevokeAllUserSessionsCommandHandler(
+        context.container.get('ISessionRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(UnlockUserCommandHandler).toDynamicValue((context) => {
+    return new UnlockUserCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(EnableAccountCommandHandler).toDynamicValue((context) => {
+    return new EnableAccountCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(RevokeSessionCommandHandler).toDynamicValue((context) => {
+    return new RevokeSessionCommandHandler(
+        context.container.get('ISessionRepository')
+    );
+});
+
+container.bind(ActivateAccountCommandHandler).toDynamicValue((context) => {
+    return new ActivateAccountCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(ChangePasswordCommandHandler).toDynamicValue((context) => {
+    return new ChangePasswordCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('IPasswordHasher'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(DeleteAccountCommandHandler).toDynamicValue((context) => {
+    return new DeleteAccountCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(ChangeEmailCommandHandler).toDynamicValue((context) => {
+    return new ChangeEmailCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(UnbanUserCommandHandler).toDynamicValue((context) => {
+    return new UnbanUserCommandHandler(
+        context.container.get('IUserRepository'),
+        context.container.get('EventBus')
+    );
+});
+
 container.bind(AuthController).toDynamicValue((context) => {
   return new AuthController(
     context.container.get(LoginCommandHandler),
@@ -294,7 +435,25 @@ container.bind(AuthController).toDynamicValue((context) => {
     context.container.get(ResetPasswordCommandHandler),
     context.container.get(VerifyEmailCommandHandler),
     context.container.get(UpdateProfileCommandHandler),
-    context.container.get(BanUserCommandHandler)
+    context.container.get(BanUserCommandHandler),
+    context.container.get(SuspendUserCommandHandler),
+    context.container.get(RestoreAccountCommandHandler),
+    context.container.get(AssignRoleCommandHandler),
+    context.container.get(RemoveRoleCommandHandler),
+    context.container.get(DisableAccountCommandHandler),
+    context.container.get(ListUsersQueryHandler),
+    context.container.get(SearchUsersQueryHandler),
+    context.container.get(ActivateAccountCommandHandler),
+    context.container.get(ChangePasswordCommandHandler),
+    context.container.get(DeleteAccountCommandHandler),
+    context.container.get(ChangeEmailCommandHandler),
+    context.container.get(UnbanUserCommandHandler),
+    context.container.get(EnableMfaCommandHandler),
+    context.container.get(ListUserSessionsQueryHandler),
+    context.container.get(RevokeAllUserSessionsCommandHandler),
+    context.container.get(UnlockUserCommandHandler),
+    context.container.get(EnableAccountCommandHandler),
+    context.container.get(RevokeSessionCommandHandler)
   );
 });
 
@@ -311,6 +470,16 @@ container.bind('IOntologyVersionRepository').toDynamicValue((context) => {
 });
 container.bind(UniqueOntologyPolicy).toSelf();
 container.bind(OntologyService).toSelf();
+container.bind(EntityTypeService).toDynamicValue((context) => {
+  return new EntityTypeService(
+      context.container.get('IEntityTypeRepository'),
+      context.container.get('IOntologyRepository'),
+      context.container.get(EntityTypeValidator),
+      context.container.get('IOutboxRepository'),
+      context.container.get('IUnitOfWork')
+  );
+});
+container.bind(EntityTypeValidator).toSelf();
 container.bind(CreateOntologyCommandHandler).toSelf();
 container.bind(OntologyController).toSelf();
 container.bind('IMetricsProvider').to(PrometheusMetricsProvider).inSingletonScope();
@@ -422,11 +591,15 @@ container.bind(RelationshipController).toSelf();
 container.bind('IArticleRepository').toDynamicValue((context) => {
     return new PostgresArticleRepository(context.container.get(Pool));
 });
+container.bind(CreateArticleCommandValidator).toSelf();
+container.bind(UpdateArticleCommandValidator).toSelf();
+container.bind(ArticleIdValidator).toSelf();
 container.bind(ArticleOntologyValidator).toDynamicValue((context) => {
     return new ArticleOntologyValidator(
-        context.container.get<IOntologyGraphService>('IOntologyGraphService')
+        context.container.get('IOntologyGraphService')
     );
 });
+
 container.bind(CreateArticleHandler).toDynamicValue((context) => {
     return new CreateArticleHandler(
         context.container.get('IArticleRepository'),

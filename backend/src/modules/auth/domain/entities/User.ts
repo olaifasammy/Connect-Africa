@@ -8,6 +8,8 @@ export interface UserProps {
   email: Email;
   passwordHash: PasswordHash;
   isActive: boolean;
+  failedLoginAttempts: number;
+  lockedUntil: Date | null;
 }
 
 export class User extends AggregateRoot<UserProps> {
@@ -28,6 +30,34 @@ export class User extends AggregateRoot<UserProps> {
 
   get isActive(): boolean {
     return this.props.isActive;
+  }
+
+  get failedLoginAttempts(): number {
+      return this.props.failedLoginAttempts;
+  }
+
+  get lockedUntil(): Date | null {
+      return this.props.lockedUntil;
+  }
+
+  isLocked(): boolean {
+      return this.props.lockedUntil !== null && this.props.lockedUntil > new Date();
+  }
+
+  incrementFailedLoginAttempts(): void {
+      this.props.failedLoginAttempts += 1;
+      if (this.props.failedLoginAttempts >= 5) {
+          this.props.lockedUntil = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+      }
+  }
+
+  resetFailedLoginAttempts(): void {
+      this.props.failedLoginAttempts = 0;
+      this.props.lockedUntil = null;
+  }
+
+  unlock(): void {
+      this.resetFailedLoginAttempts();
   }
 
   activate(): void {

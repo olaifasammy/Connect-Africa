@@ -17,6 +17,8 @@ import { GraphController } from '@modules/graph/interfaces/controllers/GraphCont
 import { AiController } from '@modules/ai/interfaces/controllers/AiController';
 import { AiRoutes } from '@modules/ai/interfaces/routes/AiRoutes';
 import { SearchRoutes } from '@modules/search/interfaces/routes/SearchRoutes';
+import auditRoutes from '@modules/audit/interfaces/routes/AuditRoutes';
+import { AuditController } from '@modules/audit/interfaces/controllers/AuditController';
 
 export const createApp = (): Application => {
   const app = express();
@@ -52,6 +54,9 @@ export const createApp = (): Application => {
 
   // Search
   app.use('/api/search', SearchRoutes);
+
+  // Audit
+  app.use('/api/v1/audit', auditRoutes);
 
   return app;
 };

@@ -10,11 +10,23 @@ export class PostgresUserRepository implements IUserRepository {
 
   async save(user: User): Promise<void> {
     const query = `
-      INSERT INTO users (id, email, password_hash, is_active)
-      VALUES ($1, $2, $3, $4)
-      ON CONFLICT (id) DO UPDATE SET email = EXCLUDED.email, password_hash = EXCLUDED.password_hash, is_active = EXCLUDED.is_active
+      INSERT INTO users (id, email, password_hash, is_active, failed_login_attempts, locked_until)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      ON CONFLICT (id) DO UPDATE SET 
+        email = EXCLUDED.email, 
+        password_hash = EXCLUDED.password_hash, 
+        is_active = EXCLUDED.is_active,
+        failed_login_attempts = EXCLUDED.failed_login_attempts,
+        locked_until = EXCLUDED.locked_until
     `;
-    await this.pool.query(query, [user.id.toString(), user.email.value, user.passwordHash.value, user.isActive]);
+    await this.pool.query(query, [
+        user.id.toString(), 
+        user.email.value, 
+        user.passwordHash.value, 
+        user.isActive,
+        user.failedLoginAttempts,
+        user.lockedUntil
+    ]);
   }
 
   async findById(id: UniqueEntityId): Promise<User | null> {
@@ -24,7 +36,9 @@ export class PostgresUserRepository implements IUserRepository {
       { 
         email: new Email(res.rows[0].email), 
         passwordHash: new PasswordHash(res.rows[0].password_hash),
-        isActive: res.rows[0].is_active || false
+        isActive: res.rows[0].is_active || false,
+        failedLoginAttempts: res.rows[0].failed_login_attempts || 0,
+        lockedUntil: res.rows[0].locked_until || null
       },
       new UniqueEntityId(res.rows[0].id)
     );
@@ -37,7 +51,9 @@ export class PostgresUserRepository implements IUserRepository {
       { 
         email: new Email(res.rows[0].email), 
         passwordHash: new PasswordHash(res.rows[0].password_hash),
-        isActive: res.rows[0].is_active || false
+        isActive: res.rows[0].is_active || false,
+        failedLoginAttempts: res.rows[0].failed_login_attempts || 0,
+        lockedUntil: res.rows[0].locked_until || null
       },
       new UniqueEntityId(res.rows[0].id)
     );
@@ -49,7 +65,9 @@ export class PostgresUserRepository implements IUserRepository {
       { 
         email: new Email(row.email), 
         passwordHash: new PasswordHash(row.password_hash),
-        isActive: row.is_active || false
+        isActive: row.is_active || false,
+        failedLoginAttempts: row.failed_login_attempts || 0,
+        lockedUntil: row.locked_until || null
       },
       new UniqueEntityId(row.id)
     ));
@@ -61,7 +79,9 @@ export class PostgresUserRepository implements IUserRepository {
       { 
         email: new Email(row.email), 
         passwordHash: new PasswordHash(row.password_hash),
-        isActive: row.is_active || false
+        isActive: row.is_active || false,
+        failedLoginAttempts: row.failed_login_attempts || 0,
+        lockedUntil: row.locked_until || null
       },
       new UniqueEntityId(row.id)
     ));
