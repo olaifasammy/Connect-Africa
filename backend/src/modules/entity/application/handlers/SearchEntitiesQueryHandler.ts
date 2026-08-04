@@ -2,6 +2,9 @@ import { IQueryHandler } from '@shared/application/handlers/IQueryHandler';
 import { SearchEntitiesQuery } from '@modules/entity/application/queries/SearchEntitiesQuery';
 import { IEntityRepository } from '@modules/entity/domain/repositories/IEntityRepository';
 
+import { injectable } from "inversify";
+
+@injectable()
 export class SearchEntitiesQueryHandler implements IQueryHandler<SearchEntitiesQuery, any[]> {
   constructor(private readonly entityRepository: IEntityRepository) {}
 

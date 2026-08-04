@@ -1,6 +1,6 @@
 import { ICommandHandler } from '@shared/application/handlers/ICommandHandler';
 import { AddToReadingHistoryCommand } from '../commands/AddToReadingHistoryCommand';
-import { IReadingHistoryRepository } from '@modules/auth/domain/repositories/IReadingHistoryRepository';
+import { IReadingHistoryRepository } from '@modules/article/domain/repositories/IReadingHistoryRepository';
 import { AuditLogger } from '@modules/auth/infrastructure/AuditLogger';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { AuthenticationError } from '@modules/auth/domain/errors/AuthErrors';

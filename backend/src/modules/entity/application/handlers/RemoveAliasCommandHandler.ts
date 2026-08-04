@@ -6,6 +6,9 @@ import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { EntityAliasRemovedEvent } from '@modules/entity/domain/events/EntityAliasRemovedEvent';
 import { AuditLogRequestedEvent } from '@modules/audit/public';
 
+import { injectable } from "inversify";
+
+@injectable()
 export class RemoveAliasCommandHandler implements ICommandHandler<RemoveAliasCommand, void> {
   constructor(
     private readonly entityAliasRepository: IEntityAliasRepository,

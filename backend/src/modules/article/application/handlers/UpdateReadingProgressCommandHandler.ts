@@ -1,8 +1,8 @@
 import { ICommandHandler } from '@shared/application/handlers/ICommandHandler';
 import { UpdateReadingProgressCommand } from '../commands/UpdateReadingProgressCommand';
-import { IContinueReadingRepository } from '@modules/auth/domain/repositories/IContinueReadingRepository';
+import { IContinueReadingRepository } from '@modules/article/domain/repositories/IContinueReadingRepository';
 import { AuditLogger } from '@modules/auth/infrastructure/AuditLogger';
-import { ContinueReadingError } from '@modules/auth/domain/errors/AuthErrors';
+import { ContinueReadingError } from '@modules/article/domain/errors/ArticleDomainErrors';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 
 export class UpdateReadingProgressCommandHandler implements ICommandHandler<UpdateReadingProgressCommand, void> {

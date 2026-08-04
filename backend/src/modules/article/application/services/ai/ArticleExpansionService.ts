@@ -1,4 +1,5 @@
 import { ExpansionRequestService, KnowledgeGapService } from '../../../../ai/public';
+import { logger } from '@shared/logger/Logger';
 
 export class ArticleExpansionService {
   constructor(
@@ -13,6 +14,7 @@ export class ArticleExpansionService {
       return expandedContent;
     } catch (error) {
       // 2. Log knowledge gap if expansion fails or indicates missing knowledge
+      logger.error('Expansion failed', error);
       await this.knowledgeGapService.recordGap(`Article:${articleId}`, content);
       throw new Error('Expansion service unavailable');
     }

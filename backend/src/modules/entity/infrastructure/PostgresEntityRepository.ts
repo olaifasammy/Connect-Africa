@@ -5,6 +5,7 @@ import { EntityName } from '@modules/entity/domain/value-objects/EntityName';
 import { EntityMetadata } from '@modules/entity/domain/value-objects/EntityMetadata';
 import { Pool } from 'pg';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
+import { SlugGenerationService } from '@modules/entity/domain/services/SlugGenerationService';
 
 export class PostgresEntityRepository implements IEntityRepository {
   constructor(private readonly pool: Pool) {}
@@ -35,29 +36,89 @@ export class PostgresEntityRepository implements IEntityRepository {
       EntityName.create(row.name),
       row.type,
       EntityMetadata.create({ description: row.description, source: row.source, tags: row.tags }),
+      'DRAFT',
       new Date(row.created_at),
       new Date(row.updated_at)
     );
   }
 
   async existsBySlug(slug: string): Promise<boolean> {
-    throw new Error('Not implemented');
+    const slugService = new SlugGenerationService();
+    const res = await this.pool.query('SELECT name FROM entities');
+    return res.rows.some(row => slugService.generate(EntityName.create(row.name)) === slug);
   }
 
   async findBySlug(slug: string): Promise<Entity | null> {
-    throw new Error('Not implemented');
+    const slugService = new SlugGenerationService();
+    const res = await this.pool.query('SELECT * FROM entities');
+    
+    for (const row of res.rows) {
+      if (slugService.generate(EntityName.create(row.name)) === slug) {
+        return Entity.rehydrate(
+          new UniqueEntityId(row.id),
+          EntityName.create(row.name),
+          row.type,
+          EntityMetadata.create({ description: row.description, source: row.source, tags: row.tags }),
+          'DRAFT',
+          new Date(row.created_at),
+          new Date(row.updated_at)
+        );
+
+      }
+    }
+    return null;
   }
 
   async findByIdentifier(identifier: string): Promise<Entity | null> {
-    throw new Error('Not implemented');
+    const query = `
+      SELECT e.* FROM entities e
+      JOIN entity_identifiers ei ON e.id = ei.entity_id
+      WHERE ei.external_id = $1
+    `;
+    const res = await this.pool.query(query, [identifier]);
+    if (res.rows.length === 0) return null;
+    
+    const row = res.rows[0];
+    return Entity.rehydrate(
+      new UniqueEntityId(row.id),
+      EntityName.create(row.name),
+      row.type,
+      EntityMetadata.create({ description: row.description, source: row.source, tags: row.tags }),
+      'DRAFT',
+      new Date(row.created_at),
+      new Date(row.updated_at)
+    );
   }
 
   async findAll(page: number, limit: number): Promise<Entity[]> {
-    throw new Error('Not implemented');
+    const offset = (page - 1) * limit;
+    const query = `SELECT * FROM entities LIMIT $1 OFFSET $2`;
+    const res = await this.pool.query(query, [limit, offset]);
+    
+    return res.rows.map(row => Entity.rehydrate(
+      new UniqueEntityId(row.id),
+      EntityName.create(row.name),
+      row.type,
+      EntityMetadata.create({ description: row.description, source: row.source, tags: row.tags }),
+      'DRAFT',
+      new Date(row.created_at),
+      new Date(row.updated_at)
+    ));
   }
 
   async search(term: string): Promise<Entity[]> {
-    throw new Error('Not implemented');
+    const query = `SELECT * FROM entities WHERE name ILIKE $1 OR description ILIKE $1`;
+    const res = await this.pool.query(query, [`%${term}%`]);
+    
+    return res.rows.map(row => Entity.rehydrate(
+      new UniqueEntityId(row.id),
+      EntityName.create(row.name),
+      row.type,
+      EntityMetadata.create({ description: row.description, source: row.source, tags: row.tags }),
+      'DRAFT',
+      new Date(row.created_at),
+      new Date(row.updated_at)
+    ));
   }
 
 

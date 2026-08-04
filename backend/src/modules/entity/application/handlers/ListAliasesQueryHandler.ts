@@ -3,6 +3,9 @@ import { ListAliasesQuery } from '@modules/entity/application/queries/ListAliase
 import { IEntityAliasRepository } from '@modules/entity/domain/repositories/IEntityAliasRepository';
 import { EntityId } from '@modules/entity/domain/value-objects/EntityId';
 
+import { injectable } from "inversify";
+
+@injectable()
 export class ListAliasesQueryHandler implements IQueryHandler<ListAliasesQuery, any[]> {
   constructor(private readonly entityAliasRepository: IEntityAliasRepository) {}
   async handle(query: ListAliasesQuery): Promise<any[]> {

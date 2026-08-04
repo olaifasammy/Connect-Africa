@@ -7,6 +7,9 @@ import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { EntityVersionCreatedEvent } from '@modules/entity/domain/events/EntityVersionCreatedEvent';
 import { AuditLogRequestedEvent } from '@modules/audit/public';
 
+import { injectable } from "inversify";
+
+@injectable()
 export class CreateEntityVersionCommandHandler implements ICommandHandler<CreateEntityVersionCommand, void> {
   constructor(
     private readonly entityRepository: IEntityRepository,

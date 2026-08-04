@@ -23,6 +23,22 @@ import { ProcessAiRequestHandler } from '@modules/ai/application/handlers/Proces
 import { AiController } from '@modules/ai/interfaces/controllers/AiController';
 import { PostgresEntityRepository } from '@modules/entity/infrastructure/PostgresEntityRepository';
 import { CreateEntityCommandHandler } from '@modules/entity/application/handlers/CreateEntityCommandHandler';
+import { AddAliasCommandHandler } from '@modules/entity/application/handlers/AddAliasCommandHandler';
+import { ArchiveEntityCommandHandler } from '@modules/entity/application/handlers/ArchiveEntityCommandHandler';
+import { CreateEntityVersionCommandHandler } from '@modules/entity/application/handlers/CreateEntityVersionCommandHandler';
+import { DeleteEntityCommandHandler } from '@modules/entity/application/handlers/DeleteEntityCommandHandler';
+import { GetEntityByIdentifierQueryHandler } from '@modules/entity/application/handlers/GetEntityByIdentifierQueryHandler';
+import { GetEntityBySlugQueryHandler } from '@modules/entity/application/handlers/GetEntityBySlugQueryHandler';
+import { GetEntityQueryHandler } from '@modules/entity/application/handlers/GetEntityQueryHandler';
+import { GetEntityVersionQueryHandler } from '@modules/entity/application/handlers/GetEntityVersionQueryHandler';
+import { ListAliasesQueryHandler } from '@modules/entity/application/handlers/ListAliasesQueryHandler';
+import { ListEntitiesQueryHandler } from '@modules/entity/application/handlers/ListEntitiesQueryHandler';
+import { MergeEntitiesCommandHandler } from '@modules/entity/application/handlers/MergeEntitiesCommandHandler';
+import { PublishEntityCommandHandler } from '@modules/entity/application/handlers/PublishEntityCommandHandler';
+import { RemoveAliasCommandHandler } from '@modules/entity/application/handlers/RemoveAliasCommandHandler';
+import { RestoreEntityCommandHandler } from '@modules/entity/application/handlers/RestoreEntityCommandHandler';
+import { SearchEntitiesQueryHandler } from '@modules/entity/application/handlers/SearchEntitiesQueryHandler';
+import { UpdateEntityCommandHandler } from '@modules/entity/application/handlers/UpdateEntityCommandHandler';
 import { EntityController } from '@modules/entity/interfaces/EntityController';
 import { PostgresRelationshipRepository } from '@modules/relationship/infrastructure/repositories/PostgresRelationshipRepository';
 import { CreateRelationshipHandler } from '@modules/relationship/application/handlers/CreateRelationshipHandler';
@@ -82,9 +98,22 @@ import { RevokeSessionCommandHandler } from '@modules/auth/application/handlers/
 import { RedisSessionRepository } from '@modules/auth/infrastructure/RedisSessionRepository';
 import { Pool } from 'pg';
 import { PostgresGraphRepository } from '@modules/graph/public';
+import { AddBookmarkCommandHandler } from '@modules/article/application/handlers/AddBookmarkCommandHandler';
+import { AddToReadingHistoryCommandHandler } from '@modules/article/application/handlers/AddToReadingHistoryCommandHandler';
+import { UpdateReadingProgressCommandHandler } from '@modules/article/application/handlers/UpdateReadingProgressCommandHandler';
+import { GetBookmarksQueryHandler } from '@modules/article/application/handlers/queries/GetBookmarksQueryHandler';
+import { GetReadingHistoryQueryHandler } from '@modules/article/application/handlers/queries/GetReadingHistoryQueryHandler';
 import { CreateGraphNodeHandler } from '@modules/graph/public';
 import { CreateGraphEdgeHandler, UpdateGraphNodeHandler, DeleteGraphNodeHandler, UpdateGraphEdgeHandler, DeleteGraphEdgeHandler } from '@modules/graph/public';
 import { CreateArticleHandler } from '@modules/article/application/handlers/CreateArticleHandler';
+import { UpdateArticleHandler } from '@modules/article/application/handlers/UpdateArticleHandler';
+import { DeleteArticleHandler } from '@modules/article/application/handlers/DeleteArticleHandler';
+import { PublishArticleHandler } from '@modules/article/application/handlers/PublishArticleHandler';
+import { ArchiveArticleHandler } from '@modules/article/application/handlers/ArchiveArticleHandler';
+import { SubmitForReviewHandler } from '@modules/article/application/handlers/SubmitForReviewHandler';
+import { ApproveArticleHandler } from '@modules/article/application/handlers/ApproveArticleHandler';
+import { ArticleController } from '@modules/article/interfaces/controllers/ArticleController';
+
 import { CreateArticleCommandValidator, UpdateArticleCommandValidator, ArticleIdValidator } from '@modules/article/application/validators/ArticleValidators';
 import { PostgresArticleRepository } from '@modules/article/infrastructure/postgres/PostgresArticleRepository';
 import { ArticleOntologyValidator } from '@modules/article/application/services/ArticleOntologyValidator';
@@ -492,14 +521,44 @@ container.bind<IOntologyGraphService>('IOntologyGraphService').toDynamicValue((c
 // Entity
 container.bind('IEntityRepository').to(PostgresEntityRepository);
 container.bind(ArticleLinkedToEntityHandler).toSelf();
-container.bind(CreateEntityCommandHandler).toDynamicValue((context) => {
-    return new CreateEntityCommandHandler(
-        context.container.get('IEntityRepository'),
-        context.container.get<IOntologyGraphService>('IOntologyGraphService'),
-        context.container.get('EventBus')
+container.bind(AddAliasCommandHandler).toSelf();
+container.bind(ArchiveEntityCommandHandler).toSelf();
+container.bind(CreateEntityCommandHandler).toSelf();
+container.bind(CreateEntityVersionCommandHandler).toSelf();
+container.bind(DeleteEntityCommandHandler).toSelf();
+container.bind(GetEntityByIdentifierQueryHandler).toSelf();
+container.bind(GetEntityBySlugQueryHandler).toSelf();
+container.bind(GetEntityQueryHandler).toSelf();
+container.bind(GetEntityVersionQueryHandler).toSelf();
+container.bind(ListAliasesQueryHandler).toSelf();
+container.bind(ListEntitiesQueryHandler).toSelf();
+container.bind(MergeEntitiesCommandHandler).toSelf();
+container.bind(PublishEntityCommandHandler).toSelf();
+container.bind(RemoveAliasCommandHandler).toSelf();
+container.bind(RestoreEntityCommandHandler).toSelf();
+container.bind(SearchEntitiesQueryHandler).toSelf();
+container.bind(UpdateEntityCommandHandler).toSelf();
+container.bind(EntityController).toDynamicValue((context) => {
+    return new EntityController(
+        context.container.get(CreateEntityCommandHandler),
+        context.container.get(UpdateEntityCommandHandler),
+        context.container.get(DeleteEntityCommandHandler),
+        context.container.get(PublishEntityCommandHandler),
+        context.container.get(ArchiveEntityCommandHandler),
+        context.container.get(RestoreEntityCommandHandler),
+        context.container.get(MergeEntitiesCommandHandler),
+        context.container.get(AddAliasCommandHandler),
+        context.container.get(RemoveAliasCommandHandler),
+        context.container.get(CreateEntityVersionCommandHandler),
+        context.container.get(GetEntityQueryHandler),
+        context.container.get(GetEntityByIdentifierQueryHandler),
+        context.container.get(GetEntityBySlugQueryHandler),
+        context.container.get(ListEntitiesQueryHandler),
+        context.container.get(SearchEntitiesQueryHandler),
+        context.container.get(ListAliasesQueryHandler),
+        context.container.get(GetEntityVersionQueryHandler)
     );
 });
-container.bind(EntityController).toSelf();
 
 // Settings
 container.bind('ISettingsRepository').toDynamicValue((context) => {
@@ -603,6 +662,80 @@ container.bind(CreateArticleHandler).toDynamicValue((context) => {
     return new CreateArticleHandler(
         context.container.get('IArticleRepository'),
         context.container.get('IAuditLogger')
+    );
+});
+container.bind(UpdateArticleHandler).toDynamicValue((context) => {
+    return new UpdateArticleHandler(context.container.get('IArticleRepository'));
+});
+container.bind(DeleteArticleHandler).toDynamicValue((context) => {
+    return new DeleteArticleHandler(
+        context.container.get('IArticleRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(PublishArticleHandler).toDynamicValue((context) => {
+    return new PublishArticleHandler(
+        context.container.get('IArticleRepository'),
+        context.container.get('IAuditLogger')
+    );
+});
+container.bind(ArchiveArticleHandler).toDynamicValue((context) => {
+    return new ArchiveArticleHandler(context.container.get('IArticleRepository'));
+});
+container.bind(SubmitForReviewHandler).toDynamicValue((context) => {
+    return new SubmitForReviewHandler(context.container.get('IArticleRepository'));
+});
+container.bind(ApproveArticleHandler).toDynamicValue((context) => {
+    return new ApproveArticleHandler(
+        context.container.get('IArticleRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(AddBookmarkCommandHandler).toDynamicValue((context) => {
+    return new AddBookmarkCommandHandler(
+        context.container.get('IUserBookmarkRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(AddToReadingHistoryCommandHandler).toDynamicValue((context) => {
+    return new AddToReadingHistoryCommandHandler(
+        context.container.get('IReadingHistoryRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(UpdateReadingProgressCommandHandler).toDynamicValue((context) => {
+    return new UpdateReadingProgressCommandHandler(
+        context.container.get('IContinueReadingRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(GetBookmarksQueryHandler).toDynamicValue((context) => {
+    return new GetBookmarksQueryHandler(
+        context.container.get('IUserBookmarkRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(GetReadingHistoryQueryHandler).toDynamicValue((context) => {
+    return new GetReadingHistoryQueryHandler(
+        context.container.get('IReadingHistoryRepository'),
+        context.container.get('EventBus')
+    );
+});
+container.bind(ArticleController).toDynamicValue((context) => {
+    return new ArticleController(
+        context.container.get(CreateArticleHandler),
+        context.container.get(UpdateArticleHandler),
+        context.container.get(DeleteArticleHandler),
+        context.container.get(PublishArticleHandler),
+        context.container.get(ArchiveArticleHandler),
+        context.container.get(SubmitForReviewHandler),
+        context.container.get(ApproveArticleHandler),
+        context.container.get(AddBookmarkCommandHandler),
+        context.container.get(AddToReadingHistoryCommandHandler),
+        context.container.get(UpdateReadingProgressCommandHandler),
+        context.container.get(GetBookmarksQueryHandler),
+        context.container.get(GetReadingHistoryQueryHandler),
+        context.container.get('IMetricsProvider')
     );
 });
 

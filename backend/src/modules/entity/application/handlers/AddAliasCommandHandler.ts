@@ -10,6 +10,9 @@ import { EntityAliasAddedEvent } from '@modules/entity/domain/events/EntityAlias
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 import { AuditLogRequestedEvent } from '@modules/audit/public';
 
+import { injectable } from "inversify";
+
+@injectable()
 export class AddAliasCommandHandler implements ICommandHandler<AddAliasCommand, void> {
   constructor(
     private readonly entityRepository: IEntityRepository,

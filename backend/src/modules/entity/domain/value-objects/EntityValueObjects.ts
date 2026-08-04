@@ -46,6 +46,10 @@ export class VersionNumber extends ValueObject<{ value: number }> {
     if (value < 1) throw new Error('Version must be >= 1');
     super({ value });
   }
+
+  get value(): number {
+    return this.props.value;
+  }
 }
 
 export class Visibility extends ValueObject<{ value: 'PUBLIC' | 'PRIVATE' | 'RESTRICTED' }> {

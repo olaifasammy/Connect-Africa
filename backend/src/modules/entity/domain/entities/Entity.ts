@@ -12,6 +12,7 @@ interface EntityProps {
   name: EntityName;
   type: string; // E.g., 'Person', 'Organization'
   metadata: EntityMetadata;
+  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -51,6 +52,7 @@ export class Entity extends AggregateRoot<EntityProps> {
       name, 
       type, 
       metadata,
+      status: 'DRAFT',
       createdAt: new Date(),
       updatedAt: new Date()
     }, new UniqueEntityId(id.value));
@@ -67,14 +69,29 @@ export class Entity extends AggregateRoot<EntityProps> {
     name: EntityName,
     type: string,
     metadata: EntityMetadata,
+    status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
     createdAt: Date,
     updatedAt: Date
   ): Entity {
-    return new Entity({ name, type, metadata, createdAt, updatedAt }, id);
+    return new Entity({ name, type, metadata, status, createdAt, updatedAt }, id);
   }
 
   get entityId(): EntityId {
     return EntityId.create(this._id.toString());
+  }
+
+  get status(): 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' {
+    return this.props.status;
+  }
+
+  public publish(): void {
+    this.props.status = 'PUBLISHED';
+    this.props.updatedAt = new Date();
+  }
+
+  public archive(): void {
+    this.props.status = 'ARCHIVED';
+    this.props.updatedAt = new Date();
   }
 
   get name(): EntityName {

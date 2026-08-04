@@ -3,6 +3,9 @@ import { GetEntityQuery } from '@modules/entity/application/queries/GetEntityQue
 import { EntityId } from '@modules/entity/domain/value-objects/EntityId';
 import { IEntityRepository } from '@modules/entity/domain/repositories/IEntityRepository';
 
+import { injectable } from "inversify";
+
+@injectable()
 export class GetEntityQueryHandler implements IQueryHandler<GetEntityQuery, any> {
   constructor(private readonly entityRepository: IEntityRepository) {}
 

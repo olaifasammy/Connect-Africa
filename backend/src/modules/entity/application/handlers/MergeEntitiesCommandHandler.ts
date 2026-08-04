@@ -6,6 +6,9 @@ import { EntityMergedEvent } from '@modules/entity/domain/events/EntityMergedEve
 import { EntityId } from '@modules/entity/domain/value-objects/EntityId';
 import { AuditLogRequestedEvent } from '@modules/audit/public';
 
+import { injectable } from "inversify";
+
+@injectable()
 export class MergeEntitiesCommandHandler implements ICommandHandler<MergeEntitiesCommand, void> {
   constructor(
     private readonly entityMergeService: IEntityMergeService,
@@ -27,7 +30,7 @@ export class MergeEntitiesCommandHandler implements ICommandHandler<MergeEntitie
       actorType: 'USER',
       ipAddress: '127.0.0.1',
       userAgent: 'unknown',
-      resourceId: targetEntityId,
+      resourceId: mergedEntity.entityId.value,
       resourceType: 'ENTITY',
       metadata: [{ key: 'status', value: 'SUCCESS' }]
     }));

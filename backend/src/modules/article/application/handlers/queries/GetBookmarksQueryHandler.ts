@@ -1,6 +1,6 @@
 import { IQueryHandler } from '@shared/application/handlers/IQueryHandler';
-import { GetBookmarksQuery } from '@modules/auth/application/queries/GetBookmarksQuery';
-import { IUserBookmarkRepository } from '@modules/auth/domain/repositories/IUserBookmarkRepository';
+import { GetBookmarksQuery } from '@modules/article/application/queries/GetBookmarksQuery';
+import { IUserBookmarkRepository } from '@modules/article/domain/repositories/IUserBookmarkRepository';
 import { AuditLogRequestedEvent } from '@modules/audit/public';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { AuthenticationError } from '@modules/auth/domain/errors/AuthErrors';

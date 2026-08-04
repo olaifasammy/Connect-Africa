@@ -9,6 +9,9 @@ import { Entity } from '@modules/entity/domain/entities/Entity';
 import { EntityUpdatedEvent } from '@modules/entity/domain/events/EntityUpdatedEvent';
 import { AuditLogRequestedEvent } from '@modules/audit/public';
 
+import { injectable } from "inversify";
+
+@injectable()
 export class UpdateEntityCommandHandler implements ICommandHandler<UpdateEntityCommand, void> {
   constructor(
     private readonly entityRepository: IEntityRepository,
@@ -43,7 +46,8 @@ export class UpdateEntityCommandHandler implements ICommandHandler<UpdateEntityC
         (entity as any)._id, 
         entity.name, 
         entity.type, 
-        updatedMetadata, 
+        updatedMetadata,
+        entity.status,
         (entity as any).props.createdAt, 
         new Date()
     ));

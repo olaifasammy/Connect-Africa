@@ -1,5 +1,14 @@
-export interface PublishArticleRequest {
+export interface AddBookmarkRequest {
   articleId: string;
+}
+
+export interface AddToReadingHistoryRequest {
+  articleId: string;
+}
+
+export interface UpdateReadingProgressRequest {
+  articleId: string;
+  progress: number;
 }
 
 export interface ArticleResponse {

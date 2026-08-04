@@ -6,6 +6,9 @@ import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { EntityRestoredEvent } from '@modules/entity/domain/events/EntityRestoredEvent';
 import { AuditLogRequestedEvent } from '@modules/audit/public';
 
+import { injectable } from "inversify";
+
+@injectable()
 export class RestoreEntityCommandHandler implements ICommandHandler<RestoreEntityCommand, void> {
   constructor(
     private readonly entityRepository: IEntityRepository,

@@ -6,6 +6,9 @@ import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { EntityDeletedEvent } from '@modules/entity/domain/events/EntityDeletedEvent';
 import { AuditLogRequestedEvent } from '@modules/audit/public';
 
+import { injectable } from "inversify";
+
+@injectable()
 export class DeleteEntityCommandHandler implements ICommandHandler<DeleteEntityCommand, void> {
   constructor(
     private readonly entityRepository: IEntityRepository & { delete(id: EntityId): Promise<void> },

@@ -1,6 +1,6 @@
 import { IQueryHandler } from '@shared/application/handlers/IQueryHandler';
-import { GetReadingHistoryQuery } from '@modules/auth/application/queries/GetReadingHistoryQuery';
-import { IReadingHistoryRepository } from '@modules/auth/domain/repositories/IReadingHistoryRepository';
+import { GetReadingHistoryQuery } from '@modules/article/application/queries/GetReadingHistoryQuery';
+import { IReadingHistoryRepository } from '@modules/article/domain/repositories/IReadingHistoryRepository';
 import { AuditLogger } from '@modules/auth/infrastructure/AuditLogger';
 import { AuthenticationError } from '@modules/auth/domain/errors/AuthErrors';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';

@@ -11,6 +11,9 @@ import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { IOntologyGraphService } from '@modules/ontology/public';
 import { AuditLogRequestedEvent } from '@modules/audit/public';
 
+import { injectable } from "inversify";
+
+@injectable()
 export class CreateEntityCommandHandler implements ICommandHandler<CreateEntityCommand, void> {
   constructor(
     private readonly entityRepository: IEntityRepository,

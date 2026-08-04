@@ -20,7 +20,9 @@ import { GetEntityVersionQueryHandler } from '@modules/entity/application/handle
 
 import { CreateEntitySchema } from '@modules/entity/application/dto/CreateEntityRequest';
 import { UpdateEntitySchema } from '@modules/entity/application/dto/UpdateEntityRequest';
+import { injectable } from 'inversify';
 
+@injectable()
 export class EntityController {
   constructor(
     private readonly createHandler: CreateEntityCommandHandler,

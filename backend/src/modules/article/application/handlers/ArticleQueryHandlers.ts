@@ -21,7 +21,7 @@ export class GetArticleBySlugHandler {
 export class SearchArticlesHandler {
   constructor(private readonly repository: IArticleRepository) {}
 
-  async handle(query: SearchArticlesQuery): Promise<Article[]> {
+  async handle(_query: SearchArticlesQuery): Promise<Article[]> {
     return [];
   }
 }
@@ -29,7 +29,7 @@ export class SearchArticlesHandler {
 export class GetLatestArticlesHandler {
   constructor(private readonly repository: IArticleRepository) {}
 
-  async handle(query: GetLatestArticlesQuery): Promise<Article[]> {
+  async handle(_query: GetLatestArticlesQuery): Promise<Article[]> {
     return [];
   }
 }
@@ -37,7 +37,7 @@ export class GetLatestArticlesHandler {
 export class GetArticlesByEntityHandler {
   constructor(private readonly repository: IArticleRepository) {}
 
-  async handle(query: GetArticlesByEntityQuery): Promise<Article[]> {
+  async handle(_query: GetArticlesByEntityQuery): Promise<Article[]> {
     return [];
   }
 }
@@ -45,7 +45,7 @@ export class GetArticlesByEntityHandler {
 export class GetArticlesByCategoryHandler {
   constructor(private readonly repository: IArticleRepository) {}
 
-  async handle(query: GetArticlesByCategoryQuery): Promise<Article[]> {
+  async handle(_query: GetArticlesByCategoryQuery): Promise<Article[]> {
     return [];
   }
 }

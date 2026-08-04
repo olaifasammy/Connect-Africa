@@ -2,6 +2,9 @@ import { IQueryHandler } from '@shared/application/handlers/IQueryHandler';
 import { GetEntityVersionQuery } from '@modules/entity/application/queries/GetEntityVersionQuery';
 import { IEntityVersionRepository } from '@modules/entity/domain/repositories/IEntityVersionRepository';
 
+import { injectable } from "inversify";
+
+@injectable()
 export class GetEntityVersionQueryHandler implements IQueryHandler<GetEntityVersionQuery, any> {
   constructor(private readonly entityVersionRepository: IEntityVersionRepository) {}
   async handle(query: GetEntityVersionQuery): Promise<any> {

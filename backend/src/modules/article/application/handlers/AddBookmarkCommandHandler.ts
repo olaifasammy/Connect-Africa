@@ -1,9 +1,9 @@
 import { ICommandHandler } from '@shared/application/handlers/ICommandHandler';
 import { AddBookmarkCommand } from '../commands/AddBookmarkCommand';
-import { IUserBookmarkRepository } from '@modules/auth/domain/repositories/IUserBookmarkRepository';
+import { IUserBookmarkRepository } from '@modules/article/domain/repositories/IUserBookmarkRepository';
 import { AuditLogger } from '@modules/auth/infrastructure/AuditLogger';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
-import { ArticleBookmarkedEvent } from '@modules/auth/domain/events/ArticleBookmarkedEvent';
+import { ArticleBookmarkedEvent } from '@modules/article/domain/events/ArticleBookmarkedEvent';
 import { AuthenticationError } from '@modules/auth/domain/errors/AuthErrors';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 

@@ -1,4 +1,3 @@
-import { Revision } from '../../domain/entities/Revision';
 import { ArticleProps } from '../../domain/entities/Article';
 
 export class RevisionDiffService {
