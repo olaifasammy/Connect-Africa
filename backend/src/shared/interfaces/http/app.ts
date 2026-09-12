@@ -47,6 +47,9 @@ import { createNotificationRoutes } from '@modules/notification/interfaces/http/
 import { AnalyticsController } from '@modules/analytics/interfaces/http/AnalyticsController';
 import { createAnalyticsRoutes } from '@modules/analytics/interfaces/http/AnalyticsRoutes';
 
+import { SettingsController } from '@modules/settings/interfaces/controllers/SettingsController';
+import { settingsRoutes } from '@modules/settings/interfaces/routes/SettingsRoutes';
+
 export const createApp = (): Application => {
   const app = express();
 
@@ -185,6 +188,17 @@ export const createApp = (): Application => {
     '/api/v1/analytics',
     createAnalyticsRoutes(
       analyticsController,
+      authMiddleware,
+    ),
+  );
+
+  // Settings
+  const settingsController = container.get(SettingsController);
+
+  app.use(
+    '/api/v1/settings',
+    settingsRoutes(
+      settingsController,
       authMiddleware,
     ),
   );
