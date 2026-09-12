@@ -3,6 +3,9 @@ import { SystemMetric } from '../entities/SystemMetric';
 export interface AnalyticsFilters {
   startDate?: Date;
   endDate?: Date;
+  eventName?: string;
+  limit?: number;
+  offset?: number;
 }
 
 export interface IAnalyticsRepository {

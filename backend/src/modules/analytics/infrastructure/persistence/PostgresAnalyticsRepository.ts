@@ -28,6 +28,10 @@ export class PostgresAnalyticsRepository implements IAnalyticsRepository {
     let query = 'SELECT * FROM system_metrics WHERE source_context = $1';
     const params: any[] = [context];
     
+    if (filters?.eventName) {
+        params.push(filters.eventName);
+        query += ` AND event_name = $${params.length}`;
+    }
     if (filters?.startDate) {
         params.push(filters.startDate);
         query += ` AND timestamp >= $${params.length}`;
@@ -35,6 +39,17 @@ export class PostgresAnalyticsRepository implements IAnalyticsRepository {
     if (filters?.endDate) {
         params.push(filters.endDate);
         query += ` AND timestamp <= $${params.length}`;
+    }
+
+    query += ' ORDER BY timestamp DESC';
+
+    if (filters?.limit) {
+        params.push(filters.limit);
+        query += ` LIMIT $${params.length}`;
+    }
+    if (filters?.offset) {
+        params.push(filters.offset);
+        query += ` OFFSET $${params.length}`;
     }
 
     const result = await this.db.query(query, params);

@@ -30,21 +30,21 @@ Rule: Do not mark Analytics complete until every applicable checkbox below is re
 
 1.1 Metric Event Tracking
 
-- [ ] Define metric event structure
-- [ ] Validate event name
-- [ ] Validate source context
-- [ ] Validate timestamp
-- [ ] Validate metadata object structure
-- [ ] Prevent duplicate event emission
-- [ ] Event-driven consumption of domain events (Article views, publication metrics, search, discovery, bookmarks)
+- [x] Define metric event structure
+- [x] Validate event name
+- [x] Validate source context
+- [x] Validate timestamp
+- [x] Validate metadata object structure
+- [x] Prevent duplicate event emission
+- [x] Event-driven consumption of domain events (Article views, publication metrics, search, discovery, bookmarks)
 
 1.2 System Metrics Persistence
 
-- [ ] Persist metric entries atomically
-- [ ] Index event name for fast aggregation
-- [ ] Index source context
-- [ ] Index timestamp (descending)
-- [ ] GIN index on metadata JSONB
+- [x] Persist metric entries atomically
+- [x] Index event name for fast aggregation
+- [x] Index source context
+- [x] Index timestamp (descending)
+- [x] GIN index on metadata JSONB
 
 ---
 
@@ -52,18 +52,18 @@ Rule: Do not mark Analytics complete until every applicable checkbox below is re
 
 2.1 Metric Aggregation
 
-- [ ] Get system metrics by event name
-- [ ] Get metrics by source context
-- [ ] Time-range filtering (start date / end date)
-- [ ] Aggregation/count queries
-- [ ] Pagination where required
-- [ ] Stable ordering
+- [x] Get system metrics by event name
+- [x] Get metrics by source context
+- [x] Time-range filtering (start date / end date)
+- [x] Aggregation/count queries
+- [x] Pagination where required
+- [x] Stable ordering
 
 2.2 Performance Metrics
 
-- [ ] Article publication analytics
-- [ ] Discovery and search interaction analytics
-- [ ] Bookmark and reading progress analytics
+- [x] Article publication analytics
+- [x] Discovery and search interaction analytics
+- [x] Bookmark and reading progress analytics
 
 ---
 
@@ -71,12 +71,12 @@ Rule: Do not mark Analytics complete until every applicable checkbox below is re
 
 PostgresAnalyticsRepository
 
-- [ ] Audit repository
-- [ ] Verify save metric
-- [ ] Verify query metrics by criteria
-- [ ] Verify JSONB metadata serialization
-- [ ] Verify NULL handling
-- [ ] Verify transaction context
+- [x] Audit repository
+- [x] Verify save metric
+- [x] Verify query metrics by criteria
+- [x] Verify JSONB metadata serialization
+- [x] Verify NULL handling
+- [x] Verify transaction context
 
 ---
 
@@ -84,28 +84,28 @@ PostgresAnalyticsRepository
 
 Analytics API
 
-- [ ] "GET /api/v1/analytics/metrics"
-- [ ] "POST /api/v1/analytics/track"
-- [ ] Controller implementation
-- [ ] Route registration
-- [ ] Authentication required
-- [ ] RBAC authorization (Admin / Editor / Analytics viewer)
+- [x] "GET /api/v1/analytics/metrics"
+- [x] "POST /api/v1/analytics/track"
+- [x] Controller implementation
+- [x] Route registration
+- [x] Authentication required
+- [x] RBAC authorization (Admin / Editor / Analytics viewer)
 
 ---
 
 5. DTOs & Validation
 
-- [ ] Track metric request DTO
-- [ ] Query metrics request DTO
-- [ ] Strict Zod validation schemas
-- [ ] Validate event names, contexts, and metadata
+- [x] Track metric request DTO
+- [x] Query metrics request DTO
+- [x] Strict Zod validation schemas
+- [x] Validate event names, contexts, and metadata
 
 ---
 
 6. Final Gates & Verification
 
-- [ ] Strict TypeScript compilation (`tsc --noEmit`)
-- [ ] Server startup verification (`npm start`)
-- [ ] Health check (`/health`)
-- [ ] Git status and diff clean
-- [ ] Analytics Freeze Gate passed
+- [x] Strict TypeScript compilation (`tsc --noEmit`)
+- [x] Server startup verification (`npm start`)
+- [x] Health check (`/health`)
+- [x] Git status and diff clean
+- [x] Analytics Freeze Gate passed

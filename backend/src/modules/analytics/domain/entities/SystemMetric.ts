@@ -14,10 +14,20 @@ export class SystemMetric {
     sourceContext: string;
     metadata: Record<string, any>;
   }): SystemMetric {
+    if (!props.eventName || typeof props.eventName !== 'string' || props.eventName.trim().length === 0) {
+      throw new Error('SystemMetric eventName must be a non-empty string.');
+    }
+    if (!props.sourceContext || typeof props.sourceContext !== 'string' || props.sourceContext.trim().length === 0) {
+      throw new Error('SystemMetric sourceContext must be a non-empty string.');
+    }
+    if (!props.metadata || typeof props.metadata !== 'object' || Array.isArray(props.metadata)) {
+      throw new Error('SystemMetric metadata must be a valid object.');
+    }
+
     return new SystemMetric(
       new UniqueEntityId(),
-      props.eventName,
-      props.sourceContext,
+      props.eventName.trim(),
+      props.sourceContext.trim(),
       new Date(),
       props.metadata
     );

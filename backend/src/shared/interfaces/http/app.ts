@@ -44,6 +44,9 @@ import { AuditController } from '@modules/audit/interfaces/controllers/AuditCont
 import { NotificationController } from '@modules/notification/interfaces/http/NotificationController';
 import { createNotificationRoutes } from '@modules/notification/interfaces/http/NotificationRoutes';
 
+import { AnalyticsController } from '@modules/analytics/interfaces/http/AnalyticsController';
+import { createAnalyticsRoutes } from '@modules/analytics/interfaces/http/AnalyticsRoutes';
+
 export const createApp = (): Application => {
   const app = express();
 
@@ -171,6 +174,17 @@ export const createApp = (): Application => {
     '/api/v1/notification',
     createNotificationRoutes(
       notificationController,
+      authMiddleware,
+    ),
+  );
+
+  // Analytics
+  const analyticsController = container.get(AnalyticsController);
+
+  app.use(
+    '/api/v1/analytics',
+    createAnalyticsRoutes(
+      analyticsController,
       authMiddleware,
     ),
   );
