@@ -1,0 +1,7 @@
+.env
+backend/dist/
+node_modules/
+dist/
+.gemini/skills/
+.geminiignore
+backend/.env

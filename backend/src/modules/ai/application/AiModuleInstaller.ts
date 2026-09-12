@@ -1,0 +1,14 @@
+import { Container } from 'inversify';
+import { provide } from 'inversify-binding-decorators';
+import { IModuleInstaller } from '@shared/application/IModuleInstaller';
+import { MODULE_INSTALLER_SYMBOL } from '@shared/application/ModuleInstallerSymbol';
+import { EventBus } from '@shared/infrastructure/queue/EventBus';
+import { injectable } from 'inversify';
+
+@provide(MODULE_INSTALLER_SYMBOL, true)
+@injectable()
+export class AiModuleInstaller implements IModuleInstaller {
+  async install(container: Container, eventBus: EventBus): Promise<void> {
+    // AI module currently has no event subscriptions in BootstrapService.
+  }
+}
