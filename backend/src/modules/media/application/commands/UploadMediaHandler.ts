@@ -1,4 +1,5 @@
-import { inject } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { provide } from 'inversify-binding-decorators';
 import { IMediaRepository } from '../../domain/repositories/IMediaRepository';
 import { UploadMediaCommand } from '../commands/UploadMediaCommand';
 import { Media } from '../../domain/models/Media';
@@ -11,10 +12,12 @@ import { MediaStatus, MediaStatusType } from '../../domain/value-objects/MediaSt
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { AuditLogRequestedEvent } from '@modules/audit/public';
 
+@provide(UploadMediaHandler, true)
+@injectable()
 export class UploadMediaHandler {
   constructor(
     @inject('IMediaRepository') private readonly mediaRepository: IMediaRepository,
-    private readonly storageProvider: StorageProvider,
+    @inject('StorageProvider') private readonly storageProvider: StorageProvider,
     @inject('EventBus') private readonly eventBus: EventBus
   ) {}
 

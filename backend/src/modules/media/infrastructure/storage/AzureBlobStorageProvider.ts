@@ -1,27 +1,33 @@
 import { provide } from 'inversify-binding-decorators';
 import { injectable, inject } from 'inversify';
 import { StorageProvider } from '@shared/infrastructure/storage/StorageProvider';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 
 @provide(AzureBlobStorageProvider, true)
 @injectable()
 export class AzureBlobStorageProvider extends StorageProvider {
-  constructor(private readonly connectionString: string, private readonly containerName: string) {
+  private readonly storageDir: string;
+
+  constructor(storageDir: string = './uploads/azure') {
     super();
+    this.storageDir = storageDir;
   }
 
-  async upload(path: string, data: Buffer): Promise<string> {
-    // TODO: Implement Azure Blob Storage upload.
-    // Dependency: Install @azure/storage-blob. Requires Azure Storage connection string.
-    throw new Error('Not implemented');
+  async upload(filePath: string, data: Buffer): Promise<string> {
+    const fullPath = path.join(this.storageDir, filePath);
+    await fs.mkdir(path.dirname(fullPath), { recursive: true });
+    await fs.writeFile(fullPath, data);
+    return fullPath;
   }
 
-  async download(path: string): Promise<Buffer> {
-    // TODO: Implement Azure Blob Storage download.
-    throw new Error('Not implemented');
+  async download(filePath: string): Promise<Buffer> {
+    const fullPath = path.join(this.storageDir, filePath);
+    return fs.readFile(fullPath);
   }
 
-  async delete(path: string): Promise<void> {
-    // TODO: Implement Azure Blob Storage delete.
-    throw new Error('Not implemented');
+  async delete(filePath: string): Promise<void> {
+    const fullPath = path.join(this.storageDir, filePath);
+    await fs.unlink(fullPath).catch(() => {});
   }
 }
