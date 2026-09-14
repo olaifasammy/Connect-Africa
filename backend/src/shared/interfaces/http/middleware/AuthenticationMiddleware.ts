@@ -21,6 +21,12 @@ import {
 } from '@modules/auth/domain/value-objects/AccountStatus';
 
 import {
+  IApiKeyRepository,
+} from '@modules/auth/domain/repositories/IApiKeyRepository';
+
+import bcrypt from 'bcryptjs';
+
+import {
   injectable,
   inject,
 } from 'inversify';
@@ -42,6 +48,10 @@ export class AuthenticationMiddleware {
 
     private readonly getCurrentUserHandler:
       GetCurrentUserQueryHandler,
+
+    @inject('IApiKeyRepository')
+    private readonly apiKeyRepository:
+      IApiKeyRepository,
   ) {}
 
   authenticate =
@@ -69,6 +79,13 @@ export class AuthenticationMiddleware {
 
       if (
         !token &&
+        req.headers['x-api-key']
+      ) {
+        token = req.headers['x-api-key'] as string;
+      }
+
+      if (
+        !token &&
         req.cookies?.accessToken
       ) {
         token =
@@ -89,6 +106,54 @@ export class AuthenticationMiddleware {
         });
 
         return;
+      }
+
+      // Check if token is an API key (starts with caf_)
+      if (token.startsWith('caf_')) {
+        try {
+          const prefix = token.substring(0, 10);
+          const record = await this.apiKeyRepository.findByPrefix(prefix);
+          if (!record || !record.isActive) {
+            res.status(401).json({
+              success: false,
+              errors: [{ code: 'UNAUTHORIZED', message: 'Invalid or inactive API key.' }],
+            });
+            return;
+          }
+
+          if (record.expiresAt && record.expiresAt < new Date()) {
+            res.status(401).json({
+              success: false,
+              errors: [{ code: 'UNAUTHORIZED', message: 'API key has expired.' }],
+            });
+            return;
+          }
+
+          const isValid = await bcrypt.compare(token, record.keyHash);
+          if (!isValid) {
+            res.status(401).json({
+              success: false,
+              errors: [{ code: 'UNAUTHORIZED', message: 'Invalid API key.' }],
+            });
+            return;
+          }
+
+          await this.apiKeyRepository.updateLastUsed(record.id);
+
+          const user = await this.getCurrentUserHandler.handle(
+            new GetCurrentUserQuery(record.userId),
+          );
+
+          req.user = user;
+          next();
+          return;
+        } catch {
+          res.status(401).json({
+            success: false,
+            errors: [{ code: 'UNAUTHORIZED', message: 'API key authentication failed.' }],
+          });
+          return;
+        }
       }
 
       try {

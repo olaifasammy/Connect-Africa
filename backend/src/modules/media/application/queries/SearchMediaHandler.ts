@@ -1,8 +1,11 @@
-import { inject } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { provide } from 'inversify-binding-decorators';
 import { IMediaRepository } from '../../domain/repositories/IMediaRepository';
 import { SearchMediaQuery } from '../queries/SearchMediaQuery';
 import { MediaResponseDto } from '../dtos/MediaResponseDto';
 
+@provide(SearchMediaHandler, true)
+@injectable()
 export class SearchMediaHandler {
   constructor(
     @inject('IMediaRepository') private readonly mediaRepository: IMediaRepository

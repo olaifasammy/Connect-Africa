@@ -20,6 +20,7 @@ node_modules/
 build/
 dist/
 *.log
+*test
 
 Before performing ANY task in a new session, ALWAYS read the following documents completely.
 

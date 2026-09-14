@@ -8,13 +8,18 @@ interface ValueProps {
 export class Theme extends ValueObject<ValueProps> {
   static readonly LIGHT = 'light';
   static readonly DARK = 'dark';
+
   constructor(value: string) {
     if (![Theme.LIGHT, Theme.DARK].includes(value)) {
       throw new Error(`Invalid theme: ${value}`);
     }
+
     super({ value });
   }
-  toString(): string { return this.props.value; }
+
+  toString(): string {
+    return this.props.value;
+  }
 }
 
 export class Timezone extends ValueObject<ValueProps> {
@@ -22,9 +27,13 @@ export class Timezone extends ValueObject<ValueProps> {
     if (!value || value.trim() === '') {
       throw new Error('Timezone cannot be empty');
     }
+
     super({ value });
   }
-  toString(): string { return this.props.value; }
+
+  toString(): string {
+    return this.props.value;
+  }
 }
 
 export class Locale extends ValueObject<ValueProps> {
@@ -32,9 +41,13 @@ export class Locale extends ValueObject<ValueProps> {
     if (!value || value.trim() === '') {
       throw new Error('Locale cannot be empty');
     }
+
     super({ value });
   }
-  toString(): string { return this.props.value; }
+
+  toString(): string {
+    return this.props.value;
+  }
 }
 
 export class DateFormat extends ValueObject<ValueProps> {
@@ -42,9 +55,13 @@ export class DateFormat extends ValueObject<ValueProps> {
     if (!value || value.trim() === '') {
       throw new Error('DateFormat cannot be empty');
     }
+
     super({ value });
   }
-  toString(): string { return this.props.value; }
+
+  toString(): string {
+    return this.props.value;
+  }
 }
 
 export class Currency extends ValueObject<ValueProps> {
@@ -52,9 +69,13 @@ export class Currency extends ValueObject<ValueProps> {
     if (!value || value.trim() === '') {
       throw new Error('Currency cannot be empty');
     }
+
     super({ value });
   }
-  toString(): string { return this.props.value; }
+
+  toString(): string {
+    return this.props.value;
+  }
 }
 
 export class MeasurementUnit extends ValueObject<ValueProps> {
@@ -62,31 +83,56 @@ export class MeasurementUnit extends ValueObject<ValueProps> {
     if (!value || value.trim() === '') {
       throw new Error('MeasurementUnit cannot be empty');
     }
+
     super({ value });
   }
-  toString(): string { return this.props.value; }
+
+  toString(): string {
+    return this.props.value;
+  }
 }
 
 export class NotificationPreference extends ValueObject<ValueProps> {
+  static readonly IN_APP = 'in_app';
+  static readonly EMAIL = 'email';
+  static readonly PUSH = 'push';
+
   constructor(value: string) {
-    if (!value || value.trim() === '') {
-      throw new Error('NotificationPreference cannot be empty');
+    const normalized = value.trim().toLowerCase();
+
+    if (
+      ![
+        NotificationPreference.IN_APP,
+        NotificationPreference.EMAIL,
+        NotificationPreference.PUSH,
+      ].includes(normalized)
+    ) {
+      throw new Error(`Invalid notification preference: ${value}`);
     }
-    super({ value });
+
+    super({ value: normalized });
   }
-  toString(): string { return this.props.value; }
+
+  toString(): string {
+    return this.props.value;
+  }
 }
 
 export class PrivacyLevel extends ValueObject<ValueProps> {
   static readonly PUBLIC = 'public';
   static readonly PRIVATE = 'private';
+
   constructor(value: string) {
     if (![PrivacyLevel.PUBLIC, PrivacyLevel.PRIVATE].includes(value)) {
       throw new Error(`Invalid privacy level: ${value}`);
     }
+
     super({ value });
   }
-  toString(): string { return this.props.value; }
+
+  toString(): string {
+    return this.props.value;
+  }
 }
 
 export class SettingsProfileId extends UniqueEntityId {}

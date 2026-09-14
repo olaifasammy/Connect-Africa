@@ -34,6 +34,7 @@ import { RedisCacheProvider } from '@shared/infrastructure/cache/RedisCacheProvi
 import { CursorCodec } from '@shared/application/pagination/CursorCodec';
 
 import { PostgresSearchProvider } from '@modules/search/infrastructure/search/PostgresSearchProvider';
+import { LocalStorageProvider } from '@modules/media/infrastructure/storage/LocalStorageProvider';
 
 export const container = new Container();
 
@@ -150,11 +151,6 @@ container
   .to(PostgresEntityVersionRepository)
   .inSingletonScope();
 
-container
-  .bind('IRevisionRepository')
-  .to(PostgresRevisionRepository)
-  .inSingletonScope();
-
 
 // Entity service bindings
 container
@@ -181,6 +177,12 @@ container
 container
   .bind('SearchProvider')
   .to(PostgresSearchProvider)
+  .inSingletonScope();
+
+// Storage provider binding
+container
+  .bind('StorageProvider')
+  .toDynamicValue(() => new LocalStorageProvider('./uploads'))
   .inSingletonScope();
 
 // Outbox / transaction infrastructure

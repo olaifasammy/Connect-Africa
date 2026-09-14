@@ -2,6 +2,7 @@ export interface PreferenceResponseDto {
   key: string;
   value: string;
 }
+
 export interface CreateSettingsDto {
   userId: string;
   theme: string;
@@ -32,6 +33,10 @@ export interface SettingsResponseDto {
   theme: string;
   timezone: string;
   locale: string;
+  privacyLevel: string;
+  notificationsEnabled: boolean;
+  notificationPreference: string;
+  mfaEnabled: boolean;
 }
 
 export interface ThemeResponseDto {
@@ -41,7 +46,12 @@ export interface ThemeResponseDto {
 export interface UserSettingsResponseDto {
   userId: string;
   theme: string;
+  timezone: string;
+  locale: string;
+  privacyLevel: string;
   notificationsEnabled: boolean;
+  notificationPreference: string;
+  mfaEnabled: boolean;
 }
 
 export interface SystemSettingsResponseDto {

@@ -7,10 +7,11 @@ import { INotificationRepository } from '../../domain/repositories/INotification
 @injectable()
 export class GetInboxQueryHandler {
   constructor(
-    @inject('INotificationRepository') private readonly repository: INotificationRepository
+    @inject('INotificationRepository')
+    private readonly repository: INotificationRepository
   ) {}
 
   async handle(recipientId: string): Promise<Domain.Notification[]> {
-    return await this.repository.findManyByRecipient(recipientId);
+    return this.repository.findManyByRecipient(recipientId);
   }
 }

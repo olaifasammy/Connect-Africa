@@ -1,4 +1,5 @@
-import { inject } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { provide } from 'inversify-binding-decorators';
 import { IMediaRepository } from '../../domain/repositories/IMediaRepository';
 import { AttachMediaCommand } from '../commands/AttachMediaCommand';
 import { MediaId } from '../../domain/value-objects/MediaId';
@@ -6,6 +7,8 @@ import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 import { AuditLogger } from '@shared/infrastructure/logging/AuditLogger';
 import { MediaPermissionService } from '../services/MediaPermissionService';
 
+@provide(AttachMediaHandler, true)
+@injectable()
 export class AttachMediaHandler {
   constructor(
     @inject('IMediaRepository') private readonly mediaRepository: IMediaRepository,

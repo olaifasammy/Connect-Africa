@@ -55,6 +55,24 @@ export const createEntityRoutes = (
   );
 
   router.post(
+    '/:id/submit',
+    authorize(Permission.ENTITY_UPDATE),
+    (req, res) => controller.submitForReview(req, res),
+  );
+
+  router.post(
+    '/:id/approve',
+    authorize(Permission.ENTITY_PUBLISH),
+    (req, res) => controller.approve(req, res),
+  );
+
+  router.post(
+    '/:id/reject',
+    authorize(Permission.ENTITY_PUBLISH),
+    (req, res) => controller.reject(req, res),
+  );
+
+  router.post(
     '/:id/archive',
     authorize(Permission.ENTITY_ARCHIVE),
     (req, res) => controller.archive(req, res),

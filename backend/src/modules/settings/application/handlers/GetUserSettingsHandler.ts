@@ -1,5 +1,4 @@
-import { inject } from 'inversify';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { provide } from 'inversify-binding-decorators';
 import { ISettingsRepository } from '../../domain/repositories/ISettingsRepository';
 import { UserSettingsResponseDto } from '../dto/SettingsDTOs';
@@ -8,19 +7,23 @@ import { UserSettingsResponseDto } from '../dto/SettingsDTOs';
 @injectable()
 export class GetUserSettingsHandler {
   constructor(
-    @inject('ISettingsRepository') private readonly repository: ISettingsRepository
+    @inject('ISettingsRepository')
+    private readonly repository: ISettingsRepository,
   ) {}
 
   async handle(userId: string): Promise<UserSettingsResponseDto | null> {
-    // Assuming repository has method to get user settings
-    const settings = await this.repository.findById(userId);
-    if (!settings) return null;
-    
-    // ... logic
+    const settings = await this.repository.findOrCreate(userId);
+
     return {
-        userId: userId,
-        theme: 'light',
-        notificationsEnabled: true
+      userId: settings.userId,
+      theme: settings.themeSettings.theme.toString(),
+      timezone: settings.languageSettings.timezone.toString(),
+      locale: settings.languageSettings.locale.toString(),
+      privacyLevel: settings.privacySettings.level.toString(),
+      notificationsEnabled: settings.notificationSettings.enabled,
+      notificationPreference:
+        settings.notificationSettings.preference.toString(),
+      mfaEnabled: settings.securitySettings.mfaEnabled,
     };
   }
 }

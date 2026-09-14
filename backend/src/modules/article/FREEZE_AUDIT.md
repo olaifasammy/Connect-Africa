@@ -20,13 +20,22 @@ The Article Bounded Context is responsible for managing the full lifecycle of ar
 - PUT `/:id` (UpdateArticleHandler)
 - DELETE `/:id` (DeleteArticleHandler)
 - POST `/:id/publish` (PublishArticleHandler)
+- POST `/:id/unpublish` (UnpublishArticleHandler)
 - POST `/:id/archive` (ArchiveArticleHandler)
 - POST `/:id/submit` (SubmitForReviewHandler)
 - POST `/:id/approve` (ApproveArticleHandler)
+- POST `/:id/reject` (RejectArticleHandler)
+- POST `/:id/restore` (RestoreArticleHandler)
+- POST `/:id/entities` (LinkEntityHandler)
+- DELETE `/:id/entities/:entityId` (UnlinkEntityHandler)
+- POST `/bookmark` (AddBookmarkCommandHandler)
+- POST `/history` (AddToReadingHistoryCommandHandler)
+- POST `/progress` (UpdateReadingProgressCommandHandler)
+- GET `/bookmarks` (GetBookmarksQueryHandler)
+- GET `/history` (GetReadingHistoryQueryHandler)
 
 ## 5. Route Mapping
-- All Category A handlers listed in Endpoint Inventory are mapped correctly.
-- Missing mappings: AddBookmarkCommandHandler, AddToReadingHistoryCommandHandler, UpdateReadingProgressCommandHandler, GetBookmarksQueryHandler, GetReadingHistoryQueryHandler.
+- All Category A handlers and endpoints (lifecycle, knowledge graph links, bookmarks, reading history) are fully mapped in `ArticleRoutes.ts` and exposed via `ArticleController`.
 
 ## 6. Security Verification
 - Authentication: Enforced via `AuthenticationMiddleware` on all listed endpoints.
@@ -42,12 +51,7 @@ The Article Bounded Context is responsible for managing the full lifecycle of ar
 - N/A.
 
 ## 10. Hidden Capability Report
-- The following Category A handlers exist in the application layer but lack corresponding routes in `ArticleRoutes.ts`:
-  - AddBookmarkCommandHandler
-  - AddToReadingHistoryCommandHandler
-  - UpdateReadingProgressCommandHandler
-  - GetBookmarksQueryHandler
-  - GetReadingHistoryQueryHandler
+- None. All application handlers are fully wired and exposed via `ArticleRoutes.ts`.
 
 ## 11. Technical Debt
 - N/A.

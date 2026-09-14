@@ -1,14 +1,17 @@
-import { inject } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { provide } from 'inversify-binding-decorators';
 import { IMediaRepository } from '../../domain/repositories/IMediaRepository';
 import { MoveMediaCommand } from '../commands/MoveMediaCommand';
 import { StorageProvider } from '@shared/infrastructure/storage/StorageProvider';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 import { AuditLogger } from '@shared/infrastructure/logging/AuditLogger';
 
+@provide(MoveMediaHandler, true)
+@injectable()
 export class MoveMediaHandler {
   constructor(
     @inject('IMediaRepository') private readonly mediaRepository: IMediaRepository,
-    private readonly storageProvider: StorageProvider
+    @inject('StorageProvider') private readonly storageProvider: StorageProvider
   
   ) {}
 

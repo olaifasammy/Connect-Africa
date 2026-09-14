@@ -1,9 +1,12 @@
-import { inject } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { provide } from 'inversify-binding-decorators';
 import { IMediaRepository } from '../../domain/repositories/IMediaRepository';
 import { ArchiveMediaCommand } from '../commands/ArchiveMediaCommand';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 import { AuditLogger } from '@shared/infrastructure/logging/AuditLogger';
 
+@provide(ArchiveMediaHandler, true)
+@injectable()
 export class ArchiveMediaHandler {
   constructor(@inject('IMediaRepository') private readonly mediaRepository: IMediaRepository) {}
 

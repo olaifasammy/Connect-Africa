@@ -28,6 +28,38 @@ export class Settings extends AggregateRoot<SettingsProps> {
     return new Settings(props, id);
   }
 
+  static createDefault(
+    userId: string,
+    id?: UniqueEntityId,
+  ): Settings {
+    return new Settings(
+      {
+        userId,
+        themeSettings: ThemeSettings.create({
+          theme: new Theme(Theme.LIGHT),
+        }),
+        notificationSettings: NotificationSettings.create({
+          enabled: true,
+          preference: new NotificationPreference(
+            NotificationPreference.EMAIL,
+          ),
+        }),
+        privacySettings: PrivacySettings.create({
+          level: new PrivacyLevel(PrivacyLevel.PUBLIC),
+        }),
+        languageSettings: LanguageSettings.create({
+          locale: new Locale('en'),
+          timezone: new Timezone('UTC'),
+        }),
+        securitySettings: SecuritySettings.create({
+          mfaEnabled: false,
+        }),
+        preferenceSettings: [],
+      },
+      id ?? new UniqueEntityId(userId),
+    );
+  }
+
   get userId(): string { return this.props.userId; }
   get themeSettings(): ThemeSettings { return this.props.themeSettings; }
   get notificationSettings(): NotificationSettings { return this.props.notificationSettings; }
@@ -49,6 +81,17 @@ export class Settings extends AggregateRoot<SettingsProps> {
   updateTimezone(timezone: Timezone): void {
     this.props.languageSettings.updateTimezone(timezone);
     this.addDomainEvent(new SettingsUpdatedEvent(this.id, 'timezone', timezone.toString()));
+  }
+
+  updateNotificationPreference(preference: NotificationPreference): void {
+    this.props.notificationSettings.updatePreference(preference);
+    this.addDomainEvent(
+      new SettingsUpdatedEvent(
+        this.id,
+        'notificationPreference',
+        preference.toString(),
+      ),
+    );
   }
 
   reset(): void {

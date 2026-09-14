@@ -1,18 +1,23 @@
 import { provide } from 'inversify-binding-decorators';
 import { injectable, inject } from 'inversify';
+
 import { RecipientId } from '../value-objects/NotificationValueObjects';
-import { NotificationPreference } from '../entities/NotificationEntities';
-import { INotificationRepository } from '../repositories/INotificationRepository';
+import {
+  INotificationPreferenceProvider,
+  NotificationPreferenceState,
+} from './INotificationPreferenceProvider';
 
 @provide(PreferenceService, true)
 @injectable()
 export class PreferenceService {
   constructor(
-    @inject('INotificationRepository') private readonly repository: INotificationRepository
+    @inject('INotificationPreferenceProvider')
+    private readonly preferenceProvider: INotificationPreferenceProvider,
   ) {}
-  
-  async getPreference(recipientId: RecipientId): Promise<NotificationPreference | null> {
-    // Should be a different repository or a method in this repository
-    return null;
+
+  async getPreference(
+    recipientId: RecipientId,
+  ): Promise<NotificationPreferenceState | null> {
+    return this.preferenceProvider.getPreference(recipientId.value);
   }
 }

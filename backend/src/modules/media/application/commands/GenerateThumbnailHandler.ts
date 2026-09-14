@@ -1,10 +1,13 @@
-import { inject } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { provide } from 'inversify-binding-decorators';
 import { IMediaRepository } from '../../domain/repositories/IMediaRepository';
 import { GenerateThumbnailCommand } from '../commands/GenerateThumbnailCommand';
 import { ThumbnailService } from '../services/ThumbnailService';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 import { AuditLogger } from '@shared/infrastructure/logging/AuditLogger';
 
+@provide(GenerateThumbnailHandler, true)
+@injectable()
 export class GenerateThumbnailHandler {
   constructor(
     @inject('IMediaRepository') private readonly mediaRepository: IMediaRepository,

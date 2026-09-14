@@ -242,4 +242,64 @@ export class PostgresRelationshipRepository
         ),
     );
   }
+
+  async findByEntityId(
+    entityId: string,
+  ): Promise<Relationship[]> {
+    const result = await this.provider.query(
+      `
+        SELECT
+          id,
+          source_id,
+          target_id,
+          type_id,
+          created_at
+        FROM relationships
+        WHERE source_id = $1 OR target_id = $1
+        ORDER BY created_at DESC
+      `,
+      [entityId],
+    );
+
+    return result.rows.map(
+      (row: any) =>
+        Relationship.reconstruct(
+          new RelationshipId(row.id),
+          new EntityId(row.source_id),
+          new EntityId(row.target_id),
+          new RelationshipTypeId(row.type_id),
+          new Date(row.created_at),
+        ),
+    );
+  }
+
+  async findByRelationshipTypeId(
+    typeId: string,
+  ): Promise<Relationship[]> {
+    const result = await this.provider.query(
+      `
+        SELECT
+          id,
+          source_id,
+          target_id,
+          type_id,
+          created_at
+        FROM relationships
+        WHERE type_id = $1
+        ORDER BY created_at DESC
+      `,
+      [typeId],
+    );
+
+    return result.rows.map(
+      (row: any) =>
+        Relationship.reconstruct(
+          new RelationshipId(row.id),
+          new EntityId(row.source_id),
+          new EntityId(row.target_id),
+          new RelationshipTypeId(row.type_id),
+          new Date(row.created_at),
+        ),
+    );
+  }
 }

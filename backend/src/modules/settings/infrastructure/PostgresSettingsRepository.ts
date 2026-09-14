@@ -22,6 +22,23 @@ export class PostgresSettingsRepository implements ISettingsRepository {
     @inject('CacheProvider') private readonly cache: CacheProvider
   ) {}
 
+  async findOrCreate(userId: string): Promise<Settings> {
+    const existing = await this.findById(userId);
+
+    if (existing) {
+      return existing;
+    }
+
+    const settings = Settings.createDefault(
+      userId,
+      new UniqueEntityId(userId),
+    );
+
+    await this.save(settings);
+
+    return settings;
+  }
+
   async findById(userId: string): Promise<Settings | null> {
     const cached = await this.cache.get(`settings:${userId}`);
     if (cached) return this.mapToDomain(JSON.parse(cached));

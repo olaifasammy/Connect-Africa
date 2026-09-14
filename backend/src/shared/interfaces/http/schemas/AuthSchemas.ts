@@ -58,12 +58,16 @@ export const VerifyEmailSchema =
 
 export const UpdateProfileSchema =
   z.object({
-    displayName:
-      z.string().min(2).max(100),
-    bio:
-      z.string().max(2000).optional(),
-    avatarUrl:
-      z.string().url().max(2048).optional(),
+    displayName: z.string().trim().min(2).max(100).optional(),
+    bio: z.string().max(2000).optional(),
+    avatarUrl: z.string().max(2048).optional(),
+    coverImageUrl: z.string().max(2048).optional(),
+    website: z.string().max(2048).optional(),
+    socialLinks: z.array(z.string().max(2048)).max(20).optional(),
+    country: z.string().max(100).optional(),
+    languages: z.array(z.string().max(100)).max(20).optional(),
+    expertise: z.array(z.string().max(200)).max(50).optional(),
+    researchInterests: z.array(z.string().max(200)).max(50).optional(),
   });
 
 export const ActivateAccountSchema =

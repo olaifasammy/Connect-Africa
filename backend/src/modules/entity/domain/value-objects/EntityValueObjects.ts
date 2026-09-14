@@ -1,9 +1,9 @@
 import { ValueObject } from '@shared/domain/ValueObject';
 
 export class EntityStatus extends ValueObject<{
-  value: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+  value: 'DRAFT' | 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'PUBLISHED' | 'ARCHIVED';
 }> {
-  constructor(value: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED') {
+  constructor(value: 'DRAFT' | 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'PUBLISHED' | 'ARCHIVED') {
     if (!value) {
       throw new Error('Entity status cannot be empty.');
     }
@@ -11,12 +11,12 @@ export class EntityStatus extends ValueObject<{
     super({ value });
   }
 
-  get value(): 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' {
+  get value(): 'DRAFT' | 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'PUBLISHED' | 'ARCHIVED' {
     return this.props.value;
   }
 
   public static create(
-    value: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
+    value: 'DRAFT' | 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'PUBLISHED' | 'ARCHIVED'
   ): EntityStatus {
     return new EntityStatus(value);
   }

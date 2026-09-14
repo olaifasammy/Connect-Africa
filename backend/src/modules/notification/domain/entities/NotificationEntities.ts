@@ -1,15 +1,30 @@
-import { NotificationId, RecipientId, TemplateId, DeliveryStatus, ChannelType } from '../value-objects/NotificationValueObjects';
+import {
+  NotificationId,
+  RecipientId,
+  TemplateId,
+  NotificationType,
+  DeliveryStatus,
+  ChannelType,
+} from '../value-objects/NotificationValueObjects';
 
 export class Notification {
   constructor(
     public readonly id: NotificationId,
     public readonly recipientId: RecipientId,
-    public readonly templateId: TemplateId,
+    public readonly type: NotificationType,
+    public readonly title: string,
+    public readonly content: string,
+    public readonly targetUrl: string | null,
     public readonly channel: ChannelType,
     public status: DeliveryStatus,
     public readonly createdAt: Date,
     public isRead: boolean = false,
+    public readonly templateId: TemplateId | null = null,
   ) {}
+
+  markAsRead(): void {
+    this.isRead = true;
+  }
 }
 
 export class NotificationTemplate {

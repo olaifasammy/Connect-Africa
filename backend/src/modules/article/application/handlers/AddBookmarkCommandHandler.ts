@@ -1,5 +1,4 @@
-import { inject } from 'inversify';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { provide } from 'inversify-binding-decorators';
 import { ICommandHandler } from '@shared/application/handlers/ICommandHandler';
 import { AddBookmarkCommand } from '../commands/AddBookmarkCommand';
@@ -14,35 +13,42 @@ import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 @injectable()
 export class AddBookmarkCommandHandler implements ICommandHandler<AddBookmarkCommand, void> {
   constructor(
-    private bookmarkRepository: IUserBookmarkRepository,
-    @inject('EventBus') private eventBus: EventBus
+    @inject('IUserBookmarkRepository')
+    private readonly bookmarkRepository: IUserBookmarkRepository,
+    @inject('EventBus')
+    private readonly eventBus: EventBus,
   ) {}
 
   async handle(command: AddBookmarkCommand): Promise<void> {
     try {
       const userId = new UniqueEntityId(command.userId);
       const articleId = new UniqueEntityId(command.articleId);
-      
+
       await this.bookmarkRepository.addBookmark(userId, articleId);
-      
+
       AuditLogger.log({
         user: command.userId,
         action: 'ADD_BOOKMARK',
         resource: command.articleId,
         status: 'SUCCESS',
-        ipAddress: command.ipAddress
+        ipAddress: command.ipAddress,
       });
-      
-      await this.eventBus.publish(new ArticleBookmarkedEvent(userId, articleId));
+
+      await this.eventBus.publish(
+        new ArticleBookmarkedEvent(userId, articleId),
+      );
     } catch (error) {
       AuditLogger.log({
         user: command.userId,
         action: 'ADD_BOOKMARK',
         resource: command.articleId,
         status: 'FAILURE',
-        ipAddress: command.ipAddress
+        ipAddress: command.ipAddress,
       });
-      throw error instanceof AuthenticationError ? error : new AuthenticationError('Failed to add bookmark');
+
+      throw error instanceof AuthenticationError
+        ? error
+        : new AuthenticationError('Failed to add bookmark');
     }
   }
 }

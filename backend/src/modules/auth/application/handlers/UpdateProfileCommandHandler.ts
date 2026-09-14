@@ -20,6 +20,10 @@ import {
 } from '@modules/auth/domain/repositories/IUserProfileRepository';
 
 import {
+  IUserRepository,
+} from '@modules/auth/domain/repositories/UserRepository';
+
+import {
   AuditLogger,
 } from '@modules/auth/infrastructure/AuditLogger';
 
@@ -43,6 +47,10 @@ import {
   UniqueEntityId,
 } from '@shared/domain/UniqueEntityId';
 
+import {
+  UserProfile,
+} from '@modules/auth/domain/entities/UserProfile';
+
 @provide(
   UpdateProfileCommandHandler,
   true,
@@ -60,6 +68,10 @@ export class UpdateProfileCommandHandler
     private readonly profileRepository:
       IUserProfileRepository,
 
+    @inject('IUserRepository')
+    private readonly userRepository:
+      IUserRepository,
+
     @inject('EventBus')
     private readonly eventBus:
       EventBus,
@@ -69,17 +81,25 @@ export class UpdateProfileCommandHandler
     command: UpdateProfileCommand,
   ): Promise<void> {
     try {
-      const profile =
+      const targetUserId = UserId.create(
+        command.userId,
+      );
+
+      let profile =
         await this.profileRepository.findByUserId(
-          UserId.create(
-            command.userId,
-          ),
+          targetUserId,
         );
 
       if (!profile) {
-        throw new AuthenticationError(
-          'Profile not found',
+        const user = await this.userRepository.findById(
+          new UniqueEntityId(targetUserId.value),
         );
+        const defaultName = user ? user.email.value.split('@')[0] : 'User';
+        profile = UserProfile.create({
+          userId: targetUserId,
+          displayName: defaultName,
+        });
+        await this.profileRepository.save(profile);
       }
 
       const updates = {
@@ -99,6 +119,48 @@ export class UpdateProfileCommandHandler
           undefined && {
           avatarUrl:
             command.avatarUrl,
+        }),
+
+        ...(command.coverImageUrl !==
+          undefined && {
+          coverImageUrl:
+            command.coverImageUrl,
+        }),
+
+        ...(command.website !==
+          undefined && {
+          website:
+            command.website,
+        }),
+
+        ...(command.socialLinks !==
+          undefined && {
+          socialLinks:
+            command.socialLinks,
+        }),
+
+        ...(command.country !==
+          undefined && {
+          country:
+            command.country,
+        }),
+
+        ...(command.languages !==
+          undefined && {
+          languages:
+            command.languages,
+        }),
+
+        ...(command.expertise !==
+          undefined && {
+          expertise:
+            command.expertise,
+        }),
+
+        ...(command.researchInterests !==
+          undefined && {
+          researchInterests:
+            command.researchInterests,
         }),
       };
 
@@ -134,7 +196,8 @@ export class UpdateProfileCommandHandler
           ),
         ),
       );
-    } catch (error) {
+    } catch (error: any) {
+      console.error('UpdateProfileCommandHandler error stack:', error.stack || error);
       AuditLogger.log({
         user:
           command.userId,
@@ -152,7 +215,7 @@ export class UpdateProfileCommandHandler
         AuthenticationError
         ? error
         : new AuthenticationError(
-            'Failed to update profile',
+            error.message || 'Failed to update profile',
           );
     }
   }

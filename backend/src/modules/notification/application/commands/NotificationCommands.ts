@@ -1,9 +1,21 @@
 export class MarkAsReadCommand {
-  constructor(public readonly notificationId: string) {}
+  constructor(
+    public readonly notificationId: string,
+    public readonly recipientId: string,
+  ) {}
+}
+
+export class MarkAllAsReadCommand {
+  constructor(
+    public readonly recipientId: string,
+  ) {}
 }
 
 export class DeleteNotificationCommand {
-  constructor(public readonly notificationId: string) {}
+  constructor(
+    public readonly notificationId: string,
+    public readonly recipientId: string,
+  ) {}
 }
 
 export class UpdateNotificationPreferenceCommand {

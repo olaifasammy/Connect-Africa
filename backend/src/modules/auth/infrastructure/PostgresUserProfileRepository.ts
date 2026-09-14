@@ -169,11 +169,11 @@ export class PostgresUserProfileRepository
         entity.coverImageUrl ?? null,
         entity.bio ?? null,
         entity.website ?? null,
-        entity.socialLinks ?? null,
+        entity.socialLinks ? JSON.stringify(entity.socialLinks) : null,
         entity.country ?? null,
-        entity.languages ?? null,
-        entity.expertise ?? null,
-        entity.researchInterests ?? null,
+        entity.languages ? JSON.stringify(entity.languages) : null,
+        entity.expertise ? JSON.stringify(entity.expertise) : null,
+        entity.researchInterests ? JSON.stringify(entity.researchInterests) : null,
       ],
     );
   }
