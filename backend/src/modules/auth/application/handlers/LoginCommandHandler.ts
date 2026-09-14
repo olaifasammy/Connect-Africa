@@ -59,6 +59,10 @@ import {
   AccountStatus,
 } from '@modules/auth/domain/value-objects/AccountStatus';
 
+import {
+  appConfig,
+} from '@config/app';
+
 export interface LoginResult {
   readonly accessToken: string;
   readonly refreshToken: string;
@@ -152,7 +156,7 @@ export class LoginCommandHandler
         );
     }
 
-    if (user.isLocked()) {
+    if (user.isLocked() && appConfig.nodeEnv !== 'development') {
       throw new AuthenticationError(
         'Account is locked. Please try again later.',
       );
@@ -165,11 +169,10 @@ export class LoginCommandHandler
       );
 
     if (!isPasswordValid) {
-      user.incrementFailedLoginAttempts();
-
-      await this.userRepository.save(
-        user,
-      );
+      if (appConfig.nodeEnv !== 'development') {
+        user.incrementFailedLoginAttempts();
+        await this.userRepository.save(user);
+      }
 
       throw new AuthenticationError(
         'Invalid credentials.',

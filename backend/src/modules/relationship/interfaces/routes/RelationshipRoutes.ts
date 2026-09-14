@@ -47,5 +47,12 @@ export const relationshipRoutes = (controller: RelationshipController, authMiddl
     controller.get.bind(controller)
   );
 
+  router.get(
+    '/entity/:entityId',
+    authMiddleware.authenticate,
+    authorize(Permission.RELATIONSHIP_READ),
+    controller.getByEntity.bind(controller)
+  );
+
   return router;
 };

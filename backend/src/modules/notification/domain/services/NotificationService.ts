@@ -20,7 +20,10 @@ export class NotificationService {
   async send(notification: Domain.Notification): Promise<void> {
     const preference = await this.preferenceService.getPreference(notification.recipientId);
     
-    if (preference && !new UserPreferencePolicy().isChannelEnabled(preference)) {
+    if (preference && !new UserPreferencePolicy().isChannelEnabled(
+      preference,
+      notification.channel,
+    )) {
       return; 
     }
 

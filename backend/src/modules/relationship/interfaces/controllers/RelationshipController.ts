@@ -21,10 +21,12 @@ import { GetRelationshipByIdHandler } from '../../application/handlers/GetRelati
 import { ListRelationshipsHandler } from '../../application/handlers/ListRelationshipsHandler';
 import { UpdateRelationshipHandler } from '../../application/handlers/UpdateRelationshipHandler';
 import { DeleteRelationshipHandler } from '../../application/handlers/DeleteRelationshipHandler';
+import { GetRelationshipsForEntityHandler } from '../../application/handlers/GetRelationshipsForEntityHandler';
 
 import {
   GetRelationshipQuery,
   ListRelationshipsQuery,
+  GetRelationshipsForEntityQuery,
 } from '../../application/queries/RelationshipQueries';
 
 import {
@@ -53,6 +55,9 @@ export class RelationshipController
 
     private readonly deleteHandler:
       DeleteRelationshipHandler,
+
+    private readonly getByEntityHandler:
+      GetRelationshipsForEntityHandler,
   ) {
     super();
   }
@@ -147,6 +152,24 @@ export class RelationshipController
         res,
         error,
       );
+    }
+  }
+
+  async getByEntity(
+    req: Request,
+    res: Response,
+  ): Promise<void> {
+    try {
+      const entityId = req.params.entityId as string;
+      const result = await this.getByEntityHandler.handle(
+        new GetRelationshipsForEntityQuery(entityId),
+      );
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (error) {
+      this.handleRelationshipError(res, error);
     }
   }
 

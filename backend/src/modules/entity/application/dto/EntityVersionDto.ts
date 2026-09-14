@@ -8,6 +8,6 @@ export interface EntityVersionDto {
   description?: string;
   source?: string;
   tags: string[];
-  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+  status: 'DRAFT' | 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'PUBLISHED' | 'ARCHIVED';
   createdAt: Date;
 }

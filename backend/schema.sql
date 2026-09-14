@@ -38,8 +38,12 @@ CREATE TABLE IF NOT EXISTS users (
         CHECK (
             role IN (
                 'USER',
+                'AUTHOR',
                 'EDITOR',
+                'REVIEWER',
                 'MODERATOR',
+                'ADMINISTRATOR',
+                'SUPER_ADMINISTRATOR',
                 'ADMIN'
             )
         )
@@ -84,8 +88,12 @@ ALTER TABLE users
     CHECK (
         role IN (
             'USER',
+            'AUTHOR',
             'EDITOR',
+            'REVIEWER',
             'MODERATOR',
+            'ADMINISTRATOR',
+            'SUPER_ADMINISTRATOR',
             'ADMIN'
         )
     );
@@ -1025,7 +1033,11 @@ CREATE INDEX IF NOT EXISTS idx_media_usage_resource
 CREATE TABLE IF NOT EXISTS notifications (
     id TEXT PRIMARY KEY,
     recipient_id TEXT NOT NULL,
-    template_id TEXT NOT NULL,
+    template_id TEXT,
+    notification_type TEXT NOT NULL,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    target_url TEXT,
     channel TEXT NOT NULL,
     status TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -1040,6 +1052,10 @@ CREATE INDEX IF NOT EXISTS idx_notifications_created_at
 
 CREATE INDEX IF NOT EXISTS idx_notifications_recipient_created
     ON notifications(recipient_id, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_notifications_recipient_unread
+    ON notifications(recipient_id, created_at DESC)
+    WHERE is_read = FALSE;
 
 
 -- ============================================================
@@ -1175,8 +1191,17 @@ CREATE TABLE IF NOT EXISTS search_documents (
     id TEXT PRIMARY KEY,
     resource_id TEXT NOT NULL,
     resource_type TEXT NOT NULL,
-    content JSONB NOT NULL
+    content JSONB NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Reconcile existing installations that predate the timestamp columns.
+ALTER TABLE search_documents
+    ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+
+ALTER TABLE search_documents
+    ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
 
 CREATE INDEX IF NOT EXISTS idx_search_documents_resource
     ON search_documents(resource_type, resource_id);

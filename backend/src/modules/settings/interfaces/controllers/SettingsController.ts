@@ -5,9 +5,25 @@ import { GetSettingsHandler } from '../../application/handlers/GetSettingsHandle
 import { GetSystemSettingsHandler } from '../../application/handlers/GetSystemSettingsHandler';
 import { GetUserSettingsHandler } from '../../application/handlers/GetUserSettingsHandler';
 import { ChangeThemeHandler } from '../../application/handlers/ChangeThemeHandler';
-import { UpdateSettingsHandler, UpdateLanguageHandler, UpdatePrivacyHandler, UpdateNotificationSettingsHandler, UpdateSecuritySettingsHandler, ResetSettingsHandler } from '../../application/handlers/SettingsHandlers';
+import {
+  UpdateSettingsHandler,
+  UpdateLanguageHandler,
+  UpdatePrivacyHandler,
+  UpdateNotificationSettingsHandler,
+  UpdateNotificationPreferenceHandler,
+  UpdateSecuritySettingsHandler,
+  ResetSettingsHandler,
+} from '../../application/handlers/SettingsHandlers';
 import { ChangeThemeCommand } from '../../application/commands/ChangeThemeCommand';
-import { UpdateSettingsCommand, UpdateLanguageCommand, UpdatePrivacyCommand, UpdateNotificationSettingsCommand, UpdateSecuritySettingsCommand, ResetSettingsCommand } from '../../application/commands/SettingsCommands';
+import {
+  UpdateSettingsCommand,
+  UpdateLanguageCommand,
+  UpdatePrivacyCommand,
+  UpdateNotificationSettingsCommand,
+  UpdateNotificationPreferenceCommand,
+  UpdateSecuritySettingsCommand,
+  ResetSettingsCommand,
+} from '../../application/commands/SettingsCommands';
 
 @provide(SettingsController, true)
 @injectable()
@@ -21,12 +37,19 @@ export class SettingsController {
     @inject(UpdateLanguageHandler) private readonly updateLanguageHandler: UpdateLanguageHandler,
     @inject(UpdatePrivacyHandler) private readonly updatePrivacyHandler: UpdatePrivacyHandler,
     @inject(UpdateNotificationSettingsHandler) private readonly updateNotificationSettingsHandler: UpdateNotificationSettingsHandler,
+    @inject(UpdateNotificationPreferenceHandler) private readonly updateNotificationPreferenceHandler: UpdateNotificationPreferenceHandler,
     @inject(UpdateSecuritySettingsHandler) private readonly updateSecuritySettingsHandler: UpdateSecuritySettingsHandler,
     @inject(ResetSettingsHandler) private readonly resetSettingsHandler: ResetSettingsHandler
   ) {}
 
+  private getUserId(req: Request): string {
+    const user = req.user;
+    if (!user) return '';
+    return typeof user.id === 'object' && user.id !== null ? user.id.toString() : String(user.id || '');
+  }
+
   async getSettings(req: Request, res: Response): Promise<void> {
-    const userId = req.user?.id;
+    const userId = this.getUserId(req);
     if (!userId) {
         res.status(401).json({ success: false, message: 'Unauthorized' });
         return;
@@ -40,7 +63,7 @@ export class SettingsController {
   }
 
   async updateSettings(req: Request, res: Response): Promise<void> {
-    const userId = req.user?.id;
+    const userId = this.getUserId(req);
     if (!userId) {
         res.status(401).json({ success: false, message: 'Unauthorized' });
         return;
@@ -51,7 +74,7 @@ export class SettingsController {
   }
 
   async changeTheme(req: Request, res: Response): Promise<void> {
-    const userId = req.user?.id;
+    const userId = this.getUserId(req);
     if (!userId) {
         res.status(401).json({ success: false, message: 'Unauthorized' });
         return;
@@ -63,7 +86,7 @@ export class SettingsController {
   }
 
   async updateLanguage(req: Request, res: Response): Promise<void> {
-    const userId = req.user?.id;
+    const userId = this.getUserId(req);
     if (!userId) {
         res.status(401).json({ success: false, message: 'Unauthorized' });
         return;
@@ -74,7 +97,7 @@ export class SettingsController {
   }
 
   async updatePrivacy(req: Request, res: Response): Promise<void> {
-    const userId = req.user?.id;
+    const userId = this.getUserId(req);
     if (!userId) {
         res.status(401).json({ success: false, message: 'Unauthorized' });
         return;
@@ -85,7 +108,7 @@ export class SettingsController {
   }
 
   async updateNotificationSettings(req: Request, res: Response): Promise<void> {
-    const userId = req.user?.id;
+    const userId = this.getUserId(req);
     if (!userId) {
         res.status(401).json({ success: false, message: 'Unauthorized' });
         return;
@@ -95,8 +118,25 @@ export class SettingsController {
     res.status(200).json({ success: true });
   }
 
+  async updateNotificationPreference(req: Request, res: Response): Promise<void> {
+    const userId = this.getUserId(req);
+
+    if (!userId) {
+      res.status(401).json({ success: false, message: 'Unauthorized' });
+      return;
+    }
+
+    const { preference } = req.body;
+
+    await this.updateNotificationPreferenceHandler.handle(
+      new UpdateNotificationPreferenceCommand(userId, preference),
+    );
+
+    res.status(200).json({ success: true });
+  }
+
   async updateSecuritySettings(req: Request, res: Response): Promise<void> {
-    const userId = req.user?.id;
+    const userId = this.getUserId(req);
     if (!userId) {
         res.status(401).json({ success: false, message: 'Unauthorized' });
         return;
@@ -107,7 +147,7 @@ export class SettingsController {
   }
 
   async resetSettings(req: Request, res: Response): Promise<void> {
-    const userId = req.user?.id;
+    const userId = this.getUserId(req);
     if (!userId) {
         res.status(401).json({ success: false, message: 'Unauthorized' });
         return;
@@ -122,7 +162,7 @@ export class SettingsController {
   }
 
   async getUserSettings(req: Request, res: Response): Promise<void> {
-    const userId = req.user?.id;
+    const userId = this.getUserId(req);
     if (!userId) {
         res.status(401).json({ success: false, message: 'Unauthorized' });
         return;

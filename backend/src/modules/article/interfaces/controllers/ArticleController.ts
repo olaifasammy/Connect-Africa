@@ -16,6 +16,7 @@ import { LinkEntityHandler } from '../../application/handlers/LinkEntityHandler'
 import { UnlinkEntityHandler } from '../../application/handlers/UnlinkEntityHandler';
 import { GetArticleHandler, GetArticleBySlugHandler, GetLatestArticlesHandler, GetArticlesByEntityHandler, GetArticlesByCategoryHandler, SearchArticlesHandler } from '../../application/handlers/ArticleQueryHandlers';
 import { AddBookmarkCommandHandler } from '../../application/handlers/AddBookmarkCommandHandler';
+import { RemoveBookmarkCommandHandler } from '../../application/handlers/RemoveBookmarkCommandHandler';
 import { AddToReadingHistoryCommandHandler } from '../../application/handlers/AddToReadingHistoryCommandHandler';
 import { UpdateReadingProgressCommandHandler } from '../../application/handlers/UpdateReadingProgressCommandHandler';
 import { GetBookmarksQueryHandler } from '../../application/handlers/queries/GetBookmarksQueryHandler';
@@ -34,6 +35,7 @@ import { LinkEntityCommand } from '../../application/commands/LinkEntityCommand'
 import { UnlinkEntityCommand } from '../../application/commands/UnlinkEntityCommand';
 import { GetArticleQuery, GetArticleBySlugQuery, GetLatestArticlesQuery, GetArticlesByEntityQuery, GetArticlesByCategoryQuery, SearchArticlesQuery } from '../../application/queries/ArticleQueries';
 import { AddBookmarkCommand } from '../../application/commands/AddBookmarkCommand';
+import { RemoveBookmarkCommand } from '../../application/commands/RemoveBookmarkCommand';
 import { AddToReadingHistoryCommand } from '../../application/commands/AddToReadingHistoryCommand';
 import { UpdateReadingProgressCommand } from '../../application/commands/UpdateReadingProgressCommand';
 import { GetBookmarksQuery } from '../../application/queries/GetBookmarksQuery';
@@ -64,6 +66,7 @@ export class ArticleController {
     private readonly getArticlesByCategoryHandler: GetArticlesByCategoryHandler,
     private readonly searchArticlesHandler: SearchArticlesHandler,
     private readonly addBookmarkHandler: AddBookmarkCommandHandler,
+    private readonly removeBookmarkHandler: RemoveBookmarkCommandHandler,
     private readonly addToReadingHistoryHandler: AddToReadingHistoryCommandHandler,
     private readonly updateReadingProgressHandler: UpdateReadingProgressCommandHandler,
     private readonly getBookmarksQueryHandler: GetBookmarksQueryHandler,
@@ -280,6 +283,25 @@ export class ArticleController {
     await this.addBookmarkHandler.handle(command);
     this.track('add_bookmark');
     res.status(200).json({ success: true });
+  }
+
+  async removeBookmark(req: Request, res: Response): Promise<void> {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      res.status(401).json({ success: false, error: 'Unauthorized' });
+      return;
+    }
+
+    const articleId = req.params.articleId as string;
+
+    await this.removeBookmarkHandler.handle(
+      new RemoveBookmarkCommand(userId, articleId, req.ip ?? ''),
+    );
+
+    this.track('remove_bookmark');
+
+    res.status(204).send();
   }
 
   async addToReadingHistory(req: Request, res: Response): Promise<void> {

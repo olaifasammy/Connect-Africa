@@ -10,6 +10,13 @@ export class TemplateId {
   constructor(public readonly value: string) {}
 }
 
+export enum NotificationType {
+  SYSTEM = 'SYSTEM',
+  KNOWLEDGE_UPDATE = 'KNOWLEDGE_UPDATE',
+  ARTICLE_PUBLISHED = 'ARTICLE_PUBLISHED',
+  SECURITY = 'SECURITY',
+}
+
 export enum DeliveryStatus {
   PENDING = 'PENDING',
   SENT = 'SENT',

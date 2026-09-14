@@ -27,3 +27,8 @@ export const UpdateSecuritySettingsDtoSchema = z.object({
 });
 
 export const ResetSettingsDtoSchema = z.object({});
+
+
+export const UpdateNotificationPreferenceDtoSchema = z.object({
+  preference: z.enum(['in_app', 'email', 'push']),
+});

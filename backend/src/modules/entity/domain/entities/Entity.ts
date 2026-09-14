@@ -10,7 +10,7 @@ interface EntityProps {
   name: EntityName;
   typeId: EntityTypeId;
   metadata: EntityMetadata;
-  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+  status: 'DRAFT' | 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'PUBLISHED' | 'ARCHIVED';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -70,7 +70,7 @@ export class Entity extends AggregateRoot<EntityProps> {
     name: EntityName,
     typeId: EntityTypeId,
     metadata: EntityMetadata,
-    status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
+    status: 'DRAFT' | 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'PUBLISHED' | 'ARCHIVED',
     createdAt: Date,
     updatedAt: Date,
   ): Entity {
@@ -91,7 +91,7 @@ export class Entity extends AggregateRoot<EntityProps> {
     return EntityId.create(this._id.toString());
   }
 
-  get status(): 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' {
+  get status(): 'DRAFT' | 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'PUBLISHED' | 'ARCHIVED' {
     return this.props.status;
   }
 
@@ -147,10 +147,40 @@ export class Entity extends AggregateRoot<EntityProps> {
     this.touch();
   }
 
-  public publish(): void {
-    if (this.props.status !== 'DRAFT') {
+  public submitForReview(): void {
+    if (this.props.status !== 'DRAFT' && this.props.status !== 'REJECTED') {
       throw new Error(
-        'Only DRAFT entities can be published.',
+        'Only DRAFT or REJECTED entities can be submitted for review.',
+      );
+    }
+    this.props.status = 'PENDING_REVIEW';
+    this.touch();
+  }
+
+  public approve(): void {
+    if (this.props.status !== 'PENDING_REVIEW') {
+      throw new Error(
+        'Only PENDING_REVIEW entities can be approved.',
+      );
+    }
+    this.props.status = 'APPROVED';
+    this.touch();
+  }
+
+  public reject(): void {
+    if (this.props.status !== 'PENDING_REVIEW') {
+      throw new Error(
+        'Only PENDING_REVIEW entities can be rejected.',
+      );
+    }
+    this.props.status = 'REJECTED';
+    this.touch();
+  }
+
+  public publish(): void {
+    if (this.props.status !== 'DRAFT' && this.props.status !== 'APPROVED') {
+      throw new Error(
+        'Only DRAFT or APPROVED entities can be published.',
       );
     }
 

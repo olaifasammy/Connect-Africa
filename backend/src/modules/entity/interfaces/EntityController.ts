@@ -20,6 +20,12 @@ import { ListEntitiesQuery } from '@modules/entity/application/queries/ListEntit
 import { SearchEntitiesQueryHandler } from '@modules/entity/application/handlers/SearchEntitiesQueryHandler';
 import { ListAliasesQueryHandler } from '@modules/entity/application/handlers/ListAliasesQueryHandler';
 import { GetEntityVersionQueryHandler } from '@modules/entity/application/handlers/GetEntityVersionQueryHandler';
+import { SubmitEntityForReviewCommandHandler } from '@modules/entity/application/handlers/SubmitEntityForReviewCommandHandler';
+import { ApproveEntityCommandHandler } from '@modules/entity/application/handlers/ApproveEntityCommandHandler';
+import { RejectEntityCommandHandler } from '@modules/entity/application/handlers/RejectEntityCommandHandler';
+import { SubmitEntityForReviewCommand } from '@modules/entity/application/commands/SubmitEntityForReviewCommand';
+import { ApproveEntityCommand } from '@modules/entity/application/commands/ApproveEntityCommand';
+import { RejectEntityCommand } from '@modules/entity/application/commands/RejectEntityCommand';
 import { EntitySearchRequest } from '@modules/entity/application/dto/EntitySearchRequest';
 
 import {
@@ -47,6 +53,9 @@ export class EntityController {
     private readonly searchHandler: SearchEntitiesQueryHandler,
     private readonly listAliasesHandler: ListAliasesQueryHandler,
     private readonly getVersionHandler: GetEntityVersionQueryHandler,
+    private readonly submitForReviewHandler: SubmitEntityForReviewCommandHandler,
+    private readonly approveHandler: ApproveEntityCommandHandler,
+    private readonly rejectHandler: RejectEntityCommandHandler,
   ) {}
 
   async get(
@@ -516,5 +525,53 @@ export class EntityController {
     res.status(201).json({
       success: true,
     });
+  }
+
+  async submitForReview(req: Request, res: Response): Promise<void> {
+    const userId = req.user?.id;
+    const id = req.params.id as string;
+
+    if (!userId) {
+      res.status(401).json({
+        success: false,
+        errors: [{ code: 'UNAUTHORIZED', message: 'User authentication is required.' }],
+      });
+      return;
+    }
+
+    await this.submitForReviewHandler.handle(new SubmitEntityForReviewCommand(id, userId));
+    res.status(200).json({ success: true });
+  }
+
+  async approve(req: Request, res: Response): Promise<void> {
+    const userId = req.user?.id;
+    const id = req.params.id as string;
+
+    if (!userId) {
+      res.status(401).json({
+        success: false,
+        errors: [{ code: 'UNAUTHORIZED', message: 'User authentication is required.' }],
+      });
+      return;
+    }
+
+    await this.approveHandler.handle(new ApproveEntityCommand(id, userId));
+    res.status(200).json({ success: true });
+  }
+
+  async reject(req: Request, res: Response): Promise<void> {
+    const userId = req.user?.id;
+    const id = req.params.id as string;
+
+    if (!userId) {
+      res.status(401).json({
+        success: false,
+        errors: [{ code: 'UNAUTHORIZED', message: 'User authentication is required.' }],
+      });
+      return;
+    }
+
+    await this.rejectHandler.handle(new RejectEntityCommand(id, userId));
+    res.status(200).json({ success: true });
   }
 }

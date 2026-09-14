@@ -4,25 +4,35 @@ import { injectable } from 'inversify';
 import { IQueryHandler } from '@shared/application/handlers/IQueryHandler';
 import { GetProfileQuery } from '@modules/auth/application/queries/GetProfileQuery';
 import { IUserProfileRepository } from '@modules/auth/domain/repositories/IUserProfileRepository';
+import { IUserRepository } from '@modules/auth/domain/repositories/UserRepository';
 import { Audit } from '@shared/infrastructure/audit/AuditDecorator';
-import { AuthenticationError } from '@modules/auth/domain/errors/AuthErrors';
-import { UserProfileId } from '@modules/auth/domain/value-objects/UserProfileId';
+import { UserId } from '@modules/auth/domain/value-objects/UserId';
+import { UserProfile } from '@modules/auth/domain/entities/UserProfile';
+import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 
 @provide(GetProfileQueryHandler, true)
 @injectable()
 export class GetProfileQueryHandler implements IQueryHandler<GetProfileQuery, any> {
   constructor(
-    @inject('IUserProfileRepository') private profileRepository: IUserProfileRepository
+    @inject('IUserProfileRepository') private profileRepository: IUserProfileRepository,
+    @inject('IUserRepository') private userRepository: IUserRepository,
   ) {}
 
   @Audit('GET_PROFILE', 'USER_PROFILE')
   async handle(query: GetProfileQuery, userId?: string, ipAddress?: string): Promise<any> {
-    const profile = await this.profileRepository.findById(UserProfileId.create(query.userId));
-      
+    const targetUserId = UserId.create(query.userId);
+    let profile = await this.profileRepository.findByUserId(targetUserId);
+
     if (!profile) {
-      throw new AuthenticationError('Profile not found');
+      const user = await this.userRepository.findById(new UniqueEntityId(targetUserId.value));
+      const defaultName = user ? user.email.value.split('@')[0] : 'User';
+      profile = UserProfile.create({
+        userId: targetUserId,
+        displayName: defaultName,
+      });
+      await this.profileRepository.save(profile);
     }
-      
+
     return profile;
   }
 }

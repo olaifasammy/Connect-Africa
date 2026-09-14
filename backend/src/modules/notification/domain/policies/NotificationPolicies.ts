@@ -1,5 +1,8 @@
 import { Notification } from '../entities/NotificationEntities';
-import { DeliveryStatus } from '../value-objects/NotificationValueObjects';
+import {
+  DeliveryStatus,
+  ChannelType,
+} from '../value-objects/NotificationValueObjects';
 
 export interface IDeliveryPolicy {
   isEligible(notification: Notification): boolean;
@@ -18,8 +21,17 @@ export class RetryPolicy {
 }
 
 export class UserPreferencePolicy {
-  isChannelEnabled(preference: any): boolean {
-    return preference.enabled;
+  isChannelEnabled(
+    preference: {
+      enabled: boolean;
+      channel: ChannelType;
+    },
+    notificationChannel: ChannelType,
+  ): boolean {
+    return (
+      preference.enabled &&
+      preference.channel === notificationChannel
+    );
   }
 }
 

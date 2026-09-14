@@ -49,6 +49,13 @@ import { createAnalyticsRoutes } from '@modules/analytics/interfaces/http/Analyt
 
 import { SettingsController } from '@modules/settings/interfaces/controllers/SettingsController';
 import { settingsRoutes } from '@modules/settings/interfaces/routes/SettingsRoutes';
+import { ArticleController } from '@modules/article/interfaces/controllers/ArticleController';
+import { createArticleRoutes } from '@modules/article/interfaces/routes/ArticleRoutes';
+import { MediaController } from '@modules/media/interfaces/http/MediaController';
+import { createMediaRoutes } from '@modules/media/interfaces/http/MediaRoutes';
+import { createMediaQueryRoutes } from '@modules/media/interfaces/http/MediaQueryRoutes';
+import { SourceController } from '@modules/source/interfaces/controllers/SourceController';
+import { createSourceRoutes } from '@modules/source/interfaces/routes/SourceRoutes';
 
 export const createApp = (): Application => {
   const app = express();
@@ -57,6 +64,10 @@ export const createApp = (): Application => {
   app.use(cors()); // Production CORS configuration belongs in shared/config hardening.
   app.use(express.json());
   app.use(cookieParser());
+  app.use((req, res, next) => {
+    console.log(`[EXPRESS REQ] ${req.method} ${req.url}`);
+    next();
+  });
 
   // Health
   app.use('/health', healthRoutes());
@@ -104,6 +115,11 @@ export const createApp = (): Application => {
 
   // Graph
   const graphController = container.get(GraphController);
+
+  app.use(
+    '/api/v1/graph',
+    graphRoutes(graphController, authMiddleware),
+  );
 
   app.use(
     '/graph',
@@ -154,6 +170,15 @@ export const createApp = (): Application => {
   const autocompleteController = container.get(AutocompleteController);
 
   app.use(
+    '/api/v1/search',
+    createSearchRoutes(
+      searchController,
+      autocompleteController,
+      authMiddleware,
+    ),
+  );
+
+  app.use(
     '/api/search',
     createSearchRoutes(
       searchController,
@@ -199,6 +224,47 @@ export const createApp = (): Application => {
     '/api/v1/settings',
     settingsRoutes(
       settingsController,
+      authMiddleware,
+    ),
+  );
+
+  // Article
+  const articleController = container.get(ArticleController);
+
+  app.use(
+    '/api/v1/article',
+    createArticleRoutes(
+      articleController,
+      authMiddleware,
+    ),
+  );
+
+  // Media
+  const mediaController = container.get(MediaController);
+
+  app.use(
+    '/api/v1/media',
+    createMediaRoutes(
+      mediaController,
+      authMiddleware,
+    ),
+  );
+
+  app.use(
+    '/api/v1/media/query',
+    createMediaQueryRoutes(
+      mediaController,
+      authMiddleware,
+    ),
+  );
+
+  // Source
+  const sourceController = container.get(SourceController);
+
+  app.use(
+    '/api/v1/source',
+    createSourceRoutes(
+      sourceController,
       authMiddleware,
     ),
   );

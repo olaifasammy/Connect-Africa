@@ -1,10 +1,13 @@
-import { inject } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { provide } from 'inversify-binding-decorators';
 import { IMediaRepository } from '../../domain/repositories/IMediaRepository';
 import { UpdateMediaCommand } from '../commands/UpdateMediaCommand';
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { AuditLogRequestedEvent } from '@modules/audit/public';
 
+@provide(UpdateMediaHandler, true)
+@injectable()
 export class UpdateMediaHandler {
   constructor(
     @inject('IMediaRepository') private readonly mediaRepository: IMediaRepository,

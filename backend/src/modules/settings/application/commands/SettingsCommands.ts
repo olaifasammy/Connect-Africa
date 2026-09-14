@@ -20,6 +20,13 @@ export class UpdateNotificationSettingsCommand implements ICommand {
   constructor(public readonly userId: string, public readonly enabled: boolean) {}
 }
 
+export class UpdateNotificationPreferenceCommand implements ICommand {
+  constructor(
+    public readonly userId: string,
+    public readonly preference: string,
+  ) {}
+}
+
 export class UpdateSecuritySettingsCommand implements ICommand {
   constructor(public readonly userId: string, public readonly mfaEnabled: boolean) {}
 }

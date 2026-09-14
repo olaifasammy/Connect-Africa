@@ -35,25 +35,23 @@ import {
 
 export const createSearchRoutes = (
   controller: SearchController,
-  autocompleteController:
-    AutocompleteController,
-  authMiddleware:
-    AuthenticationMiddleware,
+  autocompleteController: AutocompleteController,
+  authMiddleware: AuthenticationMiddleware,
 ): Router => {
-  const router =
-    Router();
+  const router = Router();
 
-  router.use(
-    authMiddleware.authenticate,
-  );
+  /*
+   * Public knowledge discovery.
+   *
+   * Search, autocomplete and suggestions are intentionally
+   * public because Connect-Africa's knowledge graph is a
+   * discovery surface, not an authenticated-only resource.
+   */
 
   router.get(
     '/',
     validate(
       SearchQuerySchema,
-    ),
-    authorize(
-      Permission.SEARCH_READ,
     ),
     controller.search.bind(
       controller,
@@ -65,9 +63,6 @@ export const createSearchRoutes = (
     validate(
       AutocompleteRequestSchema,
     ),
-    authorize(
-      Permission.SEARCH_READ,
-    ),
     autocompleteController.autocomplete.bind(
       autocompleteController,
     ),
@@ -78,16 +73,17 @@ export const createSearchRoutes = (
     validate(
       SuggestionRequestSchema,
     ),
-    authorize(
-      Permission.SEARCH_READ,
-    ),
     controller.getSuggestions.bind(
       controller,
     ),
   );
 
+  /*
+   * Index administration remains protected.
+   */
   router.post(
     '/:name/rebuild',
+    authMiddleware.authenticate,
     validate(
       RebuildIndexSchema,
     ),

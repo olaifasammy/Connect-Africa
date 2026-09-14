@@ -32,4 +32,12 @@ export interface IRelationshipRepository {
     limit: number,
     offset: number,
   ): Promise<Relationship[]>;
+
+  findByEntityId(
+    entityId: string,
+  ): Promise<Relationship[]>;
+
+  findByRelationshipTypeId(
+    typeId: string,
+  ): Promise<Relationship[]>;
 }

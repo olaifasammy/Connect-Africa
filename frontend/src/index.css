@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+
+  color: #f3f1ea;
+  background: #0b1110;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  background: #0b1110;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(34, 160, 107, 0.08),
+      transparent 38%
+    ),
+    #0b1110;
+  color: #f3f1ea;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: rgba(34, 160, 107, 0.35);
+  color: #f3f1ea;
+}
+
+@layer components {
+  .ca-container {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
+  }
+
+  .ca-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-sage;
+  }
+
+  .ca-surface {
+    @apply border border-white/[0.07] bg-forest/70;
+  }
+
+  .ca-surface-hover {
+    @apply transition duration-300 hover:border-emerald/30 hover:bg-forest;
+  }
+
+  .ca-link {
+    @apply text-sage transition-colors hover:text-cloud;
+  }
+}

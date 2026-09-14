@@ -50,6 +50,11 @@ export const validateQuery =
       return;
     }
 
-    req.query = result.data as typeof req.query;
+    if (result.data && typeof result.data === 'object') {
+      for (const [key, value] of Object.entries(result.data)) {
+        (req.query as Record<string, unknown>)[key] = value;
+      }
+    }
+
     next();
   };

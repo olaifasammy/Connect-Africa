@@ -15,3 +15,4 @@ export {
   UpdateSecuritySettingsHandler, 
   ResetSettingsHandler 
 } from '../application/handlers/SettingsHandlers';
+export { ISettingsRepository } from '../domain/repositories/ISettingsRepository';

@@ -27,7 +27,7 @@ export class CreateSettingsHandler {
     const settings = Settings.create({
         userId: command.userId,
         themeSettings: ThemeSettings.create({ theme: new Theme(command.theme) }),
-        notificationSettings: NotificationSettings.create({ enabled: true, preference: new NotificationPreference('default') }),
+        notificationSettings: NotificationSettings.create({ enabled: true, preference: new NotificationPreference(NotificationPreference.EMAIL) }),
         privacySettings: PrivacySettings.create({ level: new PrivacyLevel('public') }),
         languageSettings: LanguageSettings.create({ locale: new Locale(command.locale), timezone: new Timezone(command.timezone) }),
         securitySettings: SecuritySettings.create({ mfaEnabled: false }),

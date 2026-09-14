@@ -107,12 +107,26 @@ export const authRoutes = (
       authController.verifyEmail(req, res),
   );
 
+  router.get(
+    '/profile',
+    authMiddleware.authenticate,
+    (req, res) =>
+      authController.getProfile(req, res),
+  );
+
   router.put(
     '/profile',
     authMiddleware.authenticate,
     validate(UpdateProfileSchema),
     (req, res) =>
       authController.updateProfile(req, res),
+  );
+
+  router.post(
+    '/upload-avatar',
+    authMiddleware.authenticate,
+    (req, res) =>
+      authController.uploadAvatar(req, res),
   );
 
   router.post(
@@ -300,6 +314,27 @@ export const authRoutes = (
     validate(UnbanUserSchema),
     (req, res) =>
       authController.unbanUser(req, res),
+  );
+
+  router.post(
+    '/api-keys',
+    authMiddleware.authenticate,
+    (req, res) =>
+      authController.createApiKey(req, res),
+  );
+
+  router.get(
+    '/api-keys',
+    authMiddleware.authenticate,
+    (req, res) =>
+      authController.listApiKeys(req, res),
+  );
+
+  router.delete(
+    '/api-keys/:id',
+    authMiddleware.authenticate,
+    (req, res) =>
+      authController.revokeApiKey(req, res),
   );
 
   return router;
