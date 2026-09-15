@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Eye, EyeOff, LogIn, ShieldCheck } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { ArrowRight, Eye, EyeOff, LogIn, ShieldCheck, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const LoginPage: React.FC = () => {
@@ -8,7 +8,12 @@ export const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const location = useLocation();
+  const [successMessage, setSuccessMessage] = useState(
+    (location.state as { message?: string })?.message || ''
+  );
   const [loading, setLoading] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -17,19 +22,24 @@ export const LoginPage: React.FC = () => {
     event.preventDefault();
 
     setError('');
+    setSuccessMessage('');
     setLoading(true);
 
     try {
       await login(email.trim(), password);
-      navigate('/account', { replace: true });
+      setLoading(false);
+      setRedirecting(true);
+      setSuccessMessage('Login successful! Redirecting to your workspace in 3 seconds...');
+      setTimeout(() => {
+        navigate('/account', { replace: true });
+      }, 3000);
     } catch (err: unknown) {
+      setLoading(false);
       setError(
         err instanceof Error
           ? err.message
           : 'Unable to sign in. Please check your credentials and try again.',
       );
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -91,11 +101,14 @@ export const LoginPage: React.FC = () => {
               </p>
 
               {error && (
-                <div
-                  role="alert"
-                  className="mt-6 rounded-2xl border border-red-400/20 bg-red-500/[0.08] px-4 py-3 text-sm leading-6 text-red-200"
-                >
+                <div role="alert" className="ca-msg-error mt-6">
                   {error}
+                </div>
+              )}
+
+              {successMessage && (
+                <div role="status" className="ca-msg-success mt-6">
+                  {successMessage}
                 </div>
               )}
 
@@ -165,11 +178,18 @@ export const LoginPage: React.FC = () => {
 
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="group flex w-full items-center justify-center gap-2 rounded-xl bg-emerald px-5 py-3 text-sm font-semibold text-ink transition hover:bg-sage disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={loading || redirecting}
+                  className="ca-btn-primary group flex w-full items-center justify-center gap-2 py-3 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {loading ? 'Signing in…' : 'Sign in'}
-                  {!loading && (
+                  {(loading || redirecting) && (
+                    <Loader2 className="h-4 w-4 animate-spin text-ink" />
+                  )}
+                  {loading
+                    ? 'Signing in…'
+                    : redirecting
+                      ? 'Redirecting…'
+                      : 'Sign in'}
+                  {!loading && !redirecting && (
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   )}
                 </button>

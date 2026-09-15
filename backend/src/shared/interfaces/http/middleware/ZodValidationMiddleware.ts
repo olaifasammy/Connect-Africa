@@ -58,3 +58,31 @@ export const validateQuery =
 
     next();
   };
+
+export const validateParams =
+  (schema: z.ZodSchema) =>
+  (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): void => {
+    const result =
+      schema.safeParse(req.params);
+
+    if (!result.success) {
+      res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: result.error.issues,
+      });
+      return;
+    }
+
+    if (result.data && typeof result.data === 'object') {
+      for (const [key, value] of Object.entries(result.data)) {
+        (req.params as Record<string, unknown>)[key] = value;
+      }
+    }
+
+    next();
+  };

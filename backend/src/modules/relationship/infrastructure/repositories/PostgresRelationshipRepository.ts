@@ -302,4 +302,19 @@ export class PostgresRelationshipRepository
         ),
     );
   }
+
+  async retargetEntity(
+    oldEntityId: string,
+    newEntityId: string,
+  ): Promise<void> {
+    await this.provider.query(
+      `
+        UPDATE relationships
+        SET source_id = CASE WHEN source_id = $1 THEN $2 ELSE source_id END,
+            target_id = CASE WHEN target_id = $1 THEN $2 ELSE target_id END
+        WHERE source_id = $1 OR target_id = $1
+      `,
+      [oldEntityId, newEntityId],
+    );
+  }
 }

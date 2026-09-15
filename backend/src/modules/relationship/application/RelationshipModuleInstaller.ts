@@ -5,17 +5,19 @@ import { Container } from 'inversify';
 import { IModuleInstaller } from '@shared/application/IModuleInstaller';
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
 import { MODULE_INSTALLER_SYMBOL } from '@shared/application/ModuleInstallerSymbol';
+import { EntityMergedEvent } from '@modules/entity/domain/events/EntityMergedEvent';
+import { EntityMergedHandler } from './handlers/EntityMergedHandler';
 
 @provide(MODULE_INSTALLER_SYMBOL, true)
 @injectable()
 export class RelationshipModuleInstaller implements IModuleInstaller {
   async install(
-    _container: Container,
-    _eventBus: EventBus,
+    container: Container,
+    eventBus: EventBus,
   ): Promise<void> {
-    // Relationship currently has no module-owned event subscriptions.
-    //
-    // RelationshipCreated/Updated/Deleted events are emitted by the
-    // aggregate and consumed by downstream modules such as Graph.
+    const entityMergedHandler = container.get(EntityMergedHandler);
+    await eventBus.subscribe(EntityMergedEvent, (event) =>
+      entityMergedHandler.handle(event),
+    );
   }
 }

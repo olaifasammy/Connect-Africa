@@ -192,7 +192,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
         </div>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-5">
+      <nav className="flex-1 overflow-y-auto px-3 py-5 admin-scrollbar">
         {navigationGroups.map((group) => (
           <div key={group.label} className="mb-6">
             <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-cloud/30">
@@ -269,7 +269,7 @@ export function AdminSidebar({ open, onClose }: AdminSidebarProps) {
   return (
     <>
       <aside className="hidden w-64 shrink-0 border-r border-white/[0.06] bg-[#0a100f] lg:block">
-        <div className="sticky top-0 h-[calc(100vh-64px)]">
+        <div className="sticky top-0 h-screen max-h-screen flex flex-col">
           <SidebarContent />
         </div>
       </aside>

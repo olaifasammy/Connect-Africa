@@ -5,8 +5,6 @@ import {
   ChevronRight,
   Globe2,
   Heart,
-  Shield,
-  Sparkles,
 } from 'lucide-react';
 
 const exploreLinks = [
@@ -90,7 +88,12 @@ export const Footer: React.FC = () => {
                 aria-label="Connect-Africa home"
               >
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-gold/25 bg-forest/50 text-gold transition-all duration-300 group-hover:border-gold/50 group-hover:bg-forest">
-                  <Shield className="h-5 w-5" />
+                  <img
+                    src="/images/africa.svg"
+                    alt="Connect-Africa Logo"
+                    className="h-6 w-6 object-contain transition-all duration-300 group-hover:scale-105"
+                    style={{ filter: 'invert(72%) sepia(26%) saturate(1450%) hue-rotate(345deg) brightness(91%) contrast(85%)' }}
+                  />
                 </div>
 
                 <div>
@@ -114,15 +117,6 @@ export const Footer: React.FC = () => {
                   Discover the people, places, cultures, institutions,
                   histories, systems and ideas that shape Africa — connected
                   through structured knowledge and evidence.
-                </p>
-              </div>
-
-              {/* Knowledge principle */}
-              <div className="mt-8 flex max-w-md items-start gap-3 border-l border-gold/30 pl-4">
-                <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-gold/70" />
-                <p className="text-xs leading-5 text-mist/50">
-                  Entities are the foundation. Relationships provide context.
-                  Sources provide evidence.
                 </p>
               </div>
             </div>
@@ -170,32 +164,6 @@ export const Footer: React.FC = () => {
                   ))}
                 </ul>
               </div>
-            </div>
-          </div>
-
-          {/* Continental discovery strip */}
-          <div className="mt-16 overflow-hidden rounded-3xl border border-white/[0.06] bg-white/[0.018]">
-            <div className="flex flex-col gap-5 px-6 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-7">
-              <div>
-                <div className="flex items-center gap-2">
-                  <Globe2 className="h-4 w-4 text-sage" />
-                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-sage/80">
-                    Explore the continent
-                  </span>
-                </div>
-
-                <p className="mt-2 text-sm text-mist/55">
-                  Discover knowledge across Africa's regions and systems.
-                </p>
-              </div>
-
-              <Link
-                to="/explore"
-                className="group inline-flex w-fit items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.025] px-4 py-2.5 text-xs font-medium text-cloud transition-all duration-200 hover:border-gold/30 hover:bg-gold/[0.05] hover:text-gold"
-              >
-                <span>Explore Africa</span>
-                <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </Link>
             </div>
           </div>
         </div>

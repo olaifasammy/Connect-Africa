@@ -129,6 +129,11 @@ export class OntologyGraphService
         new UniqueEntityId(entityTypeId),
       );
 
+    // If no strict properties are defined for this entity type, allow open/flexible metadata attributes
+    if (properties.length === 0) {
+      return true;
+    }
+
     const propertyNames =
       new Set(
         properties.map(

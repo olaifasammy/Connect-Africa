@@ -7,18 +7,15 @@ import {
   CircleDot,
   Compass,
   Crown,
-  Globe2,
   GraduationCap,
   Heart,
   History,
   Languages,
   Map,
-  Menu,
   Network,
   Search,
   Sparkles,
   Users,
-  X,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -108,7 +105,6 @@ const paths = [
 ];
 
 export function HomePage() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
 
   return (
@@ -172,7 +168,7 @@ export function HomePage() {
 
                 <button
                   type="submit"
-                  className="flex h-11 shrink-0 items-center gap-2 rounded-xl bg-[#c6894a] px-4 text-xs font-semibold text-[#07100c] transition hover:bg-[#d89a55]"
+                  className="ca-btn-primary h-11 shrink-0 text-xs py-0"
                 >
                   Search
                   <ArrowRight size={15} />
@@ -278,7 +274,13 @@ export function HomePage() {
                   ].join(' ')}
                 >
                   <div className="absolute inset-x-6 bottom-5 flex items-end justify-between">
-                    <span className="rounded-full border border-white/15 bg-black/20 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/65 backdrop-blur">
+                    <span className={
+                      index === 0
+                        ? 'ca-badge-gold bg-black/40 backdrop-blur'
+                        : index === 1
+                          ? 'ca-badge-emerald bg-black/40 backdrop-blur'
+                          : 'ca-badge-sage bg-black/40 backdrop-blur'
+                    }>
                       {item.tag}
                     </span>
 
@@ -569,12 +571,12 @@ export function HomePage() {
                 type="email"
                 placeholder="Your email address"
                 aria-label="Email address"
-                className="h-12 min-w-0 flex-1 rounded-xl border border-white/10 bg-black/15 px-4 text-sm text-cloud outline-none placeholder:text-cloud/25 focus:border-emerald/50"
+                className="ca-input-dark h-12 min-w-0 flex-1 bg-black/15 focus:border-emerald/50 placeholder:text-cloud/25"
               />
 
               <button
                 type="submit"
-                className="flex h-12 items-center justify-center gap-2 rounded-xl bg-[#f3f1ea] px-5 text-xs font-semibold text-[#102019] transition hover:bg-white"
+                className="ca-btn-primary h-12 px-5 text-xs"
               >
                 Subscribe
                 <ArrowRight size={15} />

@@ -69,4 +69,96 @@ a {
   .ca-link {
     @apply text-sage transition-colors hover:text-cloud;
   }
+
+  /* Reusable Buttons using theme colors */
+  .ca-btn-primary {
+    @apply flex items-center justify-center gap-2 rounded-xl bg-gold px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-sand active:scale-[0.98];
+  }
+
+  .ca-btn-secondary {
+    @apply flex items-center justify-center gap-2 rounded-xl bg-emerald px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-sage active:scale-[0.98];
+  }
+
+  .ca-btn-outline {
+    @apply flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-2.5 text-sm font-medium text-cloud transition hover:border-gold/30 hover:bg-gold/[0.04] hover:text-gold active:scale-[0.98];
+  }
+
+  .ca-btn-danger {
+    @apply flex items-center justify-center gap-2 rounded-xl bg-terra px-4 py-2.5 text-sm font-semibold text-cloud transition hover:opacity-90 active:scale-[0.98];
+  }
+
+  /* Reusable Inputs */
+  .ca-input-dark {
+    @apply w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-cloud outline-none placeholder:text-mist/40 transition focus:border-gold/50 focus:ring-1 focus:ring-gold/20;
+  }
+
+  .ca-input-light {
+    @apply w-full rounded-xl border border-white/10 bg-cloud px-4 py-2.5 text-sm text-ink outline-none placeholder:text-mist transition focus:border-gold/50 focus:ring-1 focus:ring-gold/20;
+  }
+
+  /* Reusable Card Variants (Diverse, non-generic styling) */
+  .ca-card {
+    @apply relative overflow-hidden rounded-3xl border border-white/[0.07] bg-forest/50 p-6 transition duration-300;
+  }
+
+  .ca-card-hover {
+    @apply ca-card hover:-translate-y-1 hover:border-emerald/35 hover:bg-forest hover:shadow-glow;
+  }
+
+  .ca-card-gold {
+    @apply relative overflow-hidden rounded-3xl border border-gold/25 bg-[radial-gradient(circle_at_top_right,rgba(217,164,65,0.08),transparent_40%),#10201A] p-6 transition duration-300 hover:-translate-y-1 hover:border-gold/50;
+  }
+
+  .ca-card-emerald {
+    @apply relative overflow-hidden rounded-3xl border border-emerald/25 bg-[radial-gradient(circle_at_top_right,rgba(34,160,107,0.1),transparent_40%),#10201A] p-6 transition duration-300 hover:-translate-y-1 hover:border-emerald/50;
+  }
+
+  .ca-card-glass {
+    @apply relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025] p-6 backdrop-blur-xl transition duration-300 hover:border-white/20 hover:bg-white/[0.04];
+  }
+
+  /* Reusable Message / Alert Cards (Success, Logout/Login feedback, Info, Error) */
+  .ca-msg-success {
+    @apply flex items-center gap-3 rounded-2xl border border-emerald/30 bg-emerald/[0.08] px-4 py-3 text-sm text-cloud shadow-soft;
+  }
+
+  .ca-msg-gold {
+    @apply flex items-center gap-3 rounded-2xl border border-gold/30 bg-gold/[0.08] px-4 py-3 text-sm text-cloud shadow-soft;
+  }
+
+  .ca-msg-error {
+    @apply flex items-center gap-3 rounded-2xl border border-terra/30 bg-terra/[0.08] px-4 py-3 text-sm text-cloud shadow-soft;
+  }
+
+  /* Custom scrollbar for admin navigation */
+  .admin-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+  .admin-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .admin-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 9999px;
+  }
+  .admin-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(34, 160, 107, 0.35);
+  }
+
+  /* Reusable Badges */
+  .ca-badge-gold {
+    @apply rounded-full border border-gold/20 bg-gold/[0.05] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-gold;
+  }
+
+  .ca-badge-emerald {
+    @apply rounded-full border border-emerald/20 bg-emerald/[0.05] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald;
+  }
+
+  .ca-badge-terra {
+    @apply rounded-full border border-terra/20 bg-terra/[0.05] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-terra;
+  }
+
+  .ca-badge-sage {
+    @apply rounded-full border border-sage/20 bg-sage/[0.05] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-sage;
+  }
 }

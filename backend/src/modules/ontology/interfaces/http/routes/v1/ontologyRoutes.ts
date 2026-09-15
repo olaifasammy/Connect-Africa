@@ -11,6 +11,7 @@ import { Permission } from '@modules/auth/public';
 import {
   validate,
   validateQuery,
+  validateParams,
 } from '@shared/interfaces/http/middleware/ZodValidationMiddleware';
 
 import { ListQuerySchema } from '@shared/interfaces/http/schemas/ListQuerySchema';
@@ -60,7 +61,7 @@ export const ontologyRoutes = (
     '/entity-types/:id',
     auth.authenticate,
     authorize(Permission.ENTITY_TYPE_READ),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) =>
       controller.getEntityType(req, res),
   );
@@ -69,7 +70,7 @@ export const ontologyRoutes = (
     '/:ontologyId/entity-types',
     auth.authenticate,
     authorize(Permission.ENTITY_TYPE_READ),
-    validate(OntologyIdParamSchema),
+    validateParams(OntologyIdParamSchema),
     (req, res) =>
       controller.listEntityTypes(req, res),
   );
@@ -78,7 +79,7 @@ export const ontologyRoutes = (
     '/:ontologyId/entity-types',
     auth.authenticate,
     authorize(Permission.ENTITY_TYPE_WRITE),
-    validate(OntologyIdParamSchema),
+    validateParams(OntologyIdParamSchema),
     validate(CreateEntityTypeSchema),
     (req, res) =>
       controller.createEntityType(req, res),
@@ -89,7 +90,7 @@ export const ontologyRoutes = (
     '/entity-type-properties/:id',
     auth.authenticate,
     authorize(Permission.ENTITY_TYPE_READ),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) =>
       controller.getEntityTypeProperty(req, res),
   );
@@ -98,7 +99,7 @@ export const ontologyRoutes = (
     '/entity-types/:entityTypeId/properties',
     auth.authenticate,
     authorize(Permission.ENTITY_TYPE_READ),
-    validate(EntityTypeIdParamSchema),
+    validateParams(EntityTypeIdParamSchema),
     (req, res) =>
       controller.listEntityTypeProperties(req, res),
   );
@@ -107,7 +108,7 @@ export const ontologyRoutes = (
     '/entity-types/:entityTypeId/properties',
     auth.authenticate,
     authorize(Permission.ENTITY_TYPE_WRITE),
-    validate(EntityTypeIdParamSchema),
+    validateParams(EntityTypeIdParamSchema),
     validate(CreateEntityTypePropertySchema),
     (req, res) =>
       controller.createEntityTypeProperty(req, res),
@@ -117,7 +118,7 @@ export const ontologyRoutes = (
     '/entity-type-properties/:id',
     auth.authenticate,
     authorize(Permission.ENTITY_TYPE_WRITE),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     validate(UpdateEntityTypePropertySchema),
     (req, res) =>
       controller.updateEntityTypeProperty(req, res),
@@ -127,7 +128,7 @@ export const ontologyRoutes = (
     '/entity-type-properties/:id',
     auth.authenticate,
     authorize(Permission.ENTITY_TYPE_WRITE),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) =>
       controller.deleteEntityTypeProperty(req, res),
   );
@@ -137,7 +138,7 @@ export const ontologyRoutes = (
     '/relationship-types/:id',
     auth.authenticate,
     authorize(Permission.RELATIONSHIP_TYPE_READ),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) =>
       controller.getRelationshipType(req, res),
   );
@@ -146,7 +147,7 @@ export const ontologyRoutes = (
     '/:ontologyId/relationship-types',
     auth.authenticate,
     authorize(Permission.RELATIONSHIP_TYPE_READ),
-    validate(OntologyIdParamSchema),
+    validateParams(OntologyIdParamSchema),
     (req, res) =>
       controller.listRelationshipTypes(req, res),
   );
@@ -155,7 +156,7 @@ export const ontologyRoutes = (
     '/:ontologyId/relationship-types',
     auth.authenticate,
     authorize(Permission.RELATIONSHIP_TYPE_WRITE),
-    validate(OntologyIdParamSchema),
+    validateParams(OntologyIdParamSchema),
     validate(CreateRelationshipTypeSchema),
     (req, res) =>
       controller.createRelationshipType(req, res),
@@ -166,7 +167,7 @@ export const ontologyRoutes = (
     '/versions/:id',
     auth.authenticate,
     authorize(Permission.ONTOLOGY_VERSION_READ),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) =>
       controller.getVersion(req, res),
   );
@@ -175,7 +176,7 @@ export const ontologyRoutes = (
     '/versions/:id/publish',
     auth.authenticate,
     authorize(Permission.ONTOLOGY_VERSION_WRITE),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) =>
       controller.publishVersion(req, res),
   );
@@ -184,7 +185,7 @@ export const ontologyRoutes = (
     '/versions/:id/rollback',
     auth.authenticate,
     authorize(Permission.ONTOLOGY_VERSION_WRITE),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) =>
       controller.rollbackVersion(req, res),
   );
@@ -193,7 +194,7 @@ export const ontologyRoutes = (
     '/:ontologyId/versions',
     auth.authenticate,
     authorize(Permission.ONTOLOGY_VERSION_WRITE),
-    validate(OntologyIdParamSchema),
+    validateParams(OntologyIdParamSchema),
     validate(CreateOntologyVersionSchema),
     (req, res) =>
       controller.createVersion(req, res),
@@ -222,7 +223,7 @@ export const ontologyRoutes = (
     '/:id',
     auth.authenticate,
     authorize(Permission.ONTOLOGY_WRITE),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     validate(UpdateOntologySchema),
     (req, res) =>
       controller.update(req, res),
@@ -232,7 +233,7 @@ export const ontologyRoutes = (
     '/:id/archive',
     auth.authenticate,
     authorize(Permission.ONTOLOGY_WRITE),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) =>
       controller.archive(req, res),
   );
@@ -241,7 +242,7 @@ export const ontologyRoutes = (
     '/:id',
     auth.authenticate,
     authorize(Permission.ONTOLOGY_READ),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) =>
       controller.get(req, res),
   );

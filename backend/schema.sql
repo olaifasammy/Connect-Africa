@@ -485,6 +485,7 @@ CREATE TABLE IF NOT EXISTS entities (
     status TEXT NOT NULL DEFAULT 'DRAFT',
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    version INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT entities_status_check
         CHECK (status IN ('DRAFT', 'PUBLISHED', 'ARCHIVED')),
@@ -580,6 +581,10 @@ CREATE INDEX IF NOT EXISTS idx_entities_attributes
 
 CREATE INDEX IF NOT EXISTS idx_entities_attributes
     ON entities USING GIN(attributes);
+
+-- Reconcile existing installations with version column
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS version INTEGER NOT NULL DEFAULT 1;
 
 -- ============================================================
 -- EXISTING DATABASE COMPATIBILITY:

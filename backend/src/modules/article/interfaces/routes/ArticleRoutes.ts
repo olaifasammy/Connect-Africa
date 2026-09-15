@@ -5,7 +5,10 @@ import {
   UpdateArticleSchema,
 } from '../../application/validators/ArticleValidators';
 import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/AuthenticationMiddleware';
-import { validate } from '@shared/interfaces/http/middleware/ZodValidationMiddleware';
+import {
+  validate,
+  validateParams,
+} from '@shared/interfaces/http/middleware/ZodValidationMiddleware';
 import { authorize } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
 import { Permission } from '@modules/auth/public';
 import { authRateLimiter } from '@shared/interfaces/http/middleware/RateLimitMiddleware';
@@ -66,7 +69,7 @@ export function createArticleRoutes(
     authenticate,
     authorize(Permission.USER_DATA_WRITE),
     authRateLimiter,
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) => controller.removeBookmark(req, res),
   );
 
@@ -118,7 +121,7 @@ export function createArticleRoutes(
     '/:id',
     authenticate,
     authorize(Permission.ARTICLE_DELETE),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) => controller.delete(req, res),
   );
 
@@ -126,7 +129,7 @@ export function createArticleRoutes(
     '/:id/publish',
     authenticate,
     authorize(Permission.ARTICLE_PUBLISH),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) => controller.publish(req, res),
   );
 
@@ -134,7 +137,7 @@ export function createArticleRoutes(
     '/:id/unpublish',
     authenticate,
     authorize(Permission.ARTICLE_PUBLISH),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) => controller.unpublish(req, res),
   );
 
@@ -142,7 +145,7 @@ export function createArticleRoutes(
     '/:id/archive',
     authenticate,
     authorize(Permission.ARTICLE_UPDATE),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) => controller.archive(req, res),
   );
 
@@ -150,7 +153,7 @@ export function createArticleRoutes(
     '/:id/submit',
     authenticate,
     authorize(Permission.ARTICLE_UPDATE),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) => controller.submitForReview(req, res),
   );
 
@@ -158,7 +161,7 @@ export function createArticleRoutes(
     '/:id/approve',
     authenticate,
     authorize(Permission.ARTICLE_APPROVE),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) => controller.approve(req, res),
   );
 
@@ -166,7 +169,7 @@ export function createArticleRoutes(
     '/:id/reject',
     authenticate,
     authorize(Permission.ARTICLE_APPROVE),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) => controller.reject(req, res),
   );
 
@@ -174,7 +177,7 @@ export function createArticleRoutes(
     '/:id/restore',
     authenticate,
     authorize(Permission.ARTICLE_UPDATE),
-    validate(IdParamSchema),
+    validateParams(IdParamSchema),
     (req, res) => controller.restore(req, res),
   );
 

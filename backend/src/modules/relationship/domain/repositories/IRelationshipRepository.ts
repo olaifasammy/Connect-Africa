@@ -40,4 +40,9 @@ export interface IRelationshipRepository {
   findByRelationshipTypeId(
     typeId: string,
   ): Promise<Relationship[]>;
+
+  retargetEntity(
+    oldEntityId: string,
+    newEntityId: string,
+  ): Promise<void>;
 }

@@ -73,8 +73,9 @@ export class Entity extends AggregateRoot<EntityProps> {
     status: 'DRAFT' | 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'PUBLISHED' | 'ARCHIVED',
     createdAt: Date,
     updatedAt: Date,
+    version?: number,
   ): Entity {
-    return new Entity(
+    const entity = new Entity(
       {
         name,
         typeId,
@@ -85,6 +86,12 @@ export class Entity extends AggregateRoot<EntityProps> {
       },
       id,
     );
+
+    if (version !== undefined) {
+      entity.version = version;
+    }
+
+    return entity;
   }
 
   get entityId(): EntityId {

@@ -29,6 +29,7 @@ interface EntityRow {
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
   created_at: Date;
   updated_at: Date;
+  version: number;
 }
 
 const ENTITY_LIST_SCOPE =
@@ -62,7 +63,10 @@ export class PostgresEntityRepository
       );
     }
 
-    await this.postgresProvider.query(
+    const currentVersion = entity.version;
+    const newVersion = currentVersion + 1;
+
+    const result = await this.postgresProvider.query(
       `
         INSERT INTO entities (
           id,
@@ -75,7 +79,8 @@ export class PostgresEntityRepository
           attributes,
           status,
           created_at,
-          updated_at
+          updated_at,
+          version
         )
         VALUES (
           $1,
@@ -88,7 +93,8 @@ export class PostgresEntityRepository
           $8,
           $9,
           $10,
-          $11
+          $11,
+          1
         )
         ON CONFLICT (id)
         DO UPDATE SET
@@ -100,7 +106,9 @@ export class PostgresEntityRepository
           tags = EXCLUDED.tags,
           attributes = EXCLUDED.attributes,
           status = EXCLUDED.status,
-          updated_at = EXCLUDED.updated_at
+          updated_at = EXCLUDED.updated_at,
+          version = entities.version + 1
+        WHERE entities.version = $12
       `,
       [
         entity.entityId.value,
@@ -111,15 +119,26 @@ export class PostgresEntityRepository
           null,
         entity.metadata.source ??
           null,
-        entity.metadata.tags,
+        JSON.stringify(
+          entity.metadata.tags,
+        ),
         JSON.stringify(
           entity.metadata.attributes,
         ),
         entity.status,
         entity.createdAt,
         entity.updatedAt,
+        currentVersion,
       ],
     );
+
+    if (result.rowCount === 0) {
+      throw new Error(
+        `Concurrency conflict: Entity ${entity.entityId.value} was modified by another transaction.`,
+      );
+    }
+
+    entity.version = newVersion;
   }
 
   async findById(
@@ -139,7 +158,8 @@ export class PostgresEntityRepository
             attributes,
             status,
             created_at,
-            updated_at
+            updated_at,
+            version
           FROM entities
           WHERE id = $1
           LIMIT 1
@@ -221,7 +241,8 @@ export class PostgresEntityRepository
             attributes,
             status,
             created_at,
-            updated_at
+            updated_at,
+            version
           FROM entities
           WHERE slug = $1
           LIMIT 1
@@ -264,7 +285,8 @@ export class PostgresEntityRepository
             e.attributes,
             e.status,
             e.created_at,
-            e.updated_at
+            e.updated_at,
+            e.version
           FROM entities e
           INNER JOIN entity_identifiers ei
             ON ei.entity_id = e.id
@@ -367,7 +389,8 @@ export class PostgresEntityRepository
             attributes,
             status,
             created_at,
-            updated_at
+            updated_at,
+            version
           FROM entities
           ORDER BY created_at DESC, id ASC
           LIMIT $1
@@ -500,7 +523,8 @@ export class PostgresEntityRepository
                 attributes,
                 status,
                 created_at,
-                updated_at
+                updated_at,
+                version
               FROM entities
               WHERE
                 created_at < $1
@@ -523,7 +547,8 @@ export class PostgresEntityRepository
                 attributes,
                 status,
                 created_at,
-                updated_at
+                updated_at,
+                version
               FROM entities
               ORDER BY created_at DESC, id ASC
               LIMIT $1
@@ -627,7 +652,8 @@ export class PostgresEntityRepository
             attributes,
             status,
             created_at,
-            updated_at
+            updated_at,
+            version
           FROM entities
           WHERE
             name ILIKE $1
@@ -740,6 +766,7 @@ export class PostgresEntityRepository
       new Date(
         row.updated_at,
       ),
+      row.version,
     );
   }
 }

@@ -26,7 +26,7 @@ export const Navbar: React.FC = () => {
   const handleLogout = () => {
     logout();
     closeMobile();
-    navigate('/');
+    navigate('/login', { state: { message: 'Successfully signed out.' } });
   };
 
   return (
