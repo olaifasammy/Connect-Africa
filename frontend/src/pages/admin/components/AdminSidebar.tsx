@@ -74,6 +74,11 @@ const navigationGroups: NavigationGroup[] = [
         to: '/admin/ontology',
         icon: GitBranch,
       },
+       {
+        label: 'Article',
+        to: '/admin/article',
+        icon: GitBranch,
+      },
     ],
   },
   {
@@ -187,7 +192,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
             Connect-Africa
           </p>
           <p className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-sage/70">
-            Admin control plane
+            Admin control center
           </p>
         </div>
       </div>
