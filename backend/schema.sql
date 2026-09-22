@@ -1272,6 +1272,245 @@ CREATE INDEX IF NOT EXISTS idx_api_keys_user_id ON api_keys(user_id);
 CREATE INDEX IF NOT EXISTS idx_api_keys_prefix ON api_keys(prefix);
 
 -- ============================================================
+-- ENTERPRISE ENTITY & DIRECTORY AFRICA EXTENSIONS
+-- ============================================================
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS legal_name TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS registration_number TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS tax_id_hash TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS entity_structure TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS latitude NUMERIC(10, 7);
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS longitude NUMERIC(10, 7);
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS country_code TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS state_province TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS city TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS street_address TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS postal_code TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS digital_address_code TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS accepted_currencies JSONB NOT NULL DEFAULT '[]'::jsonb;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS payment_methods JSONB NOT NULL DEFAULT '[]'::jsonb;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS operating_hours JSONB NOT NULL DEFAULT '{}'::jsonb;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS start_date TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS end_date TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS temporal_granularity TEXT DEFAULT 'YEAR';
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS is_historical BOOLEAN NOT NULL DEFAULT FALSE;
+
+CREATE INDEX IF NOT EXISTS idx_entities_country_code ON entities(country_code);
+CREATE INDEX IF NOT EXISTS idx_entities_city ON entities(city);
+CREATE INDEX IF NOT EXISTS idx_entities_lat_lng ON entities(latitude, longitude);
+
+
+-- ============================================================
+-- DIRECTORY AFRICA: PRODUCTS & SERVICES CATALOG
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS business_products_services (
+    id TEXT PRIMARY KEY,
+    entity_id TEXT NOT NULL REFERENCES entities(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    description TEXT,
+    category TEXT,
+    sku TEXT,
+    price_min NUMERIC(15, 2),
+    price_max NUMERIC(15, 2),
+    currency TEXT NOT NULL DEFAULT 'USD',
+    image_urls JSONB NOT NULL DEFAULT '[]'::jsonb,
+    is_available BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_business_products_entity ON business_products_services(entity_id);
+CREATE INDEX IF NOT EXISTS idx_business_products_category ON business_products_services(category);
+
+
+-- ============================================================
+-- DIRECTORY AFRICA: CLAIMS & OWNERSHIP VERIFICATION
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS business_claims (
+    id TEXT PRIMARY KEY,
+    entity_id TEXT NOT NULL REFERENCES entities(id) ON DELETE CASCADE,
+    applicant_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    work_email TEXT NOT NULL,
+    phone_number TEXT,
+    proof_document_media_id TEXT REFERENCES media(id) ON DELETE SET NULL,
+    status TEXT NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED')),
+    reviewer_id TEXT REFERENCES users(id) ON DELETE SET NULL,
+    review_notes TEXT,
+    reviewed_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_business_claims_entity ON business_claims(entity_id);
+CREATE INDEX IF NOT EXISTS idx_business_claims_applicant ON business_claims(applicant_id);
+CREATE INDEX IF NOT EXISTS idx_business_claims_status ON business_claims(status);
+
+
+-- ============================================================
+-- DIRECTORY AFRICA: COMMUNITY REVIEWS & RATINGS
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS business_reviews (
+    id TEXT PRIMARY KEY,
+    entity_id TEXT NOT NULL REFERENCES entities(id) ON DELETE CASCADE,
+    reviewer_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    title TEXT,
+    review_text TEXT NOT NULL,
+    proof_of_interaction_media_id TEXT REFERENCES media(id) ON DELETE SET NULL,
+    helpful_count INTEGER NOT NULL DEFAULT 0,
+    status TEXT NOT NULL DEFAULT 'PUBLISHED' CHECK (status IN ('PUBLISHED', 'FLAGGED', 'ARCHIVED')),
+    business_response TEXT,
+    responded_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_business_reviews_entity ON business_reviews(entity_id);
+CREATE INDEX IF NOT EXISTS idx_business_reviews_rating ON business_reviews(rating);
+CREATE INDEX IF NOT EXISTS idx_business_reviews_status ON business_reviews(status);
+
+
+-- ============================================================
+-- DIRECTORY AFRICA: B2B LEADS & INQUIRIES
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS business_inquiries (
+    id TEXT PRIMARY KEY,
+    entity_id TEXT NOT NULL REFERENCES entities(id) ON DELETE CASCADE,
+    sender_name TEXT NOT NULL,
+    sender_email TEXT NOT NULL,
+    sender_phone TEXT,
+    subject TEXT NOT NULL,
+    message TEXT NOT NULL,
+    inquiry_type TEXT NOT NULL DEFAULT 'GENERAL' CHECK (inquiry_type IN ('QUOTE_REQUEST', 'GENERAL', 'PARTNERSHIP', 'JOB')),
+    status TEXT NOT NULL DEFAULT 'UNREAD' CHECK (status IN ('UNREAD', 'READ', 'RESPONDED', 'ARCHIVED')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_business_inquiries_entity ON business_inquiries(entity_id);
+CREATE INDEX IF NOT EXISTS idx_business_inquiries_status ON business_inquiries(status);
+
+
+-- ============================================================
+-- DIRECTORY AFRICA: ANALYTICS & IMPRESSION TRACKING
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS business_analytics (
+    id TEXT PRIMARY KEY,
+    entity_id TEXT NOT NULL REFERENCES entities(id) ON DELETE CASCADE,
+    event_type TEXT NOT NULL CHECK (event_type IN ('PROFILE_VIEW', 'WEBSITE_CLICK', 'INQUIRY_SENT', 'PHONE_REVEAL', 'SEARCH_IMPRESSION')),
+    referrer TEXT,
+    country_code TEXT,
+    city TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_business_analytics_entity ON business_analytics(entity_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_business_analytics_event ON business_analytics(event_type);
+
+
+-- ============================================================
+-- CONNECT AFRICA: MULTILINGUAL TRANSLATIONS
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS entity_translations (
+    id TEXT PRIMARY KEY,
+    entity_id TEXT NOT NULL REFERENCES entities(id) ON DELETE CASCADE,
+    locale TEXT NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT,
+    showcase_content TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT entity_translations_unique_locale UNIQUE(entity_id, locale)
+);
+
+CREATE INDEX IF NOT EXISTS idx_entity_translations_entity ON entity_translations(entity_id);
+CREATE INDEX IF NOT EXISTS idx_entity_translations_locale ON entity_translations(locale);
+
+
+-- ============================================================
+-- CONNECT AFRICA: ACADEMIC PEER REVIEW ENGINE
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS article_peer_reviews (
+    id TEXT PRIMARY KEY,
+    article_id TEXT NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
+    reviewer_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    verdict TEXT NOT NULL CHECK (verdict IN ('ACCEPT', 'REVISION_REQUIRED', 'REJECT')),
+    peer_review_notes TEXT,
+    reviewed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_article_peer_reviews_article ON article_peer_reviews(article_id);
+
+
+-- ============================================================
+-- DIRECTORY AFRICA: SUBSCRIPTIONS & CUSTOM DOMAINS
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS business_subscriptions (
+    id TEXT PRIMARY KEY,
+    entity_id TEXT NOT NULL REFERENCES entities(id) ON DELETE CASCADE,
+    plan_tier TEXT NOT NULL DEFAULT 'FREE' CHECK (plan_tier IN ('FREE', 'VERIFIED_PRO', 'ENTERPRISE_SHOWCASE')),
+    status TEXT NOT NULL DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'PAST_DUE', 'CANCELLED')),
+    expires_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_business_subscriptions_entity ON business_subscriptions(entity_id);
+
+
+CREATE TABLE IF NOT EXISTS custom_domain_mappings (
+    id TEXT PRIMARY KEY,
+    entity_id TEXT NOT NULL REFERENCES entities(id) ON DELETE CASCADE,
+    custom_domain TEXT NOT NULL UNIQUE,
+    is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_custom_domains_domain ON custom_domain_mappings(custom_domain);
+
+
+-- ============================================================
 -- OUTBOX
 -- ============================================================
 

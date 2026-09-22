@@ -18,6 +18,8 @@ import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/Aut
 
 import { EntityController } from '@modules/entity/interfaces/EntityController';
 import { createEntityRoutes } from '@modules/entity/interfaces/EntityRoutes';
+import { DirectoryController } from '@modules/entity/interfaces/DirectoryController';
+import { createDirectoryRoutes } from '@modules/entity/interfaces/DirectoryRoutes';
 import { IMetricsProvider } from '@shared/monitoring/IMetricsProvider';
 
 import { graphRoutes } from '@modules/graph/interfaces/routes/GraphRoutes';
@@ -110,6 +112,17 @@ export const createApp = (): Application => {
       entityController,
       authMiddleware,
       metricsProvider,
+    ),
+  );
+
+  // Directory Africa
+  const directoryController = container.get(DirectoryController);
+
+  app.use(
+    '/api/v1/directory',
+    createDirectoryRoutes(
+      directoryController,
+      authMiddleware,
     ),
   );
 
