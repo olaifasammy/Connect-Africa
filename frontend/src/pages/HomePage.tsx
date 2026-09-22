@@ -108,67 +108,52 @@ export function HomePage() {
   const [query, setQuery] = useState('');
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#0b1110] text-[#f3f1ea]">
+    <div className="min-h-screen bg-scholar-canvas bg-canvas text-text-main font-sans transition-colors duration-300">
       {/* -------------------------------------------------
-          HERO
+          HERO SECTION — THE SCHOLAR DIGITAL ARCHIVE
       ------------------------------------------------- */}
-      <section className="relative">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute left-1/2 top-[-20%] h-[650px] w-[900px] -translate-x-1/2 rounded-full bg-emerald/[0.07] blur-[120px]" />
-          <div className="absolute -left-32 top-32 h-72 w-72 rounded-full bg-[#b47a3d]/[0.08] blur-[100px]" />
-          <div className="absolute -right-32 top-56 h-80 w-80 rounded-full bg-sage/[0.06] blur-[110px]" />
-        </div>
-
-        <div className="ca-container relative py-16 sm:py-24 lg:py-28">
+      <section className="relative overflow-hidden border-b border-stone/20 py-16 sm:py-24 lg:py-28">
+        <div className="ca-container relative z-10">
           <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald/20 bg-emerald/[0.07] px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-sage">
-              <CircleDot size={11} />
-              Africa's knowledge network
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-widest text-gold">
+              <CircleDot size={12} className="text-gold animate-pulse" />
+              African Knowledge Infrastructure & Graph
             </div>
 
-            <h1 className="text-balance text-[clamp(2.65rem,9vw,6.7rem)] font-semibold leading-[0.94] tracking-[-0.055em] text-cloud">
-              Discover.
-              <br />
-              <span className="text-sage">Connect.</span>
+            <h1 className="font-serif text-balance text-4xl font-bold leading-tight tracking-tight text-text-main sm:text-6xl lg:text-7xl">
+              Discover. <span className="italic text-emerald-900 dark:text-emerald-400">Connect.</span>
               <br />
               Understand Africa.
             </h1>
 
-            <p className="mx-auto mt-7 max-w-2xl text-sm leading-7 text-cloud/45 sm:text-base">
-              Explore the people, places, events, languages, cultures and
-              histories that shape the continent — connected as one living
-              knowledge graph.
+            <p className="mx-auto mt-6 max-w-2xl font-sans text-base leading-relaxed text-text-muted">
+              Explore the people, places, events, languages, cultures, and histories shaping the continent — preserved and connected as an authoritative knowledge graph.
             </p>
 
+            {/* Search Bar */}
             <form
               onSubmit={(event) => {
                 event.preventDefault();
-
                 if (query.trim()) {
-                  window.location.href = `/search?q=${encodeURIComponent(
-                    query.trim(),
-                  )}`;
+                  window.location.href = `/search?q=${encodeURIComponent(query.trim())}`;
                 }
               }}
-              className="mx-auto mt-9 max-w-2xl"
+              className="mx-auto mt-8 max-w-2xl"
             >
-              <div className="group flex min-h-[58px] items-center rounded-2xl border border-white/[0.1] bg-[#f3f1ea] p-1.5 shadow-[0_20px_80px_rgba(0,0,0,0.28)] transition focus-within:border-emerald/50">
-                <Search
-                  size={19}
-                  className="ml-4 shrink-0 text-[#31403a]/55"
-                />
+              <div className="group flex min-h-[56px] items-center rounded-xl border border-stone/30 bg-surface p-1.5 shadow-scholar transition-all focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/20">
+                <Search size={20} className="ml-3 shrink-0 text-stone" />
 
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Search people, places, cultures, history..."
-                  className="min-w-0 flex-1 bg-transparent px-3 text-sm text-[#16201c] outline-none placeholder:text-[#52605a]/55"
+                  className="min-w-0 flex-1 bg-transparent px-3 font-sans text-sm text-text-main outline-none placeholder:text-stone/60"
                   aria-label="Search Connect-Africa"
                 />
 
                 <button
                   type="submit"
-                  className="ca-btn-primary h-11 shrink-0 text-xs py-0"
+                  className="ca-btn-primary h-11 shrink-0 px-5 text-xs uppercase tracking-wider"
                 >
                   Search
                   <ArrowRight size={15} />
@@ -176,16 +161,17 @@ export function HomePage() {
               </div>
             </form>
 
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-              <span className="mr-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-cloud/25">
-                Popular
+            {/* Popular Searches */}
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-2 font-sans">
+              <span className="mr-1 font-mono text-xs uppercase tracking-wider text-text-muted">
+                Popular:
               </span>
 
               {popularSearches.map((item) => (
                 <a
                   key={item}
                   href={`/search?q=${encodeURIComponent(item)}`}
-                  className="rounded-full border border-white/[0.07] bg-white/[0.025] px-3 py-1.5 text-[11px] text-cloud/45 transition hover:border-emerald/25 hover:bg-emerald/[0.06] hover:text-cloud/75"
+                  className="rounded-lg border border-stone/20 bg-surface px-3 py-1 font-mono text-xs text-text-muted transition-colors hover:border-gold hover:text-emerald-900 dark:hover:text-gold"
                 >
                   {item}
                 </a>
@@ -198,36 +184,36 @@ export function HomePage() {
       {/* -------------------------------------------------
           CATEGORY GRID
       ------------------------------------------------- */}
-      <section className="ca-container pb-16 sm:pb-20">
-        <div className="mb-5 flex items-end justify-between gap-4">
+      <section className="ca-container py-16 sm:py-20">
+        <div className="mb-8 flex items-end justify-between gap-4">
           <div>
-            <p className="ca-eyebrow">Explore</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-cloud sm:text-3xl">
-              Explore by category
+            <p className="ca-eyebrow">Taxonomy</p>
+            <h2 className="mt-1 font-serif text-2xl font-bold tracking-tight text-text-main sm:text-3xl">
+              Explore by Domain Category
             </h2>
           </div>
 
           <a
             href="/search"
-            className="hidden items-center gap-1 text-xs font-medium text-sage transition hover:text-cloud sm:flex"
+            className="hidden items-center gap-1 font-sans text-xs font-semibold text-emerald-900 dark:text-gold transition hover:underline sm:flex"
           >
-            View all
+            View all categories
             <ChevronRight size={14} />
           </a>
         </div>
 
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 lg:grid-cols-8">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
           {categories.map(({ label, icon: Icon }) => (
             <a
               key={label}
               href={`/search?category=${encodeURIComponent(label)}`}
-              className="group rounded-2xl border border-white/[0.065] bg-white/[0.025] p-4 transition duration-300 hover:-translate-y-0.5 hover:border-emerald/25 hover:bg-emerald/[0.045]"
+              className="ca-card-hover flex flex-col items-center justify-center p-4 text-center group"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.07] bg-[#111a17] text-sage transition group-hover:border-emerald/25 group-hover:bg-emerald/[0.08]">
-                <Icon size={17} strokeWidth={1.7} />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-stone/20 bg-canvas text-emerald-900 dark:text-emerald-400 transition group-hover:border-gold group-hover:text-gold">
+                <Icon size={18} strokeWidth={1.8} />
               </div>
 
-              <p className="mt-4 text-xs font-medium leading-5 text-cloud/65 group-hover:text-cloud">
+              <p className="mt-3 font-sans text-xs font-semibold text-text-main group-hover:text-emerald-900 dark:group-hover:text-gold">
                 {label}
               </p>
             </a>
@@ -236,81 +222,61 @@ export function HomePage() {
       </section>
 
       {/* -------------------------------------------------
-          DISCOVERIES
+          CURATED DISCOVERIES
       ------------------------------------------------- */}
-      <section className="border-y border-white/[0.055] bg-[#0e1714]">
-        <div className="ca-container py-16 sm:py-20">
-          <div className="mb-7 flex items-end justify-between">
+      <section className="border-y border-stone/20 bg-surface/50 py-16 sm:py-20">
+        <div className="ca-container">
+          <div className="mb-8 flex items-end justify-between">
             <div>
-              <p className="ca-eyebrow">Curated discovery</p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-cloud sm:text-3xl">
-                Discoveries
+              <p className="ca-eyebrow">Archival Highlights</p>
+              <h2 className="mt-1 font-serif text-2xl font-bold tracking-tight text-text-main sm:text-3xl">
+                Featured Knowledge Discoveries
               </h2>
             </div>
 
-            <button
-              type="button"
-              className="hidden items-center gap-1 text-xs text-cloud/35 transition hover:text-cloud sm:flex"
+            <a
+              href="/articles"
+              className="hidden items-center gap-1 font-sans text-xs font-semibold text-text-muted hover:text-text-main sm:flex"
             >
-              Explore more
+              Explore all articles
               <ArrowUpRight size={14} />
-            </button>
+            </a>
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-3">
+          <div className="grid gap-6 lg:grid-cols-3">
             {discoveries.map((item, index) => (
               <article
                 key={item.title}
-                className="group overflow-hidden rounded-3xl border border-white/[0.07] bg-[#111a17] transition duration-300 hover:-translate-y-1 hover:border-emerald/25"
+                className="ca-card-hover group flex flex-col justify-between"
               >
-                <div
-                  className={[
-                    'relative h-44 overflow-hidden',
-                    index === 0
-                      ? 'bg-[radial-gradient(circle_at_30%_40%,rgba(198,137,74,.34),transparent_32%),linear-gradient(135deg,#28382f,#9b6839_50%,#151e19)]'
-                      : index === 1
-                        ? 'bg-[radial-gradient(circle_at_70%_35%,rgba(34,160,107,.32),transparent_34%),linear-gradient(135deg,#15211c,#725738_55%,#111916)]'
-                        : 'bg-[radial-gradient(circle_at_35%_35%,rgba(137,177,126,.3),transparent_30%),linear-gradient(135deg,#25362d,#5f765b 55%,#101713)]',
-                  ].join(' ')}
-                >
-                  <div className="absolute inset-x-6 bottom-5 flex items-end justify-between">
-                    <span className={
-                      index === 0
-                        ? 'ca-badge-gold bg-black/40 backdrop-blur'
-                        : index === 1
-                          ? 'ca-badge-emerald bg-black/40 backdrop-blur'
-                          : 'ca-badge-sage bg-black/40 backdrop-blur'
-                    }>
+                <div>
+                  <div className="mb-3 flex items-center justify-between">
+                    <span className={index === 0 ? "ca-badge-gold" : index === 1 ? "ca-badge-emerald" : "ca-badge-clay"}>
                       {item.tag}
                     </span>
-
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-black/20 text-white/70 backdrop-blur transition group-hover:bg-emerald group-hover:text-[#07100c]">
-                      <ArrowUpRight size={16} />
-                    </div>
+                    <ArrowUpRight size={16} className="text-stone group-hover:text-gold transition-colors" />
                   </div>
-                </div>
 
-                <div className="p-5">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-sage/70">
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-text-muted">
                     {item.eyebrow}
                   </p>
 
-                  <h3 className="mt-2 text-lg font-semibold tracking-[-0.025em] text-cloud">
+                  <h3 className="mt-2 font-serif text-xl font-bold tracking-tight text-text-main group-hover:text-emerald-900 dark:group-hover:text-gold">
                     {item.title}
                   </h3>
 
-                  <p className="mt-2 text-xs leading-6 text-cloud/38">
+                  <p className="mt-3 font-sans text-xs leading-relaxed text-text-muted">
                     {item.description}
                   </p>
-
-                  <a
-                    href="/search"
-                    className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-sage transition hover:text-cloud"
-                  >
-                    Read more
-                    <ChevronRight size={13} />
-                  </a>
                 </div>
+
+                <a
+                  href="/articles"
+                  className="mt-6 ca-article-link inline-flex items-center gap-1.5 font-sans text-xs font-semibold"
+                >
+                  Read archived entry
+                  <ChevronRight size={13} />
+                </a>
               </article>
             ))}
           </div>
@@ -318,74 +284,55 @@ export function HomePage() {
       </section>
 
       {/* -------------------------------------------------
-          KNOWLEDGE NETWORK
+          THE KNOWLEDGE NETWORK / GRAPH
       ------------------------------------------------- */}
       <section className="ca-container py-16 sm:py-20">
-        <div className="mb-7 max-w-2xl">
-          <p className="ca-eyebrow">The graph</p>
+        <div className="mb-8 max-w-2xl">
+          <p className="ca-eyebrow">The Knowledge Graph</p>
 
-          <div className="mt-2 flex items-center gap-3">
-            <h2 className="text-2xl font-semibold tracking-[-0.03em] text-cloud sm:text-3xl">
-              Explore the knowledge network
+          <div className="mt-1 flex items-center gap-3">
+            <h2 className="font-serif text-2xl font-bold tracking-tight text-text-main sm:text-3xl">
+              Explore Entity Relationships
             </h2>
 
-            <Network
-              size={22}
-              className="hidden text-sage sm:block"
-              strokeWidth={1.6}
-            />
+            <Network size={22} className="text-gold" strokeWidth={1.8} />
           </div>
 
-          <p className="mt-3 text-sm leading-6 text-cloud/38">
-            Connect-Africa is built around entities and relationships. Instead
-            of isolated pages, discover how people, places, cultures and
-            historical events connect.
+          <p className="mt-3 font-sans text-sm leading-relaxed text-text-muted">
+            Connect-Africa models history as a living graph. Uncover how people, places, institutions, and historical epochs interconnect.
           </p>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3">
           {networkNodes.map((network) => (
             <a
               key={network.title}
-              href="/search"
-              className="group relative overflow-hidden rounded-3xl border border-white/[0.07] bg-[#0e1714] p-5 transition duration-300 hover:-translate-y-1 hover:border-emerald/25"
+              href="/articles"
+              className="ca-card-hover group flex flex-col justify-between"
             >
-              <div className="absolute right-[-50px] top-[-50px] h-40 w-40 rounded-full bg-emerald/[0.055] blur-2xl transition group-hover:bg-emerald/[0.1]" />
-
-              <div className="relative">
-                <div className="mb-5 flex items-center justify-between">
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sage/65">
-                    {network.type}
-                  </span>
-
-                  <ArrowUpRight
-                    size={15}
-                    className="text-cloud/25 transition group-hover:text-sage"
-                  />
+              <div>
+                <div className="mb-4 flex items-center justify-between">
+                  <span className="ca-badge-gold">{network.type}</span>
+                  <ArrowUpRight size={15} className="text-stone group-hover:text-gold transition-colors" />
                 </div>
 
-                <div className="relative mb-6 h-28">
-                  <div className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-emerald/25 bg-emerald/[0.09] text-[10px] font-semibold text-sage">
+                <div className="relative mb-6 h-28 rounded-xl border border-stone/20 bg-canvas p-3">
+                  <div className="absolute left-1/2 top-1/2 flex h-12 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-lg border border-emerald-900 dark:border-emerald-500 bg-emerald-900 dark:bg-emerald-700 text-white font-serif text-xs font-bold shadow-sm">
                     {network.title}
                   </div>
 
-                  <div className="absolute left-[17%] top-[13%] h-px w-[27%] rotate-[25deg] bg-sage/15" />
-                  <div className="absolute right-[17%] top-[13%] h-px w-[27%] -rotate-[25deg] bg-sage/15" />
-                  <div className="absolute bottom-[12%] left-[18%] h-px w-[28%] -rotate-[25deg] bg-sage/15" />
-                  <div className="absolute bottom-[12%] right-[18%] h-px w-[28%] rotate-[25deg] bg-sage/15" />
-
                   {network.nodes.map((node, index) => {
                     const positions = [
-                      'left-[4%] top-0',
-                      'right-[4%] top-0',
-                      'left-[4%] bottom-0',
-                      'right-[4%] bottom-0',
+                      'left-2 top-2',
+                      'right-2 top-2',
+                      'left-2 bottom-2',
+                      'right-2 bottom-2',
                     ];
 
                     return (
                       <span
                         key={node}
-                        className={`absolute ${positions[index]} rounded-lg border border-white/[0.06] bg-[#131e1a] px-2 py-1 text-[8px] text-cloud/35`}
+                        className={`absolute ${positions[index]} rounded-md border border-stone/20 bg-surface px-2 py-0.5 font-mono text-[9px] text-text-muted`}
                       >
                         {node}
                       </span>
@@ -393,18 +340,18 @@ export function HomePage() {
                   })}
                 </div>
 
-                <h3 className="text-base font-semibold text-cloud">
+                <h3 className="font-serif text-lg font-bold text-text-main group-hover:text-emerald-900 dark:group-hover:text-gold">
                   {network.title}
                 </h3>
 
-                <p className="mt-2 text-xs leading-5 text-cloud/35">
+                <p className="mt-2 font-sans text-xs leading-relaxed text-text-muted">
                   {network.description}
                 </p>
+              </div>
 
-                <div className="mt-4 flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-sage/65">
-                  Open network
-                  <ChevronRight size={12} />
-                </div>
+              <div className="mt-5 flex items-center gap-1 font-mono text-xs font-semibold text-gold group-hover:underline">
+                Explore Graph Nodes
+                <ChevronRight size={12} />
               </div>
             </a>
           ))}
@@ -412,72 +359,63 @@ export function HomePage() {
       </section>
 
       {/* -------------------------------------------------
-          ON THIS DAY
+          HISTORICAL TIMELINE
       ------------------------------------------------- */}
-      <section className="border-y border-white/[0.055] bg-[#0e1714]">
-        <div className="ca-container py-16 sm:py-20">
+      <section className="border-y border-stone/20 bg-surface/50 py-16 sm:py-20">
+        <div className="ca-container">
           <div className="mb-8 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald/20 bg-emerald/[0.07] text-sage">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-gold/30 bg-gold/10 text-gold">
               <CalendarDays size={18} />
             </div>
 
             <div>
-              <p className="ca-eyebrow">Historical timeline</p>
-              <h2 className="mt-1 text-2xl font-semibold tracking-[-0.03em] text-cloud">
-                On this day in African history
+              <p className="ca-eyebrow">Chronology</p>
+              <h2 className="mt-1 font-serif text-2xl font-bold tracking-tight text-text-main sm:text-3xl">
+                On This Day in African History
               </h2>
             </div>
           </div>
 
           <div className="relative">
-            <div className="absolute left-[7px] top-2 h-[calc(100%-8px)] w-px bg-gradient-to-b from-emerald/40 via-sage/15 to-transparent sm:left-1/2 sm:-translate-x-1/2" />
+            <div className="absolute left-2 top-2 h-[calc(100%-16px)] w-0.5 bg-stone/20 sm:left-1/2 sm:-translate-x-1/2" />
 
             <div className="space-y-6">
               {[
                 {
-                  date: 'Today',
-                  title: 'A moment connected to Africa’s wider story',
-                  description:
-                    'As the knowledge graph grows, historical events will be connected to the people, places and movements around them.',
+                  date: 'Today in History',
+                  title: 'Moments Connected Across Time',
+                  description: 'Historical occurrences indexed against primary sources, entities, and geopolitical contexts.',
                 },
                 {
-                  date: 'Past',
-                  title: 'Trade, migration and cultural exchange',
-                  description:
-                    'Discover how relationships between communities shaped the continent across centuries.',
+                  date: 'Trade & Culture',
+                  title: 'Trans-Saharan & Maritime Networks',
+                  description: 'Tracing century-long economic and scholarly exchanges across northern, western, and eastern coasts.',
                 },
                 {
-                  date: 'Always',
-                  title: 'History is a network',
-                  description:
-                    'Every event becomes more meaningful when you can follow what and who it connects to.',
+                  date: 'Graph Integrity',
+                  title: 'Verified Historical Provenance',
+                  description: 'Every record is backed by primary source citations and ontological verification rules.',
                 },
               ].map((item, index) => (
                 <div
                   key={item.date}
                   className="relative grid gap-4 pl-8 sm:grid-cols-2 sm:gap-10 sm:pl-0"
                 >
-                  <div
-                    className={
-                      index % 2 === 0
-                        ? 'sm:text-right'
-                        : 'sm:col-start-2'
-                    }
-                  >
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-sage">
+                  <div className={index % 2 === 0 ? 'sm:text-right' : 'sm:col-start-2'}>
+                    <p className="font-mono text-xs font-semibold uppercase tracking-wider text-gold">
                       {item.date}
                     </p>
 
-                    <h3 className="mt-1 text-sm font-semibold text-cloud">
+                    <h3 className="mt-1 font-serif text-base font-bold text-text-main">
                       {item.title}
                     </h3>
 
-                    <p className="mt-1 text-xs leading-5 text-cloud/32">
+                    <p className="mt-1 font-sans text-xs leading-relaxed text-text-muted">
                       {item.description}
                     </p>
                   </div>
 
-                  <span className="absolute left-0 top-1.5 h-4 w-4 rounded-full border-4 border-[#0e1714] bg-emerald sm:left-1/2 sm:-translate-x-1/2" />
+                  <span className="absolute left-0 top-1.5 h-4 w-4 rounded-full border-2 border-surface bg-emerald-900 sm:left-1/2 sm:-translate-x-1/2" />
                 </div>
               ))}
             </div>
@@ -489,50 +427,43 @@ export function HomePage() {
           FEATURED PATHS
       ------------------------------------------------- */}
       <section className="ca-container py-16 sm:py-20">
-        <div className="mb-7 flex items-end justify-between">
+        <div className="mb-8 flex items-end justify-between">
           <div>
-            <p className="ca-eyebrow">Guided exploration</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-cloud sm:text-3xl">
-              Featured paths
+            <p className="ca-eyebrow">Guided Reading</p>
+            <h2 className="mt-1 font-serif text-2xl font-bold tracking-tight text-text-main sm:text-3xl">
+              Curated Research Paths
             </h2>
           </div>
 
-          <Compass
-            size={23}
-            className="text-sage/60"
-            strokeWidth={1.6}
-          />
+          <Compass size={24} className="text-gold" strokeWidth={1.8} />
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-3">
           {paths.map((path, index) => (
             <a
               key={path.title}
               href="/search"
-              className="group flex min-h-40 flex-col justify-between rounded-3xl border border-white/[0.07] bg-white/[0.025] p-5 transition duration-300 hover:-translate-y-1 hover:border-emerald/25 hover:bg-emerald/[0.035]"
+              className="ca-card-hover group flex flex-col justify-between"
             >
               <div>
-                <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sage/55">
-                  0{index + 1} · {path.count}
+                <span className="font-mono text-xs font-semibold text-gold">
+                  PATH 0{index + 1} · {path.count}
                 </span>
 
-                <h3 className="mt-3 max-w-xs text-base font-semibold leading-6 text-cloud">
+                <h3 className="mt-3 font-serif text-lg font-bold text-text-main group-hover:text-emerald-900 dark:group-hover:text-gold">
                   {path.title}
                 </h3>
 
-                <p className="mt-2 text-xs text-cloud/30">
+                <p className="mt-2 font-sans text-xs text-text-muted">
                   {path.description}
                 </p>
               </div>
 
-              <div className="mt-5 flex items-center justify-between">
-                <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-cloud/25">
-                  Follow path
+              <div className="mt-6 flex items-center justify-between border-t border-stone/15 pt-4">
+                <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-text-muted">
+                  Follow Path
                 </span>
-
-                <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.07] text-cloud/35 transition group-hover:border-emerald/25 group-hover:bg-emerald group-hover:text-[#07100c]">
-                  <ArrowRight size={14} />
-                </span>
+                <ArrowRight size={14} className="text-gold group-hover:translate-x-1 transition-transform" />
               </div>
             </a>
           ))}
@@ -540,26 +471,22 @@ export function HomePage() {
       </section>
 
       {/* -------------------------------------------------
-          NEWSLETTER / KNOWLEDGE CTA
+          SUBSCRIPTION CTA
       ------------------------------------------------- */}
       <section className="ca-container pb-16 sm:pb-20">
-        <div className="relative overflow-hidden rounded-[2rem] border border-emerald/20 bg-gradient-to-br from-[#163d2c] via-[#123123] to-[#0e241b] p-7 sm:p-10">
-          <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-emerald/10 blur-3xl" />
-          <div className="absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-sage/10 blur-3xl" />
-
-          <div className="relative grid gap-8 lg:grid-cols-[1fr_420px] lg:items-end">
+        <div className="ca-card border-gold/40 bg-surface p-8 sm:p-12">
+          <div className="grid gap-8 lg:grid-cols-[1fr_420px] lg:items-center">
             <div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] text-sage">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-gold/30 bg-gold/10 text-gold">
                 <BookOpen size={18} />
               </div>
 
-              <h2 className="mt-5 max-w-xl text-3xl font-semibold tracking-[-0.04em] text-cloud sm:text-4xl">
+              <h2 className="mt-4 font-serif text-3xl font-bold tracking-tight text-text-main sm:text-4xl">
                 Stay connected to African knowledge.
               </h2>
 
-              <p className="mt-3 max-w-lg text-sm leading-6 text-cloud/50">
-                Get new discoveries, connected histories and emerging
-                knowledge from the Connect-Africa network.
+              <p className="mt-2 font-sans text-sm text-text-muted">
+                Receive new research entries, verified historical updates, and graph expansions directly from Connect Africa.
               </p>
             </div>
 
@@ -569,51 +496,20 @@ export function HomePage() {
             >
               <input
                 type="email"
-                placeholder="Your email address"
+                placeholder="Enter your academic or personal email"
                 aria-label="Email address"
-                className="ca-input-dark h-12 min-w-0 flex-1 bg-black/15 focus:border-emerald/50 placeholder:text-cloud/25"
+                className="ca-input"
               />
 
-              <button
-                type="submit"
-                className="ca-btn-primary h-12 px-5 text-xs"
-              >
-                Subscribe
+              <button type="submit" className="ca-btn-primary">
+                Subscribe to Knowledge Briefs
                 <ArrowRight size={15} />
               </button>
             </form>
           </div>
         </div>
       </section>
-
-      {/* -------------------------------------------------
-          FOOTER
-      ------------------------------------------------- */}
-      <footer className="border-t border-white/[0.055]">
-        <div className="ca-container flex flex-col gap-4 py-7 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-xs font-semibold text-cloud/55">
-              Connect<span className="text-sage">-Africa</span>
-            </p>
-            <p className="mt-1 text-[10px] text-cloud/25">
-              Africa, connected as knowledge.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-5 text-[10px] text-cloud/25">
-            <a href="/about" className="transition hover:text-cloud/60">
-              About
-            </a>
-            <a href="/search" className="transition hover:text-cloud/60">
-              Explore
-            </a>
-            <a href="/account" className="transition hover:text-cloud/60">
-              Account
-            </a>
-          </div>
-        </div>
-      </footer>
-    </main>
+    </div>
   );
 }
 

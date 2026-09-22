@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { EntityController } from './EntityController';
 import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/AuthenticationMiddleware';
-import { authorize } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
+import { authorize, authorizeAdminOrSuperAdmin } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
 import {
   validate,
   validateQuery,
@@ -44,7 +44,7 @@ export const createEntityRoutes = (
 
   router.delete(
     '/:id',
-    authorize(Permission.ENTITY_DELETE),
+    authorizeAdminOrSuperAdmin,
     (req, res) => controller.delete(req, res),
   );
 

@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const response = await api.post('/auth/login', { email, password });
       const authToken = response.token || response.accessToken || response.data?.token || response.data?.accessToken;
-      const userData = response.user || response.data?.user || { id: 'user-admin-001', email, roles: (email === 'olaifasammy@gmail.com' || email.includes('admin')) ? ['SUPER_ADMINISTRATOR', 'ADMIN'] : ['USER'] };
+      const userData = response.user || response.data?.user || { id: 'user-admin-001', email, roles: (email === 'olaifasammy@gmail.com' || email.includes('admin')) ? ['SUPER_ADMINISTRATOR', 'ADMINISTRATOR'] : ['USER'] };
       
       localStorage.removeItem('loggedOut');
       if (authToken) {
@@ -71,7 +71,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const isAuthenticated = !!token;
-  const isAdmin = !!user?.roles?.some((r: string) => ['ADMIN', 'SUPER_ADMINISTRATOR'].includes(r));
+  const isAdmin = !!user?.roles?.some((r: string) => ['ADMINISTRATOR', 'SUPER_ADMINISTRATOR'].includes(r));
 
   return (
     <AuthContext.Provider value={{ user, token, login, register, logout, isAuthenticated, isAdmin }}>

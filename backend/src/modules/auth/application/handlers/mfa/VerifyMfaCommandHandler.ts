@@ -1,5 +1,7 @@
 import { provide } from 'inversify-binding-decorators';
 import { injectable, inject } from 'inversify';
+import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 import { ICommandHandler } from '@shared/application/handlers/ICommandHandler';
 import { VerifyMfaCommand } from '@modules/auth/application/commands/VerifyMfaCommand';
 import { IUserRepository } from '@modules/auth/domain/repositories/UserRepository';
@@ -14,7 +16,7 @@ import { AuditLogRequestedEvent } from '@modules/audit/public';
 
 @provide(VerifyMfaCommandHandler, true)
 @injectable()
-export class VerifyMfaCommandHandler implements ICommandHandler<VerifyMfaCommand, void> {
+export class VerifyMfaCommandHandler implements ICommandHandler<VerifyMfaCommand, string[]> {
   constructor(
     @inject('IUserRepository') private readonly userRepository: IUserRepository,
     @inject('IMfaEnrollmentRepository') private readonly enrollmentRepository: IMfaEnrollmentRepository,
@@ -23,7 +25,7 @@ export class VerifyMfaCommandHandler implements ICommandHandler<VerifyMfaCommand
     @inject('EventBus') private readonly eventBus: EventBus,
   ) {}
 
-  async handle(command: VerifyMfaCommand): Promise<void> {
+  async handle(command: VerifyMfaCommand): Promise<string[]> {
     const userId = new UniqueEntityId(command.userId);
 
     try {
@@ -55,6 +57,20 @@ export class VerifyMfaCommandHandler implements ICommandHandler<VerifyMfaCommand
 
       user.setMfaSecret(pendingSecret);
 
+      const plainCodes: string[] = [];
+      const hashedCodes: string[] = [];
+
+      for (let i = 0; i < 8; i++) {
+        const randomHex = crypto.randomBytes(4).toString('hex').toUpperCase();
+        const formattedCode = `${randomHex.substring(0, 4)}-${randomHex.substring(4)}`;
+        plainCodes.push(formattedCode);
+
+        const hash = await bcrypt.hash(formattedCode, 10);
+        hashedCodes.push(hash);
+      }
+
+      user.setMfaRecoveryCodes(hashedCodes);
+
       await this.userRepository.save(user);
       await this.enrollmentRepository.remove(userId);
       await this.sessionRepository.revokeAllUserSessions(userId);
@@ -73,6 +89,8 @@ export class VerifyMfaCommandHandler implements ICommandHandler<VerifyMfaCommand
           metadata: [{ key: 'status', value: 'SUCCESS' }],
         }),
       );
+
+      return plainCodes;
     } catch (error) {
       await this.eventBus.publish(
         new AuditLogRequestedEvent({

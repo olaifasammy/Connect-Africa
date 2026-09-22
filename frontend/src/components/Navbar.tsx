@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import {
   ChevronDown,
   LogIn,
   LogOut,
   Menu,
+  Moon,
   Search,
   Shield,
+  Sun,
   User,
   X,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { user, isAuthenticated, logout, isAdmin } = useAuth();
+  const { resolvedTheme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -30,7 +34,7 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-ink/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-stone/20 bg-surface/90 backdrop-blur-xl transition-colors duration-300">
       <nav className="ca-container">
         <div className="flex h-[72px] items-center justify-between">
           <Link
@@ -41,26 +45,26 @@ export const Navbar: React.FC = () => {
             <img
               src="/images/africa.svg"
               alt="Connect-Africa Logo"
-              className="h-7 w-7 object-contain transition-all duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_6px_rgba(217,164,65,0.5)]"
-              style={{ filter: 'invert(72%) sepia(26%) saturate(1450%) hue-rotate(345deg) brightness(91%) contrast(85%)' }}
+              className="h-7 w-7 object-contain transition-all duration-300 group-hover:scale-105"
+              style={{ filter: 'invert(70%) sepia(30%) saturate(1200%) hue-rotate(345deg) brightness(90%)' }}
             />
 
-            <span className="text-sm font-black tracking-[0.2em] text-gold transition-all duration-300 group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(217,164,65,0.4)]">
-              Connect-Africa
+            <span className="font-serif text-base font-bold tracking-widest text-emerald-900 dark:text-emerald-400 transition-all duration-300 group-hover:text-gold">
+              CONNECT-AFRICA
             </span>
           </Link>
 
-          <div className="hidden items-center gap-1 lg:flex">
+          <div className="hidden items-center gap-1 lg:flex font-sans">
             <Link
               to="/"
-              className="rounded-lg px-4 py-2 text-sm font-medium text-cloud transition hover:bg-white/[0.05]"
+              className="rounded-lg px-4 py-2 text-sm font-medium text-text-main transition hover:bg-stone/10"
             >
               Explore
             </Link>
 
             <Link
               to="/articles"
-              className="flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-mist transition hover:bg-white/[0.05] hover:text-cloud"
+              className="flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-text-muted transition hover:bg-stone/10 hover:text-text-main"
             >
               Knowledge
               <ChevronDown className="h-3.5 w-3.5 opacity-50" />
@@ -68,37 +72,52 @@ export const Navbar: React.FC = () => {
 
             <Link
               to="/articles"
-              className="rounded-lg px-4 py-2 text-sm font-medium text-mist transition hover:bg-white/[0.05] hover:text-cloud"
+              className="rounded-lg px-4 py-2 text-sm font-medium text-text-muted transition hover:bg-stone/10 hover:text-text-main"
             >
               Graph
             </Link>
 
             <Link
               to="/articles"
-              className="rounded-lg px-4 py-2 text-sm font-medium text-mist transition hover:bg-white/[0.05] hover:text-cloud"
+              className="rounded-lg px-4 py-2 text-sm font-medium text-text-muted transition hover:bg-stone/10 hover:text-text-main"
             >
               Research
             </Link>
           </div>
 
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center gap-2 md:flex font-sans">
             <Link
               to="/search"
-              className="flex items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.025] px-3 py-2 text-sm text-mist transition hover:border-white/[0.12] hover:text-cloud"
+              className="flex items-center gap-2 rounded-lg border border-stone/20 bg-canvas/60 px-3 py-2 text-sm text-text-muted transition hover:border-gold hover:text-text-main"
             >
               <Search className="h-4 w-4" />
               <span>Search</span>
-              <kbd className="hidden rounded border border-white/[0.08] px-1.5 py-0.5 text-[10px] text-mist lg:inline">
+              <kbd className="hidden rounded border border-stone/30 px-1.5 py-0.5 font-mono text-[10px] text-text-muted lg:inline">
                 /
               </kbd>
             </Link>
 
+            {/* Theme Switcher Toggle */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="rounded-lg border border-stone/20 p-2 text-text-muted transition hover:border-gold hover:bg-stone/10 hover:text-text-main"
+              title={`Switch to ${resolvedTheme === 'light' ? 'Dark' : 'Parchment Light'} mode`}
+              aria-label="Toggle theme"
+            >
+              {resolvedTheme === 'light' ? (
+                <Moon className="h-4 w-4 text-emerald-900" />
+              ) : (
+                <Sun className="h-4 w-4 text-gold" />
+              )}
+            </button>
+
             {isAuthenticated ? (
-              <div className="ml-2 flex items-center gap-1 border-l border-white/[0.07] pl-3">
+              <div className="ml-2 flex items-center gap-1 border-l border-stone/20 pl-3">
                 {!isAccountPage && (
                   <Link
                     to="/account"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-mist transition hover:bg-white/[0.05] hover:text-cloud"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-muted transition hover:bg-stone/10 hover:text-text-main"
                   >
                     <User className="h-4 w-4" />
                     <span className="hidden xl:inline">
@@ -120,17 +139,17 @@ export const Navbar: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="rounded-lg p-2 text-mist transition hover:bg-white/[0.05] hover:text-cloud"
+                  className="rounded-lg p-2 text-text-muted transition hover:bg-stone/10 hover:text-text-main"
                   title="Sign out"
                 >
                   <LogOut className="h-4 w-4" />
                 </button>
               </div>
             ) : (
-              <div className="ml-2 flex items-center gap-1 border-l border-white/[0.07] pl-3">
+              <div className="ml-2 flex items-center gap-1 border-l border-stone/20 pl-3">
                 <Link
                   to="/login"
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-mist transition hover:text-cloud"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-text-muted transition hover:text-text-main"
                 >
                   <LogIn className="h-4 w-4" />
                   Sign in
@@ -138,7 +157,7 @@ export const Navbar: React.FC = () => {
 
                 <Link
                   to="/register"
-                  className="rounded-lg bg-emerald px-4 py-2 text-sm font-semibold text-ink transition hover:bg-sage"
+                  className="ca-btn-primary"
                 >
                   Join
                 </Link>
@@ -146,27 +165,42 @@ export const Navbar: React.FC = () => {
             )}
           </div>
 
-          <button
-            type="button"
-            onClick={() => setMobileOpen((open) => !open)}
-            className="rounded-lg border border-white/[0.07] p-2 text-mist transition hover:bg-white/[0.05] hover:text-cloud md:hidden"
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-          >
-            {mobileOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="rounded-lg border border-stone/20 p-2 text-text-muted transition hover:bg-stone/10"
+              aria-label="Toggle theme"
+            >
+              {resolvedTheme === 'light' ? (
+                <Moon className="h-4 w-4 text-emerald-900" />
+              ) : (
+                <Sun className="h-4 w-4 text-gold" />
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setMobileOpen((open) => !open)}
+              className="rounded-lg border border-stone/20 p-2 text-text-muted transition hover:bg-stone/10 hover:text-text-main"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            >
+              {mobileOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
+            </button>
+          </div>
         </div>
 
         {mobileOpen && (
-          <div className="border-t border-white/[0.06] py-4 md:hidden">
+          <div className="border-t border-stone/20 py-4 md:hidden font-sans">
             <div className="flex flex-col gap-1">
               <Link
                 to="/"
                 onClick={closeMobile}
-                className="rounded-lg px-3 py-3 text-sm font-medium text-cloud hover:bg-white/[0.05]"
+                className="rounded-lg px-3 py-3 text-sm font-medium text-text-main hover:bg-stone/10"
               >
                 Explore
               </Link>
@@ -174,7 +208,7 @@ export const Navbar: React.FC = () => {
               <Link
                 to="/articles"
                 onClick={closeMobile}
-                className="rounded-lg px-3 py-3 text-sm font-medium text-mist hover:bg-white/[0.05] hover:text-cloud"
+                className="rounded-lg px-3 py-3 text-sm font-medium text-text-muted hover:bg-stone/10 hover:text-text-main"
               >
                 Knowledge
               </Link>
@@ -182,7 +216,7 @@ export const Navbar: React.FC = () => {
               <Link
                 to="/articles"
                 onClick={closeMobile}
-                className="rounded-lg px-3 py-3 text-sm font-medium text-mist hover:bg-white/[0.05] hover:text-cloud"
+                className="rounded-lg px-3 py-3 text-sm font-medium text-text-muted hover:bg-stone/10 hover:text-text-main"
               >
                 Graph
               </Link>
@@ -190,17 +224,17 @@ export const Navbar: React.FC = () => {
               <Link
                 to="/articles"
                 onClick={closeMobile}
-                className="rounded-lg px-3 py-3 text-sm font-medium text-mist hover:bg-white/[0.05] hover:text-cloud"
+                className="rounded-lg px-3 py-3 text-sm font-medium text-text-muted hover:bg-stone/10 hover:text-text-main"
               >
                 Research
               </Link>
 
-              <div className="my-2 border-t border-white/[0.06]" />
+              <div className="my-2 border-t border-stone/20" />
 
               <Link
                 to="/search"
                 onClick={closeMobile}
-                className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm text-mist hover:bg-white/[0.05] hover:text-cloud"
+                className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm text-text-muted hover:bg-stone/10 hover:text-text-main"
               >
                 <Search className="h-4 w-4" />
                 Search
@@ -212,7 +246,7 @@ export const Navbar: React.FC = () => {
                     <Link
                       to="/account"
                       onClick={closeMobile}
-                      className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm text-mist hover:bg-white/[0.05] hover:text-cloud"
+                      className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm text-text-muted hover:bg-stone/10 hover:text-text-main"
                     >
                       <User className="h-4 w-4" />
                       Account
@@ -233,7 +267,7 @@ export const Navbar: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="flex items-center gap-2 rounded-lg px-3 py-3 text-left text-sm text-mist hover:bg-white/[0.05] hover:text-cloud"
+                    className="flex items-center gap-2 rounded-lg px-3 py-3 text-left text-sm text-text-muted hover:bg-stone/10 hover:text-text-main"
                   >
                     <LogOut className="h-4 w-4" />
                     Sign out
@@ -244,7 +278,7 @@ export const Navbar: React.FC = () => {
                   <Link
                     to="/login"
                     onClick={closeMobile}
-                    className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm text-mist hover:bg-white/[0.05] hover:text-cloud"
+                    className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm text-text-muted hover:bg-stone/10 hover:text-text-main"
                   >
                     <LogIn className="h-4 w-4" />
                     Sign in
@@ -253,7 +287,7 @@ export const Navbar: React.FC = () => {
                   <Link
                     to="/register"
                     onClick={closeMobile}
-                    className="mt-1 rounded-lg bg-emerald px-3 py-3 text-center text-sm font-semibold text-ink"
+                    className="mt-1 ca-btn-primary w-full text-center"
                   >
                     Join Connect-Africa
                   </Link>

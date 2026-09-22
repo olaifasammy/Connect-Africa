@@ -49,6 +49,8 @@ export class RedisSessionRepository
   async createSession(
     userId: UniqueEntityId,
     token: string,
+    ipAddress?: string,
+    userAgent?: string,
   ): Promise<void> {
     try {
       if (
@@ -66,9 +68,18 @@ export class RedisSessionRepository
       const sessionId =
         this.createSessionId(token);
 
+      const sessionData = {
+        userId: userIdValue,
+        ipAddress: ipAddress || 'unknown',
+        userAgent: userAgent || 'unknown',
+        createdAt: new Date().toISOString(),
+        lastUsedAt: new Date().toISOString(),
+        id: sessionId,
+      };
+
       await this.redisClient.set(
         this.getSessionKey(sessionId),
-        userIdValue,
+        JSON.stringify(sessionData),
         'EX',
         this.getSessionTtlSeconds(),
       );
@@ -114,16 +125,21 @@ export class RedisSessionRepository
       const sessionId =
         this.createSessionId(token);
 
-      const userId =
+      const cached =
         await this.redisClient.get(
           this.getSessionKey(sessionId),
         );
 
-      if (!userId) {
+      if (!cached) {
         return null;
       }
 
-      return new UniqueEntityId(userId);
+      if (cached.startsWith('{')) {
+        const session = JSON.parse(cached);
+        return new UniqueEntityId(session.userId);
+      }
+
+      return new UniqueEntityId(cached);
     } catch (error) {
       throw new AuthenticationError(
         'Failed to read session',
@@ -135,6 +151,8 @@ export class RedisSessionRepository
     userId: UniqueEntityId,
     oldToken: string,
     newToken: string,
+    ipAddress?: string,
+    userAgent?: string,
   ): Promise<void> {
     try {
       if (
@@ -154,11 +172,32 @@ export class RedisSessionRepository
       const oldSessionId =
         this.createSessionId(oldToken);
 
-      const newSessionId =
-        this.createSessionId(newToken);
-
       const oldSessionKey =
         this.getSessionKey(oldSessionId);
+
+      const cached = await this.redisClient.get(oldSessionKey);
+
+      if (!cached) {
+        throw new AuthenticationError(
+          'Refresh session is invalid or has been revoked.',
+        );
+      }
+
+      let storedUserId = cached;
+      let oldSessionData: any = {};
+      if (cached.startsWith('{')) {
+        oldSessionData = JSON.parse(cached);
+        storedUserId = oldSessionData.userId;
+      }
+
+      if (storedUserId !== userIdValue) {
+        throw new AuthenticationError(
+          'Refresh session is invalid or has been revoked.',
+        );
+      }
+
+      const newSessionId =
+        this.createSessionId(newToken);
 
       const newSessionKey =
         this.getSessionKey(newSessionId);
@@ -168,64 +207,22 @@ export class RedisSessionRepository
           userIdValue,
         );
 
-      const rotationScript = `
-        local storedUserId = redis.call(
-          'GET',
-          KEYS[1]
-        )
+      const newSessionData = {
+        userId: userIdValue,
+        ipAddress: ipAddress || oldSessionData.ipAddress || 'unknown',
+        userAgent: userAgent || oldSessionData.userAgent || 'unknown',
+        createdAt: oldSessionData.createdAt || new Date().toISOString(),
+        lastUsedAt: new Date().toISOString(),
+        id: newSessionId,
+      };
 
-        if not storedUserId or storedUserId ~= ARGV[1] then
-          return 0
-        end
-
-        redis.call(
-          'SET',
-          KEYS[2],
-          ARGV[1],
-          'EX',
-          ARGV[2]
-        )
-
-        redis.call(
-          'SADD',
-          KEYS[3],
-          ARGV[4]
-        )
-
-        redis.call(
-          'DEL',
-          KEYS[1]
-        )
-
-        redis.call(
-          'SREM',
-          KEYS[3],
-          ARGV[3]
-        )
-
-        return 1
-      `;
-
-      const result =
-        await this.redisClient.eval(
-          rotationScript,
-          3,
-          oldSessionKey,
-          newSessionKey,
-          userSessionsKey,
-          userIdValue,
-          String(
-            this.getSessionTtlSeconds(),
-          ),
-          oldSessionId,
-          newSessionId,
-        );
-
-      if (result !== 1) {
-        throw new AuthenticationError(
-          'Refresh session is invalid or has been revoked.',
-        );
-      }
+      await this.redisClient
+        .multi()
+        .set(newSessionKey, JSON.stringify(newSessionData), 'EX', this.getSessionTtlSeconds())
+        .sadd(userSessionsKey, newSessionId)
+        .del(oldSessionKey)
+        .srem(userSessionsKey, oldSessionId)
+        .exec();
 
       AuditLogger.log({
         user: userIdValue,
@@ -268,10 +265,15 @@ export class RedisSessionRepository
       const sessionKey =
         this.getSessionKey(sessionId);
 
-      const storedUserId =
+      let storedUserId =
         await this.redisClient.get(
           sessionKey,
         );
+
+      if (storedUserId && storedUserId.startsWith('{')) {
+        const session = JSON.parse(storedUserId);
+        storedUserId = session.userId;
+      }
 
       if (
         !storedUserId ||
@@ -319,10 +321,15 @@ export class RedisSessionRepository
       const sessionKey =
         this.getSessionKey(sessionId);
 
-      const storedUserId =
+      let storedUserId =
         await this.redisClient.get(
           sessionKey,
         );
+
+      if (storedUserId && storedUserId.startsWith('{')) {
+        const session = JSON.parse(storedUserId);
+        storedUserId = session.userId;
+      }
 
       if (
         !storedUserId ||
@@ -352,7 +359,7 @@ export class RedisSessionRepository
 
   async listUserSessions(
     userId: UniqueEntityId,
-  ): Promise<string[]> {
+  ): Promise<any[]> {
     try {
       const userIdValue =
         userId.toString();
@@ -377,7 +384,7 @@ export class RedisSessionRepository
       for (
         const sessionId of sessionIds
       ) {
-        pipeline.exists(
+        pipeline.get(
           this.getSessionKey(sessionId),
         );
       }
@@ -385,7 +392,7 @@ export class RedisSessionRepository
       const results =
         await pipeline.exec();
 
-      const activeSessions: string[] = [];
+      const activeSessions: any[] = [];
       const staleSessions: string[] = [];
 
       for (
@@ -396,14 +403,23 @@ export class RedisSessionRepository
         const result =
           results?.[index];
 
-        const exists =
+        const value =
           result &&
-          result[1] === 1;
+          result[1];
 
-        if (exists) {
-          activeSessions.push(
-            sessionIds[index],
-          );
+        if (value && typeof value === 'string') {
+          if (value.startsWith('{')) {
+            activeSessions.push(JSON.parse(value));
+          } else {
+            activeSessions.push({
+              id: sessionIds[index],
+              userId: userIdValue,
+              ipAddress: 'unknown',
+              userAgent: 'unknown',
+              createdAt: new Date().toISOString(),
+              lastUsedAt: new Date().toISOString(),
+            });
+          }
         } else {
           staleSessions.push(
             sessionIds[index],
@@ -481,10 +497,15 @@ export class RedisSessionRepository
     const sessionKey =
       this.getSessionKey(sessionId);
 
-    const userId =
+    let userId =
       await this.redisClient.get(
         sessionKey,
       );
+
+    if (userId && userId.startsWith('{')) {
+      const session = JSON.parse(userId);
+      userId = session.userId;
+    }
 
     await this.redisClient.del(
       sessionKey,

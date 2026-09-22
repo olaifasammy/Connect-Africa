@@ -1,22 +1,24 @@
 {
   "snapshot": {
     "schemaVersion": 1,
-    "projectRoot": "/data/data/com.termux/files/home/Connect-Africa",
+    "projectRoot": "/data/data/com.termux/files/home/pro/projects/Connect-Africa",
     "projectName": "Connect-Africa",
-    "scannedAt": "2026-09-15T11:47:40.793Z",
+    "workspace": "pro",
+    "leakWarnings": [],
+    "scannedAt": "2026-09-21T22:52:51.195Z",
     "git": {
       "branch": "Main",
-      "commit": "74544975c2b7ccb3742e84186a6e51749a1be864",
+      "commit": "832b8a2c5a1cb81ae2f462abe64444de0e6e7443",
       "dirty": true
     },
     "languages": {
-      "Markdown": 36,
+      "Markdown": 39,
       "YAML": 2,
       "JSON": 12,
       "JavaScript": 3,
       "SQL": 2,
-      "TypeScript": 1032,
-      "TypeScript React": 78
+      "TypeScript": 1029,
+      "TypeScript React": 44
     },
     "files": [
       {
@@ -155,6 +157,15 @@
         "exports": []
       },
       {
+        "path": "Docs/architecture/SCHOLAR_DESIGN_SYSTEM.md",
+        "size": 5092,
+        "mtimeMs": 1789779088251.4448,
+        "hash": "9afd841032e57cd6ed610609f897108e4bed031d7c249379a9f96d7107c909cf",
+        "language": "Markdown",
+        "imports": [],
+        "exports": []
+      },
+      {
         "path": "backend/.eslintrc.json",
         "size": 277,
         "mtimeMs": 1786761206000,
@@ -183,20 +194,35 @@
       },
       {
         "path": "backend/package.json",
-        "size": 2665,
-        "mtimeMs": 1787885796000,
-        "hash": "721bc0ca61ffdc62360686bf9b89f28983cbdd020490382fe2c87c800b33a6e5",
+        "size": 2739,
+        "mtimeMs": 1789782569475.4424,
+        "hash": "709c648501ac7e395fc0e57d052a2b75196a2c4f3078fbad9e52e8c8f95e7165",
         "language": "JSON",
         "imports": [],
         "exports": []
       },
       {
         "path": "backend/schema.sql",
-        "size": 33355,
-        "mtimeMs": 1789444403685.9927,
-        "hash": "5697d27c3fbec5fd50f2d1fb74c85f3700cc8dc1f0aff895de8204f5518a793c",
+        "size": 34470,
+        "mtimeMs": 1789737948315.474,
+        "hash": "5a1f3d7c1403034cf62d632da67cd580e2902c6cd95a59744cf3588b4d5ca827",
         "language": "SQL",
         "imports": [],
+        "exports": []
+      },
+      {
+        "path": "backend/scripts/seedUsers.ts",
+        "size": 2450,
+        "mtimeMs": 1789781951031.4426,
+        "hash": "ddcb270baa251139ea335b095229cf303077512860bbb086e8a36fb846cc6471",
+        "language": "TypeScript",
+        "imports": [
+          "bcryptjs",
+          "dotenv",
+          "path",
+          "pg",
+          "uuid"
+        ],
         "exports": []
       },
       {
@@ -1669,9 +1695,9 @@
       },
       {
         "path": "backend/src/modules/ai/infrastructure/security/AiAuthorizationMiddleware.ts",
-        "size": 243,
-        "mtimeMs": 1787795927000,
-        "hash": "916c94862b099858bb2144cbcdd294effcf7954dec12be4fc5abdaf014da2f75",
+        "size": 251,
+        "mtimeMs": 1789483036995.5745,
+        "hash": "c43cd371eb8796cf4df3af2da28f6c9b2b4f57fc19348f4d1a0726aa5aec3732",
         "language": "TypeScript",
         "imports": [
           "@modules/auth/public",
@@ -3507,9 +3533,9 @@
       },
       {
         "path": "backend/src/modules/article/interfaces/routes/ArticleRoutes.ts",
-        "size": 5723,
-        "mtimeMs": 1789441527197.9946,
-        "hash": "12f5fcdff67df804b73e5d7cc0b539ea9e6b275f7fd2832b5ee37cf045348e29",
+        "size": 5741,
+        "mtimeMs": 1789485661642.142,
+        "hash": "748653db5f77535069b2fbc19dc7bd7edc76e26695535f0ed8d0b413f14b415d",
         "language": "TypeScript",
         "imports": [
           "../../application/validators/ArticleValidators",
@@ -4274,9 +4300,9 @@
       },
       {
         "path": "backend/src/modules/auth/application/commands/LoginCommand.ts",
-        "size": 250,
-        "mtimeMs": 1789065412957.484,
-        "hash": "6f75f899b645e0cf4d17c34ef3a4df3ce86645e5ded694da02d6d441caf74e87",
+        "size": 330,
+        "mtimeMs": 1789739358915.4731,
+        "hash": "548a77c3fe24f70b1594cfe01ef34f98fc4ef0b1f01cffcc0c7cb7db84f32caa",
         "language": "TypeScript",
         "imports": [
           "@shared/application/commands/ICommand"
@@ -4287,9 +4313,9 @@
       },
       {
         "path": "backend/src/modules/auth/application/commands/RegisterUserCommand.ts",
-        "size": 242,
-        "mtimeMs": 1787938284000,
-        "hash": "d701b03bd9305fb1fc1df9ed47d53620c72ca424054c9ebc7373584251fdf6ef",
+        "size": 382,
+        "mtimeMs": 1789738307827.4739,
+        "hash": "c3bf08cd67777150f36245da01f8d6c24f88e0074bdca41225e5fa00c606fd40",
         "language": "TypeScript",
         "imports": [
           "@shared/application/commands/ICommand"
@@ -4467,19 +4493,6 @@
         ]
       },
       {
-        "path": "backend/src/modules/auth/application/commands/UpdateUserSettingsCommand.ts",
-        "size": 550,
-        "mtimeMs": 1787938284000,
-        "hash": "7d2600b3ef530b2b8f282b005d622dc90f0e104f2f58868d7df9870079ac4efd",
-        "language": "TypeScript",
-        "imports": [
-          "@shared/application/commands/ICommand"
-        ],
-        "exports": [
-          "UpdateUserSettingsCommand"
-        ]
-      },
-      {
         "path": "backend/src/modules/auth/application/commands/UploadAvatarCommand.ts",
         "size": 260,
         "mtimeMs": 1787938284000,
@@ -4553,9 +4566,9 @@
       },
       {
         "path": "backend/src/modules/auth/application/dto/RegisterUserRequestDTO.ts",
-        "size": 278,
-        "mtimeMs": 1786761206000,
-        "hash": "d416eb2157f7facbddae5d3a5a5444993d6c6bdfa5a152daac73ef308ca29cf3",
+        "size": 467,
+        "mtimeMs": 1789752499743.4639,
+        "hash": "18e579c3ec70c38ae15bde0fc2a1698ac228a2d92cb060556fb6d5a44f0168dc",
         "language": "TypeScript",
         "imports": [
           "zod"
@@ -4601,9 +4614,9 @@
       },
       {
         "path": "backend/src/modules/auth/application/handlers/AssignRoleCommandHandler.ts",
-        "size": 3335,
-        "mtimeMs": 1789077042545.4714,
-        "hash": "fff053708f610fea8de1d3854aeb71da17dc77497661b8287e96e611e45c20cc",
+        "size": 3675,
+        "mtimeMs": 1789483417363.5742,
+        "hash": "4758530d6081f6519953d9fa5ab406f6fd229b64db91afe219c74b127ccabc1c",
         "language": "TypeScript",
         "imports": [
           "../commands/AssignRoleCommand",
@@ -4846,9 +4859,9 @@
       },
       {
         "path": "backend/src/modules/auth/application/handlers/LoginCommandHandler.ts",
-        "size": 5027,
-        "mtimeMs": 1789307372077.4707,
-        "hash": "04f7e4a5b7c63fdd09f24eb6c9401842a47ab1231373f79aa6c210dfa019fed3",
+        "size": 5660,
+        "mtimeMs": 1789748342851.4668,
+        "hash": "d4da0b05d95edefcb5f2a4ac4b5be5144ce34498c100c8924d71794bfaf75d17",
         "language": "TypeScript",
         "imports": [
           "../commands/LoginCommand",
@@ -4865,6 +4878,7 @@
           "@shared/domain/UniqueEntityId",
           "@shared/infrastructure/audit/AuditDecorator",
           "@shared/infrastructure/queue/EventBus",
+          "bcryptjs",
           "inversify",
           "inversify-binding-decorators"
         ],
@@ -4923,20 +4937,24 @@
       },
       {
         "path": "backend/src/modules/auth/application/handlers/RegisterUserCommandHandler.ts",
-        "size": 2556,
-        "mtimeMs": 1789073768209.4739,
-        "hash": "ae6bcf4b2464acb1d360fe1640ecdd3c32575d1b11ca8bc9715af59546c5923a",
+        "size": 3443,
+        "mtimeMs": 1789738367631.4739,
+        "hash": "78fc26ecee9bcbbfb63123845577ff23cc3e51368948bf508797fc7ddefd019f",
         "language": "TypeScript",
         "imports": [
           "../commands/RegisterUserCommand",
           "@modules/auth/domain/entities/User",
+          "@modules/auth/domain/entities/UserProfile",
+          "@modules/auth/domain/errors/AuthErrors",
           "@modules/auth/domain/errors/UserErrors",
           "@modules/auth/domain/events/UserCreatedEvent",
           "@modules/auth/domain/interfaces/IPasswordHasher",
+          "@modules/auth/domain/repositories/IUserProfileRepository",
           "@modules/auth/domain/repositories/UserRepository",
           "@modules/auth/domain/value-objects/AccountStatus",
           "@modules/auth/domain/value-objects/Email",
           "@modules/auth/domain/value-objects/PasswordHash",
+          "@modules/auth/domain/value-objects/UserId",
           "@shared/application/handlers/ICommandHandler",
           "@shared/domain/UniqueEntityId",
           "@shared/infrastructure/audit/AuditDecorator",
@@ -4950,9 +4968,9 @@
       },
       {
         "path": "backend/src/modules/auth/application/handlers/RemoveRoleCommandHandler.ts",
-        "size": 3014,
-        "mtimeMs": 1789077042545.4714,
-        "hash": "7d4f5b6267c431c847eb501bb4148cdd02347444cdb10127e1d3562c147b9652",
+        "size": 3071,
+        "mtimeMs": 1789483017967.5745,
+        "hash": "bec0e9753214b352391b8e8ff69e88f7dc66fa65a201813234bb4f20d6db544e",
         "language": "TypeScript",
         "imports": [
           "../commands/RemoveRoleCommand",
@@ -5240,27 +5258,6 @@
         ]
       },
       {
-        "path": "backend/src/modules/auth/application/handlers/UpdateUserSettingsCommandHandler.ts",
-        "size": 2225,
-        "mtimeMs": 1787938639000,
-        "hash": "8d77c8bbcde2d0c53f693cde7fce75589296e58bd7d165e5af3fd30f8288c0ba",
-        "language": "TypeScript",
-        "imports": [
-          "../commands/UpdateUserSettingsCommand",
-          "@modules/auth/domain/errors/AuthErrors",
-          "@modules/auth/domain/repositories/IUserSettingsRepository",
-          "@modules/auth/domain/value-objects/UserId",
-          "@modules/auth/infrastructure/AuditLogger",
-          "@shared/application/handlers/ICommandHandler",
-          "@shared/infrastructure/queue/EventBus",
-          "inversify",
-          "inversify-binding-decorators"
-        ],
-        "exports": [
-          "UpdateUserSettingsCommandHandler"
-        ]
-      },
-      {
         "path": "backend/src/modules/auth/application/handlers/UploadAvatarCommandHandler.ts",
         "size": 2592,
         "mtimeMs": 1789060486129.4875,
@@ -5352,9 +5349,9 @@
       },
       {
         "path": "backend/src/modules/auth/application/handlers/mfa/VerifyMfaCommandHandler.ts",
-        "size": 3667,
-        "mtimeMs": 1789065383481.484,
-        "hash": "ca42b763fc2fca62ea7e02fec82c167c7cd9cebc3d57d6d583bdbfdaf7341f1a",
+        "size": 4231,
+        "mtimeMs": 1789742526967.471,
+        "hash": "e28b7a231acf5016d5d5b3692b42809f1cfc3f05acdb9dd1c186ee0c5b7a61dc",
         "language": "TypeScript",
         "imports": [
           "@modules/audit/public",
@@ -5368,6 +5365,8 @@
           "@shared/application/handlers/ICommandHandler",
           "@shared/domain/UniqueEntityId",
           "@shared/infrastructure/queue/EventBus",
+          "bcryptjs",
+          "crypto",
           "inversify",
           "inversify-binding-decorators"
         ],
@@ -5644,9 +5643,9 @@
       },
       {
         "path": "backend/src/modules/auth/domain/entities/User.ts",
-        "size": 8688,
-        "mtimeMs": 1789073767681.4739,
-        "hash": "e43e24d9e5e6af98804fc643282a3e11c2c622f075e7d29d6dc072b93f827899",
+        "size": 9491,
+        "mtimeMs": 1789738189211.474,
+        "hash": "52aac82c47c5f7f581952639fe49d725ac8a87bc910a7f08f58bf466e1fc73fb",
         "language": "TypeScript",
         "imports": [
           "../events/UserCreatedEvent",
@@ -5693,22 +5692,6 @@
         "exports": [
           "UserProfile",
           "UserProfileProps"
-        ]
-      },
-      {
-        "path": "backend/src/modules/auth/domain/entities/UserSettings.ts",
-        "size": 1379,
-        "mtimeMs": 1787938284000,
-        "hash": "68e0daa2f5a242e7fb995a4f49698ce17260cb93d06aecafa5d359767fc89d36",
-        "language": "TypeScript",
-        "imports": [
-          "../value-objects/UserId",
-          "@shared/domain/AggregateRoot",
-          "@shared/domain/UniqueEntityId"
-        ],
-        "exports": [
-          "UserSettings",
-          "UserSettingsProps"
         ]
       },
       {
@@ -6188,9 +6171,9 @@
       },
       {
         "path": "backend/src/modules/auth/domain/policies/rbac/Role.ts",
-        "size": 3078,
-        "mtimeMs": 1789323597797.474,
-        "hash": "f05436fbf96e6e45e7c8a329520c216ce877a84030c71dbbfc07bb284518c49f",
+        "size": 2590,
+        "mtimeMs": 1789482981719.5745,
+        "hash": "1e7f279080cfedc0413c620feacf66d1f5ce114a19e6ae1809098fc462b90256",
         "language": "TypeScript",
         "imports": [
           "./Permissions"
@@ -6321,9 +6304,9 @@
       },
       {
         "path": "backend/src/modules/auth/domain/repositories/ISessionRepository.ts",
-        "size": 709,
-        "mtimeMs": 1789058858985.4885,
-        "hash": "6e325d7b2f64ded283c8b69574dae5a0902798b5d6d586f77070f898000243ce",
+        "size": 802,
+        "mtimeMs": 1789738699791.4736,
+        "hash": "039d0ccb9ec2558d41ec3cdd8ae38cb259614a4b612747716d5e6bedd1bb20a8",
         "language": "TypeScript",
         "imports": [
           "@shared/domain/UniqueEntityId"
@@ -6345,20 +6328,6 @@
         ],
         "exports": [
           "IUserProfileRepository"
-        ]
-      },
-      {
-        "path": "backend/src/modules/auth/domain/repositories/IUserSettingsRepository.ts",
-        "size": 311,
-        "mtimeMs": 1786761206000,
-        "hash": "45545cb5f4661a6cbdf3862f678fa0aa3f476ed4820d03f957e7da2bc9666269",
-        "language": "TypeScript",
-        "imports": [
-          "../entities/UserSettings",
-          "../value-objects/UserId"
-        ],
-        "exports": [
-          "IUserSettingsRepository"
         ]
       },
       {
@@ -6614,9 +6583,9 @@
       },
       {
         "path": "backend/src/modules/auth/infrastructure/PostgresUserRepository.ts",
-        "size": 7458,
-        "mtimeMs": 1789073836109.4736,
-        "hash": "6c34e7c37a82ef2c7eb76f3ff5e228154d7555605a1ee3146800a2d2ca647fc9",
+        "size": 8450,
+        "mtimeMs": 1789738281635.4739,
+        "hash": "f2459023179c3a98b70d7608da1b46e05c1eba7440ffcc16a86493cc3176a267",
         "language": "TypeScript",
         "imports": [
           "@modules/auth/domain/entities/User",
@@ -6654,9 +6623,9 @@
       },
       {
         "path": "backend/src/modules/auth/infrastructure/RedisSessionRepository.ts",
-        "size": 10376,
-        "mtimeMs": 1789059270653.4883,
-        "hash": "e9b7f33421559a34d410d9b261ec55eaa0b49d960ccb197c80b51afdfb2ac8e1",
+        "size": 11818,
+        "mtimeMs": 1789739288471.4731,
+        "hash": "ccc6bd95c34a5eb46b202240ea4f1351a66753436f5ec2f9295f26641617b76c",
         "language": "TypeScript",
         "imports": [
           "@config/app",
@@ -6675,9 +6644,9 @@
       },
       {
         "path": "backend/src/modules/auth/interfaces/AuthController.ts",
-        "size": 27159,
-        "mtimeMs": 1789344051279.9993,
-        "hash": "e9757b6957eb51798ad4de89139dfad7e15ac3eb6417dc6a13edea6297625146",
+        "size": 27534,
+        "mtimeMs": 1789752928507.4634,
+        "hash": "a23f8db042d62e9d3b4b3fdbbcc90869de8beb90653c70e8169100eca4d351e3",
         "language": "TypeScript",
         "imports": [
           "@config/app",
@@ -6756,9 +6725,9 @@
       },
       {
         "path": "backend/src/modules/auth/interfaces/http/routes/v1/authRoutes.ts",
-        "size": 7077,
-        "mtimeMs": 1789337487405.464,
-        "hash": "0c37a913110892dbcd92e9a9bc0e688d6800623a709449675f83d1c04aa989e3",
+        "size": 7085,
+        "mtimeMs": 1789483047059.5745,
+        "hash": "baa304093c6f2f9356c245b21f9c3639b119aa12c074ed332ff1b59431e710fc",
         "language": "TypeScript",
         "imports": [
           "@modules/auth/domain/policies/rbac/Permissions",
@@ -8464,9 +8433,9 @@
       },
       {
         "path": "backend/src/modules/entity/interfaces/EntityRoutes.ts",
-        "size": 4096,
-        "mtimeMs": 1789257227257.4766,
-        "hash": "b824e85836f23e8c2abfffd6289c7aa068cfde7f49b9abdf32d9030297d3ed6f",
+        "size": 4115,
+        "mtimeMs": 1789485653346.142,
+        "hash": "c0f0c3542b18113afaec5e3e7e86eab7f1803f87a2c2cab8314ebf6c6c634f8d",
         "language": "TypeScript",
         "imports": [
           "./EntityController",
@@ -13176,9 +13145,9 @@
       },
       {
         "path": "backend/src/modules/ontology/interfaces/http/routes/v1/ontologyRoutes.ts",
-        "size": 6215,
-        "mtimeMs": 1789441506129.9946,
-        "hash": "bd9fe48278f0d15728439a18c72bc3e24f5d30172a7c89598e905bb11122c4be",
+        "size": 6087,
+        "mtimeMs": 1789485692994.142,
+        "hash": "96416838f9d481d195bce97ef9e53519bf44d8558d27b69524ed8236386fd9dc",
         "language": "TypeScript",
         "imports": [
           "@modules/auth/public",
@@ -15970,9 +15939,9 @@
       },
       {
         "path": "backend/src/shared/infrastructure/database/PostgresProvider.ts",
-        "size": 2908,
-        "mtimeMs": 1788460171000,
-        "hash": "7ff483f18c5f98e88792995add53ce78e396495174fdcee70766239a54dfcd78",
+        "size": 3225,
+        "mtimeMs": 1789781589655.4429,
+        "hash": "16d9e17e9c2e174a29a2deb90f36faa47484b40b5ed790f2d1ff564230ea808f",
         "language": "TypeScript",
         "imports": [
           "./DatabaseProvider",
@@ -16279,9 +16248,9 @@
       },
       {
         "path": "backend/src/shared/interfaces/http/middleware/AuthorizationMiddleware.ts",
-        "size": 1506,
-        "mtimeMs": 1786761206000,
-        "hash": "cad05443f7ee052119f395d8f5ca9b94ae99174a2e890aa2e3ee23532bc8dfac",
+        "size": 2123,
+        "mtimeMs": 1789485439743.5647,
+        "hash": "385692bcfecfa4f163f4a60a32972a20d32e8cc7ad47a4a9cb0bbcc761b4cd8a",
         "language": "TypeScript",
         "imports": [
           "@modules/auth/domain/policies/rbac/PermissionEvaluator",
@@ -16291,6 +16260,7 @@
         ],
         "exports": [
           "authorize",
+          "authorizeAdminOrSuperAdmin",
           "authorizeRole"
         ]
       },
@@ -16394,9 +16364,9 @@
       },
       {
         "path": "backend/src/shared/interfaces/http/schemas/AuthSchemas.ts",
-        "size": 2788,
-        "mtimeMs": 1789338017117.4639,
-        "hash": "35e61b31ca25c4602e671ee823aa3a1dfe6ccefccc6555aa1dcc17eab7160f73",
+        "size": 2996,
+        "mtimeMs": 1789752831111.4636,
+        "hash": "35aaf5ea8839618df3309669b0923f3e1b80ff45f165b919e11f93097b5c3e46",
         "language": "TypeScript",
         "imports": [
           "zod"
@@ -16662,6 +16632,15 @@
         "exports": []
       },
       {
+        "path": "frontend/ColorSpecs.md",
+        "size": 2873,
+        "mtimeMs": 1789777552927.4458,
+        "hash": "ec338cc0b268a0ede1bb083088b5906f5ac2148a7945a954f94b116eb4080ffe",
+        "language": "Markdown",
+        "imports": [],
+        "exports": []
+      },
+      {
         "path": "frontend/README.md",
         "size": 1278,
         "mtimeMs": 1789265714863.5562,
@@ -16699,15 +16678,17 @@
       },
       {
         "path": "frontend/src/App.tsx",
-        "size": 4084,
-        "mtimeMs": 1789383837199.4714,
-        "hash": "21bbc3afe954a9bffeeb72e4172cf85067f32aef0b387017eece2d2680096921",
+        "size": 4616,
+        "mtimeMs": 1789782177011.4426,
+        "hash": "102a3c511a2fa4e21d9a6556cf82215bd20291ca9f57996e98542096d758274f",
         "language": "TypeScript React",
         "imports": [
           "./components/ErrorBoundary",
           "./components/Footer",
           "./components/Navbar",
+          "./components/ProtectedRoute",
           "./context/AuthContext",
+          "./context/ThemeContext",
           "./pages/ArticleDetailPage",
           "./pages/ArticleListPage",
           "./pages/ErrorPage",
@@ -16747,9 +16728,9 @@
       },
       {
         "path": "frontend/src/components/Footer.tsx",
-        "size": 7721,
-        "mtimeMs": 1789460235629.4746,
-        "hash": "bcd0b77b300c56a1ae8b22867bc7208a77409c8f7c133a17f49268ce989c1fa4",
+        "size": 7861,
+        "mtimeMs": 1789779258191.4446,
+        "hash": "3848082ae3ba961cc1e0119c22ca2d653e4520ed928c43a298437f40584eae65",
         "language": "TypeScript React",
         "imports": [
           "lucide-react",
@@ -16762,12 +16743,13 @@
       },
       {
         "path": "frontend/src/components/Navbar.tsx",
-        "size": 9592,
-        "mtimeMs": 1789415727753.484,
-        "hash": "3ef913c365b2c5d60672fb9f609141f6f513c73a3881e8229c217f298e173836",
+        "size": 10855,
+        "mtimeMs": 1789779217871.4446,
+        "hash": "64bfd0d15222b8963d2c9a9af1b6dc164f84838f81ff65b82df083980f38d260",
         "language": "TypeScript React",
         "imports": [
           "../context/AuthContext",
+          "../context/ThemeContext",
           "lucide-react",
           "react",
           "react-router-dom"
@@ -16777,10 +16759,27 @@
         ]
       },
       {
+        "path": "frontend/src/components/ProtectedRoute.tsx",
+        "size": 1743,
+        "mtimeMs": 1789781638899.4429,
+        "hash": "73340e10f327bb581f87b4e67b15ab8878bd70f6a5fffa21767c543cfd884bf6",
+        "language": "TypeScript React",
+        "imports": [
+          "../context/AuthContext",
+          "../pages/ErrorPage",
+          "react",
+          "react-router-dom"
+        ],
+        "exports": [
+          "AdminRoute",
+          "ProtectedRoute"
+        ]
+      },
+      {
         "path": "frontend/src/components/entity/EntityVisual.tsx",
-        "size": 4164,
-        "mtimeMs": 1789293497767.4722,
-        "hash": "415adfb68df1e7c887545b87e62795fa06652b0273c2f191e96f2eaa122409e8",
+        "size": 5002,
+        "mtimeMs": 1789779850511.444,
+        "hash": "b49259aff64de9b012e77f7fc74e0a2cac1e676b4b918079174f5ff6ca824de5",
         "language": "TypeScript React",
         "imports": [
           "lucide-react"
@@ -16791,9 +16790,9 @@
       },
       {
         "path": "frontend/src/context/AuthContext.tsx",
-        "size": 2973,
-        "mtimeMs": 1789307410285.4707,
-        "hash": "95a1ed10baf19d00003a8301569b8b853b50c89980159328dab7f91eb100bfab",
+        "size": 2989,
+        "mtimeMs": 1789483070859.5745,
+        "hash": "a0da816a4d42fc43810ddcda7321c78c3d23e93a67610db9ca38c06c97e7ec46",
         "language": "TypeScript React",
         "imports": [
           "../services/api",
@@ -16802,6 +16801,21 @@
         "exports": [
           "AuthProvider",
           "useAuth"
+        ]
+      },
+      {
+        "path": "frontend/src/context/ThemeContext.tsx",
+        "size": 2377,
+        "mtimeMs": 1789782586455.4421,
+        "hash": "fcdacb51cccc3bb76b65bc20547ea53799d421f9d63c4d0b7156842667901ba4",
+        "language": "TypeScript React",
+        "imports": [
+          "react"
+        ],
+        "exports": [
+          "Theme",
+          "ThemeProvider",
+          "useTheme"
         ]
       },
       {
@@ -16819,9 +16833,9 @@
       },
       {
         "path": "frontend/src/pages/ArticleDetailPage.tsx",
-        "size": 2732,
-        "mtimeMs": 1789266651955.475,
-        "hash": "76440936051b60b32ce75edb70dd63978892e84728e5cf947495464183acfed9",
+        "size": 3516,
+        "mtimeMs": 1789779458039.4446,
+        "hash": "97609d50d1e38e31de5affcc167cac974b795fd9a85bc6e42d7af0db2edeb48e",
         "language": "TypeScript React",
         "imports": [
           "lucide-react",
@@ -16834,9 +16848,9 @@
       },
       {
         "path": "frontend/src/pages/ArticleListPage.tsx",
-        "size": 4097,
-        "mtimeMs": 1789266054789.4788,
-        "hash": "f2295e44c1e7864bad85b59b12a7d23e14a1db35b02066ad476c87e24def9a7e",
+        "size": 4589,
+        "mtimeMs": 1789779402395.4446,
+        "hash": "7c885c8f226a81c91594fa8eb46293939a33472a3f6c448581fba9441933a942",
         "language": "TypeScript React",
         "imports": [
           "lucide-react",
@@ -16864,9 +16878,9 @@
       },
       {
         "path": "frontend/src/pages/HomePage.tsx",
-        "size": 24342,
-        "mtimeMs": 1789416207921.4836,
-        "hash": "6fac753bc39cc2048a307928a323e4271b81d5c01a861073e5671a2806401091",
+        "size": 20210,
+        "mtimeMs": 1789779867847.444,
+        "hash": "43cf6ddd1c3db68493e71c7a9aaf23132d4c0c244b021a51fec9c621999dfea9",
         "language": "TypeScript React",
         "imports": [
           "lucide-react",
@@ -16926,9 +16940,9 @@
       },
       {
         "path": "frontend/src/pages/SearchPage.tsx",
-        "size": 18374,
-        "mtimeMs": 1789298093699.4832,
-        "hash": "d926eab640160838b1b7a4baf423d70c64178e501c4e609670d4c7a83b87bcf9",
+        "size": 18190,
+        "mtimeMs": 1789779505171.4443,
+        "hash": "99094d33a237b82d4c0c0151519d95830260cc0c7089ed3c465bc6d62890fcd1",
         "language": "TypeScript React",
         "imports": [
           "../services/api",
@@ -16942,9 +16956,9 @@
       },
       {
         "path": "frontend/src/pages/UserAccountCenterPage.tsx",
-        "size": 38353,
-        "mtimeMs": 1789460746189.474,
-        "hash": "7b35bad18270838498266b1e6ab016f34d56d3d280322df43944138ed85dfef5",
+        "size": 27155,
+        "mtimeMs": 1789780129803.444,
+        "hash": "59bbdc05e6e143eca03d5c8fdca9050ddb7b7274831ee33ac9448ab1d5027ea3",
         "language": "TypeScript React",
         "imports": [
           "../context/AuthContext",
@@ -16959,9 +16973,9 @@
       },
       {
         "path": "frontend/src/pages/UserProfilePage.tsx",
-        "size": 23755,
-        "mtimeMs": 1789337785905.4639,
-        "hash": "68f316a7a42cfb33c0493136f0065e2f839ff140a036550d0555cd9d57a04c22",
+        "size": 19915,
+        "mtimeMs": 1789780089843.444,
+        "hash": "3aa6b55c4e39dccd99bd721e397945af3da43cdb578f7dfa6e28fca641e4c214",
         "language": "TypeScript React",
         "imports": [
           "../context/AuthContext",
@@ -16976,9 +16990,9 @@
       },
       {
         "path": "frontend/src/pages/account/AccountBookmarksPage.tsx",
-        "size": 7601,
-        "mtimeMs": 1789322872161.4746,
-        "hash": "060bf728b6fe3480d24cfda35667830312030c610b8623bc5d242bf776b8151a",
+        "size": 7310,
+        "mtimeMs": 1789780238695.4438,
+        "hash": "4a8384f09d27ece74e94be1b3a0c6da616f8aeb09f77828df73d173fcd4e8362",
         "language": "TypeScript React",
         "imports": [
           "../../services/api",
@@ -16992,9 +17006,9 @@
       },
       {
         "path": "frontend/src/pages/account/AccountHistoryPage.tsx",
-        "size": 7843,
-        "mtimeMs": 1789322873081.4746,
-        "hash": "05017e78a5a6bd73c5a77ee28e9cb9dbc9789a44e72d24690af5182f7d70939b",
+        "size": 7578,
+        "mtimeMs": 1789780260003.4438,
+        "hash": "ddeb2ca84ca4c5d5973d4a620a392f3796ad0f031ba8efa4dc33f6b8a02668cb",
         "language": "TypeScript React",
         "imports": [
           "../../services/api",
@@ -17008,9 +17022,9 @@
       },
       {
         "path": "frontend/src/pages/account/AccountNotificationsPage.tsx",
-        "size": 16216,
-        "mtimeMs": 1789320953953.476,
-        "hash": "19570da2000f7f5e8fae2ef00fb13be74db668a435ec953341fe1ec7b2e25f8a",
+        "size": 13303,
+        "mtimeMs": 1789780192359.4438,
+        "hash": "9b2dbb5424b78d2df18b361f4034d2dd27ab0767c2bd96bace137a976be29574",
         "language": "TypeScript React",
         "imports": [
           "../../services/api",
@@ -17038,9 +17052,9 @@
       },
       {
         "path": "frontend/src/pages/account/AccountSectionPage.tsx",
-        "size": 5039,
-        "mtimeMs": 1789321246237.4758,
-        "hash": "b63b6961f0d02ba02b3bd3a4ad91655440be7927e3540cc217cf60b037eb8de1",
+        "size": 4785,
+        "mtimeMs": 1789780156679.444,
+        "hash": "e9dd4abce0d469d75fbd97506b2742d2ad6367e88ddde3aebf257f4c26afd3a1",
         "language": "TypeScript React",
         "imports": [
           "lucide-react",
@@ -17053,9 +17067,9 @@
       },
       {
         "path": "frontend/src/pages/account/AccountSecurityPage.tsx",
-        "size": 22863,
-        "mtimeMs": 1789324978345.4731,
-        "hash": "4f026068596760db63369153f9b6bdc48a29c5397ad3aec690959ed9b7029c00",
+        "size": 25496,
+        "mtimeMs": 1789780370979.4438,
+        "hash": "7c1aa5a67c778c2536fec5f8fe5d3029dc5cb716b00a9f7e07ccbed80e35f36c",
         "language": "TypeScript React",
         "imports": [
           "../../context/AuthContext",
@@ -17069,11 +17083,12 @@
       },
       {
         "path": "frontend/src/pages/account/AccountSettingsPage.tsx",
-        "size": 19060,
-        "mtimeMs": 1789327722485.4712,
-        "hash": "0786c51aef71642a6f19fb3b2345358b21115ecbbefd3c850a23285a497432bb",
+        "size": 16693,
+        "mtimeMs": 1789780777787.4436,
+        "hash": "173ed2290d576dc1bbc730b9df6c4a46d2a71318a063156e1d824fc53ee2c40c",
         "language": "TypeScript React",
         "imports": [
+          "../../context/ThemeContext",
           "../../services/api",
           "lucide-react",
           "react",
@@ -17102,19 +17117,20 @@
       },
       {
         "path": "frontend/src/pages/admin/AdminDashboardPage.tsx",
-        "size": 1295,
-        "mtimeMs": 1789464483053.4717,
-        "hash": "3b26b4cfc1ebb2e4d5dc30af68847c2d686c8f656a58417bbb4cf72447009c79",
+        "size": 4180,
+        "mtimeMs": 1789502929005.478,
+        "hash": "b04f2badffa3a9457c60fcf16d48a5e1385d32bd64a4b025071d413750b1df4f",
         "language": "TypeScript React",
         "imports": [
+          "./article/ArticleAdmin",
           "./components/AdminShell",
+          "./entities/EntityAdmin",
+          "./identity/UsersAdmin",
+          "./intelligence/AIAdmin",
+          "./observability/AuditAdmin",
+          "./ontology/OntologyAdmin",
           "./overview/AdminOverview",
-          "./routing/EntityRelationshipRoutes",
-          "./routing/IdentityRoutes",
-          "./routing/IntelligenceRoutes",
-          "./routing/ObservabilityRoutes",
-          "./routing/OverviewRoutes",
-          "./routing/SearchManagementRoutes",
+          "lucide-react",
           "react-router-dom"
         ],
         "exports": [
@@ -17122,29 +17138,39 @@
         ]
       },
       {
-        "path": "frontend/src/pages/admin/components/ActivityFeed.tsx",
-        "size": 2767,
-        "mtimeMs": 1789350630883.9946,
-        "hash": "6e8cd9d85c8d01af52bc5e9e13e6fc706f6123db053d1c87bdd04025e6bd5813",
+        "path": "frontend/src/pages/admin/ROLE_DASHBOARD_GUIDELINES.md",
+        "size": 3944,
+        "mtimeMs": 1789487818649.4783,
+        "hash": "e02f875a4991e322b82eca44985a1013d8f9e4a2783126c4df8c7f76024d11e3",
+        "language": "Markdown",
+        "imports": [],
+        "exports": []
+      },
+      {
+        "path": "frontend/src/pages/admin/article/ArticleAdmin.tsx",
+        "size": 8192,
+        "mtimeMs": 1789780716771.4436,
+        "hash": "a1304f1d72a4357a1b8a61665ef004ee5511cc69c2c68d5911b89e14c0715da1",
         "language": "TypeScript React",
         "imports": [
+          "../../../context/AuthContext",
+          "../../../services/api",
+          "lucide-react",
           "react"
         ],
         "exports": [
-          "ActivityFeed",
-          "ActivityFeedProps",
-          "ActivityItem",
-          "ActivitySeverity"
+          "ArticleAdmin"
         ]
       },
       {
         "path": "frontend/src/pages/admin/components/AdminBreadcrumbs.tsx",
-        "size": 1976,
-        "mtimeMs": 1789349488883.9956,
-        "hash": "966f2c3bf9f4c605a659c13746af27fb2e59f3c87dc9a45116b9c27c4fd76764",
+        "size": 1808,
+        "mtimeMs": 1789487985253.478,
+        "hash": "d668f3ae433c2236088a46576fcf01ab3a749300e772828b0546e96dedd62d4b",
         "language": "TypeScript React",
         "imports": [
           "lucide-react",
+          "react",
           "react-router-dom"
         ],
         "exports": [
@@ -17152,28 +17178,17 @@
         ]
       },
       {
-        "path": "frontend/src/pages/admin/components/AdminCommandBar.tsx",
-        "size": 1330,
-        "mtimeMs": 1789356158011.9907,
-        "hash": "7cc147af6d0fd77b2f19f30303b405a1b182e64226e11d9ff7183aa744bede78",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react",
-          "react"
-        ],
-        "exports": [
-          "AdminCommandBar",
-          "AdminCommandBarProps"
-        ]
-      },
-      {
         "path": "frontend/src/pages/admin/components/AdminHeader.tsx",
-        "size": 3052,
-        "mtimeMs": 1789349487727.9956,
-        "hash": "0c3c2a4a1d23346fb0de821a66665f7098ad563a0b8bb45d6adca8f4b8001d04",
+        "size": 4683,
+        "mtimeMs": 1789780460319.4438,
+        "hash": "2cf9203f554f4ceb2ae49b7e20c340de719eb44649296d2f80e8c98a93245894",
         "language": "TypeScript React",
         "imports": [
+          "../../../context/AuthContext",
+          "../../../context/ThemeContext",
+          "./AdminBreadcrumbs",
           "lucide-react",
+          "react",
           "react-router-dom"
         ],
         "exports": [
@@ -17182,15 +17197,15 @@
       },
       {
         "path": "frontend/src/pages/admin/components/AdminShell.tsx",
-        "size": 1029,
-        "mtimeMs": 1789349486055.9956,
-        "hash": "7864f16a6fd4caa2c61ad2629c5d08dad6caf1d25b9876daf39ebfda202764d2",
+        "size": 1347,
+        "mtimeMs": 1789780449095.4438,
+        "hash": "d66d1e4678c19cb84fbf51f54aa59b5af1e8bc7a737d492c71a0b88bf9b26439",
         "language": "TypeScript React",
         "imports": [
-          "./AdminBreadcrumbs",
           "./AdminHeader",
           "./AdminSidebar",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "exports": [
           "AdminShell"
@@ -17198,12 +17213,14 @@
       },
       {
         "path": "frontend/src/pages/admin/components/AdminSidebar.tsx",
-        "size": 7925,
-        "mtimeMs": 1789416487857.4834,
-        "hash": "b3e246b25075b341891d1d310cd49ec5d4ab0800e4adf84de2f198cd4d44312b",
+        "size": 6458,
+        "mtimeMs": 1789780474083.4438,
+        "hash": "500f181ee3dc06606ae01c05c977f4c9b5fb9570537aa330ce22ad8dcee3dac0",
         "language": "TypeScript React",
         "imports": [
+          "../../../context/AuthContext",
           "lucide-react",
+          "react",
           "react-router-dom"
         ],
         "exports": [
@@ -17211,41 +17228,10 @@
         ]
       },
       {
-        "path": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-        "size": 4766,
-        "mtimeMs": 1789349621411.9954,
-        "hash": "e918c4f8e8928d0a29cdf123c2d496c1be1f6d8dac040c5f5b07b5446d09f382",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react"
-        ],
-        "exports": [
-          "AttentionItem",
-          "AttentionPanel",
-          "AttentionPanelProps",
-          "AttentionSeverity"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/components/HealthStatus.tsx",
-        "size": 2416,
-        "mtimeMs": 1789349620615.9954,
-        "hash": "b492c87c75cab39ec85892adbc609b1a5b6ab9b9ae811963831aa6419c028f34",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react"
-        ],
-        "exports": [
-          "HealthState",
-          "HealthStatus",
-          "HealthStatusProps"
-        ]
-      },
-      {
         "path": "frontend/src/pages/admin/components/MetricCard.tsx",
-        "size": 3052,
-        "mtimeMs": 1789414490445.4849,
-        "hash": "edb4c9032d50dab12d7dddea0ddb6c9b9e722bee93813242f8624a26a057008b",
+        "size": 3178,
+        "mtimeMs": 1789780489079.4438,
+        "hash": "344d5b01ae577ed06be2aef68571c2664527c81f745bddd398f0d933a2d858ec",
         "language": "TypeScript React",
         "imports": [
           "lucide-react",
@@ -17258,147 +17244,30 @@
         ]
       },
       {
-        "path": "frontend/src/pages/admin/components/ResourceTable.tsx",
-        "size": 8806,
-        "mtimeMs": 1789370135499.4878,
-        "hash": "5da10d18ac126e731a16e340e3123643f2f9c784d42c1e80fa8c12e64aa50f6a",
+        "path": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
+        "size": 10297,
+        "mtimeMs": 1789780586519.4436,
+        "hash": "eeaa756133b6939a487333f8504520e6d3959d17181c8f98245a77590d833797",
         "language": "TypeScript React",
         "imports": [
+          "../../../services/api",
+          "../components/MetricCard",
           "lucide-react",
           "react"
-        ],
-        "exports": [
-          "ResourceColumn",
-          "ResourceTable",
-          "ResourceTableProps"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-        "size": 4320,
-        "mtimeMs": 1789356409655.9905,
-        "hash": "292f147ab6fb40411d6649ad32845b0668ed4bf21ab5a0ed208df6a6d09ece47",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "./EntityInspector",
-          "./EntityOperations",
-          "lucide-react",
-          "react",
-          "react-router-dom"
         ],
         "exports": [
           "EntityAdmin"
         ]
       },
       {
-        "path": "frontend/src/pages/admin/entities/EntityInspector.tsx",
-        "size": 1950,
-        "mtimeMs": 1789356159283.9907,
-        "hash": "222c871ae08bce1755ea4a444c44fa85ff302b47838f306694964391a30f9397",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react"
-        ],
-        "exports": [
-          "EntityInspector",
-          "EntityInspectorProps"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/entities/EntityOperations.tsx",
-        "size": 2420,
-        "mtimeMs": 1789356158651.9907,
-        "hash": "042bdf0cfe185225aa3efa1b7cf95a3148860712eecf6453988d6376ad7c6b1f",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react"
-        ],
-        "exports": [
-          "EntityOperations"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/identity/ApiKeysAdmin.tsx",
-        "size": 7032,
-        "mtimeMs": 1789385010033.4788,
-        "hash": "d05153b3fa3ad617e476815f73f0b5f33cb4a830ca24dec8995ca88d5546cba9",
-        "language": "TypeScript React",
-        "imports": [
-          "../../../services/api",
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react"
-        ],
-        "exports": [
-          "ApiKeysAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/identity/PermissionsAdmin.tsx",
-        "size": 4007,
-        "mtimeMs": 1789385044407.4626,
-        "hash": "870f8dc27b45df45be34edd757ac10b39df9066b7251374c37071a11cd5913c2",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "exports": [
-          "PermissionsAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/identity/RolesAdmin.tsx",
-        "size": 3754,
-        "mtimeMs": 1789385055047.4626,
-        "hash": "e49598c64c06ee1288ec21471cd289843cd880c8e54fba0eaa941231d20f865b",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "exports": [
-          "RolesAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/identity/SessionsAdmin.tsx",
-        "size": 5657,
-        "mtimeMs": 1789385117307.4626,
-        "hash": "d0db614eb9e0d366581614a593c4199592b64b7b1b27d84e0c40a44a0958f4b4",
-        "language": "TypeScript React",
-        "imports": [
-          "../../../services/api",
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react"
-        ],
-        "exports": [
-          "SessionsAdmin"
-        ]
-      },
-      {
         "path": "frontend/src/pages/admin/identity/UsersAdmin.tsx",
-        "size": 8757,
-        "mtimeMs": 1789385185559.4626,
-        "hash": "a36cd72c145e1308e79d2878edc4d1350c7cdde7b37b0de64c625c7fbf0b338b",
+        "size": 9175,
+        "mtimeMs": 1789501007325.4814,
+        "hash": "c7bd5ac820235d5d3d7aad8c1ee2a4b9a5f43b6ef46a1845925caf89ca357d57",
         "language": "TypeScript React",
         "imports": [
+          "../../../context/AuthContext",
           "../../../services/api",
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
           "lucide-react",
           "react"
         ],
@@ -17408,112 +17277,27 @@
       },
       {
         "path": "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
-        "size": 3286,
-        "mtimeMs": 1789385209803.4626,
-        "hash": "8d33ce436e8db8e33cd3248fe4243a6b2abd738503b9cf0f4557676f6bdc59be",
+        "size": 5458,
+        "mtimeMs": 1789501853397.481,
+        "hash": "24e56004ca509b73dcd79d12a0a047809e29262902868e41a4bf6ab86a7900ca",
         "language": "TypeScript React",
         "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
+          "../../../services/api",
+          "lucide-react",
+          "react"
         ],
         "exports": [
           "AIAdmin"
         ]
       },
       {
-        "path": "frontend/src/pages/admin/intelligence/CrawlAdmin.tsx",
-        "size": 5811,
-        "mtimeMs": 1789385488131.4624,
-        "hash": "a683ba0fc5501279eb05bad01d3aa19d914f22ec979cd20aa929cd616e92c09c",
-        "language": "TypeScript React",
-        "imports": [
-          "../../../services/api",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react"
-        ],
-        "exports": [
-          "CrawlAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/intelligence/KnowledgeGapAdmin.tsx",
-        "size": 3372,
-        "mtimeMs": 1789385333027.4624,
-        "hash": "6cd8946b800383a17e0ea2361a1eae6b536091467de3b0cb30138e3dac7f74b9",
-        "language": "TypeScript React",
-        "imports": [
-          "../../../services/api",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react"
-        ],
-        "exports": [
-          "KnowledgeGapAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/intelligence/PromptAdmin.tsx",
-        "size": 2739,
-        "mtimeMs": 1789385373615.4624,
-        "hash": "957069c8dedfaf230abdffe193fe0de347a6e40e5344b0a15f35f9c9d0923eb3",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "exports": [
-          "PromptAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/intelligence/ProviderAdmin.tsx",
-        "size": 4139,
-        "mtimeMs": 1789385509795.4624,
-        "hash": "c5c46026444ae8be0c8d832d86238124731a87e7da763a4838676d2e72df8dea",
-        "language": "TypeScript React",
-        "imports": [
-          "../../../services/api",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react"
-        ],
-        "exports": [
-          "ProviderAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/observability/AnalyticsAdmin.tsx",
-        "size": 2838,
-        "mtimeMs": 1789385558735.4624,
-        "hash": "16cdba198039177deb291bf6916f4e795ea9c40483e4e416b83a5477e5d4bbd4",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "exports": [
-          "AnalyticsAdmin"
-        ]
-      },
-      {
         "path": "frontend/src/pages/admin/observability/AuditAdmin.tsx",
-        "size": 6356,
-        "mtimeMs": 1789386877011.4614,
-        "hash": "5c6a37371d4048412245dcc7ccfa290d2864d6f239e1abf598482b80da0debf4",
+        "size": 5913,
+        "mtimeMs": 1789501357565.4812,
+        "hash": "a7f6e30667ccbc0fc0f354d841f882a2978ab6fef04f05068c01bed371b41682",
         "language": "TypeScript React",
         "imports": [
           "../../../services/api",
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
           "lucide-react",
           "react"
         ],
@@ -17522,114 +17306,30 @@
         ]
       },
       {
-        "path": "frontend/src/pages/admin/observability/OperationsAdmin.tsx",
-        "size": 3286,
-        "mtimeMs": 1789385621939.4622,
-        "hash": "99ffbb121b519ba5550634e16ec8f7147e6339d57602f9bd983829e50b3d48d5",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "exports": [
-          "OperationsAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/ontology/EntityTypesAdmin.tsx",
-        "size": 3361,
-        "mtimeMs": 1789375336392.7783,
-        "hash": "d775c8894556c8f0a5ea897554e0314c7ec8bb1015e099668a60a71fff2fc227",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react-router-dom"
-        ],
-        "exports": [
-          "EntityTypesAdmin"
-        ]
-      },
-      {
         "path": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
-        "size": 7204,
-        "mtimeMs": 1789375336392.7783,
-        "hash": "6ad03b31c9a2d828a93c9edae7b28ea7846afbe0f71fe28c91ebeb1be01ef93e",
+        "size": 5834,
+        "mtimeMs": 1789780646635.4436,
+        "hash": "9cd6d448eacd7663828d50a4ae7049aec75ba196b519b28cdc369aa1c6addbb5",
         "language": "TypeScript React",
         "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "./OntologyInspector",
+          "../../../context/AuthContext",
+          "../../../services/api",
           "lucide-react",
-          "react",
-          "react-router-dom"
+          "react"
         ],
         "exports": [
           "OntologyAdmin"
         ]
       },
       {
-        "path": "frontend/src/pages/admin/ontology/OntologyInspector.tsx",
-        "size": 2900,
-        "mtimeMs": 1789375212843.4736,
-        "hash": "981ed4a2a0baf38babe54c996c8c7138bb75c07e8ee66e7bb15e63798a5f6f1d",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react"
-        ],
-        "exports": [
-          "OntologyInspector"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/ontology/OntologyVersionsAdmin.tsx",
-        "size": 3558,
-        "mtimeMs": 1789375336396.7783,
-        "hash": "4b0b460dc0e08afa7768abd86687197e2b1ce0994408bc986b1723742a039fc4",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react-router-dom"
-        ],
-        "exports": [
-          "OntologyVersionsAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/ontology/RelationshipTypesAdmin.tsx",
-        "size": 3464,
-        "mtimeMs": 1789375336396.7783,
-        "hash": "98ee6fe45998e708f7af507bae1f0555f9039cb2dce36f7d75641877a6031131",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react-router-dom"
-        ],
-        "exports": [
-          "RelationshipTypesAdmin"
-        ]
-      },
-      {
         "path": "frontend/src/pages/admin/overview/AdminOverview.tsx",
-        "size": 8680,
-        "mtimeMs": 1789461892957.4734,
-        "hash": "95f7d1d532b3fae7000ce5793149b5d86e5861ab8903b160d7b332656c204cca",
+        "size": 7521,
+        "mtimeMs": 1789780517691.4438,
+        "hash": "d33c9098bf91ddd2712f0103933efbe3088ddc318017f19cfbb02634705740c2",
         "language": "TypeScript React",
         "imports": [
           "../../../services/api",
           "../components/MetricCard",
-          "./KnowledgeGraphOverview",
-          "./KnowledgeGrowthChart",
           "./QuickActionsPanel",
           "./RecentActivityPanel",
           "./RecentEntitiesTable",
@@ -17642,70 +17342,14 @@
         ]
       },
       {
-        "path": "frontend/src/pages/admin/overview/KnowledgeGraphOverview.tsx",
-        "size": 8459,
-        "mtimeMs": 1789415141725.4844,
-        "hash": "e0ed9ff9d2eb4a1b86ef98ee8c77bf6e7f47839ca61c00197bb3ce07241954f8",
+        "path": "frontend/src/pages/admin/overview/QuickActionsPanel.tsx",
+        "size": 2184,
+        "mtimeMs": 1789781184159.4434,
+        "hash": "dc1362032a865777ac80a1e14dc56295048bc4ee593104cb628cce16bf203e86",
         "language": "TypeScript React",
         "imports": [
           "lucide-react",
           "react",
-          "react-router-dom"
-        ],
-        "exports": [
-          "KnowledgeGraphOverview"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/overview/KnowledgeGrowthChart.tsx",
-        "size": 10462,
-        "mtimeMs": 1789415182441.4844,
-        "hash": "ef5ec84cba5722920b6f45a676f9c846b41b49f517237c68e1476bc0fafddbd9",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react",
-          "react"
-        ],
-        "exports": [
-          "KnowledgeGrowthChart"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/overview/KnowledgeHealth.tsx",
-        "size": 1811,
-        "mtimeMs": 1789350631531.9946,
-        "hash": "487fbe1b8bf7e6f07556e9d575b619f6cfd98b63b9c604775c8b3842edb32adb",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/MetricCard",
-          "lucide-react"
-        ],
-        "exports": [
-          "KnowledgeHealth"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/overview/OperationsFeed.tsx",
-        "size": 2234,
-        "mtimeMs": 1789350632975.9946,
-        "hash": "2853fdec6eb42b9610d941da8ece9c1edbebf74224071daed2e2de3d801311fe",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/ActivityFeed",
-          "lucide-react"
-        ],
-        "exports": [
-          "OperationsFeed"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/overview/QuickActionsPanel.tsx",
-        "size": 2205,
-        "mtimeMs": 1789415738565.484,
-        "hash": "edc3cd7c6d1e4c19939ac5272c7edbaab5353c50faa11c6e5c6aa07de6616c54",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react",
           "react-router-dom"
         ],
         "exports": [
@@ -17714,12 +17358,13 @@
       },
       {
         "path": "frontend/src/pages/admin/overview/RecentActivityPanel.tsx",
-        "size": 4085,
-        "mtimeMs": 1789461127177.4739,
-        "hash": "9a8bddd6b1f3b67866b3d3f359918c0efc987e105fc28e191d846c8ff8f57530",
+        "size": 3057,
+        "mtimeMs": 1789781168519.4434,
+        "hash": "cb1ba40112c47d3c50a22a3af6537aa25e9fa0381055c33b1e5cf607afe75ba4",
         "language": "TypeScript React",
         "imports": [
           "lucide-react",
+          "react",
           "react-router-dom"
         ],
         "exports": [
@@ -17728,226 +17373,43 @@
       },
       {
         "path": "frontend/src/pages/admin/overview/RecentEntitiesTable.tsx",
-        "size": 6528,
-        "mtimeMs": 1789461139081.4739,
-        "hash": "78c5dbfbc7329c4214c2255fa1a812a50be232cd4702af9da0e0d5c9fc3c2e10",
+        "size": 5740,
+        "mtimeMs": 1789781208703.4434,
+        "hash": "6b8bc4f6b791fb1251e85330fe5feeaaf91d60e685f983d098318893173d2626",
         "language": "TypeScript React",
         "imports": [
+          "../../../services/api",
           "lucide-react",
+          "react",
           "react-router-dom"
         ],
         "exports": [
-          "RecentEntitiesTable",
-          "RecentEntityItem"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/overview/SystemHealth.tsx",
-        "size": 2703,
-        "mtimeMs": 1789350522507.9949,
-        "hash": "d2b429eb30645b52c75a9577045b46ce3d91ddeaa0616ea04480f529dc58eedd",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/HealthStatus",
-          "lucide-react"
-        ],
-        "exports": [
-          "SystemHealth"
+          "RecentEntitiesTable"
         ]
       },
       {
         "path": "frontend/src/pages/admin/overview/SystemHealthGauge.tsx",
-        "size": 1956,
-        "mtimeMs": 1789461123425.4739,
-        "hash": "3029fe15ee9a19212b4e8cc30cd8111fbc9d959af7aa4ae38491366fff987c8a",
+        "size": 1780,
+        "mtimeMs": 1789781152991.4434,
+        "hash": "fbf966bb49e6b838b6964f7a0da5ed011b2430e7dfe9c47430b1ea12a1808d91",
         "language": "TypeScript React",
-        "imports": [],
+        "imports": [
+          "lucide-react",
+          "react"
+        ],
         "exports": [
           "SystemHealthGauge"
         ]
       },
       {
-        "path": "frontend/src/pages/admin/relationships/RelationshipAdmin.tsx",
-        "size": 2788,
-        "mtimeMs": 1789356409659.9905,
-        "hash": "061efebd99fad8c6947df3d5f91fb42cb6116c815510ee12c2d62c8c84efd194",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "exports": [
-          "RelationshipAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/relationships/RelationshipInspector.tsx",
-        "size": 3371,
-        "mtimeMs": 1789385756663.4622,
-        "hash": "5086895b57d3f42886aae0b577e5a3a87d9a4962ec6f65daf4664c1eec833d43",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react"
-        ],
-        "exports": [
-          "RelationshipInspector"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/routing/EntityRelationshipRoutes.tsx",
-        "size": 559,
-        "mtimeMs": 1789464310065.4717,
-        "hash": "28bc6ae4dd38e4282bd5643871b1c27b835fe37220d10da95adb73b6ab08b9cf",
-        "language": "TypeScript React",
-        "imports": [
-          "../entities/EntityAdmin",
-          "../ontology/OntologyAdmin",
-          "../relationships/RelationshipAdmin",
-          "react-router-dom"
-        ],
-        "exports": [
-          "EntityRelationshipRoutes"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/routing/IdentityRoutes.tsx",
-        "size": 748,
-        "mtimeMs": 1789464344169.4717,
-        "hash": "4393574990d9cc56506fb3bc88bccbae3133b5987837171e70d3737ab1c072fe",
-        "language": "TypeScript React",
-        "imports": [
-          "../identity/ApiKeysAdmin",
-          "../identity/PermissionsAdmin",
-          "../identity/RolesAdmin",
-          "../identity/SessionsAdmin",
-          "../identity/UsersAdmin",
-          "react-router-dom"
-        ],
-        "exports": [
-          "IdentityRoutes"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx",
-        "size": 767,
-        "mtimeMs": 1789464357557.4717,
-        "hash": "466b502994eeef3de5e381456914256a64ec301e8c0c7abfa6895e084d65236c",
-        "language": "TypeScript React",
-        "imports": [
-          "../intelligence/AIAdmin",
-          "../intelligence/CrawlAdmin",
-          "../intelligence/KnowledgeGapAdmin",
-          "../intelligence/PromptAdmin",
-          "../intelligence/ProviderAdmin",
-          "react-router-dom"
-        ],
-        "exports": [
-          "IntelligenceRoutes"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/routing/ObservabilityRoutes.tsx",
-        "size": 548,
-        "mtimeMs": 1789464400285.4717,
-        "hash": "1bbbce725089f809a1b5553981522afed52219bd9013fe5df6a1aaae4eca99f3",
-        "language": "TypeScript React",
-        "imports": [
-          "../observability/AnalyticsAdmin",
-          "../observability/AuditAdmin",
-          "../observability/OperationsAdmin",
-          "react-router-dom"
-        ],
-        "exports": [
-          "ObservabilityRoutes"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/routing/OverviewRoutes.tsx",
-        "size": 530,
-        "mtimeMs": 1789464269593.4717,
-        "hash": "ac173b78cd2f27f5a5c87e4e70a9b44986f536f4779ffec9c7f65c681fee520c",
-        "language": "TypeScript React",
-        "imports": [
-          "../overview/KnowledgeHealth",
-          "../overview/OperationsFeed",
-          "../overview/SystemHealth",
-          "react-router-dom"
-        ],
-        "exports": [
-          "OverviewRoutes"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/routing/SearchManagementRoutes.tsx",
-        "size": 550,
-        "mtimeMs": 1789464433505.4717,
-        "hash": "65b77537796cc52df48c2b4c735bbd4181a790e188877245e886dac452fcb493",
-        "language": "TypeScript React",
-        "imports": [
-          "../search/SearchAdmin",
-          "../search/SearchDiagnostics",
-          "../search/SearchIndexHealth",
-          "react-router-dom"
-        ],
-        "exports": [
-          "SearchManagementRoutes"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/search/SearchAdmin.tsx",
-        "size": 3702,
-        "mtimeMs": 1789385879451.4622,
-        "hash": "c1b38faf8aafed955a76f77f60b2623632c5b32ba91111bae779f379d994235f",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "exports": [
-          "SearchAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/search/SearchDiagnostics.tsx",
-        "size": 3034,
-        "mtimeMs": 1789386694355.4614,
-        "hash": "85ce4944db2efecbc6439b8693693f0b79e332e01cfb24cd266abbd84d4a7c27",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "exports": [
-          "SearchDiagnostics"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/search/SearchIndexHealth.tsx",
-        "size": 2795,
-        "mtimeMs": 1789386751323.4614,
-        "hash": "ede015d287d4f211f94fa83b36abe859393762e23e967001fbe538ffb0df0161",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "exports": [
-          "SearchIndexHealth"
-        ]
-      },
-      {
         "path": "frontend/src/services/api.ts",
-        "size": 14757,
-        "mtimeMs": 1789463980981.472,
-        "hash": "552f16d42a68e992b125e2a4a4235f48afd383aa3ff5871ce44a15f501dec86b",
+        "size": 17965,
+        "mtimeMs": 1789749750711.4658,
+        "hash": "bcf11f7f7409da807eb3d20d2c6dbaba5a732a9e823f56b8cb33b8d9f5a9e1fb",
         "language": "TypeScript",
         "imports": [],
         "exports": [
+          "ApiKeyItem",
           "ArticleSummary",
           "AuthSession",
           "EntitySummary",
@@ -17960,11 +17422,16 @@
           "UserProfileData",
           "UserSettings",
           "adminApi",
+          "aiAdminApi",
           "api",
+          "apiKeyApi",
           "articleActivityApi",
           "articleApi",
+          "auditApi",
+          "authAdminApi",
           "entityApi",
           "notificationApi",
+          "ontologyApi",
           "profileApi",
           "securityApi",
           "settingsApi"
@@ -17972,9 +17439,9 @@
       },
       {
         "path": "frontend/tailwind.config.js",
-        "size": 596,
-        "mtimeMs": 1789411459573.4868,
-        "hash": "f43023044ee2d8ab04301a8a341809a00f3d551d6dc5aae6ddee195335f44a06",
+        "size": 1731,
+        "mtimeMs": 1789779817467.4443,
+        "hash": "b42a9cd1b17c6c4bbaf6fdbc9e8bf3ed50b9dd32f3a3a16c9eedf98acca36b2c",
         "language": "JavaScript",
         "imports": [
           "tailwindcss"
@@ -18071,6 +17538,19 @@
         "path": "backend/jest.config.js",
         "language": "JavaScript",
         "imports": [],
+        "importedBy": [],
+        "exports": []
+      },
+      {
+        "path": "backend/scripts/seedUsers.ts",
+        "language": "TypeScript",
+        "imports": [
+          "bcryptjs",
+          "dotenv",
+          "path",
+          "pg",
+          "uuid"
+        ],
         "importedBy": [],
         "exports": []
       },
@@ -22252,19 +21732,6 @@
         ]
       },
       {
-        "path": "backend/src/modules/auth/application/commands/UpdateUserSettingsCommand.ts",
-        "language": "TypeScript",
-        "imports": [
-          "@shared/application/commands/ICommand"
-        ],
-        "importedBy": [
-          "backend/src/modules/auth/application/handlers/UpdateUserSettingsCommandHandler.ts"
-        ],
-        "exports": [
-          "UpdateUserSettingsCommand"
-        ]
-      },
-      {
         "path": "backend/src/modules/auth/application/commands/UploadAvatarCommand.ts",
         "language": "TypeScript",
         "imports": [
@@ -22614,6 +22081,7 @@
           "@shared/domain/UniqueEntityId",
           "@shared/infrastructure/audit/AuditDecorator",
           "@shared/infrastructure/queue/EventBus",
+          "bcryptjs",
           "inversify",
           "inversify-binding-decorators"
         ],
@@ -22675,13 +22143,17 @@
         "imports": [
           "../commands/RegisterUserCommand",
           "@modules/auth/domain/entities/User",
+          "@modules/auth/domain/entities/UserProfile",
+          "@modules/auth/domain/errors/AuthErrors",
           "@modules/auth/domain/errors/UserErrors",
           "@modules/auth/domain/events/UserCreatedEvent",
           "@modules/auth/domain/interfaces/IPasswordHasher",
+          "@modules/auth/domain/repositories/IUserProfileRepository",
           "@modules/auth/domain/repositories/UserRepository",
           "@modules/auth/domain/value-objects/AccountStatus",
           "@modules/auth/domain/value-objects/Email",
           "@modules/auth/domain/value-objects/PasswordHash",
+          "@modules/auth/domain/value-objects/UserId",
           "@shared/application/handlers/ICommandHandler",
           "@shared/domain/UniqueEntityId",
           "@shared/infrastructure/audit/AuditDecorator",
@@ -22962,25 +22434,6 @@
         ]
       },
       {
-        "path": "backend/src/modules/auth/application/handlers/UpdateUserSettingsCommandHandler.ts",
-        "language": "TypeScript",
-        "imports": [
-          "../commands/UpdateUserSettingsCommand",
-          "@modules/auth/domain/errors/AuthErrors",
-          "@modules/auth/domain/repositories/IUserSettingsRepository",
-          "@modules/auth/domain/value-objects/UserId",
-          "@modules/auth/infrastructure/AuditLogger",
-          "@shared/application/handlers/ICommandHandler",
-          "@shared/infrastructure/queue/EventBus",
-          "inversify",
-          "inversify-binding-decorators"
-        ],
-        "importedBy": [],
-        "exports": [
-          "UpdateUserSettingsCommandHandler"
-        ]
-      },
-      {
         "path": "backend/src/modules/auth/application/handlers/UploadAvatarCommandHandler.ts",
         "language": "TypeScript",
         "imports": [
@@ -23079,6 +22532,8 @@
           "@shared/application/handlers/ICommandHandler",
           "@shared/domain/UniqueEntityId",
           "@shared/infrastructure/queue/EventBus",
+          "bcryptjs",
+          "crypto",
           "inversify",
           "inversify-binding-decorators"
         ],
@@ -23389,22 +22844,6 @@
         "exports": [
           "UserProfile",
           "UserProfileProps"
-        ]
-      },
-      {
-        "path": "backend/src/modules/auth/domain/entities/UserSettings.ts",
-        "language": "TypeScript",
-        "imports": [
-          "../value-objects/UserId",
-          "@shared/domain/AggregateRoot",
-          "@shared/domain/UniqueEntityId"
-        ],
-        "importedBy": [
-          "backend/src/modules/auth/domain/repositories/IUserSettingsRepository.ts"
-        ],
-        "exports": [
-          "UserSettings",
-          "UserSettingsProps"
         ]
       },
       {
@@ -23993,18 +23432,6 @@
         ]
       },
       {
-        "path": "backend/src/modules/auth/domain/repositories/IUserSettingsRepository.ts",
-        "language": "TypeScript",
-        "imports": [
-          "../entities/UserSettings",
-          "../value-objects/UserId"
-        ],
-        "importedBy": [],
-        "exports": [
-          "IUserSettingsRepository"
-        ]
-      },
-      {
         "path": "backend/src/modules/auth/domain/repositories/UserRepository.ts",
         "language": "TypeScript",
         "imports": [
@@ -24194,9 +23621,7 @@
         "importedBy": [
           "backend/src/modules/auth/domain/entities/UserPreferences.ts",
           "backend/src/modules/auth/domain/entities/UserProfile.ts",
-          "backend/src/modules/auth/domain/entities/UserSettings.ts",
           "backend/src/modules/auth/domain/repositories/IUserProfileRepository.ts",
-          "backend/src/modules/auth/domain/repositories/IUserSettingsRepository.ts",
           "backend/src/modules/auth/infrastructure/PostgresUserProfileRepository.ts",
           "backend/src/modules/auth/public/index.ts",
           "backend/src/modules/auth/tests/integration/infrastructure/repositories/PostgresUserProfileRepository.test.ts",
@@ -33635,6 +33060,7 @@
         ],
         "exports": [
           "authorize",
+          "authorizeAdminOrSuperAdmin",
           "authorizeRole"
         ]
       },
@@ -33961,7 +33387,9 @@
           "./components/ErrorBoundary",
           "./components/Footer",
           "./components/Navbar",
+          "./components/ProtectedRoute",
           "./context/AuthContext",
+          "./context/ThemeContext",
           "./pages/ArticleDetailPage",
           "./pages/ArticleListPage",
           "./pages/ErrorPage",
@@ -34022,6 +33450,7 @@
         "language": "TypeScript React",
         "imports": [
           "../context/AuthContext",
+          "../context/ThemeContext",
           "lucide-react",
           "react",
           "react-router-dom"
@@ -34031,6 +33460,23 @@
         ],
         "exports": [
           "Navbar"
+        ]
+      },
+      {
+        "path": "frontend/src/components/ProtectedRoute.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "../context/AuthContext",
+          "../pages/ErrorPage",
+          "react",
+          "react-router-dom"
+        ],
+        "importedBy": [
+          "frontend/src/App.tsx"
+        ],
+        "exports": [
+          "AdminRoute",
+          "ProtectedRoute"
         ]
       },
       {
@@ -34054,16 +33500,40 @@
         "importedBy": [
           "frontend/src/App.tsx",
           "frontend/src/components/Navbar.tsx",
+          "frontend/src/components/ProtectedRoute.tsx",
           "frontend/src/pages/LoginPage.tsx",
           "frontend/src/pages/RegisterPage.tsx",
           "frontend/src/pages/UserAccountCenterPage.tsx",
           "frontend/src/pages/UserProfilePage.tsx",
           "frontend/src/pages/account/AccountSecurityPage.tsx",
-          "frontend/src/pages/account/UserAccountCenterPage.tsx"
+          "frontend/src/pages/account/UserAccountCenterPage.tsx",
+          "frontend/src/pages/admin/article/ArticleAdmin.tsx",
+          "frontend/src/pages/admin/components/AdminHeader.tsx",
+          "frontend/src/pages/admin/components/AdminSidebar.tsx",
+          "frontend/src/pages/admin/identity/UsersAdmin.tsx",
+          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx"
         ],
         "exports": [
           "AuthProvider",
           "useAuth"
+        ]
+      },
+      {
+        "path": "frontend/src/context/ThemeContext.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "react"
+        ],
+        "importedBy": [
+          "frontend/src/App.tsx",
+          "frontend/src/components/Navbar.tsx",
+          "frontend/src/pages/account/AccountSettingsPage.tsx",
+          "frontend/src/pages/admin/components/AdminHeader.tsx"
+        ],
+        "exports": [
+          "Theme",
+          "ThemeProvider",
+          "useTheme"
         ]
       },
       {
@@ -34117,7 +33587,8 @@
         ],
         "importedBy": [
           "frontend/src/App.tsx",
-          "frontend/src/components/ErrorBoundary.tsx"
+          "frontend/src/components/ErrorBoundary.tsx",
+          "frontend/src/components/ProtectedRoute.tsx"
         ],
         "exports": [
           "ErrorPage"
@@ -34332,6 +33803,7 @@
         "path": "frontend/src/pages/account/AccountSettingsPage.tsx",
         "language": "TypeScript React",
         "imports": [
+          "../../context/ThemeContext",
           "../../services/api",
           "lucide-react",
           "react",
@@ -34363,14 +33835,15 @@
         "path": "frontend/src/pages/admin/AdminDashboardPage.tsx",
         "language": "TypeScript React",
         "imports": [
+          "./article/ArticleAdmin",
           "./components/AdminShell",
+          "./entities/EntityAdmin",
+          "./identity/UsersAdmin",
+          "./intelligence/AIAdmin",
+          "./observability/AuditAdmin",
+          "./ontology/OntologyAdmin",
           "./overview/AdminOverview",
-          "./routing/EntityRelationshipRoutes",
-          "./routing/IdentityRoutes",
-          "./routing/IntelligenceRoutes",
-          "./routing/ObservabilityRoutes",
-          "./routing/OverviewRoutes",
-          "./routing/SearchManagementRoutes",
+          "lucide-react",
           "react-router-dom"
         ],
         "importedBy": [
@@ -34381,19 +33854,19 @@
         ]
       },
       {
-        "path": "frontend/src/pages/admin/components/ActivityFeed.tsx",
+        "path": "frontend/src/pages/admin/article/ArticleAdmin.tsx",
         "language": "TypeScript React",
         "imports": [
+          "../../../context/AuthContext",
+          "../../../services/api",
+          "lucide-react",
           "react"
         ],
         "importedBy": [
-          "frontend/src/pages/admin/overview/OperationsFeed.tsx"
+          "frontend/src/pages/admin/AdminDashboardPage.tsx"
         ],
         "exports": [
-          "ActivityFeed",
-          "ActivityFeedProps",
-          "ActivityItem",
-          "ActivitySeverity"
+          "ArticleAdmin"
         ]
       },
       {
@@ -34401,33 +33874,25 @@
         "language": "TypeScript React",
         "imports": [
           "lucide-react",
+          "react",
           "react-router-dom"
         ],
         "importedBy": [
-          "frontend/src/pages/admin/components/AdminShell.tsx"
+          "frontend/src/pages/admin/components/AdminHeader.tsx"
         ],
         "exports": [
           "AdminBreadcrumbs"
         ]
       },
       {
-        "path": "frontend/src/pages/admin/components/AdminCommandBar.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react",
-          "react"
-        ],
-        "importedBy": [],
-        "exports": [
-          "AdminCommandBar",
-          "AdminCommandBarProps"
-        ]
-      },
-      {
         "path": "frontend/src/pages/admin/components/AdminHeader.tsx",
         "language": "TypeScript React",
         "imports": [
+          "../../../context/AuthContext",
+          "../../../context/ThemeContext",
+          "./AdminBreadcrumbs",
           "lucide-react",
+          "react",
           "react-router-dom"
         ],
         "importedBy": [
@@ -34441,10 +33906,10 @@
         "path": "frontend/src/pages/admin/components/AdminShell.tsx",
         "language": "TypeScript React",
         "imports": [
-          "./AdminBreadcrumbs",
           "./AdminHeader",
           "./AdminSidebar",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "importedBy": [
           "frontend/src/pages/admin/AdminDashboardPage.tsx"
@@ -34457,7 +33922,9 @@
         "path": "frontend/src/pages/admin/components/AdminSidebar.tsx",
         "language": "TypeScript React",
         "imports": [
+          "../../../context/AuthContext",
           "lucide-react",
+          "react",
           "react-router-dom"
         ],
         "importedBy": [
@@ -34465,50 +33932,6 @@
         ],
         "exports": [
           "AdminSidebar"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-          "frontend/src/pages/admin/identity/ApiKeysAdmin.tsx",
-          "frontend/src/pages/admin/identity/PermissionsAdmin.tsx",
-          "frontend/src/pages/admin/identity/RolesAdmin.tsx",
-          "frontend/src/pages/admin/identity/SessionsAdmin.tsx",
-          "frontend/src/pages/admin/identity/UsersAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
-          "frontend/src/pages/admin/observability/AuditAdmin.tsx",
-          "frontend/src/pages/admin/observability/OperationsAdmin.tsx",
-          "frontend/src/pages/admin/ontology/EntityTypesAdmin.tsx",
-          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
-          "frontend/src/pages/admin/ontology/OntologyVersionsAdmin.tsx",
-          "frontend/src/pages/admin/ontology/RelationshipTypesAdmin.tsx",
-          "frontend/src/pages/admin/search/SearchAdmin.tsx"
-        ],
-        "exports": [
-          "AttentionItem",
-          "AttentionPanel",
-          "AttentionPanelProps",
-          "AttentionSeverity"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/components/HealthStatus.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/overview/SystemHealth.tsx"
-        ],
-        "exports": [
-          "HealthState",
-          "HealthStatus",
-          "HealthStatusProps"
         ]
       },
       {
@@ -34520,29 +33943,7 @@
         ],
         "importedBy": [
           "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-          "frontend/src/pages/admin/identity/ApiKeysAdmin.tsx",
-          "frontend/src/pages/admin/identity/PermissionsAdmin.tsx",
-          "frontend/src/pages/admin/identity/RolesAdmin.tsx",
-          "frontend/src/pages/admin/identity/SessionsAdmin.tsx",
-          "frontend/src/pages/admin/identity/UsersAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/CrawlAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/KnowledgeGapAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/PromptAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/ProviderAdmin.tsx",
-          "frontend/src/pages/admin/observability/AnalyticsAdmin.tsx",
-          "frontend/src/pages/admin/observability/AuditAdmin.tsx",
-          "frontend/src/pages/admin/observability/OperationsAdmin.tsx",
-          "frontend/src/pages/admin/ontology/EntityTypesAdmin.tsx",
-          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
-          "frontend/src/pages/admin/ontology/OntologyVersionsAdmin.tsx",
-          "frontend/src/pages/admin/ontology/RelationshipTypesAdmin.tsx",
-          "frontend/src/pages/admin/overview/AdminOverview.tsx",
-          "frontend/src/pages/admin/overview/KnowledgeHealth.tsx",
-          "frontend/src/pages/admin/relationships/RelationshipAdmin.tsx",
-          "frontend/src/pages/admin/search/SearchAdmin.tsx",
-          "frontend/src/pages/admin/search/SearchDiagnostics.tsx",
-          "frontend/src/pages/admin/search/SearchIndexHealth.tsx"
+          "frontend/src/pages/admin/overview/AdminOverview.tsx"
         ],
         "exports": [
           "MetricCard",
@@ -34551,169 +33952,32 @@
         ]
       },
       {
-        "path": "frontend/src/pages/admin/components/ResourceTable.tsx",
+        "path": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
         "language": "TypeScript React",
         "imports": [
+          "../../../services/api",
+          "../components/MetricCard",
           "lucide-react",
           "react"
         ],
         "importedBy": [
-          "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-          "frontend/src/pages/admin/identity/ApiKeysAdmin.tsx",
-          "frontend/src/pages/admin/identity/PermissionsAdmin.tsx",
-          "frontend/src/pages/admin/identity/RolesAdmin.tsx",
-          "frontend/src/pages/admin/identity/SessionsAdmin.tsx",
-          "frontend/src/pages/admin/identity/UsersAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/CrawlAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/KnowledgeGapAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/PromptAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/ProviderAdmin.tsx",
-          "frontend/src/pages/admin/observability/AnalyticsAdmin.tsx",
-          "frontend/src/pages/admin/observability/AuditAdmin.tsx",
-          "frontend/src/pages/admin/observability/OperationsAdmin.tsx",
-          "frontend/src/pages/admin/ontology/EntityTypesAdmin.tsx",
-          "frontend/src/pages/admin/ontology/OntologyVersionsAdmin.tsx",
-          "frontend/src/pages/admin/ontology/RelationshipTypesAdmin.tsx",
-          "frontend/src/pages/admin/relationships/RelationshipAdmin.tsx",
-          "frontend/src/pages/admin/search/SearchAdmin.tsx",
-          "frontend/src/pages/admin/search/SearchDiagnostics.tsx",
-          "frontend/src/pages/admin/search/SearchIndexHealth.tsx"
-        ],
-        "exports": [
-          "ResourceColumn",
-          "ResourceTable",
-          "ResourceTableProps"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "./EntityInspector",
-          "./EntityOperations",
-          "lucide-react",
-          "react",
-          "react-router-dom"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/EntityRelationshipRoutes.tsx"
+          "frontend/src/pages/admin/AdminDashboardPage.tsx"
         ],
         "exports": [
           "EntityAdmin"
         ]
       },
       {
-        "path": "frontend/src/pages/admin/entities/EntityInspector.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/entities/EntityAdmin.tsx"
-        ],
-        "exports": [
-          "EntityInspector",
-          "EntityInspectorProps"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/entities/EntityOperations.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/entities/EntityAdmin.tsx"
-        ],
-        "exports": [
-          "EntityOperations"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/identity/ApiKeysAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../../../services/api",
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/IdentityRoutes.tsx"
-        ],
-        "exports": [
-          "ApiKeysAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/identity/PermissionsAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/IdentityRoutes.tsx"
-        ],
-        "exports": [
-          "PermissionsAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/identity/RolesAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/IdentityRoutes.tsx"
-        ],
-        "exports": [
-          "RolesAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/identity/SessionsAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../../../services/api",
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/IdentityRoutes.tsx"
-        ],
-        "exports": [
-          "SessionsAdmin"
-        ]
-      },
-      {
         "path": "frontend/src/pages/admin/identity/UsersAdmin.tsx",
         "language": "TypeScript React",
         "imports": [
+          "../../../context/AuthContext",
           "../../../services/api",
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
           "lucide-react",
           "react"
         ],
         "importedBy": [
-          "frontend/src/pages/admin/routing/IdentityRoutes.tsx"
+          "frontend/src/pages/admin/AdminDashboardPage.tsx"
         ],
         "exports": [
           "UsersAdmin"
@@ -34723,97 +33987,15 @@
         "path": "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
         "language": "TypeScript React",
         "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
+          "../../../services/api",
+          "lucide-react",
+          "react"
         ],
         "importedBy": [
-          "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx"
+          "frontend/src/pages/admin/AdminDashboardPage.tsx"
         ],
         "exports": [
           "AIAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/intelligence/CrawlAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../../../services/api",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx"
-        ],
-        "exports": [
-          "CrawlAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/intelligence/KnowledgeGapAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../../../services/api",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx"
-        ],
-        "exports": [
-          "KnowledgeGapAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/intelligence/PromptAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx"
-        ],
-        "exports": [
-          "PromptAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/intelligence/ProviderAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../../../services/api",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx"
-        ],
-        "exports": [
-          "ProviderAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/observability/AnalyticsAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/ObservabilityRoutes.tsx"
-        ],
-        "exports": [
-          "AnalyticsAdmin"
         ]
       },
       {
@@ -34821,109 +34003,30 @@
         "language": "TypeScript React",
         "imports": [
           "../../../services/api",
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
           "lucide-react",
           "react"
         ],
         "importedBy": [
-          "frontend/src/pages/admin/routing/ObservabilityRoutes.tsx"
+          "frontend/src/pages/admin/AdminDashboardPage.tsx"
         ],
         "exports": [
           "AuditAdmin"
         ]
       },
       {
-        "path": "frontend/src/pages/admin/observability/OperationsAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/ObservabilityRoutes.tsx"
-        ],
-        "exports": [
-          "OperationsAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/ontology/EntityTypesAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react-router-dom"
-        ],
-        "importedBy": [],
-        "exports": [
-          "EntityTypesAdmin"
-        ]
-      },
-      {
         "path": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
         "language": "TypeScript React",
         "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "./OntologyInspector",
+          "../../../context/AuthContext",
+          "../../../services/api",
           "lucide-react",
-          "react",
-          "react-router-dom"
+          "react"
         ],
         "importedBy": [
-          "frontend/src/pages/admin/routing/EntityRelationshipRoutes.tsx"
+          "frontend/src/pages/admin/AdminDashboardPage.tsx"
         ],
         "exports": [
           "OntologyAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/ontology/OntologyInspector.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx"
-        ],
-        "exports": [
-          "OntologyInspector"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/ontology/OntologyVersionsAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react-router-dom"
-        ],
-        "importedBy": [],
-        "exports": [
-          "OntologyVersionsAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/ontology/RelationshipTypesAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react",
-          "react-router-dom"
-        ],
-        "importedBy": [],
-        "exports": [
-          "RelationshipTypesAdmin"
         ]
       },
       {
@@ -34932,8 +34035,6 @@
         "imports": [
           "../../../services/api",
           "../components/MetricCard",
-          "./KnowledgeGraphOverview",
-          "./KnowledgeGrowthChart",
           "./QuickActionsPanel",
           "./RecentActivityPanel",
           "./RecentEntitiesTable",
@@ -34949,67 +34050,11 @@
         ]
       },
       {
-        "path": "frontend/src/pages/admin/overview/KnowledgeGraphOverview.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react",
-          "react",
-          "react-router-dom"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/overview/AdminOverview.tsx"
-        ],
-        "exports": [
-          "KnowledgeGraphOverview"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/overview/KnowledgeGrowthChart.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react",
-          "react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/overview/AdminOverview.tsx"
-        ],
-        "exports": [
-          "KnowledgeGrowthChart"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/overview/KnowledgeHealth.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/MetricCard",
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/OverviewRoutes.tsx"
-        ],
-        "exports": [
-          "KnowledgeHealth"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/overview/OperationsFeed.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/ActivityFeed",
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/OverviewRoutes.tsx"
-        ],
-        "exports": [
-          "OperationsFeed"
-        ]
-      },
-      {
         "path": "frontend/src/pages/admin/overview/QuickActionsPanel.tsx",
         "language": "TypeScript React",
         "imports": [
           "lucide-react",
+          "react",
           "react-router-dom"
         ],
         "importedBy": [
@@ -35024,6 +34069,7 @@
         "language": "TypeScript React",
         "imports": [
           "lucide-react",
+          "react",
           "react-router-dom"
         ],
         "importedBy": [
@@ -35037,212 +34083,30 @@
         "path": "frontend/src/pages/admin/overview/RecentEntitiesTable.tsx",
         "language": "TypeScript React",
         "imports": [
+          "../../../services/api",
           "lucide-react",
+          "react",
           "react-router-dom"
         ],
         "importedBy": [
           "frontend/src/pages/admin/overview/AdminOverview.tsx"
         ],
         "exports": [
-          "RecentEntitiesTable",
-          "RecentEntityItem"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/overview/SystemHealth.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/HealthStatus",
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/OverviewRoutes.tsx"
-        ],
-        "exports": [
-          "SystemHealth"
+          "RecentEntitiesTable"
         ]
       },
       {
         "path": "frontend/src/pages/admin/overview/SystemHealthGauge.tsx",
         "language": "TypeScript React",
-        "imports": [],
+        "imports": [
+          "lucide-react",
+          "react"
+        ],
         "importedBy": [
           "frontend/src/pages/admin/overview/AdminOverview.tsx"
         ],
         "exports": [
           "SystemHealthGauge"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/relationships/RelationshipAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/EntityRelationshipRoutes.tsx"
-        ],
-        "exports": [
-          "RelationshipAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/relationships/RelationshipInspector.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "lucide-react"
-        ],
-        "importedBy": [],
-        "exports": [
-          "RelationshipInspector"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/routing/EntityRelationshipRoutes.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../entities/EntityAdmin",
-          "../ontology/OntologyAdmin",
-          "../relationships/RelationshipAdmin",
-          "react-router-dom"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/AdminDashboardPage.tsx"
-        ],
-        "exports": [
-          "EntityRelationshipRoutes"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/routing/IdentityRoutes.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../identity/ApiKeysAdmin",
-          "../identity/PermissionsAdmin",
-          "../identity/RolesAdmin",
-          "../identity/SessionsAdmin",
-          "../identity/UsersAdmin",
-          "react-router-dom"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/AdminDashboardPage.tsx"
-        ],
-        "exports": [
-          "IdentityRoutes"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../intelligence/AIAdmin",
-          "../intelligence/CrawlAdmin",
-          "../intelligence/KnowledgeGapAdmin",
-          "../intelligence/PromptAdmin",
-          "../intelligence/ProviderAdmin",
-          "react-router-dom"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/AdminDashboardPage.tsx"
-        ],
-        "exports": [
-          "IntelligenceRoutes"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/routing/ObservabilityRoutes.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../observability/AnalyticsAdmin",
-          "../observability/AuditAdmin",
-          "../observability/OperationsAdmin",
-          "react-router-dom"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/AdminDashboardPage.tsx"
-        ],
-        "exports": [
-          "ObservabilityRoutes"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/routing/OverviewRoutes.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../overview/KnowledgeHealth",
-          "../overview/OperationsFeed",
-          "../overview/SystemHealth",
-          "react-router-dom"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/AdminDashboardPage.tsx"
-        ],
-        "exports": [
-          "OverviewRoutes"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/routing/SearchManagementRoutes.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../search/SearchAdmin",
-          "../search/SearchDiagnostics",
-          "../search/SearchIndexHealth",
-          "react-router-dom"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/AdminDashboardPage.tsx"
-        ],
-        "exports": [
-          "SearchManagementRoutes"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/search/SearchAdmin.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/AttentionPanel",
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/SearchManagementRoutes.tsx"
-        ],
-        "exports": [
-          "SearchAdmin"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/search/SearchDiagnostics.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/SearchManagementRoutes.tsx"
-        ],
-        "exports": [
-          "SearchDiagnostics"
-        ]
-      },
-      {
-        "path": "frontend/src/pages/admin/search/SearchIndexHealth.tsx",
-        "language": "TypeScript React",
-        "imports": [
-          "../components/MetricCard",
-          "../components/ResourceTable",
-          "lucide-react"
-        ],
-        "importedBy": [
-          "frontend/src/pages/admin/routing/SearchManagementRoutes.tsx"
-        ],
-        "exports": [
-          "SearchIndexHealth"
         ]
       },
       {
@@ -35261,16 +34125,17 @@
           "frontend/src/pages/account/AccountSecurityPage.tsx",
           "frontend/src/pages/account/AccountSettingsPage.tsx",
           "frontend/src/pages/account/UserAccountCenterPage.tsx",
-          "frontend/src/pages/admin/identity/ApiKeysAdmin.tsx",
-          "frontend/src/pages/admin/identity/SessionsAdmin.tsx",
+          "frontend/src/pages/admin/article/ArticleAdmin.tsx",
+          "frontend/src/pages/admin/entities/EntityAdmin.tsx",
           "frontend/src/pages/admin/identity/UsersAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/CrawlAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/KnowledgeGapAdmin.tsx",
-          "frontend/src/pages/admin/intelligence/ProviderAdmin.tsx",
+          "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
           "frontend/src/pages/admin/observability/AuditAdmin.tsx",
-          "frontend/src/pages/admin/overview/AdminOverview.tsx"
+          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
+          "frontend/src/pages/admin/overview/AdminOverview.tsx",
+          "frontend/src/pages/admin/overview/RecentEntitiesTable.tsx"
         ],
         "exports": [
+          "ApiKeyItem",
           "ArticleSummary",
           "AuthSession",
           "EntitySummary",
@@ -35283,11 +34148,16 @@
           "UserProfileData",
           "UserSettings",
           "adminApi",
+          "aiAdminApi",
           "api",
+          "apiKeyApi",
           "articleActivityApi",
           "articleApi",
+          "auditApi",
+          "authAdminApi",
           "entityApi",
           "notificationApi",
+          "ontologyApi",
           "profileApi",
           "securityApi",
           "settingsApi"
@@ -35344,11 +34214,13 @@
         "Docs/EngineV2/BoundedContextWorkflow.md",
         "Docs/EngineV2/System-Integration.md",
         "Docs/api/openapi.yaml",
+        "Docs/architecture/SCHOLAR_DESIGN_SYSTEM.md",
         "backend/.eslintrc.json",
         "backend/jest.config.js",
         "backend/package-lock.json",
         "backend/package.json",
         "backend/schema.sql",
+        "backend/scripts/seedUsers.ts",
         "backend/src/@types/exif-parser/index.d.ts",
         "backend/src/bootstrap/container/auto-discovery.ts",
         "backend/src/bootstrap/container/container.ts",
@@ -35635,7 +34507,6 @@
         "backend/src/modules/auth/application/commands/UnlockUserCommand.ts",
         "backend/src/modules/auth/application/commands/UpdateProfileCommand.ts",
         "backend/src/modules/auth/application/commands/UpdateUserCommand.ts",
-        "backend/src/modules/auth/application/commands/UpdateUserSettingsCommand.ts",
         "backend/src/modules/auth/application/commands/UploadAvatarCommand.ts",
         "backend/src/modules/auth/application/commands/VerifyEmailCommand.ts",
         "backend/src/modules/auth/application/commands/VerifyMfaCommand.ts",
@@ -35673,7 +34544,6 @@
         "backend/src/modules/auth/application/handlers/UnlockUserCommandHandler.ts",
         "backend/src/modules/auth/application/handlers/UpdateProfileCommandHandler.ts",
         "backend/src/modules/auth/application/handlers/UpdateUserCommandHandler.ts",
-        "backend/src/modules/auth/application/handlers/UpdateUserSettingsCommandHandler.ts",
         "backend/src/modules/auth/application/handlers/UploadAvatarCommandHandler.ts",
         "backend/src/modules/auth/application/handlers/VerifyEmailCommandHandler.ts",
         "backend/src/modules/auth/application/handlers/audit/UserLoggedInAuditHandler.ts",
@@ -35699,7 +34569,6 @@
         "backend/src/modules/auth/domain/entities/User.ts",
         "backend/src/modules/auth/domain/entities/UserPreferences.ts",
         "backend/src/modules/auth/domain/entities/UserProfile.ts",
-        "backend/src/modules/auth/domain/entities/UserSettings.ts",
         "backend/src/modules/auth/domain/errors/AuthErrors.ts",
         "backend/src/modules/auth/domain/errors/MfaErrors.ts",
         "backend/src/modules/auth/domain/errors/UserErrors.ts",
@@ -35747,7 +34616,6 @@
         "backend/src/modules/auth/domain/repositories/ISavedResearchRepository.ts",
         "backend/src/modules/auth/domain/repositories/ISessionRepository.ts",
         "backend/src/modules/auth/domain/repositories/IUserProfileRepository.ts",
-        "backend/src/modules/auth/domain/repositories/IUserSettingsRepository.ts",
         "backend/src/modules/auth/domain/repositories/UserRepository.ts",
         "backend/src/modules/auth/domain/services/AuthenticationService.ts",
         "backend/src/modules/auth/domain/validators/AvatarValidator.ts",
@@ -36401,6 +35269,7 @@
         "backend/tests/helpers/database.ts",
         "backend/tsconfig.json",
         "frontend/.oxlintrc.json",
+        "frontend/ColorSpecs.md",
         "frontend/README.md",
         "frontend/package-lock.json",
         "frontend/package.json",
@@ -36409,8 +35278,10 @@
         "frontend/src/components/ErrorBoundary.tsx",
         "frontend/src/components/Footer.tsx",
         "frontend/src/components/Navbar.tsx",
+        "frontend/src/components/ProtectedRoute.tsx",
         "frontend/src/components/entity/EntityVisual.tsx",
         "frontend/src/context/AuthContext.tsx",
+        "frontend/src/context/ThemeContext.tsx",
         "frontend/src/main.tsx",
         "frontend/src/pages/ArticleDetailPage.tsx",
         "frontend/src/pages/ArticleListPage.tsx",
@@ -36431,58 +35302,23 @@
         "frontend/src/pages/account/AccountSettingsPage.tsx",
         "frontend/src/pages/account/UserAccountCenterPage.tsx",
         "frontend/src/pages/admin/AdminDashboardPage.tsx",
-        "frontend/src/pages/admin/components/ActivityFeed.tsx",
+        "frontend/src/pages/admin/ROLE_DASHBOARD_GUIDELINES.md",
+        "frontend/src/pages/admin/article/ArticleAdmin.tsx",
         "frontend/src/pages/admin/components/AdminBreadcrumbs.tsx",
-        "frontend/src/pages/admin/components/AdminCommandBar.tsx",
         "frontend/src/pages/admin/components/AdminHeader.tsx",
         "frontend/src/pages/admin/components/AdminShell.tsx",
         "frontend/src/pages/admin/components/AdminSidebar.tsx",
-        "frontend/src/pages/admin/components/AttentionPanel.tsx",
-        "frontend/src/pages/admin/components/HealthStatus.tsx",
         "frontend/src/pages/admin/components/MetricCard.tsx",
-        "frontend/src/pages/admin/components/ResourceTable.tsx",
         "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-        "frontend/src/pages/admin/entities/EntityInspector.tsx",
-        "frontend/src/pages/admin/entities/EntityOperations.tsx",
-        "frontend/src/pages/admin/identity/ApiKeysAdmin.tsx",
-        "frontend/src/pages/admin/identity/PermissionsAdmin.tsx",
-        "frontend/src/pages/admin/identity/RolesAdmin.tsx",
-        "frontend/src/pages/admin/identity/SessionsAdmin.tsx",
         "frontend/src/pages/admin/identity/UsersAdmin.tsx",
         "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
-        "frontend/src/pages/admin/intelligence/CrawlAdmin.tsx",
-        "frontend/src/pages/admin/intelligence/KnowledgeGapAdmin.tsx",
-        "frontend/src/pages/admin/intelligence/PromptAdmin.tsx",
-        "frontend/src/pages/admin/intelligence/ProviderAdmin.tsx",
-        "frontend/src/pages/admin/observability/AnalyticsAdmin.tsx",
         "frontend/src/pages/admin/observability/AuditAdmin.tsx",
-        "frontend/src/pages/admin/observability/OperationsAdmin.tsx",
-        "frontend/src/pages/admin/ontology/EntityTypesAdmin.tsx",
         "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
-        "frontend/src/pages/admin/ontology/OntologyInspector.tsx",
-        "frontend/src/pages/admin/ontology/OntologyVersionsAdmin.tsx",
-        "frontend/src/pages/admin/ontology/RelationshipTypesAdmin.tsx",
         "frontend/src/pages/admin/overview/AdminOverview.tsx",
-        "frontend/src/pages/admin/overview/KnowledgeGraphOverview.tsx",
-        "frontend/src/pages/admin/overview/KnowledgeGrowthChart.tsx",
-        "frontend/src/pages/admin/overview/KnowledgeHealth.tsx",
-        "frontend/src/pages/admin/overview/OperationsFeed.tsx",
         "frontend/src/pages/admin/overview/QuickActionsPanel.tsx",
         "frontend/src/pages/admin/overview/RecentActivityPanel.tsx",
         "frontend/src/pages/admin/overview/RecentEntitiesTable.tsx",
-        "frontend/src/pages/admin/overview/SystemHealth.tsx",
         "frontend/src/pages/admin/overview/SystemHealthGauge.tsx",
-        "frontend/src/pages/admin/relationships/RelationshipAdmin.tsx",
-        "frontend/src/pages/admin/relationships/RelationshipInspector.tsx",
-        "frontend/src/pages/admin/routing/EntityRelationshipRoutes.tsx",
-        "frontend/src/pages/admin/routing/IdentityRoutes.tsx",
-        "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx",
-        "frontend/src/pages/admin/routing/ObservabilityRoutes.tsx",
-        "frontend/src/pages/admin/routing/OverviewRoutes.tsx",
-        "frontend/src/pages/admin/routing/SearchManagementRoutes.tsx",
-        "frontend/src/pages/admin/search/SearchAdmin.tsx",
-        "frontend/src/pages/admin/search/SearchDiagnostics.tsx",
-        "frontend/src/pages/admin/search/SearchIndexHealth.tsx",
         "frontend/src/services/api.ts",
         "frontend/tailwind.config.js",
         "frontend/tsconfig.app.json",
@@ -38282,11 +37118,6 @@
           "type": "import"
         },
         {
-          "from": "backend/src/modules/auth/application/handlers/UpdateUserSettingsCommandHandler.ts",
-          "to": "backend/src/modules/auth/application/commands/UpdateUserSettingsCommand.ts",
-          "type": "import"
-        },
-        {
           "from": "backend/src/modules/auth/application/handlers/UploadAvatarCommandHandler.ts",
           "to": "backend/src/modules/auth/application/commands/UploadAvatarCommand.ts",
           "type": "import"
@@ -38352,11 +37183,6 @@
           "type": "import"
         },
         {
-          "from": "backend/src/modules/auth/domain/entities/UserSettings.ts",
-          "to": "backend/src/modules/auth/domain/value-objects/UserId.ts",
-          "type": "import"
-        },
-        {
           "from": "backend/src/modules/auth/domain/interfaces/IAuthenticationService.ts",
           "to": "backend/src/modules/auth/domain/entities/User.ts",
           "type": "import"
@@ -38409,16 +37235,6 @@
         {
           "from": "backend/src/modules/auth/domain/repositories/IUserProfileRepository.ts",
           "to": "backend/src/modules/auth/domain/value-objects/UserProfileId.ts",
-          "type": "import"
-        },
-        {
-          "from": "backend/src/modules/auth/domain/repositories/IUserSettingsRepository.ts",
-          "to": "backend/src/modules/auth/domain/entities/UserSettings.ts",
-          "type": "import"
-        },
-        {
-          "from": "backend/src/modules/auth/domain/repositories/IUserSettingsRepository.ts",
-          "to": "backend/src/modules/auth/domain/value-objects/UserId.ts",
           "type": "import"
         },
         {
@@ -42418,7 +41234,17 @@
         },
         {
           "from": "frontend/src/App.tsx",
+          "to": "frontend/src/components/ProtectedRoute.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/App.tsx",
           "to": "frontend/src/context/AuthContext.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/App.tsx",
+          "to": "frontend/src/context/ThemeContext.tsx",
           "type": "import"
         },
         {
@@ -42517,6 +41343,21 @@
           "type": "import"
         },
         {
+          "from": "frontend/src/components/Navbar.tsx",
+          "to": "frontend/src/context/ThemeContext.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/components/ProtectedRoute.tsx",
+          "to": "frontend/src/context/AuthContext.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/components/ProtectedRoute.tsx",
+          "to": "frontend/src/pages/ErrorPage.tsx",
+          "type": "import"
+        },
+        {
           "from": "frontend/src/context/AuthContext.tsx",
           "to": "frontend/src/services/api.ts",
           "type": "import"
@@ -42598,6 +41439,11 @@
         },
         {
           "from": "frontend/src/pages/account/AccountSettingsPage.tsx",
+          "to": "frontend/src/context/ThemeContext.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/account/AccountSettingsPage.tsx",
           "to": "frontend/src/services/api.ts",
           "type": "import"
         },
@@ -42613,7 +41459,37 @@
         },
         {
           "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "to": "frontend/src/pages/admin/article/ArticleAdmin.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
           "to": "frontend/src/pages/admin/components/AdminShell.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "to": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "to": "frontend/src/pages/admin/identity/UsersAdmin.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "to": "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "to": "frontend/src/pages/admin/observability/AuditAdmin.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "to": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
           "type": "import"
         },
         {
@@ -42622,37 +41498,27 @@
           "type": "import"
         },
         {
-          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
-          "to": "frontend/src/pages/admin/routing/EntityRelationshipRoutes.tsx",
+          "from": "frontend/src/pages/admin/article/ArticleAdmin.tsx",
+          "to": "frontend/src/context/AuthContext.tsx",
           "type": "import"
         },
         {
-          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
-          "to": "frontend/src/pages/admin/routing/IdentityRoutes.tsx",
+          "from": "frontend/src/pages/admin/article/ArticleAdmin.tsx",
+          "to": "frontend/src/services/api.ts",
           "type": "import"
         },
         {
-          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
-          "to": "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx",
+          "from": "frontend/src/pages/admin/components/AdminHeader.tsx",
+          "to": "frontend/src/context/AuthContext.tsx",
           "type": "import"
         },
         {
-          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
-          "to": "frontend/src/pages/admin/routing/ObservabilityRoutes.tsx",
+          "from": "frontend/src/pages/admin/components/AdminHeader.tsx",
+          "to": "frontend/src/context/ThemeContext.tsx",
           "type": "import"
         },
         {
-          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
-          "to": "frontend/src/pages/admin/routing/OverviewRoutes.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
-          "to": "frontend/src/pages/admin/routing/SearchManagementRoutes.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/components/AdminShell.tsx",
+          "from": "frontend/src/pages/admin/components/AdminHeader.tsx",
           "to": "frontend/src/pages/admin/components/AdminBreadcrumbs.tsx",
           "type": "import"
         },
@@ -42667,293 +41533,48 @@
           "type": "import"
         },
         {
-          "from": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
+          "from": "frontend/src/pages/admin/components/AdminSidebar.tsx",
+          "to": "frontend/src/context/AuthContext.tsx",
           "type": "import"
         },
         {
           "from": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-          "to": "frontend/src/pages/admin/entities/EntityInspector.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-          "to": "frontend/src/pages/admin/entities/EntityOperations.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/ApiKeysAdmin.tsx",
           "to": "frontend/src/services/api.ts",
           "type": "import"
         },
         {
-          "from": "frontend/src/pages/admin/identity/ApiKeysAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/ApiKeysAdmin.tsx",
+          "from": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
           "to": "frontend/src/pages/admin/components/MetricCard.tsx",
           "type": "import"
         },
         {
-          "from": "frontend/src/pages/admin/identity/ApiKeysAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/PermissionsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/PermissionsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/PermissionsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/RolesAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/RolesAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/RolesAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/SessionsAdmin.tsx",
-          "to": "frontend/src/services/api.ts",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/SessionsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/SessionsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/SessionsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
+          "from": "frontend/src/pages/admin/identity/UsersAdmin.tsx",
+          "to": "frontend/src/context/AuthContext.tsx",
           "type": "import"
         },
         {
           "from": "frontend/src/pages/admin/identity/UsersAdmin.tsx",
           "to": "frontend/src/services/api.ts",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/UsersAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/UsersAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/identity/UsersAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
           "type": "import"
         },
         {
           "from": "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/CrawlAdmin.tsx",
-          "to": "frontend/src/services/api.ts",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/CrawlAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/CrawlAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/KnowledgeGapAdmin.tsx",
-          "to": "frontend/src/services/api.ts",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/KnowledgeGapAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/KnowledgeGapAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/PromptAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/PromptAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/ProviderAdmin.tsx",
-          "to": "frontend/src/services/api.ts",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/ProviderAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/intelligence/ProviderAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/observability/AnalyticsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/observability/AnalyticsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/observability/AuditAdmin.tsx",
           "to": "frontend/src/services/api.ts",
           "type": "import"
         },
         {
           "from": "frontend/src/pages/admin/observability/AuditAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/observability/AuditAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/observability/AuditAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/observability/OperationsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/observability/OperationsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/observability/OperationsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/ontology/EntityTypesAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/ontology/EntityTypesAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/ontology/EntityTypesAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
+          "to": "frontend/src/services/api.ts",
           "type": "import"
         },
         {
           "from": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
+          "to": "frontend/src/context/AuthContext.tsx",
           "type": "import"
         },
         {
           "from": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
-          "to": "frontend/src/pages/admin/ontology/OntologyInspector.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/ontology/OntologyVersionsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/ontology/OntologyVersionsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/ontology/OntologyVersionsAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/ontology/RelationshipTypesAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/ontology/RelationshipTypesAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/ontology/RelationshipTypesAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
+          "to": "frontend/src/services/api.ts",
           "type": "import"
         },
         {
@@ -42964,16 +41585,6 @@
         {
           "from": "frontend/src/pages/admin/overview/AdminOverview.tsx",
           "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/overview/AdminOverview.tsx",
-          "to": "frontend/src/pages/admin/overview/KnowledgeGraphOverview.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/overview/AdminOverview.tsx",
-          "to": "frontend/src/pages/admin/overview/KnowledgeGrowthChart.tsx",
           "type": "import"
         },
         {
@@ -42997,198 +41608,17 @@
           "type": "import"
         },
         {
-          "from": "frontend/src/pages/admin/overview/KnowledgeHealth.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/overview/OperationsFeed.tsx",
-          "to": "frontend/src/pages/admin/components/ActivityFeed.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/overview/SystemHealth.tsx",
-          "to": "frontend/src/pages/admin/components/HealthStatus.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/relationships/RelationshipAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/relationships/RelationshipAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/EntityRelationshipRoutes.tsx",
-          "to": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/EntityRelationshipRoutes.tsx",
-          "to": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/EntityRelationshipRoutes.tsx",
-          "to": "frontend/src/pages/admin/relationships/RelationshipAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/IdentityRoutes.tsx",
-          "to": "frontend/src/pages/admin/identity/ApiKeysAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/IdentityRoutes.tsx",
-          "to": "frontend/src/pages/admin/identity/PermissionsAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/IdentityRoutes.tsx",
-          "to": "frontend/src/pages/admin/identity/RolesAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/IdentityRoutes.tsx",
-          "to": "frontend/src/pages/admin/identity/SessionsAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/IdentityRoutes.tsx",
-          "to": "frontend/src/pages/admin/identity/UsersAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx",
-          "to": "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx",
-          "to": "frontend/src/pages/admin/intelligence/CrawlAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx",
-          "to": "frontend/src/pages/admin/intelligence/KnowledgeGapAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx",
-          "to": "frontend/src/pages/admin/intelligence/PromptAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx",
-          "to": "frontend/src/pages/admin/intelligence/ProviderAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/ObservabilityRoutes.tsx",
-          "to": "frontend/src/pages/admin/observability/AnalyticsAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/ObservabilityRoutes.tsx",
-          "to": "frontend/src/pages/admin/observability/AuditAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/ObservabilityRoutes.tsx",
-          "to": "frontend/src/pages/admin/observability/OperationsAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/OverviewRoutes.tsx",
-          "to": "frontend/src/pages/admin/overview/KnowledgeHealth.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/OverviewRoutes.tsx",
-          "to": "frontend/src/pages/admin/overview/OperationsFeed.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/OverviewRoutes.tsx",
-          "to": "frontend/src/pages/admin/overview/SystemHealth.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/SearchManagementRoutes.tsx",
-          "to": "frontend/src/pages/admin/search/SearchAdmin.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/SearchManagementRoutes.tsx",
-          "to": "frontend/src/pages/admin/search/SearchDiagnostics.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/routing/SearchManagementRoutes.tsx",
-          "to": "frontend/src/pages/admin/search/SearchIndexHealth.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/search/SearchAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/AttentionPanel.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/search/SearchAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/search/SearchAdmin.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/search/SearchDiagnostics.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/search/SearchDiagnostics.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/search/SearchIndexHealth.tsx",
-          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
-          "type": "import"
-        },
-        {
-          "from": "frontend/src/pages/admin/search/SearchIndexHealth.tsx",
-          "to": "frontend/src/pages/admin/components/ResourceTable.tsx",
+          "from": "frontend/src/pages/admin/overview/RecentEntitiesTable.tsx",
+          "to": "frontend/src/services/api.ts",
           "type": "import"
         }
       ]
     }
   },
   "changes": {
-    "added": [
-      "frontend/src/pages/admin/routing/EntityRelationshipRoutes.tsx",
-      "frontend/src/pages/admin/routing/IdentityRoutes.tsx",
-      "frontend/src/pages/admin/routing/IntelligenceRoutes.tsx",
-      "frontend/src/pages/admin/routing/ObservabilityRoutes.tsx",
-      "frontend/src/pages/admin/routing/OverviewRoutes.tsx",
-      "frontend/src/pages/admin/routing/SearchManagementRoutes.tsx"
-    ],
-    "changed": [
-      "frontend/src/components/Footer.tsx",
-      "frontend/src/pages/UserAccountCenterPage.tsx",
-      "frontend/src/pages/admin/AdminDashboardPage.tsx",
-      "frontend/src/pages/admin/overview/AdminOverview.tsx",
-      "frontend/src/pages/admin/overview/RecentActivityPanel.tsx",
-      "frontend/src/pages/admin/overview/RecentEntitiesTable.tsx",
-      "frontend/src/pages/admin/overview/SystemHealthGauge.tsx",
-      "frontend/src/services/api.ts"
-    ],
+    "added": [],
+    "changed": [],
     "deleted": [],
-    "unchanged": 1151
+    "unchanged": 1131
   }
 }

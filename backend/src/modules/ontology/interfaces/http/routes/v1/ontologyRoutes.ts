@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { OntologyController } from '@modules/ontology/interfaces/controllers/OntologyController';
 
 import { AuthenticationMiddleware } from '@shared/interfaces/http/middleware/AuthenticationMiddleware';
-import { authorize } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
+import { authorize, authorizeAdminOrSuperAdmin } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
 
 import { Permission } from '@modules/auth/public';
 
@@ -78,7 +78,7 @@ export const ontologyRoutes = (
   router.post(
     '/:ontologyId/entity-types',
     auth.authenticate,
-    authorize(Permission.ENTITY_TYPE_WRITE),
+    authorizeAdminOrSuperAdmin,
     validateParams(OntologyIdParamSchema),
     validate(CreateEntityTypeSchema),
     (req, res) =>
@@ -107,7 +107,7 @@ export const ontologyRoutes = (
   router.post(
     '/entity-types/:entityTypeId/properties',
     auth.authenticate,
-    authorize(Permission.ENTITY_TYPE_WRITE),
+    authorizeAdminOrSuperAdmin,
     validateParams(EntityTypeIdParamSchema),
     validate(CreateEntityTypePropertySchema),
     (req, res) =>
@@ -117,7 +117,7 @@ export const ontologyRoutes = (
   router.put(
     '/entity-type-properties/:id',
     auth.authenticate,
-    authorize(Permission.ENTITY_TYPE_WRITE),
+    authorizeAdminOrSuperAdmin,
     validateParams(IdParamSchema),
     validate(UpdateEntityTypePropertySchema),
     (req, res) =>
@@ -127,7 +127,7 @@ export const ontologyRoutes = (
   router.delete(
     '/entity-type-properties/:id',
     auth.authenticate,
-    authorize(Permission.ENTITY_TYPE_WRITE),
+    authorizeAdminOrSuperAdmin,
     validateParams(IdParamSchema),
     (req, res) =>
       controller.deleteEntityTypeProperty(req, res),
@@ -155,7 +155,7 @@ export const ontologyRoutes = (
   router.post(
     '/:ontologyId/relationship-types',
     auth.authenticate,
-    authorize(Permission.RELATIONSHIP_TYPE_WRITE),
+    authorizeAdminOrSuperAdmin,
     validateParams(OntologyIdParamSchema),
     validate(CreateRelationshipTypeSchema),
     (req, res) =>
@@ -175,7 +175,7 @@ export const ontologyRoutes = (
   router.post(
     '/versions/:id/publish',
     auth.authenticate,
-    authorize(Permission.ONTOLOGY_VERSION_WRITE),
+    authorizeAdminOrSuperAdmin,
     validateParams(IdParamSchema),
     (req, res) =>
       controller.publishVersion(req, res),
@@ -184,7 +184,7 @@ export const ontologyRoutes = (
   router.post(
     '/versions/:id/rollback',
     auth.authenticate,
-    authorize(Permission.ONTOLOGY_VERSION_WRITE),
+    authorizeAdminOrSuperAdmin,
     validateParams(IdParamSchema),
     (req, res) =>
       controller.rollbackVersion(req, res),
@@ -193,7 +193,7 @@ export const ontologyRoutes = (
   router.post(
     '/:ontologyId/versions',
     auth.authenticate,
-    authorize(Permission.ONTOLOGY_VERSION_WRITE),
+    authorizeAdminOrSuperAdmin,
     validateParams(OntologyIdParamSchema),
     validate(CreateOntologyVersionSchema),
     (req, res) =>
@@ -204,7 +204,7 @@ export const ontologyRoutes = (
   router.post(
     '/',
     auth.authenticate,
-    authorize(Permission.ONTOLOGY_CREATE),
+    authorizeAdminOrSuperAdmin,
     validate(CreateOntologySchema),
     (req, res) =>
       controller.create(req, res),
@@ -222,7 +222,7 @@ export const ontologyRoutes = (
   router.put(
     '/:id',
     auth.authenticate,
-    authorize(Permission.ONTOLOGY_WRITE),
+    authorizeAdminOrSuperAdmin,
     validateParams(IdParamSchema),
     validate(UpdateOntologySchema),
     (req, res) =>
@@ -232,7 +232,7 @@ export const ontologyRoutes = (
   router.post(
     '/:id/archive',
     auth.authenticate,
-    authorize(Permission.ONTOLOGY_WRITE),
+    authorizeAdminOrSuperAdmin,
     validateParams(IdParamSchema),
     (req, res) =>
       controller.archive(req, res),

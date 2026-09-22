@@ -11,29 +11,33 @@ const visualConfig = {
     icon: UsersRound,
     eyebrow: 'PERSON',
     title: 'People',
-    accent: '#D9A441',
-    secondary: '#8BC7A8',
+    accent: '#C9A86A',     // Savanna Gold
+    secondary: '#064E3B',  // Emerald 900
+    badgeBg: 'rgba(201, 168, 106, 0.12)',
   },
   PLACE: {
     icon: MapPinned,
     eyebrow: 'PLACE',
     title: 'Place',
-    accent: '#C96B4B',
-    secondary: '#8BC7A8',
+    accent: '#A1624D',     // Clay
+    secondary: '#C9A86A',  // Savanna Gold
+    badgeBg: 'rgba(161, 98, 77, 0.12)',
   },
   ORGANIZATION: {
     icon: Landmark,
     eyebrow: 'ORGANIZATION',
     title: 'Institution',
-    accent: '#22A06B',
-    secondary: '#D9A441',
+    accent: '#064E3B',     // Emerald 900
+    secondary: '#C9A86A',  // Savanna Gold
+    badgeBg: 'rgba(6, 78, 59, 0.12)',
   },
   CULTURE: {
     icon: Globe2,
     eyebrow: 'CULTURE',
     title: 'Culture',
-    accent: '#E7D7B5',
-    secondary: '#C96B4B',
+    accent: '#C9A86A',     // Savanna Gold
+    secondary: '#A1624D',  // Clay
+    badgeBg: 'rgba(201, 168, 106, 0.12)',
   },
 } as const;
 
@@ -50,52 +54,59 @@ export function EntityVisual({
   const cy = [76, 104, 68, 92][seed];
 
   return (
-    <div className="relative h-56 overflow-hidden bg-ink">
+    <div className="relative h-56 overflow-hidden rounded-t-xl bg-surface border-b border-stone/20 transition-colors duration-300">
       <div
         className="absolute inset-0 opacity-80"
         style={{
           background: `
             radial-gradient(circle at ${cx}% ${cy}%,
-              ${config.accent}30 0,
-              transparent 28%),
+              ${config.accent}18 0,
+              transparent 35%),
             radial-gradient(circle at ${100 - cx}% ${100 - cy}%,
-              ${config.secondary}20 0,
-              transparent 34%),
-            linear-gradient(135deg, #10201A 0%, #0B1110 72%)
+              rgba(6, 78, 59, 0.08) 0,
+              transparent 40%)
           `,
         }}
       />
 
+      {/* "The Scholar" Ontology Graph Background Rendering */}
       <svg
-        className="absolute inset-0 h-full w-full opacity-70"
+        className="absolute inset-0 h-full w-full opacity-60"
         viewBox="0 0 420 220"
         fill="none"
         aria-hidden="true"
       >
+        {/* Verified Savanna Gold relationship lines */}
         <path
           d="M-20 168C54 112 91 197 162 130C226 70 252 115 307 69C348 35 385 51 445 17"
-          stroke={config.accent}
-          strokeOpacity="0.32"
-          strokeWidth="1"
+          stroke="#C9A86A"
+          strokeOpacity="0.4"
+          strokeWidth="1.5"
         />
+        {/* Inferred relationship dashed line */}
         <path
           d="M-10 195C72 144 115 207 183 153C248 101 277 143 329 103C365 76 394 82 438 58"
-          stroke={config.secondary}
-          strokeOpacity="0.24"
-          strokeWidth="1"
+          stroke="#C9A86A"
+          strokeOpacity="0.3"
+          strokeWidth="1.5"
+          strokeDasharray="4 4"
         />
 
+        {/* Graph Nodes */}
         {[42, 88, 136, 186, 238, 286, 338, 386].map((x, nodeIndex) => {
           const y = 42 + ((nodeIndex * 31 + seed * 17) % 112);
+          const isSelected = nodeIndex === 3;
 
           return (
-            <g key={`${x}-${nodeIndex}`}>
+            <g key={`${x}-${nodeIndex}`} className="group/node cursor-pointer">
               <circle
                 cx={x}
                 cy={y}
-                r={nodeIndex % 3 === 0 ? 3 : 2}
-                fill={nodeIndex % 3 === 0 ? config.accent : config.secondary}
-                fillOpacity={nodeIndex % 3 === 0 ? 0.72 : 0.4}
+                r={isSelected ? 6 : nodeIndex % 3 === 0 ? 4 : 3}
+                fill={isSelected ? '#064E3B' : '#FFFFFF'}
+                stroke={isSelected ? '#C9A86A' : '#121619'}
+                strokeWidth={isSelected ? 1.5 : 1}
+                className="transition-all duration-300 group-hover/node:fill-[#D1FAE5] group-hover/node:stroke-[#064E3B] group-hover/node:r-6"
               />
               {nodeIndex > 0 && (
                 <line
@@ -103,8 +114,9 @@ export function EntityVisual({
                   y1={y - 11}
                   x2={x}
                   y2={y}
-                  stroke={config.secondary}
-                  strokeOpacity="0.12"
+                  stroke="#C9A86A"
+                  strokeOpacity="0.25"
+                  strokeWidth="1.5"
                 />
               )}
             </g>
@@ -115,46 +127,46 @@ export function EntityVisual({
           cx={cx * 3.2}
           cy={cy}
           r="34"
-          stroke={config.accent}
+          stroke="#C9A86A"
           strokeOpacity="0.2"
         />
         <circle
           cx={cx * 3.2}
           cy={cy}
           r="9"
-          fill={config.accent}
-          fillOpacity="0.18"
+          fill="#064E3B"
+          fillOpacity="0.8"
         />
       </svg>
 
       <div className="absolute inset-x-5 top-5 flex items-center justify-between">
         <span
-          className="rounded-full border px-2.5 py-1 text-[10px] font-semibold tracking-[0.18em]"
+          className="rounded-md border px-2.5 py-0.5 font-mono text-[10px] font-semibold tracking-wider"
           style={{
             borderColor: `${config.accent}45`,
             color: config.accent,
-            backgroundColor: `${config.accent}0d`,
+            backgroundColor: config.badgeBg,
           }}
         >
           {config.eyebrow}
         </span>
 
         <Icon
-          size={17}
+          size={18}
           strokeWidth={1.5}
           style={{ color: config.accent }}
         />
       </div>
 
       <div className="absolute inset-x-5 bottom-5">
-        <p className="text-[10px] uppercase tracking-[0.18em] text-mist">
-          Knowledge entity
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+          Knowledge Entity
         </p>
-        <p className="mt-1 text-sm font-medium text-cloud">{label}</p>
+        <p className="mt-1 font-serif text-lg font-bold text-text-main">{label}</p>
       </div>
 
       <div
-        className="absolute bottom-0 left-0 h-px w-1/2"
+        className="absolute bottom-0 left-0 h-0.5 w-1/2"
         style={{ backgroundColor: config.accent }}
       />
     </div>

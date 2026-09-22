@@ -5,5 +5,7 @@ export class LoginCommand implements ICommand {
     public readonly email: string,
     public readonly password: string,
     public readonly mfaCode?: string,
+    public readonly ipAddress?: string,
+    public readonly userAgent?: string,
   ) {}
 }

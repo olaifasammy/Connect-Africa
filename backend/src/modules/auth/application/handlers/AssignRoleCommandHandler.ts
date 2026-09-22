@@ -35,7 +35,7 @@ export class AssignRoleCommandHandler
         throw new AuthenticationError('Administrator not found.');
       }
 
-      if (actor.role !== Roles.ADMIN.name) {
+      if (actor.role !== Roles.ADMINISTRATOR.name && actor.role !== Roles.SUPER_ADMINISTRATOR.name) {
         throw new AuthenticationError(
           'Only administrators can manage user roles.',
         );
@@ -59,6 +59,12 @@ export class AssignRoleCommandHandler
 
       if (!(role in Roles)) {
         throw new AuthenticationError('Invalid role.');
+      }
+
+      if (actor.role === Roles.ADMINISTRATOR.name && (role === Roles.ADMINISTRATOR.name || role === Roles.SUPER_ADMINISTRATOR.name)) {
+        throw new AuthenticationError(
+          'Administrators cannot assign the ADMINISTRATOR or SUPER_ADMINISTRATOR role.',
+        );
       }
 
       const previousRole = user.role;

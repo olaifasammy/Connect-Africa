@@ -176,6 +176,63 @@ export const articleApi = {
   },
 };
 
+export const aiAdminApi = {
+  listProviders: async () => {
+    const response = await api.get('/ai/provider');
+    const data = unwrapData<any>(response);
+    return Array.isArray(data) ? data : (data?.providers || data?.items || data?.data || []);
+  },
+  getProviderHealth: async (id: string) => {
+    const response = await api.get(`/ai/provider/${encodeURIComponent(id)}/health`);
+    return unwrapData<any>(response);
+  },
+};
+
+export const auditApi = {
+  list: async () => {
+    const response = await api.get('/audit');
+    const data = unwrapData<any>(response);
+    return Array.isArray(data) ? data : (data?.logs || data?.items || data?.data || []);
+  },
+};
+
+export const authAdminApi = {
+  listUsers: async () => {
+    const response = await api.get('/auth/users');
+    const data = unwrapData<any>(response);
+    return Array.isArray(data) ? data : (data?.users || data?.items || data?.data || []);
+  },
+  assignRole: async (userId: string, role: string) => {
+    return await api.post('/auth/assign-role', { userId, role });
+  },
+  removeRole: async (userId: string, role: string) => {
+    return await api.post('/auth/remove-role', { userId, role });
+  },
+  banUser: async (userIdToBan: string) => {
+    return await api.post('/auth/ban', { userIdToBan });
+  },
+  suspendUser: async (userIdToSuspend: string) => {
+    return await api.post('/auth/suspend', { userIdToSuspend });
+  },
+};
+
+export const ontologyApi = {
+  list: async () => {
+    const response = await api.get('/ontology');
+    const data = unwrapData<any>(response);
+    return Array.isArray(data) ? data : (data?.ontologies || data?.items || data?.data || []);
+  },
+  getEntityTypes: async (ontologyId: string) => {
+    const response = await api.get(`/ontology/${ontologyId}/entity-types`);
+    const data = unwrapData<any>(response);
+    return Array.isArray(data) ? data : (data?.entityTypes || data?.items || data?.data || []);
+  },
+  getRelationshipTypes: async (ontologyId: string) => {
+    const response = await api.get(`/ontology/${ontologyId}/relationship-types`);
+    const data = unwrapData<any>(response);
+    return Array.isArray(data) ? data : (data?.relationshipTypes || data?.items || data?.data || []);
+  },
+};
 export const entityApi = {
   list: async (limit = 10): Promise<EntitySummary[]> => {
     const response = await api.get(`/entity?limit=${limit}&strategy=offset`);
@@ -358,8 +415,10 @@ export const securityApi = {
     return unwrapData<MfaSetup>(response);
   },
 
-  verifyMfa: async (code: string): Promise<void> => {
-    await api.post('/auth/verify-mfa', { code });
+  verifyMfa: async (code: string): Promise<string[] | void> => {
+    const response = await api.post('/auth/verify-mfa', { code });
+    const data = unwrapData<any>(response);
+    return data?.recoveryCodes || data?.data?.recoveryCodes;
   },
 
   deleteAccount: async (): Promise<void> => {
@@ -367,6 +426,31 @@ export const securityApi = {
   },
 };
 
+export interface ApiKeyItem {
+  id: string;
+  name: string;
+  prefix: string;
+  scopes: string[];
+  isActive: boolean;
+  expiresAt?: string;
+  createdAt: string;
+  lastUsedAt?: string;
+}
+
+export const apiKeyApi = {
+  list: async (): Promise<ApiKeyItem[]> => {
+    const response = await api.get('/auth/api-keys');
+    const data = unwrapData<any>(response);
+    return Array.isArray(data) ? data : (data?.apiKeys || data?.items || data?.data || []);
+  },
+  create: async (name: string, scopes: string[] = [], expiresInDays?: number): Promise<{ id: string; name: string; apiKey: string; prefix: string; scopes: string[] }> => {
+    const response = await api.post('/auth/api-keys', { name, scopes, expiresInDays });
+    return unwrapData<any>(response);
+  },
+  revoke: async (id: string): Promise<void> => {
+    await api.delete(`/auth/api-keys/${encodeURIComponent(id)}`);
+  },
+};
 export interface UserProfileData {
   userId: string;
   displayName: string;
@@ -477,14 +561,14 @@ export const adminApi = {
   getStats: async () => {
     const [entitiesRes, relationshipsRes, articlesRes, sourcesRes, usersRes, auditRes, ontologyRes, healthRes] =
       await Promise.allSettled([
-        api.get('/entity?limit=1000&strategy=offset'),
-        api.get('/relationship'),
-        api.get('/article/latest?limit=1000'),
+        api.get('/entity?limit=100&strategy=offset'),
+        api.get('/relationship?limit=100'),
+        api.get('/article/latest?limit=100'),
         api.get('/source'),
         api.get('/auth/users'),
         api.get('/audit'),
         api.get('/ontology'),
-        fetch('http://localhost:3000/health').then((r) => r.json()).catch(() => ({ status: 'healthy' })),
+        fetch('/health').then((r) => r.json()).catch(() => ({ status: 'healthy' })),
       ]);
 
     const parseCountAndList = (res: PromiseSettledResult<any>) => {

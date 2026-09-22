@@ -43,6 +43,11 @@ export class PostgresProvider extends DatabaseProvider {
   async connect(): Promise<void> {
     try {
       await this.pool.query('SELECT 1');
+      await this.pool.query(`
+        ALTER TABLE users ADD COLUMN IF NOT EXISTS terms_accepted_at TIMESTAMPTZ;
+        ALTER TABLE users ADD COLUMN IF NOT EXISTS password_changed_at TIMESTAMPTZ DEFAULT NOW();
+        ALTER TABLE users ADD COLUMN IF NOT EXISTS mfa_recovery_codes JSONB DEFAULT '[]'::jsonb;
+      `);
     } catch (error) {
       logger.warn(
         'Failed to connect to PostgreSQL during initialization:',

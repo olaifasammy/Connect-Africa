@@ -32,3 +32,16 @@ export const authorizeRole = (role: Role) => (req: Request, res: Response, next:
   }
   next();
 };
+
+export const authorizeAdminOrSuperAdmin = (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user;
+  if (!user) {
+    return res.status(401).json({ success: false, errors: [{ code: 'UNAUTHORIZED', message: 'User not authenticated' }] });
+  }
+
+  const userRoleIdentifier = (user as any).role || Roles.USER.name;
+  if (userRoleIdentifier !== Roles.ADMINISTRATOR.name && userRoleIdentifier !== Roles.SUPER_ADMINISTRATOR.name) {
+    return res.status(403).json({ success: false, errors: [{ code: 'FORBIDDEN', message: 'Administrator or Super Administrator access required' }] });
+  }
+  next();
+};

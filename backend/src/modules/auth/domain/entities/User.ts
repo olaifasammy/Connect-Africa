@@ -35,6 +35,10 @@ export interface UserProps {
   lockedUntil?: Date | null;
   mfaSecret?: string;
   role?: string;
+
+  termsAcceptedAt?: Date | null;
+  passwordChangedAt?: Date;
+  mfaRecoveryCodes?: string[];
 }
 
 export class User
@@ -73,6 +77,12 @@ export class User
           props.mfaSecret ?? undefined,
         role:
           props.role ?? Roles.USER.name,
+        termsAcceptedAt:
+          props.termsAcceptedAt ?? null,
+        passwordChangedAt:
+          props.passwordChangedAt ?? new Date(),
+        mfaRecoveryCodes:
+          props.mfaRecoveryCodes ?? [],
       },
       id,
     );
@@ -134,6 +144,18 @@ export class User
 
   get mfaSecret(): string | undefined {
     return this.props.mfaSecret;
+  }
+
+  get termsAcceptedAt(): Date | null {
+    return this.props.termsAcceptedAt ?? null;
+  }
+
+  get passwordChangedAt(): Date {
+    return this.props.passwordChangedAt ?? new Date();
+  }
+
+  get mfaRecoveryCodes(): string[] {
+    return this.props.mfaRecoveryCodes ?? [];
   }
 
   get role(): string {
@@ -230,7 +252,16 @@ export class User
     }
 
     this.props.passwordHash = passwordHash;
+    this.props.passwordChangedAt = new Date();
     this.resetFailedLoginAttempts();
+  }
+
+  setMfaRecoveryCodes(hashes: string[]): void {
+    this.props.mfaRecoveryCodes = hashes;
+  }
+
+  acceptTerms(at: Date = new Date()): void {
+    this.props.termsAcceptedAt = at;
   }
 
   updateEmail(email: Email): void {

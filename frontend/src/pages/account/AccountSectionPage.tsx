@@ -31,60 +31,60 @@ const config: Record<
   }
 > = {
   notifications: {
-    eyebrow: 'Account activity',
+    eyebrow: 'Account Activity',
     title: 'Notifications',
     description: 'Important updates and activity associated with your account.',
     icon: <Bell className="h-6 w-6" />,
     message:
-      'You have no notifications yet. Important Connect-Africa activity will appear here when the notification service is connected.',
+      'You have no notifications yet. Important Connect Africa activity will appear here when notifications are delivered.',
   },
   bookmarks: {
-    eyebrow: 'Knowledge workspace',
+    eyebrow: 'Knowledge Workspace',
     title: 'Bookmarks',
-    description: 'Knowledge you choose to keep within reach.',
+    description: 'Knowledge records you choose to keep within reach.',
     icon: <Bookmark className="h-6 w-6" />,
     message:
-      'You have no saved knowledge yet. Bookmark entities and other knowledge as the discovery experience comes online.',
+      'You have no saved knowledge yet. Bookmark entities and articles while exploring.',
   },
   history: {
-    eyebrow: 'Knowledge workspace',
-    title: 'Reading history',
-    description: 'A record of the knowledge you have explored.',
+    eyebrow: 'Knowledge Workspace',
+    title: 'Reading History',
+    description: 'A record of the knowledge entries you have explored.',
     icon: <History className="h-6 w-6" />,
     message:
-      'Your reading history is empty. Pages you meaningfully explore will appear here once activity tracking is connected.',
+      'Your reading history is empty. Pages you explore will appear here automatically.',
   },
   searches: {
-    eyebrow: 'Knowledge workspace',
-    title: 'Recent searches',
+    eyebrow: 'Knowledge Workspace',
+    title: 'Recent Searches',
     description: 'Return to questions and concepts you searched for previously.',
     icon: <Search className="h-6 w-6" />,
     message:
-      'No recent searches are available yet. Search activity will appear here once search history is connected.',
+      'No recent searches are recorded yet. Search queries will appear here.',
   },
   settings: {
-    eyebrow: 'Account control',
+    eyebrow: 'Account Control',
     title: 'Settings',
-    description: 'Manage account-level controls for your Connect-Africa experience.',
+    description: 'Manage account-level controls and system preferences.',
     icon: <Settings className="h-6 w-6" />,
     message:
-      'Account settings are being connected to the platform settings service. No changes are being simulated here.',
+      'Account settings are managed through your profile dashboard.',
   },
   security: {
-    eyebrow: 'Account protection',
+    eyebrow: 'Protection',
     title: 'Security',
-    description: 'Review authentication and security controls.',
+    description: 'Review authentication and multi-factor security controls.',
     icon: <LockKeyhole className="h-6 w-6" />,
     message:
-      'Security controls will appear here as the account security surface is connected to the authentication service.',
+      'Security controls are available in the Security & MFA page.',
   },
   preferences: {
     eyebrow: 'Experience',
     title: 'Preferences',
-    description: 'Control how Connect-Africa behaves and presents your knowledge experience.',
+    description: 'Control how Connect Africa presents your knowledge workspace.',
     icon: <Compass className="h-6 w-6" />,
     message:
-      'Experience preferences will appear here as the preference service is connected.',
+      'Display preferences are linked to your workspace theme state.',
   },
 };
 
@@ -96,53 +96,53 @@ export const AccountSectionPage: React.FC<Props> = ({ section }) => {
   const page = config[section];
 
   return (
-    <div className="min-h-screen bg-ink pb-20 pt-10 text-cloud sm:pt-14">
+    <div className="min-h-screen bg-scholar-canvas bg-canvas pb-20 pt-10 text-text-main font-sans transition-colors duration-300">
       <div className="ca-container">
         <Link
           to="/account"
-          className="inline-flex items-center gap-2 text-sm text-mist transition hover:text-cloud"
+          className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-emerald-900 dark:text-gold hover:underline"
         >
           <ArrowLeft className="h-4 w-4" />
-          Account center
+          Back to Account Center
         </Link>
 
-        <section className="mt-6 max-w-3xl overflow-hidden rounded-3xl border border-white/[0.07] bg-forest/70 shadow-soft">
-          <div className="border-b border-white/[0.06] p-6 sm:p-8">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-emerald/20 bg-brand text-sage">
+        <section className="mt-6 max-w-3xl ca-card bg-surface shadow-scholar">
+          <div className="border-b border-stone/20 pb-6">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-gold/30 bg-gold/10 text-gold">
               {page.icon}
             </div>
 
             <p className="ca-eyebrow mt-6">{page.eyebrow}</p>
 
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight">
+            <h1 className="mt-1 font-serif text-3xl font-bold text-text-main">
               {page.title}
             </h1>
 
-            <p className="mt-3 text-sm leading-6 text-mist sm:text-base">
+            <p className="mt-2 font-sans text-sm text-text-muted">
               {page.description}
             </p>
           </div>
 
-          <div className="p-6 sm:p-8">
-            <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] px-6 py-10 text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl border border-white/[0.07] bg-forest text-sage">
+          <div className="pt-6">
+            <div className="rounded-xl border border-dashed border-stone/30 bg-canvas px-6 py-12 text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl border border-stone/20 bg-surface text-gold">
                 {page.icon}
               </div>
 
-              <h2 className="mt-5 text-lg font-semibold">
-                Nothing to show yet
+              <h2 className="mt-4 font-serif text-lg font-bold text-text-main">
+                Nothing to Show Yet
               </h2>
 
-              <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-mist">
+              <p className="mx-auto mt-2 max-w-xl font-sans text-xs text-text-muted">
                 {page.message}
               </p>
 
               <Link
                 to="/search"
-                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-sage"
+                className="mt-6 ca-btn-primary inline-flex text-xs"
               >
                 <Search className="h-4 w-4" />
-                Explore knowledge
+                Explore Knowledge
               </Link>
             </div>
           </div>

@@ -57,13 +57,12 @@ export const UserProfilePage: React.FC = () => {
           setExpertiseInput(data.expertise?.join(', ') || '');
           setResearchInput(data.researchInterests?.join(', ') || '');
         }
-      } catch (err) {
+      } catch {
         if (active) {
-          // Fallback to auth user data if profile doesn't exist yet or endpoint error
           const fallbackName =
             [user?.firstName, user?.lastName].filter(Boolean).join(' ') ||
             user?.email?.split('@')[0] ||
-            'Connect-Africa user';
+            'Connect-Africa Scholar';
           setDisplayName(fallbackName);
         }
       } finally {
@@ -110,10 +109,10 @@ export const UserProfilePage: React.FC = () => {
 
       const updated = await profileApi.getProfile();
       setProfile(updated);
-      setNotice('Profile updated successfully.');
+      setNotice('Profile record updated successfully.');
       setEditing(false);
     } catch (err: any) {
-      setError(err.message || 'Failed to update profile.');
+      setError(err.message || 'Failed to update profile record.');
     } finally {
       setSaving(false);
     }
@@ -123,7 +122,7 @@ export const UserProfilePage: React.FC = () => {
     profile?.displayName ||
     [user?.firstName, user?.lastName].filter(Boolean).join(' ') ||
     user?.email?.split('@')[0] ||
-    'Connect-Africa user';
+    'Connect-Africa Scholar';
 
   const initials =
     resolvedDisplayName
@@ -139,11 +138,11 @@ export const UserProfilePage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-ink pb-20 pt-10 text-cloud sm:pt-14">
+      <div className="min-h-screen bg-scholar-canvas bg-canvas pb-20 pt-10 text-text-main sm:pt-14 font-sans">
         <div className="ca-container">
           <div className="animate-pulse space-y-6">
-            <div className="h-8 w-40 rounded bg-white/[0.06]" />
-            <div className="h-64 rounded-3xl bg-forest/50" />
+            <div className="h-8 w-40 rounded bg-stone/20" />
+            <div className="h-64 rounded-xl bg-surface border border-stone/20" />
           </div>
         </div>
       </div>
@@ -151,50 +150,48 @@ export const UserProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-ink pb-20 pt-8 text-cloud sm:pt-12">
+    <div className="min-h-screen bg-scholar-canvas bg-canvas pb-20 pt-8 text-text-main sm:pt-12 font-sans transition-colors duration-300">
       <div className="ca-container space-y-6">
-        {/* Header / Banner */}
-        <section className="overflow-hidden rounded-3xl border border-white/[0.07] bg-forest/70 shadow-soft">
-          <div className="relative border-b border-white/[0.06] px-6 py-8 sm:px-8 lg:px-10 lg:py-10">
-            <div className="pointer-events-none absolute -right-24 -top-32 h-80 w-80 rounded-full bg-emerald/10 blur-3xl" />
-
+        {/* Banner Section */}
+        <section className="ca-card bg-surface shadow-scholar">
+          <div className="relative border-b border-stone/15 pb-8">
             <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
                 {profile?.avatarUrl ? (
                   <img
                     src={profile.avatarUrl}
                     alt={resolvedDisplayName}
-                    className="h-20 w-20 shrink-0 rounded-3xl border border-emerald/25 object-cover shadow-glow"
+                    className="h-20 w-20 shrink-0 rounded-xl border border-stone/20 object-cover shadow-sm"
                   />
                 ) : (
-                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-3xl border border-emerald/25 bg-brand text-2xl font-semibold text-sage shadow-glow">
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border border-gold/30 bg-gold/10 font-serif text-2xl font-bold text-gold">
                     {initials}
                   </div>
                 )}
 
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="ca-eyebrow">Identity & Profile</p>
+                    <p className="ca-eyebrow">Archival Profile Record</p>
                     {profile?.country && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-0.5 text-xs text-mist">
-                        <MapPin className="h-3 w-3 text-emerald" />
+                      <span className="ca-badge-gold">
+                        <MapPin className="h-3 w-3 mr-1 text-gold" />
                         {profile.country}
                       </span>
                     )}
                   </div>
-                  <h1 className="mt-2 text-3xl font-semibold tracking-tight text-cloud sm:text-4xl">
+                  <h1 className="mt-1 font-serif text-3xl font-bold tracking-tight text-text-main sm:text-4xl">
                     {resolvedDisplayName}
                   </h1>
 
                   {user?.email && (
-                    <div className="mt-3 flex items-center gap-2 text-sm text-mist">
-                      <Mail className="h-4 w-4 shrink-0" />
+                    <div className="mt-2 flex items-center gap-2 font-mono text-xs text-text-muted">
+                      <Mail className="h-3.5 w-3.5 shrink-0 text-stone" />
                       <span className="truncate">{user.email}</span>
                     </div>
                   )}
 
                   {profile?.bio && (
-                    <p className="mt-3 max-w-2xl text-sm leading-6 text-mist">
+                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-text-muted font-sans">
                       {profile.bio}
                     </p>
                   )}
@@ -204,23 +201,23 @@ export const UserProfilePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setEditing(!editing)}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald/30 bg-emerald/[0.08] px-4 py-2.5 text-sm font-semibold text-sage transition hover:bg-emerald/[0.15]"
+                className="ca-btn-secondary h-10 px-4 text-xs font-semibold"
               >
                 {editing ? <X className="h-4 w-4" /> : <Edit3 className="h-4 w-4" />}
-                {editing ? 'Cancel editing' : 'Edit profile'}
+                {editing ? 'Cancel Editing' : 'Edit Profile'}
               </button>
             </div>
           </div>
 
           {(error || notice) && (
-            <div className="px-6 pt-4 sm:px-8">
+            <div className="pt-4">
               {error && (
-                <div className="rounded-xl border border-red-400/20 bg-red-400/[0.06] px-4 py-3 text-sm text-red-200">
+                <div className="ca-msg-error">
                   {error}
                 </div>
               )}
               {notice && (
-                <div className="flex items-center gap-2 rounded-xl border border-emerald/20 bg-emerald/[0.06] px-4 py-3 text-sm text-sage">
+                <div className="ca-msg-success">
                   <Check className="h-4 w-4" />
                   {notice}
                 </div>
@@ -229,24 +226,24 @@ export const UserProfilePage: React.FC = () => {
           )}
 
           {editing ? (
-            <form onSubmit={handleSave} className="p-6 sm:p-8 lg:p-10 space-y-6">
-              <h2 className="text-xl font-semibold">Edit your profile details</h2>
+            <form onSubmit={handleSave} className="pt-6 space-y-6">
+              <h2 className="font-serif text-xl font-bold text-text-main">Edit Profile Information</h2>
               <div className="grid gap-6 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-mist">
-                    Display name
+                  <label className="block font-mono text-xs font-semibold uppercase tracking-wider text-text-muted">
+                    Display Name
                   </label>
                   <input
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     required
-                    className="mt-2 w-full rounded-xl border border-white/[0.08] bg-ink px-4 py-3 text-sm text-cloud outline-none transition focus:border-emerald/50"
+                    className="ca-input mt-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-mist">
+                  <label className="block font-mono text-xs font-semibold uppercase tracking-wider text-text-muted">
                     Avatar URL
                   </label>
                   <input
@@ -254,175 +251,156 @@ export const UserProfilePage: React.FC = () => {
                     value={avatarUrl}
                     onChange={(e) => setAvatarUrl(e.target.value)}
                     placeholder="https://example.com/avatar.jpg"
-                    className="mt-2 w-full rounded-xl border border-white/[0.08] bg-ink px-4 py-3 text-sm text-cloud outline-none transition focus:border-emerald/50"
+                    className="ca-input mt-2"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-mist">
-                    Bio
+                  <label className="block font-mono text-xs font-semibold uppercase tracking-wider text-text-muted">
+                    Bio / Scholar Summary
                   </label>
                   <textarea
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     rows={3}
-                    placeholder="Tell the community about your professional background and interests..."
-                    className="mt-2 w-full rounded-xl border border-white/[0.08] bg-ink px-4 py-3 text-sm text-cloud outline-none transition focus:border-emerald/50"
+                    placeholder="Brief summary of academic or community interests..."
+                    className="ca-input mt-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-mist">
+                  <label className="block font-mono text-xs font-semibold uppercase tracking-wider text-text-muted">
                     Country
                   </label>
                   <input
                     type="text"
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    placeholder="e.g. Kenya, Nigeria, South Africa"
-                    className="mt-2 w-full rounded-xl border border-white/[0.08] bg-ink px-4 py-3 text-sm text-cloud outline-none transition focus:border-emerald/50"
+                    placeholder="e.g. Kenya, Nigeria, Senegal"
+                    className="ca-input mt-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-mist">
-                    Website
+                  <label className="block font-mono text-xs font-semibold uppercase tracking-wider text-text-muted">
+                    Academic / Personal Website
                   </label>
                   <input
                     type="url"
                     value={website}
                     onChange={(e) => setWebsite(e.target.value)}
                     placeholder="https://yourwebsite.com"
-                    className="mt-2 w-full rounded-xl border border-white/[0.08] bg-ink px-4 py-3 text-sm text-cloud outline-none transition focus:border-emerald/50"
+                    className="ca-input mt-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-mist">
+                  <label className="block font-mono text-xs font-semibold uppercase tracking-wider text-text-muted">
                     Languages (comma separated)
                   </label>
                   <input
                     type="text"
                     value={languagesInput}
                     onChange={(e) => setLanguagesInput(e.target.value)}
-                    placeholder="English, French, Arabic"
-                    className="mt-2 w-full rounded-xl border border-white/[0.08] bg-ink px-4 py-3 text-sm text-cloud outline-none transition focus:border-emerald/50"
+                    placeholder="Swahili, English, French, Yoruba"
+                    className="ca-input mt-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-mist">
-                    Expertise (comma separated)
+                  <label className="block font-mono text-xs font-semibold uppercase tracking-wider text-text-muted">
+                    Expertise Domains (comma separated)
                   </label>
                   <input
                     type="text"
                     value={expertiseInput}
                     onChange={(e) => setExpertiseInput(e.target.value)}
-                    placeholder="AgriTech, Renewable Energy, Policy"
-                    className="mt-2 w-full rounded-xl border border-white/[0.08] bg-ink px-4 py-3 text-sm text-cloud outline-none transition focus:border-emerald/50"
+                    placeholder="Ontology, Archival Science, Policy"
+                    className="ca-input mt-2"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-mist">
-                    Research interests (comma separated)
+                  <label className="block font-mono text-xs font-semibold uppercase tracking-wider text-text-muted">
+                    Research Interests (comma separated)
                   </label>
                   <input
                     type="text"
                     value={researchInput}
                     onChange={(e) => setResearchInput(e.target.value)}
-                    placeholder="Continental Trade, Sustainable Infrastructure"
-                    className="mt-2 w-full rounded-xl border border-white/[0.08] bg-ink px-4 py-3 text-sm text-cloud outline-none transition focus:border-emerald/50"
+                    placeholder="Trans-Saharan Trade Routes, Swahili Archaeology"
+                    className="ca-input mt-2"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-white/[0.06]">
+              <div className="flex justify-end gap-3 pt-4 border-t border-stone/15">
                 <button
                   type="button"
                   onClick={() => setEditing(false)}
-                  className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-cloud transition hover:bg-white/[0.06]"
+                  className="ca-btn-outline px-5 py-2 text-xs"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex items-center gap-2 rounded-xl bg-emerald px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-sage disabled:opacity-50"
+                  className="ca-btn-primary px-5 py-2 text-xs"
                 >
                   <Save className="h-4 w-4" />
-                  {saving ? 'Saving...' : 'Save changes'}
+                  {saving ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
             </form>
           ) : (
-            <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-2 lg:p-10">
+            <div className="grid gap-6 pt-6 lg:grid-cols-2">
               <div className="space-y-6">
-                <div className="rounded-2xl border border-white/[0.07] bg-ink/50 p-6">
+                <div className="rounded-xl border border-stone/20 bg-canvas p-6">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald/10 text-emerald">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-emerald-900/30 bg-emerald-100/40 text-emerald-900 dark:text-emerald-300">
                       <Shield className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-mist">
-                        Access
-                      </p>
-                      <h2 className="mt-1 text-base font-semibold text-cloud">
-                        Roles & permissions
+                      <p className="ca-eyebrow">Access Authority</p>
+                      <h2 className="font-serif text-base font-bold text-text-main">
+                        Assigned Platform Roles
                       </h2>
                     </div>
                   </div>
 
-                  <div className="mt-6 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     {roles.map((role) => (
-                      <span
-                        key={role}
-                        className="rounded-lg border border-emerald/20 bg-emerald/[0.07] px-3 py-1.5 text-xs font-medium text-sage"
-                      >
+                      <span key={role} className="ca-badge-emerald">
                         {role}
                       </span>
                     ))}
                   </div>
-
-                  <p className="mt-5 text-sm leading-6 text-mist">
-                    Administrative capabilities are determined by your
-                    authenticated account role.
-                  </p>
                 </div>
 
-                <div className="rounded-2xl border border-white/[0.07] bg-ink/50 p-6">
+                <div className="rounded-xl border border-stone/20 bg-canvas p-6">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold/10 text-gold">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-gold/30 bg-gold/10 text-gold">
                       <Globe className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-mist">
-                        Professional & Regional
-                      </p>
-                      <h2 className="mt-1 text-base font-semibold text-cloud">
-                        Background details
+                      <p className="ca-eyebrow">Provenance</p>
+                      <h2 className="font-serif text-base font-bold text-text-main">
+                        Regional & Contact Details
                       </h2>
                     </div>
                   </div>
 
-                  <dl className="mt-6 space-y-4">
-                    <div className="flex items-start justify-between gap-6 border-b border-white/[0.05] pb-3">
-                      <dt className="text-sm text-mist">Country</dt>
-                      <dd className="text-right text-sm font-medium text-cloud">
-                        {profile?.country || 'Not specified'}
-                      </dd>
+                  <dl className="mt-4 space-y-3 font-sans text-xs">
+                    <div className="flex items-start justify-between gap-6 border-b border-stone/15 pb-2">
+                      <dt className="text-text-muted">Country</dt>
+                      <dd className="font-medium text-text-main">{profile?.country || 'Not specified'}</dd>
                     </div>
 
-                    <div className="flex items-start justify-between gap-6 border-b border-white/[0.05] pb-3">
-                      <dt className="text-sm text-mist">Website</dt>
-                      <dd className="max-w-[60%] truncate text-right text-sm font-medium text-cloud">
+                    <div className="flex items-start justify-between gap-6 border-b border-stone/15 pb-2">
+                      <dt className="text-text-muted">Website</dt>
+                      <dd className="max-w-[60%] truncate font-medium text-text-main">
                         {profile?.website ? (
-                          <a
-                            href={profile.website}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-emerald hover:underline"
-                          >
+                          <a href={profile.website} target="_blank" rel="noreferrer" className="ca-article-link">
                             {profile.website}
                           </a>
                         ) : (
@@ -431,84 +409,70 @@ export const UserProfilePage: React.FC = () => {
                       </dd>
                     </div>
 
-                    <div className="flex items-start justify-between gap-6 border-b border-white/[0.05] pb-3">
-                      <dt className="text-sm text-mist">Languages</dt>
-                      <dd className="text-right text-sm font-medium text-cloud">
-                        {profile?.languages?.length
-                          ? profile.languages.join(', ')
-                          : 'Not specified'}
+                    <div className="flex items-start justify-between gap-6 border-b border-stone/15 pb-2">
+                      <dt className="text-text-muted">Languages</dt>
+                      <dd className="font-medium text-text-main">
+                        {profile?.languages?.length ? profile.languages.join(', ') : 'Not specified'}
                       </dd>
                     </div>
 
                     <div className="flex items-start justify-between gap-6">
-                      <dt className="text-sm text-mist">Email</dt>
-                      <dd className="max-w-[60%] truncate text-right text-sm font-medium text-cloud">
-                        {user?.email || 'Not available'}
-                      </dd>
+                      <dt className="text-text-muted">Email</dt>
+                      <dd className="font-mono text-text-main">{user?.email || 'Not available'}</dd>
                     </div>
                   </dl>
                 </div>
               </div>
 
               <div className="space-y-6">
-                <div className="rounded-2xl border border-white/[0.07] bg-ink/50 p-6">
+                <div className="rounded-xl border border-stone/20 bg-canvas p-6">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand text-sage">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-clay/30 bg-clay/10 text-clay">
                       <UserRound className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-mist">
-                        Expertise
-                      </p>
-                      <h2 className="mt-1 text-base font-semibold text-cloud">
-                        Professional domains
+                      <p className="ca-eyebrow">Domains</p>
+                      <h2 className="font-serif text-base font-bold text-text-main">
+                        Professional Expertise
                       </h2>
                     </div>
                   </div>
 
-                  <div className="mt-6 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     {profile?.expertise?.length ? (
                       profile.expertise.map((item) => (
-                        <span
-                          key={item}
-                          className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-cloud"
-                        >
+                        <span key={item} className="ca-badge-clay">
                           {item}
                         </span>
                       ))
                     ) : (
-                      <p className="text-sm text-mist">No expertise areas specified.</p>
+                      <p className="text-xs text-text-muted">No expertise specified.</p>
                     )}
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-white/[0.07] bg-ink/50 p-6">
+                <div className="rounded-xl border border-stone/20 bg-canvas p-6">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald/10 text-emerald">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-gold/30 bg-gold/10 text-gold">
                       <BookOpen className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-mist">
-                        Research
-                      </p>
-                      <h2 className="mt-1 text-base font-semibold text-cloud">
-                        Research interests
+                      <p className="ca-eyebrow">Research Agenda</p>
+                      <h2 className="font-serif text-base font-bold text-text-main">
+                        Research Interests
                       </h2>
                     </div>
                   </div>
 
-                  <div className="mt-6 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     {profile?.researchInterests?.length ? (
                       profile.researchInterests.map((item) => (
-                        <span
-                          key={item}
-                          className="rounded-lg border border-emerald/25 bg-emerald/[0.05] px-3 py-1.5 text-xs font-medium text-sage"
-                        >
+                        <span key={item} className="ca-badge-gold">
                           {item}
                         </span>
                       ))
                     ) : (
-                      <p className="text-sm text-mist">No research interests specified.</p>
+                      <p className="text-xs text-text-muted">No research interests specified.</p>
                     )}
                   </div>
                 </div>
@@ -516,44 +480,29 @@ export const UserProfilePage: React.FC = () => {
             </div>
           )}
 
-          <div className="border-t border-white/[0.06] px-6 py-6 sm:px-8 lg:px-10">
-            <div className="flex flex-wrap gap-3">
-              <Link
-                to="/account"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald px-5 py-3 text-sm font-semibold text-ink transition hover:bg-sage"
-              >
+          <div className="border-t border-stone/15 pt-6 mt-6">
+            <div className="flex flex-wrap gap-3 font-mono text-xs">
+              <Link to="/account" className="ca-btn-primary px-4 py-2 text-xs">
                 <Settings className="h-4 w-4" />
-                Account center
+                Account Center
               </Link>
 
-              <Link
-                to="/account/settings"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.025] px-5 py-3 text-sm font-medium text-cloud transition hover:border-emerald/30 hover:bg-emerald/[0.04]"
-              >
+              <Link to="/account/settings" className="ca-btn-outline px-4 py-2 text-xs">
                 Settings
               </Link>
 
-              <Link
-                to="/account/security"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.025] px-5 py-3 text-sm font-medium text-cloud transition hover:border-emerald/30 hover:bg-emerald/[0.04]"
-              >
+              <Link to="/account/security" className="ca-btn-outline px-4 py-2 text-xs">
                 <Lock className="h-4 w-4 text-gold" />
                 Security & MFA
               </Link>
 
-              <Link
-                to="/account/history"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.025] px-5 py-3 text-sm font-medium text-cloud transition hover:border-emerald/30 hover:bg-emerald/[0.04]"
-              >
-                <History className="h-4 w-4 text-sage" />
-                Reading history
+              <Link to="/account/history" className="ca-btn-outline px-4 py-2 text-xs">
+                <History className="h-4 w-4 text-gold" />
+                Reading History
               </Link>
 
               {isAdmin && (
-                <Link
-                  to="/admin"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-gold/20 bg-gold/[0.04] px-5 py-3 text-sm font-medium text-gold transition hover:border-gold/40"
-                >
+                <Link to="/admin" className="ca-btn-secondary px-4 py-2 text-xs">
                   Administration
                   <ArrowRight className="h-4 w-4" />
                 </Link>

@@ -35,7 +35,7 @@ export class RemoveRoleCommandHandler
         throw new AuthenticationError('Administrator not found.');
       }
 
-      if (actor.role !== Roles.ADMIN.name) {
+      if (actor.role !== Roles.ADMINISTRATOR.name && actor.role !== Roles.SUPER_ADMINISTRATOR.name) {
         throw new AuthenticationError(
           'Only administrators can manage user roles.',
         );

@@ -3,40 +3,77 @@
 @tailwind utilities;
 
 :root {
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+  /* Font Family Definitions */
+  --font-serif: 'Lora', 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
-  color: #f3f1ea;
-  background: #0b1110;
+  /* Base Light - "The Scholar" Parchment & Ink System */
+  --bg-canvas: #FDF6E3;        /* Parchment */
+  --bg-surface: #FFFFFF;       /* Paper */
+  --text-primary: #121619;     /* Ink */
+  --text-secondary: #78716C;   /* Stone */
+  --border-subtle: rgba(120, 113, 108, 0.2);
+
+  /* Primary - Emerald Depth */
+  --emerald-900: #064E3B;
+  --emerald-700: #047857;
+  --emerald-100: #D1FAE5;
+  --color-primary: var(--emerald-900);
+  --color-primary-hover: var(--emerald-700);
+
+  /* Accents - Gold & Clay */
+  --savanna-gold: #C9A86A;
+  --clay-accent: #A1624D;
+}
+
+/* Dark Mode Adaptation Tokens */
+[data-theme="dark"] {
+  --bg-canvas: #121619;        /* Dark Ink */
+  --bg-surface: #1E2328;       /* Dark Surface Charcoal */
+  --text-primary: #FDF6E3;     /* Light Parchment */
+  --text-secondary: #A8A29E;   /* Light Stone */
+  --border-subtle: rgba(253, 246, 227, 0.12);
+
+  /* Lightened Emerald for readability on dark surfaces */
+  --color-primary: #34D399;
+  --color-primary-hover: #6EE7B7;
+  --emerald-100: #064E3B;
+}
+
+html {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-html {
-  background: #0b1110;
-  scroll-behavior: smooth;
-}
-
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background:
-    radial-gradient(
-      circle at 50% -10%,
-      rgba(34, 160, 107, 0.08),
-      transparent 38%
-    ),
-    #0b1110;
-  color: #f3f1ea;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Background Texture for Parchment Canvas (Lightweight CSS Gradient Overlay for Peak Performance) */
+.bg-scholar-canvas {
+  background-color: var(--bg-canvas);
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(201, 168, 106, 0.08), transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(6, 78, 59, 0.04), transparent 40%);
 }
 
 button,
-input {
-  font: inherit;
+input,
+textarea,
+select {
+  font-family: inherit;
 }
 
 button,
@@ -45,92 +82,116 @@ a {
 }
 
 ::selection {
-  background: rgba(34, 160, 107, 0.35);
-  color: #f3f1ea;
+  background: rgba(6, 78, 59, 0.25);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] ::selection {
+  background: rgba(52, 211, 153, 0.35);
+  color: var(--text-primary);
 }
 
 @layer components {
+  /* Layout Containers */
   .ca-container {
     @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
   }
 
   .ca-eyebrow {
-    @apply text-xs font-semibold uppercase tracking-[0.18em] text-sage;
+    @apply font-mono text-xs font-semibold uppercase tracking-[0.18em] text-gold;
   }
 
   .ca-surface {
-    @apply border border-white/[0.07] bg-forest/70;
+    @apply border border-stone/20 bg-surface;
   }
 
   .ca-surface-hover {
-    @apply transition duration-300 hover:border-emerald/30 hover:bg-forest;
+    @apply transition duration-300 hover:border-gold hover:bg-surface;
   }
 
-  .ca-link {
-    @apply text-sage transition-colors hover:text-cloud;
+  /* Scholarly Links with Savanna Gold Underline */
+  .ca-link,
+  .ca-article-link {
+    @apply font-medium text-text-main underline decoration-gold decoration-1 underline-offset-4 transition-colors hover:text-emerald-900 dark:hover:text-gold hover:decoration-emerald-900 dark:hover:decoration-gold;
   }
 
-  /* Reusable Buttons using theme colors */
+  /* Reusable Buttons */
   .ca-btn-primary {
-    @apply flex items-center justify-center gap-2 rounded-xl bg-gold px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-sand active:scale-[0.98];
+    @apply flex items-center justify-center gap-2 rounded-xl bg-emerald-900 dark:bg-emerald-500 dark:text-ink px-5 py-2.5 font-sans text-sm font-semibold text-white transition-all duration-200 hover:bg-emerald-700 dark:hover:bg-emerald-400 active:scale-[0.98] disabled:opacity-50;
   }
 
   .ca-btn-secondary {
-    @apply flex items-center justify-center gap-2 rounded-xl bg-emerald px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-sage active:scale-[0.98];
+    @apply flex items-center justify-center gap-2 rounded-xl border border-emerald-900 dark:border-emerald-400 bg-transparent px-5 py-2.5 font-sans text-sm font-semibold text-emerald-900 dark:text-emerald-300 transition-all duration-200 hover:bg-emerald-100/50 dark:hover:bg-emerald-900/40 active:scale-[0.98] disabled:opacity-50;
   }
 
   .ca-btn-outline {
-    @apply flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-2.5 text-sm font-medium text-cloud transition hover:border-gold/30 hover:bg-gold/[0.04] hover:text-gold active:scale-[0.98];
+    @apply flex items-center justify-center gap-2 rounded-xl border border-stone/30 bg-surface px-5 py-2.5 font-sans text-sm font-medium text-text-main transition-all duration-200 hover:border-gold hover:text-gold active:scale-[0.98] disabled:opacity-50;
   }
 
   .ca-btn-danger {
-    @apply flex items-center justify-center gap-2 rounded-xl bg-terra px-4 py-2.5 text-sm font-semibold text-cloud transition hover:opacity-90 active:scale-[0.98];
+    @apply flex items-center justify-center gap-2 rounded-xl bg-clay px-5 py-2.5 font-sans text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98] disabled:opacity-50;
   }
 
-  /* Reusable Inputs */
-  .ca-input-dark {
-    @apply w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-cloud outline-none placeholder:text-mist/40 transition focus:border-gold/50 focus:ring-1 focus:ring-gold/20;
-  }
-
+  /* Form Inputs */
+  .ca-input,
+  .ca-input-dark,
   .ca-input-light {
-    @apply w-full rounded-xl border border-white/10 bg-cloud px-4 py-2.5 text-sm text-ink outline-none placeholder:text-mist transition focus:border-gold/50 focus:ring-1 focus:ring-gold/20;
+    @apply w-full rounded-xl border border-stone/20 bg-surface px-4 py-2.5 font-sans text-sm text-text-main outline-none placeholder:text-stone/50 transition focus:border-gold focus:ring-1 focus:ring-gold/30;
   }
 
-  /* Reusable Card Variants (Diverse, non-generic styling) */
+  /* Cards Hierarchy */
   .ca-card {
-    @apply relative overflow-hidden rounded-3xl border border-white/[0.07] bg-forest/50 p-6 transition duration-300;
+    @apply relative overflow-hidden rounded-xl border border-stone/20 bg-surface p-6 shadow-scholar transition-all duration-300;
   }
 
   .ca-card-hover {
-    @apply ca-card hover:-translate-y-1 hover:border-emerald/35 hover:bg-forest hover:shadow-glow;
+    @apply ca-card hover:-translate-y-0.5 hover:border-gold hover:shadow-md;
   }
 
   .ca-card-gold {
-    @apply relative overflow-hidden rounded-3xl border border-gold/25 bg-[radial-gradient(circle_at_top_right,rgba(217,164,65,0.08),transparent_40%),#10201A] p-6 transition duration-300 hover:-translate-y-1 hover:border-gold/50;
+    @apply relative overflow-hidden rounded-xl border border-gold/40 bg-surface p-6 shadow-scholar transition-all duration-300 hover:-translate-y-0.5 hover:border-gold;
   }
 
   .ca-card-emerald {
-    @apply relative overflow-hidden rounded-3xl border border-emerald/25 bg-[radial-gradient(circle_at_top_right,rgba(34,160,107,0.1),transparent_40%),#10201A] p-6 transition duration-300 hover:-translate-y-1 hover:border-emerald/50;
+    @apply relative overflow-hidden rounded-xl border border-emerald-900/30 bg-surface p-6 shadow-scholar transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-900;
   }
 
   .ca-card-glass {
-    @apply relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025] p-6 backdrop-blur-xl transition duration-300 hover:border-white/20 hover:bg-white/[0.04];
+    @apply relative overflow-hidden rounded-xl border border-stone/20 bg-surface/80 p-6 backdrop-blur-xl transition-all duration-300 hover:border-gold;
   }
 
-  /* Reusable Message / Alert Cards (Success, Logout/Login feedback, Info, Error) */
+  /* Alert / Message Cards */
   .ca-msg-success {
-    @apply flex items-center gap-3 rounded-2xl border border-emerald/30 bg-emerald/[0.08] px-4 py-3 text-sm text-cloud shadow-soft;
+    @apply flex items-center gap-3 rounded-xl border border-emerald-900/30 dark:border-emerald-400/40 bg-emerald-100/40 dark:bg-emerald-900/40 px-4 py-3 font-sans text-sm text-emerald-900 dark:text-emerald-300 shadow-sm;
   }
 
   .ca-msg-gold {
-    @apply flex items-center gap-3 rounded-2xl border border-gold/30 bg-gold/[0.08] px-4 py-3 text-sm text-cloud shadow-soft;
+    @apply flex items-center gap-3 rounded-xl border border-gold/40 bg-gold/10 px-4 py-3 font-sans text-sm text-text-main shadow-sm;
   }
 
   .ca-msg-error {
-    @apply flex items-center gap-3 rounded-2xl border border-terra/30 bg-terra/[0.08] px-4 py-3 text-sm text-cloud shadow-soft;
+    @apply flex items-center gap-3 rounded-xl border border-clay/30 bg-clay/10 px-4 py-3 font-sans text-sm text-clay shadow-sm;
   }
 
-  /* Custom scrollbar for admin navigation */
+  /* Provenance & Category Badges */
+  .ca-badge-gold {
+    @apply inline-flex items-center rounded-md border border-gold/30 bg-gold/10 px-2.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-gold;
+  }
+
+  .ca-badge-emerald {
+    @apply inline-flex items-center rounded-md border border-emerald-900/30 dark:border-emerald-400/40 bg-emerald-100/50 dark:bg-emerald-900/50 px-2.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-emerald-900 dark:text-emerald-300;
+  }
+
+  .ca-badge-clay {
+    @apply inline-flex items-center rounded-md border border-clay/30 bg-clay/10 px-2.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-clay;
+  }
+
+  .ca-badge-stone,
+  .ca-badge-sage {
+    @apply inline-flex items-center rounded-md border border-stone/30 bg-stone/10 px-2.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-stone;
+  }
+
+  /* Admin Scrollbar */
   .admin-scrollbar::-webkit-scrollbar {
     width: 5px;
   }
@@ -138,27 +199,10 @@ a {
     background: transparent;
   }
   .admin-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(120, 113, 108, 0.25);
     border-radius: 9999px;
   }
   .admin-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(34, 160, 107, 0.35);
-  }
-
-  /* Reusable Badges */
-  .ca-badge-gold {
-    @apply rounded-full border border-gold/20 bg-gold/[0.05] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-gold;
-  }
-
-  .ca-badge-emerald {
-    @apply rounded-full border border-emerald/20 bg-emerald/[0.05] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald;
-  }
-
-  .ca-badge-terra {
-    @apply rounded-full border border-terra/20 bg-terra/[0.05] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-terra;
-  }
-
-  .ca-badge-sage {
-    @apply rounded-full border border-sage/20 bg-sage/[0.05] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-sage;
+    background: rgba(6, 78, 59, 0.5);
   }
 }

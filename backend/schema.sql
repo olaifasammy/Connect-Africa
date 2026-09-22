@@ -20,6 +20,10 @@ CREATE TABLE IF NOT EXISTS users (
     role TEXT NOT NULL DEFAULT 'USER',
     mfa_secret TEXT,
 
+    terms_accepted_at TIMESTAMPTZ,
+    password_changed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    mfa_recovery_codes JSONB NOT NULL DEFAULT '[]'::jsonb,
+
     CONSTRAINT users_account_status_check
         CHECK (
             account_status IN (
@@ -104,6 +108,15 @@ ALTER TABLE users
 ALTER TABLE users
     ADD CONSTRAINT users_failed_login_attempts_check
     CHECK (failed_login_attempts >= 0);
+
+ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS terms_accepted_at TIMESTAMPTZ;
+
+ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS password_changed_at TIMESTAMPTZ DEFAULT NOW();
+
+ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS mfa_recovery_codes JSONB DEFAULT '[]'::jsonb;
 
 CREATE INDEX IF NOT EXISTS idx_users_email
     ON users(email);
@@ -1218,6 +1231,26 @@ CREATE INDEX IF NOT EXISTS idx_search_documents_content_trgm
     ON search_documents
     USING GIN ((content::text) gin_trgm_ops);
 
+
+-- ============================================================
+-- API KEYS
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS api_keys (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    prefix TEXT NOT NULL UNIQUE,
+    key_hash TEXT NOT NULL,
+    scopes TEXT[] NOT NULL DEFAULT '{}',
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    expires_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    last_used_at TIMESTAMPTZ
+);
+
+CREATE INDEX IF NOT EXISTS idx_api_keys_user_id ON api_keys(user_id);
+CREATE INDEX IF NOT EXISTS idx_api_keys_prefix ON api_keys(prefix);
 
 -- ============================================================
 -- OUTBOX

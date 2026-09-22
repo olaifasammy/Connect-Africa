@@ -53,7 +53,10 @@ export class PostgresUserRepository
     failed_login_attempts,
     locked_until,
     role,
-    mfa_secret
+    mfa_secret,
+    terms_accepted_at,
+    password_changed_at,
+    mfa_recovery_codes
   `;
 
   constructor(
@@ -73,7 +76,10 @@ export class PostgresUserRepository
         failed_login_attempts,
         locked_until,
         role,
-        mfa_secret
+        mfa_secret,
+        terms_accepted_at,
+        password_changed_at,
+        mfa_recovery_codes
       )
       VALUES (
         $1,
@@ -84,7 +90,10 @@ export class PostgresUserRepository
         $6,
         $7,
         $8,
-        $9
+        $9,
+        $10,
+        $11,
+        $12
       )
       ON CONFLICT (id) DO UPDATE SET
         email = EXCLUDED.email,
@@ -94,7 +103,10 @@ export class PostgresUserRepository
         failed_login_attempts = EXCLUDED.failed_login_attempts,
         locked_until = EXCLUDED.locked_until,
         role = EXCLUDED.role,
-        mfa_secret = EXCLUDED.mfa_secret
+        mfa_secret = EXCLUDED.mfa_secret,
+        terms_accepted_at = EXCLUDED.terms_accepted_at,
+        password_changed_at = EXCLUDED.password_changed_at,
+        mfa_recovery_codes = EXCLUDED.mfa_recovery_codes
     `;
 
     await this.pool.query(
@@ -109,6 +121,9 @@ export class PostgresUserRepository
         user.lockedUntil,
         user.role,
         user.mfaSecret ?? null,
+        user.termsAcceptedAt,
+        user.passwordChangedAt,
+        JSON.stringify(user.mfaRecoveryCodes),
       ],
     );
   }
@@ -260,6 +275,9 @@ export class PostgresUserRepository
       locked_until: Date | null;
       role: string;
       mfa_secret: string | null;
+      terms_accepted_at: Date | null;
+      password_changed_at: Date;
+      mfa_recovery_codes: string[] | any;
     },
   ): User {
     if (
@@ -392,6 +410,19 @@ export class PostgresUserRepository
         mfaSecret:
           row.mfa_secret ??
           undefined,
+
+        termsAcceptedAt:
+          row.terms_accepted_at,
+
+        passwordChangedAt:
+          row.password_changed_at ? new Date(row.password_changed_at) : undefined,
+
+        mfaRecoveryCodes:
+          row.mfa_recovery_codes
+            ? (typeof row.mfa_recovery_codes === 'string'
+                ? JSON.parse(row.mfa_recovery_codes)
+                : row.mfa_recovery_codes)
+            : [],
       },
 
       new UniqueEntityId(

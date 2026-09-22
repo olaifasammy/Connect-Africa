@@ -1,60 +1,75 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, User } from 'lucide-react';
+import { ArrowLeft, Calendar, User, BookOpen } from 'lucide-react';
 
 export const ArticleDetailPage: React.FC = () => {
   const { slug } = useParams();
 
+  const titleFormatted = slug
+    ? slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+    : 'Research Publication';
+
   const article = {
-    title: slug?.replace(/-/g, ' ').toUpperCase() || 'Article Title',
-    category: 'Research & Knowledge',
+    title: titleFormatted,
+    category: 'Archival Research',
     author: 'Dr. Amina Diallo',
     createdAt: '2026-09-10',
-    content: `
-      This is a comprehensive research publication detailing the strategic developments, infrastructure expansion, and socio-economic impact across the African continent.
+    content: `This comprehensive research publication examines the strategic developments, infrastructure expansion, and socio-economic dynamics across the African continent.
 
-      ## Overview
-      Recent advancements in technology, policy frameworks, and regional integration have catalyzed sustainable growth. Key stakeholders are collaborating to build resilient systems that empower local communities and foster cross-border innovation.
+Key Themes & Methodologies:
+Recent advancements in policy frameworks, digital knowledge infrastructure, and regional integration have catalyzed sustainable growth. Academic researchers and institutional stakeholders collaborate to build resilient systems that preserve cultural heritage while advancing scientific innovation.
 
-      ## Key Findings
-      - Accelerated digital and physical infrastructure investments.
-      - Enhanced multi-lateral cooperation and knowledge sharing.
-      - Strong commitment to sustainable energy and economic diversification.
+Primary Research Findings:
+• Accelerated investment in renewable energy corridors and cross-border connectivity.
+• Enhanced multi-lateral cooperation and open-access scholarly citation networks.
+• Strong institutional commitment to sustainable economic diversification and archival digitization.
 
-      ## Conclusion
-      The future outlook remains highly positive as new governance models and technological platforms unlock unprecedented potential across the region.
-    `,
+Conclusion & Scholarly Outlook:
+The long-term outlook remains profoundly positive as new governance models and technological knowledge graphs unlock unprecedented access to African research and historical data.`,
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 py-12 px-4 sm:px-6 lg:px-8 text-slate-100">
+    <div className="min-h-screen bg-scholar-canvas bg-canvas py-12 px-4 sm:px-6 lg:px-8 text-text-main font-sans transition-colors duration-300">
       <div className="max-w-3xl mx-auto">
-        <Link to="/articles" className="inline-flex items-center space-x-2 text-emerald-400 hover:underline mb-6 text-sm font-medium">
+        <Link
+          to="/articles"
+          className="inline-flex items-center space-x-2 font-mono text-xs font-semibold text-emerald-900 dark:text-gold hover:underline mb-8"
+        >
           <ArrowLeft className="h-4 w-4" />
-          <span>Back to Articles</span>
+          <span>Back to All Publications</span>
         </Link>
 
-        <div className="bg-slate-900 rounded-xl border border-slate-800 p-8 shadow-xl">
-          <div className="flex items-center space-x-4 mb-4">
-            <span className="bg-emerald-950 text-emerald-400 px-3 py-1 rounded-md text-xs font-semibold">
+        <article className="ca-card bg-surface p-8 sm:p-12 shadow-scholar">
+          <div className="flex flex-wrap items-center gap-4 mb-6 pb-4 border-b border-stone/15 font-mono text-xs text-text-muted">
+            <span className="ca-badge-clay">
               {article.category}
             </span>
-            <span className="text-slate-400 text-sm flex items-center space-x-1">
-              <Calendar className="h-4 w-4" />
+            <span className="flex items-center space-x-1">
+              <Calendar className="h-3.5 w-3.5 text-stone" />
               <span>{article.createdAt}</span>
             </span>
-            <span className="text-slate-400 text-sm flex items-center space-x-1">
-              <User className="h-4 w-4" />
+            <span className="flex items-center space-x-1">
+              <User className="h-3.5 w-3.5 text-stone" />
               <span>{article.author}</span>
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-6 capitalize">{article.title}</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-text-main mb-6 leading-tight">
+            {article.title}
+          </h1>
 
-          <div className="prose prose-invert max-w-none text-slate-300 space-y-4 whitespace-pre-line leading-relaxed border-t border-slate-800 pt-6">
+          <div className="font-serif text-base sm:text-lg text-text-main leading-relaxed space-y-6 whitespace-pre-line border-t border-stone/20 pt-6">
             {article.content}
           </div>
-        </div>
+
+          <div className="mt-12 pt-6 border-t border-stone/15 flex items-center justify-between font-mono text-xs text-text-muted">
+            <span className="flex items-center gap-1.5">
+              <BookOpen className="h-4 w-4 text-gold" />
+              <span>Connect Africa Digital Archive Record</span>
+            </span>
+            <span>Ref ID: CA-PUB-2026-904</span>
+          </div>
+        </article>
       </div>
     </div>
   );

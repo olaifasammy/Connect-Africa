@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
@@ -20,14 +21,16 @@ import { AccountSettingsPage } from './pages/account/AccountSettingsPage';
 import { AccountSecurityPage } from './pages/account/AccountSecurityPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ErrorPage } from './pages/ErrorPage';
+import { ProtectedRoute, AdminRoute } from './components/ProtectedRoute';
 
 export function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <Router>
-          <div className="min-h-screen bg-ink text-cloud">
-            <Navbar />
+      <ThemeProvider>
+        <AuthProvider>
+          <Router>
+            <div className="min-h-screen bg-scholar-canvas bg-canvas text-text-main font-sans transition-colors duration-300">
+              <Navbar />
 
             <main>
               <Routes>
@@ -36,15 +39,15 @@ export function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
-                <Route path="/profile" element={<UserProfilePage />} />
-                <Route path="/account" element={<UserAccountCenterPage />} />
-                <Route path="/account/notifications" element={<AccountNotificationsPage />} />
-                <Route path="/account/bookmarks" element={<AccountBookmarksPage />} />
-                <Route path="/account/history" element={<AccountHistoryPage />} />
-                <Route path="/account/searches" element={<AccountSearchesPage />} />
-                <Route path="/account/settings" element={<AccountSettingsPage />} />
-                <Route path="/account/security" element={<AccountSecurityPage />} />
-                <Route path="/admin/*" element={<AdminDashboardPage />} />
+                <Route path="/profile" element={<ProtectedRoute><UserProfilePage /></ProtectedRoute>} />
+                <Route path="/account" element={<ProtectedRoute><UserAccountCenterPage /></ProtectedRoute>} />
+                <Route path="/account/notifications" element={<ProtectedRoute><AccountNotificationsPage /></ProtectedRoute>} />
+                <Route path="/account/bookmarks" element={<ProtectedRoute><AccountBookmarksPage /></ProtectedRoute>} />
+                <Route path="/account/history" element={<ProtectedRoute><AccountHistoryPage /></ProtectedRoute>} />
+                <Route path="/account/searches" element={<ProtectedRoute><AccountSearchesPage /></ProtectedRoute>} />
+                <Route path="/account/settings" element={<ProtectedRoute><AccountSettingsPage /></ProtectedRoute>} />
+                <Route path="/account/security" element={<ProtectedRoute><AccountSecurityPage /></ProtectedRoute>} />
+                <Route path="/admin/*" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
                 <Route path="/articles" element={<ArticleListPage />} />
                 <Route path="/articles/:slug" element={<ArticleDetailPage />} />
                 
@@ -73,8 +76,9 @@ export function App() {
           </div>
         </Router>
       </AuthProvider>
-    </ErrorBoundary>
-  );
+    </ThemeProvider>
+  </ErrorBoundary>
+);
 }
 
 export default App;

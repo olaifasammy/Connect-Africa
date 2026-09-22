@@ -9,7 +9,7 @@ import {
   validate,
   validateParams,
 } from '@shared/interfaces/http/middleware/ZodValidationMiddleware';
-import { authorize } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
+import { authorize, authorizeAdminOrSuperAdmin } from '@shared/interfaces/http/middleware/AuthorizationMiddleware';
 import { Permission } from '@modules/auth/public';
 import { authRateLimiter } from '@shared/interfaces/http/middleware/RateLimitMiddleware';
 import {
@@ -120,7 +120,7 @@ export function createArticleRoutes(
   router.delete(
     '/:id',
     authenticate,
-    authorize(Permission.ARTICLE_DELETE),
+    authorizeAdminOrSuperAdmin,
     validateParams(IdParamSchema),
     (req, res) => controller.delete(req, res),
   );

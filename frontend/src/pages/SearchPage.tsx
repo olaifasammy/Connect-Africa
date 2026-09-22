@@ -60,13 +60,13 @@ const resourceIcons: Record<ResourceType, typeof Network> = {
   user: UserRound,
 };
 
-const resourceColors: Record<ResourceType, string> = {
-  entity: 'text-emerald border-emerald/20 bg-emerald/5',
-  article: 'text-sage border-sage/20 bg-sage/5',
-  relationship: 'text-gold border-gold/20 bg-gold/5',
-  source: 'text-sand border-sand/20 bg-sand/5',
-  ontology: 'text-terra border-terra/20 bg-terra/5',
-  user: 'text-mist border-white/10 bg-white/[0.03]',
+const resourceBadgeStyles: Record<ResourceType, string> = {
+  entity: 'ca-badge-emerald',
+  article: 'ca-badge-gold',
+  relationship: 'ca-badge-clay',
+  source: 'ca-badge-stone',
+  ontology: 'ca-badge-clay',
+  user: 'ca-badge-stone',
 };
 
 export function SearchPage() {
@@ -278,31 +278,29 @@ export function SearchPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-72px)]">
-      <section className="border-b border-white/[0.06]">
-        <div className="ca-container py-12 sm:py-16 lg:py-20">
+    <div className="min-h-[calc(100vh-72px)] bg-scholar-canvas bg-canvas text-text-main font-sans transition-colors duration-300">
+      <section className="border-b border-stone/20 bg-surface/50 py-12 sm:py-16 lg:py-20">
+        <div className="ca-container">
           <div className="max-w-4xl">
-            <p className="ca-eyebrow">Universal knowledge search</p>
+            <p className="ca-eyebrow">Universal Knowledge Index</p>
 
-            <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-cloud sm:text-5xl">
-              Find the entities behind the knowledge.
+            <h1 className="mt-2 font-serif text-3xl font-bold tracking-tight text-text-main sm:text-5xl">
+              Search African Knowledge Entities
             </h1>
 
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-mist sm:text-base">
-              Search across entities, articles, relationships, sources and
-              ontologies. Search results are ranked by the current knowledge
-              index and relevance model.
+            <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-text-muted sm:text-base">
+              Query across entities, research articles, ontological relationships, primary sources, and historical metadata.
             </p>
 
             <form onSubmit={submitSearch} className="relative mt-8">
-              <div className="flex items-center rounded-2xl border border-white/[0.10] bg-forest/80 p-2 shadow-soft backdrop-blur-xl transition focus-within:border-emerald/50">
-                <SearchIcon className="ml-4 shrink-0 text-mist" size={21} />
+              <div className="flex items-center rounded-xl border border-stone/30 bg-surface p-2 shadow-scholar backdrop-blur-xl transition focus-within:border-gold">
+                <SearchIcon className="ml-3 shrink-0 text-stone" size={20} />
 
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search an entity, place, person, institution..."
-                  className="min-w-0 flex-1 bg-transparent px-4 py-3 text-sm text-cloud outline-none placeholder:text-mist/60 sm:text-base"
+                  placeholder="Search an entity, place, person, institution, culture..."
+                  className="min-w-0 flex-1 bg-transparent px-3 py-2 font-sans text-sm text-text-main outline-none placeholder:text-stone/50 sm:text-base"
                   autoFocus
                 />
 
@@ -310,27 +308,27 @@ export function SearchPage() {
                   <button
                     type="button"
                     onClick={clearSearch}
-                    className="rounded-lg p-2 text-mist transition hover:bg-white/[0.05] hover:text-cloud"
+                    className="rounded-lg p-2 text-stone transition hover:bg-stone/10 hover:text-text-main"
                     aria-label="Clear search"
                   >
-                    <X size={17} />
+                    <X size={16} />
                   </button>
                 )}
 
                 <button
                   type="submit"
-                  className="rounded-xl bg-emerald px-5 py-3 text-sm font-semibold text-ink transition hover:bg-sage"
+                  className="ca-btn-primary px-5 py-2.5 text-xs uppercase tracking-wider"
                 >
-                  Search
+                  Search Index
                 </button>
               </div>
 
               {(suggestions.length > 0 || suggestionsLoading) && query.trim().length >= 2 && (
-                <div className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-xl border border-white/[0.08] bg-forest shadow-soft">
+                <div className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-xl border border-stone/20 bg-surface shadow-scholar font-sans">
                   {suggestionsLoading ? (
-                    <div className="flex items-center gap-2 px-4 py-3 text-xs text-mist">
-                      <LoaderCircle className="h-4 w-4 animate-spin" />
-                      Finding matches...
+                    <div className="flex items-center gap-2 px-4 py-3 text-xs text-text-muted">
+                      <LoaderCircle className="h-4 w-4 animate-spin text-gold" />
+                      Searching index suggestions...
                     </div>
                   ) : (
                     suggestions.slice(0, 6).map((suggestion) => (
@@ -338,9 +336,9 @@ export function SearchPage() {
                         key={suggestion}
                         type="button"
                         onClick={() => selectSuggestion(suggestion)}
-                        className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-cloud transition hover:bg-white/[0.05]"
+                        className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-text-main transition hover:bg-stone/10"
                       >
-                        <SearchIcon size={15} className="text-mist" />
+                        <SearchIcon size={15} className="text-stone" />
                         {suggestion}
                       </button>
                     ))
@@ -354,23 +352,23 @@ export function SearchPage() {
 
       <section className="ca-container py-10 lg:py-12">
         <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
-          <aside>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-mist">
-              <Filter size={14} />
-              Filter
+          <aside className="font-sans">
+            <div className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-text-muted">
+              <Filter size={14} className="text-gold" />
+              Filter Domain
             </div>
 
             <div className="mt-4 space-y-1">
               <button
                 type="button"
                 onClick={() => setTypeFilter('')}
-                className={`w-full rounded-lg px-3 py-2.5 text-left text-sm transition ${
+                className={`w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition ${
                   !resourceType
-                    ? 'bg-emerald/10 text-emerald'
-                    : 'text-mist hover:bg-white/[0.04] hover:text-cloud'
+                    ? 'bg-emerald-900/10 text-emerald-900 dark:text-gold font-bold'
+                    : 'text-text-muted hover:bg-stone/10 hover:text-text-main'
                 }`}
               >
-                All knowledge
+                All Knowledge
               </button>
 
               {resourceTypes.map((type) => (
@@ -378,10 +376,10 @@ export function SearchPage() {
                   key={type.value}
                   type="button"
                   onClick={() => setTypeFilter(type.value)}
-                  className={`w-full rounded-lg px-3 py-2.5 text-left text-sm transition ${
+                  className={`w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition ${
                     resourceType === type.value
-                      ? 'bg-emerald/10 text-emerald'
-                      : 'text-mist hover:bg-white/[0.04] hover:text-cloud'
+                      ? 'bg-emerald-900/10 text-emerald-900 dark:text-gold font-bold'
+                      : 'text-text-muted hover:bg-stone/10 hover:text-text-main'
                   }`}
                 >
                   {type.label}
@@ -392,35 +390,34 @@ export function SearchPage() {
 
           <div className="min-w-0">
             {!hasQuery ? (
-              <div className="rounded-2xl border border-dashed border-white/[0.10] bg-forest/30 px-6 py-16 text-center">
-                <SearchIcon className="mx-auto text-mist" size={28} />
-                <h2 className="mt-4 text-xl font-semibold text-cloud">
-                  Search Africa's connected knowledge
+              <div className="ca-card border-dashed border-stone/30 bg-surface/50 px-6 py-16 text-center">
+                <SearchIcon className="mx-auto text-stone" size={32} />
+                <h2 className="mt-4 font-serif text-xl font-bold text-text-main">
+                  Search Connect Africa Knowledge Base
                 </h2>
-                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-mist">
-                  Start with an entity, place, institution, culture, historical
-                  subject or relationship.
+                <p className="mx-auto mt-2 max-w-md font-sans text-sm text-text-muted">
+                  Begin typing an entity name, historical polity, ruler, trade route, or cultural context.
                 </p>
               </div>
             ) : (
               <>
-                <div className="flex flex-col justify-between gap-4 border-b border-white/[0.07] pb-5 sm:flex-row sm:items-center">
+                <div className="flex flex-col justify-between gap-4 border-b border-stone/20 pb-5 sm:flex-row sm:items-center">
                   <div>
-                    <p className="text-xs text-mist">
+                    <p className="font-mono text-xs text-text-muted">
                       {loading
-                        ? 'Searching knowledge...'
-                        : `${response?.total ?? 0} result${
+                        ? 'Searching index...'
+                        : `${response?.total ?? 0} record${
                             response?.total === 1 ? '' : 's'
-                          }`}
+                          } found`}
                     </p>
 
-                    <h2 className="mt-1 text-xl font-semibold text-cloud">
-                      {activeQuery}
+                    <h2 className="mt-1 font-serif text-xl font-bold text-text-main">
+                      "{activeQuery}"
                     </h2>
                   </div>
 
-                  <label className="flex items-center gap-2 text-xs text-mist">
-                    <ArrowUpDown size={14} />
+                  <label className="flex items-center gap-2 font-mono text-xs text-text-muted">
+                    <ArrowUpDown size={14} className="text-stone" />
                     <select
                       value={sortBy}
                       onChange={(event) => {
@@ -432,74 +429,72 @@ export function SearchPage() {
                             | 'dateCreated',
                         );
                       }}
-                      className="rounded-lg border border-white/[0.08] bg-forest px-3 py-2 text-xs text-cloud outline-none"
+                      className="rounded-lg border border-stone/20 bg-surface px-3 py-1.5 font-sans text-xs text-text-main outline-none focus:border-gold"
                     >
-                      <option value="relevance">Relevance</option>
+                      <option value="relevance">Sort by Relevance</option>
                       <option value="alphabetical">Alphabetical</option>
-                      <option value="dateCreated">Newest</option>
+                      <option value="dateCreated">Newest First</option>
                     </select>
                   </label>
                 </div>
 
                 {error && (
-                  <div className="mt-6 rounded-xl border border-terra/25 bg-terra/5 p-4 text-sm text-terra">
+                  <div className="mt-6 ca-msg-error">
                     {error}
                   </div>
                 )}
 
                 {loading && !response && (
-                  <div className="flex items-center justify-center py-20 text-mist">
-                    <LoaderCircle className="mr-3 animate-spin" size={20} />
-                    Searching the knowledge index...
+                  <div className="flex items-center justify-center py-20 font-sans text-sm text-text-muted">
+                    <LoaderCircle className="mr-3 animate-spin text-gold" size={20} />
+                    Querying African Knowledge Graph Index...
                   </div>
                 )}
 
                 {!loading && !error && response && response.results.length === 0 && (
-                  <div className="rounded-2xl border border-dashed border-white/[0.10] bg-forest/30 px-6 py-16 text-center">
-                    <Sparkles className="mx-auto text-mist" size={26} />
-                    <h2 className="mt-4 text-lg font-semibold text-cloud">
-                      No knowledge found
+                  <div className="ca-card border-dashed border-stone/30 bg-surface/50 px-6 py-16 text-center">
+                    <Sparkles className="mx-auto text-stone" size={28} />
+                    <h2 className="mt-4 font-serif text-lg font-bold text-text-main">
+                      No Records Found
                     </h2>
-                    <p className="mt-2 text-sm text-mist">
-                      Try a broader entity name or remove the resource filter.
+                    <p className="mt-2 font-sans text-sm text-text-muted">
+                      Try adjusting search keywords or clearing resource filters.
                     </p>
                   </div>
                 )}
 
-                <div className="mt-6 space-y-3">
+                <div className="mt-6 space-y-4">
                   {response?.results.map((result) => {
                     const Icon = resourceIcons[result.resourceType];
-                    const typeStyle = resourceColors[result.resourceType];
+                    const badgeClass = resourceBadgeStyles[result.resourceType];
 
                     return (
                       <article
                         key={`${result.resourceType}-${result.id}`}
-                        className="group rounded-2xl border border-white/[0.07] bg-forest/45 p-5 transition duration-300 hover:border-emerald/25 hover:bg-forest/75"
+                        className="ca-card-hover group"
                       >
                         <div className="flex gap-4">
-                          <div
-                            className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${typeStyle}`}
-                          >
-                            <Icon size={17} />
+                          <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-stone/20 bg-canvas text-emerald-900 dark:text-gold">
+                            <Icon size={18} />
                           </div>
 
                           <div className="min-w-0 flex-1">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-sage">
+                            <div className="flex flex-wrap items-center gap-3">
+                              <span className={badgeClass}>
                                 {result.resourceType}
                               </span>
 
-                              <span className="text-[10px] text-mist/50">
-                                Relevance {result.score.toFixed(3)}
+                              <span className="font-mono text-[10px] text-text-muted">
+                                Score: {result.score.toFixed(3)}
                               </span>
                             </div>
 
-                            <h3 className="mt-2 text-lg font-semibold text-cloud">
+                            <h3 className="mt-2 font-serif text-lg font-bold text-text-main group-hover:text-emerald-900 dark:group-hover:text-gold transition">
                               {result.title}
                             </h3>
 
                             {result.snippet && (
-                              <p className="mt-2 max-w-3xl text-sm leading-6 text-mist">
+                              <p className="mt-2 max-w-3xl font-sans text-xs leading-relaxed text-text-muted">
                                 {result.snippet}
                               </p>
                             )}
@@ -511,18 +506,18 @@ export function SearchPage() {
                 </div>
 
                 {response && response.results.length > 0 && totalPages > 1 && (
-                  <div className="mt-8 flex items-center justify-between border-t border-white/[0.07] pt-5">
+                  <div className="mt-8 flex items-center justify-between border-t border-stone/20 pt-5 font-mono text-xs">
                     <button
                       type="button"
                       disabled={page <= 1}
                       onClick={() => changePage(page - 1)}
-                      className="inline-flex items-center gap-2 rounded-lg border border-white/[0.08] px-3 py-2 text-sm text-mist transition hover:bg-white/[0.04] hover:text-cloud disabled:cursor-not-allowed disabled:opacity-30"
+                      className="ca-btn-outline px-3 py-1.5"
                     >
                       <ChevronLeft size={15} />
                       Previous
                     </button>
 
-                    <span className="text-xs tabular-nums text-mist">
+                    <span className="text-text-muted">
                       Page {page} of {totalPages}
                     </span>
 
@@ -530,7 +525,7 @@ export function SearchPage() {
                       type="button"
                       disabled={page >= totalPages}
                       onClick={() => changePage(page + 1)}
-                      className="inline-flex items-center gap-2 rounded-lg border border-white/[0.08] px-3 py-2 text-sm text-mist transition hover:bg-white/[0.04] hover:text-cloud disabled:cursor-not-allowed disabled:opacity-30"
+                      className="ca-btn-outline px-3 py-1.5"
                     >
                       Next
                       <ChevronRight size={15} />

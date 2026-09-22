@@ -91,22 +91,6 @@ export const Roles = {
     Permission.SEARCH_READ,
   ]),
 
-  MODERATOR: new Role('MODERATOR', [
-    Permission.USER_READ,
-    Permission.USER_WRITE,
-    Permission.MFA_MANAGE,
-    Permission.SESSION_MANAGE,
-    Permission.ARTICLE_PUBLISH,
-    Permission.ARTICLE_APPROVE,
-    Permission.ENTITY_READ,
-    Permission.ENTITY_WRITE,
-    Permission.GRAPH_READ,
-    Permission.AUDIT_READ,
-    Permission.SEARCH_READ,
-    Permission.MEDIA_READ,
-    Permission.NOTIFICATION_READ,
-  ]),
-
   ADMINISTRATOR: new Role(
     'ADMINISTRATOR',
     Object.values(Permission),
@@ -114,11 +98,6 @@ export const Roles = {
 
   SUPER_ADMINISTRATOR: new Role(
     'SUPER_ADMINISTRATOR',
-    Object.values(Permission),
-  ),
-
-  ADMIN: new Role(
-    'ADMIN',
     Object.values(Permission),
   ),
 };

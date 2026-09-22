@@ -5,3 +5,6 @@ dist/
 .gemini/skills/
 .geminiignore
 backend/.env
+*.log
+*.rdb
+.pi/intelligence/cache.json

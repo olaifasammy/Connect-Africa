@@ -192,25 +192,37 @@ export class LoginCommandHandler
         );
       }
 
-      if (
-        !/^\d{6}$/.test(
-          command.mfaCode,
-        )
-      ) {
-        throw new AuthenticationError(
-          'Invalid MFA code.',
-        );
-      }
+      let isMfaValid = false;
 
-      const isMfaValid =
-        this.totpProvider.verifyCode(
+      if (/^\d{6}$/.test(command.mfaCode)) {
+        isMfaValid = this.totpProvider.verifyCode(
           user.mfaSecret,
           command.mfaCode,
         );
+      } else if (/^[A-Z0-9]{4}-[A-Z0-9]{4}$/i.test(command.mfaCode)) {
+        const normalizedCode = command.mfaCode.trim().toUpperCase();
+        const bcrypt = require('bcryptjs');
+        const remainingCodes: string[] = [];
+        let matched = false;
+
+        for (const hashedCode of user.mfaRecoveryCodes) {
+          if (!matched && await bcrypt.compare(normalizedCode, hashedCode)) {
+            matched = true;
+          } else {
+            remainingCodes.push(hashedCode);
+          }
+        }
+
+        if (matched) {
+          isMfaValid = true;
+          user.setMfaRecoveryCodes(remainingCodes);
+          await this.userRepository.save(user);
+        }
+      }
 
       if (!isMfaValid) {
         throw new AuthenticationError(
-          'Invalid MFA code.',
+          'Invalid MFA or recovery code.',
         );
       }
     }
@@ -238,6 +250,8 @@ export class LoginCommandHandler
         user.id.toString(),
       ),
       refreshToken,
+      command.ipAddress,
+      command.userAgent,
     );
 
     await this.eventBus.publish(

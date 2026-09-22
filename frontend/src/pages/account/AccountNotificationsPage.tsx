@@ -17,32 +17,16 @@ import {
 
 const formatNotificationDate = (value: string): string => {
   const date = new Date(value);
-
   if (Number.isNaN(date.getTime())) {
     return value;
   }
-
   const now = Date.now();
   const diff = now - date.getTime();
 
-  if (diff < 60_000) {
-    return 'Just now';
-  }
-
-  if (diff < 3_600_000) {
-    const minutes = Math.floor(diff / 60_000);
-    return `${minutes}m ago`;
-  }
-
-  if (diff < 86_400_000) {
-    const hours = Math.floor(diff / 3_600_000);
-    return `${hours}h ago`;
-  }
-
-  if (diff < 604_800_000) {
-    const days = Math.floor(diff / 86_400_000);
-    return `${days}d ago`;
-  }
+  if (diff < 60_000) return 'Just now';
+  if (diff < 3_600_000) return `${Math.floor(diff / 60_000)}m ago`;
+  if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)}h ago`;
+  if (diff < 604_800_000) return `${Math.floor(diff / 86_400_000)}d ago`;
 
   return new Intl.DateTimeFormat(undefined, {
     dateStyle: 'medium',
@@ -53,11 +37,11 @@ const formatNotificationDate = (value: string): string => {
 const notificationTypeLabel = (type: string): string => {
   switch (type) {
     case 'KNOWLEDGE_UPDATE':
-      return 'Knowledge update';
+      return 'Knowledge Update';
     case 'ARTICLE_PUBLISHED':
-      return 'Article published';
+      return 'Article Published';
     case 'SECURITY':
-      return 'Account security';
+      return 'Security Alert';
     case 'SYSTEM':
       return 'System';
     default:
@@ -65,15 +49,15 @@ const notificationTypeLabel = (type: string): string => {
   }
 };
 
-const notificationTypeClass = (type: string): string => {
+const notificationTypeBadgeClass = (type: string): string => {
   switch (type) {
     case 'SECURITY':
-      return 'border-gold/25 bg-gold/[0.06] text-gold';
+      return 'ca-badge-clay';
     case 'KNOWLEDGE_UPDATE':
     case 'ARTICLE_PUBLISHED':
-      return 'border-emerald/25 bg-emerald/[0.06] text-emerald';
+      return 'ca-badge-gold';
     default:
-      return 'border-white/[0.08] bg-white/[0.025] text-sage';
+      return 'ca-badge-emerald';
   }
 };
 
@@ -96,7 +80,6 @@ const NotificationRow: React.FC<NotificationRowProps> = ({
     if (!notification.isRead) {
       onRead(notification);
     }
-
     if (notification.targetUrl) {
       onOpen(notification);
     }
@@ -104,74 +87,58 @@ const NotificationRow: React.FC<NotificationRowProps> = ({
 
   return (
     <article
-      className={`group relative border-b border-white/[0.06] px-5 py-5 transition last:border-b-0 sm:px-7 ${
-        notification.isRead
-          ? 'bg-transparent'
-          : 'bg-emerald/[0.035]'
+      className={`group relative border-b border-stone/15 px-5 py-4 transition last:border-b-0 sm:px-7 ${
+        notification.isRead ? 'bg-transparent' : 'bg-gold/5'
       }`}
     >
       {!notification.isRead && (
         <span
-          className="absolute left-2 top-7 h-2 w-2 rounded-full bg-emerald shadow-[0_0_12px_rgba(34,160,107,0.65)] sm:left-3"
+          className="absolute left-2 top-6 h-2 w-2 rounded-full bg-gold"
           aria-label="Unread"
         />
       )}
 
       <div className="flex items-start gap-4">
-        <div
-          className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${notificationTypeClass(
-            notification.type,
-          )}`}
-        >
+        <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stone/20 bg-surface text-gold">
           <Bell className="h-4 w-4" />
         </div>
 
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+        <div className="min-w-0 flex-1 font-sans">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <h2
-                  className={`text-sm font-semibold ${
-                    notification.isRead
-                      ? 'text-cloud/85'
-                      : 'text-cloud'
-                  }`}
-                >
+                <h2 className="font-serif text-base font-bold text-text-main">
                   {notification.title}
                 </h2>
 
-                <span
-                  className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${notificationTypeClass(
-                    notification.type,
-                  )}`}
-                >
+                <span className={notificationTypeBadgeClass(notification.type)}>
                   {notificationTypeLabel(notification.type)}
                 </span>
               </div>
 
-              <p className="mt-2 text-sm leading-6 text-mist">
+              <p className="mt-1 text-xs leading-relaxed text-text-muted">
                 {notification.content}
               </p>
             </div>
 
             <time
               dateTime={notification.createdAt}
-              className="shrink-0 text-xs text-mist/70"
+              className="shrink-0 font-mono text-xs text-text-muted"
             >
               {formatNotificationDate(notification.createdAt)}
             </time>
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center gap-2">
+          <div className="mt-3 flex flex-wrap items-center gap-2 font-mono text-xs">
             {notification.targetUrl && (
               <button
                 type="button"
                 onClick={handleOpen}
                 disabled={busy}
-                className="inline-flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.025] px-3 py-2 text-xs font-medium text-cloud transition hover:border-emerald/30 hover:bg-emerald/[0.05] disabled:cursor-not-allowed disabled:opacity-50"
+                className="ca-btn-outline px-2.5 py-1 text-xs"
               >
-                <ExternalLink className="h-3.5 w-3.5 text-sage" />
-                Open
+                <ExternalLink className="h-3.5 w-3.5 text-gold" />
+                Open Entry
               </button>
             )}
 
@@ -180,14 +147,14 @@ const NotificationRow: React.FC<NotificationRowProps> = ({
                 type="button"
                 onClick={() => onRead(notification)}
                 disabled={busy}
-                className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-sage transition hover:bg-white/[0.04] hover:text-cloud disabled:cursor-not-allowed disabled:opacity-50"
+                className="ca-btn-outline px-2.5 py-1 text-xs"
               >
                 {busy ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 ) : (
                   <Check className="h-3.5 w-3.5" />
                 )}
-                Mark as read
+                Mark Read
               </button>
             )}
 
@@ -195,7 +162,7 @@ const NotificationRow: React.FC<NotificationRowProps> = ({
               type="button"
               onClick={() => onDelete(notification)}
               disabled={busy}
-              className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-mist transition hover:bg-terra/[0.07] hover:text-cloud disabled:cursor-not-allowed disabled:opacity-50"
+              className="ca-btn-outline px-2.5 py-1 text-xs text-clay"
             >
               {busy ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -228,14 +195,11 @@ export const AccountNotificationsPage: React.FC = () => {
 
     try {
       const inbox = await notificationApi.getInbox();
-
       setNotifications(inbox.notifications);
       setUnreadCount(inbox.unreadCount);
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : 'Unable to load notifications.',
+        err instanceof Error ? err.message : 'Unable to load notifications.',
       );
     } finally {
       setLoading(false);
@@ -250,74 +214,48 @@ export const AccountNotificationsPage: React.FC = () => {
     if (filter === 'unread') {
       return notifications.filter((notification) => !notification.isRead);
     }
-
     if (filter === 'system') {
       return notifications.filter(
         (notification) =>
-          notification.type === 'SYSTEM' ||
-          notification.type === 'SECURITY',
+          notification.type === 'SYSTEM' || notification.type === 'SECURITY',
       );
     }
-
     return notifications;
   }, [filter, notifications]);
 
   const handleRead = async (notification: Notification) => {
-    if (notification.isRead) {
-      return;
-    }
-
+    if (notification.isRead) return;
     setBusyId(notification.id);
     setError(null);
 
     try {
       await notificationApi.markAsRead(notification.id);
-
       setNotifications((current) =>
         current.map((item) =>
-          item.id === notification.id
-            ? { ...item, isRead: true }
-            : item,
+          item.id === notification.id ? { ...item, isRead: true } : item,
         ),
       );
-
       setUnreadCount((current) => Math.max(0, current - 1));
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'Unable to mark notification as read.',
-      );
+      setError(err instanceof Error ? err.message : 'Unable to mark notification as read.');
     } finally {
       setBusyId(null);
     }
   };
 
   const handleMarkAll = async () => {
-    if (unreadCount === 0 || markingAll) {
-      return;
-    }
-
+    if (unreadCount === 0 || markingAll) return;
     setMarkingAll(true);
     setError(null);
 
     try {
       await notificationApi.markAllAsRead();
-
       setNotifications((current) =>
-        current.map((notification) => ({
-          ...notification,
-          isRead: true,
-        })),
+        current.map((notification) => ({ ...notification, isRead: true })),
       );
-
       setUnreadCount(0);
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'Unable to mark notifications as read.',
-      );
+      setError(err instanceof Error ? err.message : 'Unable to mark notifications as read.');
     } finally {
       setMarkingAll(false);
     }
@@ -329,72 +267,56 @@ export const AccountNotificationsPage: React.FC = () => {
 
     try {
       await notificationApi.delete(notification.id);
-
-      setNotifications((current) =>
-        current.filter((item) => item.id !== notification.id),
-      );
-
+      setNotifications((current) => current.filter((item) => item.id !== notification.id));
       if (!notification.isRead) {
         setUnreadCount((current) => Math.max(0, current - 1));
       }
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'Unable to remove notification.',
-      );
+      setError(err instanceof Error ? err.message : 'Unable to remove notification.');
     } finally {
       setBusyId(null);
     }
   };
 
   const handleOpen = (notification: Notification) => {
-    if (!notification.targetUrl) {
-      return;
-    }
-
-    if (
-      notification.targetUrl.startsWith('/') &&
-      !notification.targetUrl.startsWith('//')
-    ) {
+    if (!notification.targetUrl) return;
+    if (notification.targetUrl.startsWith('/') && !notification.targetUrl.startsWith('//')) {
       navigate(notification.targetUrl);
       return;
     }
-
     window.location.assign(notification.targetUrl);
   };
 
   return (
-    <div className="min-h-screen bg-ink pb-20 pt-10 text-cloud sm:pt-14">
+    <div className="min-h-screen bg-scholar-canvas bg-canvas pb-20 pt-10 text-text-main font-sans transition-colors duration-300">
       <div className="ca-container">
         <Link
           to="/account"
-          className="inline-flex items-center gap-2 text-sm text-mist transition hover:text-cloud"
+          className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-emerald-900 dark:text-gold hover:underline"
         >
           <ArrowLeft className="h-4 w-4" />
-          Account center
+          Back to Account Center
         </Link>
 
-        <section className="mt-6 overflow-hidden rounded-3xl border border-white/[0.07] bg-forest/70 shadow-soft">
-          <div className="border-b border-white/[0.06] px-6 py-6 sm:px-8">
+        <section className="mt-6 ca-card bg-surface shadow-scholar p-0">
+          <div className="border-b border-stone/20 px-6 py-6 sm:px-8">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-emerald/20 bg-brand text-sage">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-gold/30 bg-gold/10 text-gold">
                     <Bell className="h-6 w-6" />
                   </div>
 
                   <div>
-                    <p className="ca-eyebrow">Account activity</p>
-                    <h1 className="mt-1 text-3xl font-semibold tracking-tight">
+                    <p className="ca-eyebrow">Account Dispatch</p>
+                    <h1 className="mt-1 font-serif text-3xl font-bold text-text-main">
                       Notifications
                     </h1>
                   </div>
                 </div>
 
-                <p className="mt-4 max-w-2xl text-sm leading-6 text-mist sm:text-base">
-                  Important updates and activity associated with your
-                  Connect-Africa account.
+                <p className="mt-2 font-sans text-sm text-text-muted">
+                  Important dispatches and activity associated with your account.
                 </p>
               </div>
 
@@ -402,34 +324,32 @@ export const AccountNotificationsPage: React.FC = () => {
                 type="button"
                 onClick={handleMarkAll}
                 disabled={unreadCount === 0 || markingAll || loading}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.025] px-4 py-2.5 text-sm font-medium text-cloud transition hover:border-emerald/30 hover:bg-emerald/[0.05] disabled:cursor-not-allowed disabled:opacity-40"
+                className="ca-btn-outline px-4 py-2 text-xs font-mono"
               >
                 {markingAll ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <CheckCheck className="h-4 w-4 text-sage" />
+                  <CheckCheck className="h-4 w-4 text-gold" />
                 )}
-                Mark all as read
+                Mark All Read
               </button>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 border-b border-white/[0.06] px-6 py-4 sm:px-8">
+          <div className="flex flex-wrap items-center gap-2 border-b border-stone/15 px-6 py-3 font-mono text-xs">
             {[
               ['all', 'All'],
-              ['unread', `Unread${unreadCount ? ` · ${unreadCount}` : ''}`],
-              ['system', 'System'],
+              ['unread', `Unread${unreadCount ? ` (${unreadCount})` : ''}`],
+              ['system', 'System Alerts'],
             ].map(([value, label]) => (
               <button
                 key={value}
                 type="button"
-                onClick={() =>
-                  setFilter(value as 'all' | 'unread' | 'system')
-                }
-                className={`rounded-lg px-3 py-2 text-xs font-semibold transition ${
+                onClick={() => setFilter(value as 'all' | 'unread' | 'system')}
+                className={`rounded-md px-3 py-1.5 font-semibold transition ${
                   filter === value
-                    ? 'bg-emerald text-ink'
-                    : 'text-mist hover:bg-white/[0.04] hover:text-cloud'
+                    ? 'bg-emerald-900 text-white dark:bg-emerald-500 dark:text-ink'
+                    : 'text-text-muted hover:bg-stone/10 hover:text-text-main'
                 }`}
               >
                 {label}
@@ -438,34 +358,21 @@ export const AccountNotificationsPage: React.FC = () => {
           </div>
 
           {error && (
-            <div className="border-b border-terra/20 bg-terra/[0.05] px-6 py-4 sm:px-8">
+            <div className="border-b border-clay/30 bg-clay/10 px-6 py-4">
               <div className="flex items-start gap-3">
-                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-terra" />
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-cloud">
-                    Notification service unavailable
-                  </p>
-                  <p className="mt-1 text-xs leading-5 text-mist">
-                    {error}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => void loadNotifications()}
-                    className="mt-3 text-xs font-semibold text-sage transition hover:text-cloud"
-                  >
-                    Try again
-                  </button>
+                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-clay" />
+                <div className="min-w-0 font-sans text-xs text-clay">
+                  <p className="font-bold">Notification Dispatch Warning</p>
+                  <p className="mt-0.5">{error}</p>
                 </div>
               </div>
             </div>
           )}
 
           {loading ? (
-            <div className="flex min-h-[320px] items-center justify-center px-6 py-16">
-              <div className="flex items-center gap-3 text-sm text-mist">
-                <Loader2 className="h-5 w-5 animate-spin text-sage" />
-                Loading notifications…
-              </div>
+            <div className="flex min-h-[250px] items-center justify-center font-mono text-xs text-text-muted">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin text-gold" />
+              Loading notifications inbox...
             </div>
           ) : filteredNotifications.length > 0 ? (
             <div>
@@ -481,33 +388,14 @@ export const AccountNotificationsPage: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="flex min-h-[360px] flex-col items-center justify-center px-6 py-16 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/[0.07] bg-white/[0.025] text-sage">
-                <Bell className="h-6 w-6" />
-              </div>
-
-              <h2 className="mt-5 text-lg font-semibold text-cloud">
-                {filter === 'unread'
-                  ? 'You are all caught up'
-                  : filter === 'system'
-                    ? 'No system notifications'
-                    : 'No notifications yet'}
+            <div className="flex min-h-[250px] flex-col items-center justify-center px-6 py-12 text-center">
+              <Bell className="h-8 w-8 text-gold" />
+              <h2 className="mt-3 font-serif text-lg font-bold text-text-main">
+                {filter === 'unread' ? 'All Caught Up' : 'No Notifications'}
               </h2>
-
-              <p className="mt-2 max-w-md text-sm leading-6 text-mist">
-                {filter === 'unread'
-                  ? 'There are no unread notifications associated with your account.'
-                  : filter === 'system'
-                    ? 'System and security notifications will appear here when they are generated.'
-                    : 'Important Connect-Africa activity will appear here when notifications are generated for your account.'}
+              <p className="mt-1 font-sans text-xs text-text-muted">
+                Activity alerts and system dispatches will appear here.
               </p>
-
-              <Link
-                to="/search"
-                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-sage"
-              >
-                Explore knowledge
-              </Link>
             </div>
           )}
         </section>

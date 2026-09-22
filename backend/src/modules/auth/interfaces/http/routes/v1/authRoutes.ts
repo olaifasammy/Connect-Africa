@@ -299,7 +299,7 @@ export const authRoutes = (
   router.post(
     '/reset-mfa',
     authMiddleware.authenticate,
-    authorizeRole(Roles.ADMIN),
+    authorizeRole(Roles.ADMINISTRATOR),
     authRateLimiter,
     validate(ResetMfaSchema),
     (req, res) =>

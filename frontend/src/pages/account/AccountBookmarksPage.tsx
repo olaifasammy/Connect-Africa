@@ -26,18 +26,14 @@ export const AccountBookmarksPage: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-
         const data = await articleActivityApi.getBookmarks();
-
         if (active) {
           setBookmarks(data);
         }
       } catch (err) {
         if (active) {
           setError(
-            err instanceof Error
-              ? err.message
-              : 'Unable to load your bookmarks.',
+            err instanceof Error ? err.message : 'Unable to load your bookmarks.',
           );
         }
       } finally {
@@ -58,17 +54,13 @@ export const AccountBookmarksPage: React.FC = () => {
     try {
       setRemovingId(articleId);
       setError(null);
-
       await articleActivityApi.removeBookmark(articleId);
-
       setBookmarks((current) =>
         current.filter((article) => article.id !== articleId),
       );
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : 'Unable to remove this bookmark.',
+        err instanceof Error ? err.message : 'Unable to remove this bookmark.',
       );
     } finally {
       setRemovingId(null);
@@ -76,36 +68,36 @@ export const AccountBookmarksPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-ink pb-20 pt-10 text-cloud sm:pt-14">
+    <div className="min-h-screen bg-scholar-canvas bg-canvas pb-20 pt-10 text-text-main font-sans transition-colors duration-300">
       <div className="ca-container">
         <Link
           to="/account"
-          className="inline-flex items-center gap-2 text-sm text-mist transition hover:text-cloud"
+          className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-emerald-900 dark:text-gold hover:underline"
         >
           <ArrowLeft className="h-4 w-4" />
-          Account center
+          Back to Account Center
         </Link>
 
         <header className="mt-8 max-w-3xl">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald/20 bg-brand text-sage">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-gold/30 bg-gold/10 text-gold">
             <Bookmark className="h-6 w-6" />
           </div>
 
-          <p className="ca-eyebrow mt-6">Knowledge workspace</p>
+          <p className="ca-eyebrow mt-6">Knowledge Shelf</p>
 
           <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+              <h1 className="font-serif text-3xl font-bold text-text-main sm:text-4xl">
                 Bookmarks
               </h1>
 
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-mist sm:text-base">
-                Knowledge you have chosen to keep within reach.
+              <p className="mt-2 font-sans text-sm text-text-muted">
+                Articles and knowledge entries saved to your personal shelf.
               </p>
             </div>
 
             {!loading && bookmarks.length > 0 && (
-              <span className="text-sm text-mist">
+              <span className="font-mono text-xs text-text-muted">
                 {bookmarks.length}{' '}
                 {bookmarks.length === 1 ? 'saved article' : 'saved articles'}
               </span>
@@ -114,40 +106,37 @@ export const AccountBookmarksPage: React.FC = () => {
         </header>
 
         {error && (
-          <div className="mt-8 rounded-2xl border border-terra/30 bg-terra/10 px-5 py-4 text-sm text-cloud">
+          <div className="mt-6 ca-msg-error">
             {error}
           </div>
         )}
 
         <section className="mt-8">
           {loading ? (
-            <div className="flex min-h-64 items-center justify-center rounded-3xl border border-white/[0.07] bg-forest/60">
-              <div className="flex items-center gap-3 text-sm text-mist">
-                <LoaderCircle className="h-5 w-5 animate-spin text-emerald" />
-                Loading your bookmarks…
-              </div>
+            <div className="flex min-h-64 items-center justify-center font-mono text-xs text-text-muted ca-card">
+              <LoaderCircle className="mr-2 h-4 w-4 animate-spin text-gold" />
+              Loading saved bookmarks...
             </div>
           ) : bookmarks.length === 0 ? (
-            <div className="rounded-3xl border border-white/[0.07] bg-forest/60 px-6 py-14 text-center sm:px-10">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-white/[0.07] bg-white/[0.02] text-sage">
+            <div className="ca-card border-dashed border-stone/30 bg-surface/50 px-6 py-14 text-center sm:px-10">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl border border-stone/20 bg-surface text-gold">
                 <BookmarkX className="h-6 w-6" />
               </div>
 
-              <h2 className="mt-5 text-xl font-semibold">
-                Your knowledge shelf is empty
+              <h2 className="mt-4 font-serif text-xl font-bold text-text-main">
+                Your Knowledge Shelf is Empty
               </h2>
 
-              <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-mist">
-                Save articles you want to return to while exploring African
-                knowledge.
+              <p className="mx-auto mt-2 max-w-xl font-sans text-xs text-text-muted">
+                Save research publications and articles while exploring Connect Africa.
               </p>
 
               <Link
                 to="/search"
-                className="mt-7 inline-flex items-center gap-2 rounded-xl bg-emerald px-5 py-3 text-sm font-semibold text-ink transition hover:bg-sage"
+                className="mt-6 ca-btn-primary inline-flex text-xs"
               >
                 <Search className="h-4 w-4" />
-                Explore knowledge
+                Explore Knowledge
               </Link>
             </div>
           ) : (
@@ -155,54 +144,56 @@ export const AccountBookmarksPage: React.FC = () => {
               {bookmarks.map((article) => (
                 <article
                   key={article.id}
-                  className="group rounded-3xl border border-white/[0.07] bg-forest/60 p-5 transition duration-300 hover:border-emerald/25 hover:bg-forest sm:p-6"
+                  className="ca-card-hover group flex flex-col justify-between"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      {article.category && (
-                        <p className="ca-eyebrow text-[10px]">
-                          {article.category}
-                        </p>
-                      )}
+                  <div>
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        {article.category && (
+                          <span className="ca-badge-clay">
+                            {article.category}
+                          </span>
+                        )}
 
-                      <Link
-                        to={`/articles/${encodeURIComponent(article.slug)}`}
-                        className="mt-2 block"
-                      >
-                        <h2 className="text-lg font-semibold leading-7 text-cloud transition group-hover:text-sage">
-                          {article.title}
-                        </h2>
-                      </Link>
+                        <Link
+                          to={`/articles/${encodeURIComponent(article.slug)}`}
+                          className="mt-2 block"
+                        >
+                          <h2 className="font-serif text-lg font-bold text-text-main group-hover:text-emerald-900 dark:group-hover:text-gold transition">
+                            {article.title}
+                          </h2>
+                        </Link>
+                      </div>
+
+                      <Bookmark className="mt-1 h-5 w-5 shrink-0 text-gold fill-gold/20" />
                     </div>
 
-                    <Bookmark className="mt-1 h-5 w-5 shrink-0 text-gold" />
+                    {article.description && (
+                      <p className="mt-3 line-clamp-3 font-sans text-xs leading-relaxed text-text-muted">
+                        {article.description}
+                      </p>
+                    )}
                   </div>
 
-                  {article.description && (
-                    <p className="mt-3 line-clamp-3 text-sm leading-6 text-mist">
-                      {article.description}
-                    </p>
-                  )}
-
-                  <div className="mt-6 flex items-center justify-between gap-3 border-t border-white/[0.06] pt-4">
+                  <div className="mt-6 flex items-center justify-between gap-3 border-t border-stone/15 pt-4 font-mono text-xs">
                     <Link
                       to={`/articles/${encodeURIComponent(article.slug)}`}
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-sage transition hover:text-cloud"
+                      className="ca-article-link inline-flex items-center gap-1.5"
                     >
-                      Open article
-                      <ExternalLink className="h-4 w-4" />
+                      Open Article
+                      <ExternalLink className="h-3.5 w-3.5" />
                     </Link>
 
                     <button
                       type="button"
                       onClick={() => void removeBookmark(article.id)}
                       disabled={removingId === article.id}
-                      className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] px-3 py-2 text-xs font-semibold text-mist transition hover:border-terra/30 hover:text-cloud disabled:cursor-not-allowed disabled:opacity-50"
+                      className="ca-btn-outline px-2.5 py-1 text-xs text-clay"
                     >
                       {removingId === article.id ? (
-                        <LoaderCircle className="h-4 w-4 animate-spin" />
+                        <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
                       ) : (
-                        <BookmarkX className="h-4 w-4" />
+                        <BookmarkX className="h-3.5 w-3.5" />
                       )}
                       Remove
                     </button>

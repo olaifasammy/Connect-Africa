@@ -268,7 +268,7 @@ export class AuthController extends BaseController {
       const ipAddress = req.ip || '';
       const userAgent = req.get('user-agent') || '';
 
-      await this.verifyMfaHandler.handle(
+      const recoveryCodes = await this.verifyMfaHandler.handle(
         new VerifyMfaCommand(
           userId,
           code,
@@ -279,6 +279,9 @@ export class AuthController extends BaseController {
 
       res.status(200).json({
         success: true,
+        data: {
+          recoveryCodes,
+        },
       });
     } catch (error: any) {
       this.handleError(res, error);
@@ -609,12 +612,22 @@ export class AuthController extends BaseController {
       const {
         email,
         password,
+        firstName,
+        lastName,
+        country,
+        termsAccepted,
       } = req.body;
+
+      const displayName = `${firstName} ${lastName}`.trim();
 
       await this.registerUserHandler.handle(
         new RegisterUserCommand(
           email,
           password,
+          displayName,
+          country,
+          termsAccepted ?? true,
+          req.ip || '',
         ),
       );
 
@@ -644,6 +657,8 @@ export class AuthController extends BaseController {
           email,
           password,
           mfaCode,
+          req.ip || '',
+          req.get('user-agent') || '',
         ),
       );
 

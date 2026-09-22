@@ -4,6 +4,8 @@ export interface ISessionRepository {
   createSession(
     userId: UniqueEntityId,
     token: string,
+    ipAddress?: string,
+    userAgent?: string,
   ): Promise<void>;
 
   getSessionUserId(
@@ -14,6 +16,8 @@ export interface ISessionRepository {
     userId: UniqueEntityId,
     oldToken: string,
     newToken: string,
+    ipAddress?: string,
+    userAgent?: string,
   ): Promise<void>;
 
   invalidateSession(
@@ -28,7 +32,7 @@ export interface ISessionRepository {
 
   listUserSessions(
     userId: UniqueEntityId,
-  ): Promise<string[]>;
+  ): Promise<any[]>;
 
   revokeAllUserSessions(
     userId: UniqueEntityId,
