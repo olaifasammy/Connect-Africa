@@ -3,12 +3,21 @@ import { ValueObject } from '@shared/domain/ValueObject';
 export type EntityMetadataAttributes =
   Record<string, unknown>;
 
+export type VerificationStatus =
+  | 'UNVERIFIED'
+  | 'COMMUNITY_VERIFIED'
+  | 'OFFICIALLY_VERIFIED';
+
 interface EntityMetadataProps {
   slug?: string;
   description?: string;
   source?: string;
   tags: string[];
   attributes: EntityMetadataAttributes;
+  showcaseContent?: string;
+  businessProfile?: Record<string, unknown>;
+  verificationStatus?: VerificationStatus;
+  verificationDetails?: Record<string, unknown>;
 }
 
 export class EntityMetadata
@@ -49,6 +58,22 @@ export class EntityMetadata
       attributes: {
         ...(props.attributes ?? {}),
       },
+
+      showcaseContent:
+        props.showcaseContent?.trim() ||
+        undefined,
+
+      businessProfile: {
+        ...(props.businessProfile ?? {}),
+      },
+
+      verificationStatus:
+        props.verificationStatus ||
+        'UNVERIFIED',
+
+      verificationDetails: {
+        ...(props.verificationDetails ?? {}),
+      },
     });
   }
 
@@ -71,6 +96,26 @@ export class EntityMetadata
   get attributes(): EntityMetadataAttributes {
     return {
       ...this.props.attributes,
+    };
+  }
+
+  get showcaseContent(): string | undefined {
+    return this.props.showcaseContent;
+  }
+
+  get businessProfile(): Record<string, unknown> {
+    return {
+      ...(this.props.businessProfile ?? {}),
+    };
+  }
+
+  get verificationStatus(): VerificationStatus {
+    return this.props.verificationStatus || 'UNVERIFIED';
+  }
+
+  get verificationDetails(): Record<string, unknown> {
+    return {
+      ...(this.props.verificationDetails ?? {}),
     };
   }
 
@@ -100,6 +145,24 @@ export class EntityMetadata
       attributes: {
         ...this.attributes,
         ...other.attributes,
+      },
+
+      showcaseContent:
+        other.showcaseContent ??
+        this.showcaseContent,
+
+      businessProfile: {
+        ...this.businessProfile,
+        ...other.businessProfile,
+      },
+
+      verificationStatus:
+        other.verificationStatus ??
+        this.verificationStatus,
+
+      verificationDetails: {
+        ...this.verificationDetails,
+        ...other.verificationDetails,
       },
     });
   }

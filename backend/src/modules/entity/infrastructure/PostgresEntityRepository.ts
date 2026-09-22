@@ -26,6 +26,10 @@ interface EntityRow {
   source: string | null;
   tags: string[] | null;
   attributes: unknown;
+  showcase_content: string | null;
+  business_profile: unknown;
+  verification_status: 'UNVERIFIED' | 'COMMUNITY_VERIFIED' | 'OFFICIALLY_VERIFIED' | null;
+  verification_details: unknown;
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
   created_at: Date;
   updated_at: Date;
@@ -77,6 +81,10 @@ export class PostgresEntityRepository
           source,
           tags,
           attributes,
+          showcase_content,
+          business_profile,
+          verification_status,
+          verification_details,
           status,
           created_at,
           updated_at,
@@ -94,6 +102,10 @@ export class PostgresEntityRepository
           $9,
           $10,
           $11,
+          $12,
+          $13,
+          $14,
+          $15,
           1
         )
         ON CONFLICT (id)
@@ -105,10 +117,14 @@ export class PostgresEntityRepository
           source = EXCLUDED.source,
           tags = EXCLUDED.tags,
           attributes = EXCLUDED.attributes,
+          showcase_content = EXCLUDED.showcase_content,
+          business_profile = EXCLUDED.business_profile,
+          verification_status = EXCLUDED.verification_status,
+          verification_details = EXCLUDED.verification_details,
           status = EXCLUDED.status,
           updated_at = EXCLUDED.updated_at,
           version = entities.version + 1
-        WHERE entities.version = $12
+        WHERE entities.version = $16
       `,
       [
         entity.entityId.value,
@@ -124,6 +140,14 @@ export class PostgresEntityRepository
         ),
         JSON.stringify(
           entity.metadata.attributes,
+        ),
+        entity.metadata.showcaseContent ?? null,
+        JSON.stringify(
+          entity.metadata.businessProfile,
+        ),
+        entity.metadata.verificationStatus,
+        JSON.stringify(
+          entity.metadata.verificationDetails,
         ),
         entity.status,
         entity.createdAt,
@@ -156,6 +180,10 @@ export class PostgresEntityRepository
             source,
             tags,
             attributes,
+            showcase_content,
+            business_profile,
+            verification_status,
+            verification_details,
             status,
             created_at,
             updated_at,
@@ -521,6 +549,10 @@ export class PostgresEntityRepository
                 source,
                 tags,
                 attributes,
+                showcase_content,
+                business_profile,
+                verification_status,
+                verification_details,
                 status,
                 created_at,
                 updated_at,
@@ -545,6 +577,10 @@ export class PostgresEntityRepository
                 source,
                 tags,
                 attributes,
+                showcase_content,
+                business_profile,
+                verification_status,
+                verification_details,
                 status,
                 created_at,
                 updated_at,
@@ -650,6 +686,10 @@ export class PostgresEntityRepository
             source,
             tags,
             attributes,
+            showcase_content,
+            business_profile,
+            verification_status,
+            verification_details,
             status,
             created_at,
             updated_at,
@@ -659,12 +699,14 @@ export class PostgresEntityRepository
             name ILIKE $1
             OR slug ILIKE $1
             OR description ILIKE $1
+            OR showcase_content ILIKE $1
           ORDER BY
             CASE
               WHEN name ILIKE $1 THEN 0
               WHEN slug ILIKE $1 THEN 1
               WHEN description ILIKE $1 THEN 2
-              ELSE 3
+              WHEN showcase_content ILIKE $1 THEN 3
+              ELSE 4
             END,
             name ASC,
             id ASC
@@ -746,6 +788,19 @@ export class PostgresEntityRepository
           ? row.tags
           : [],
         attributes,
+        showcaseContent:
+          row.showcase_content ??
+          undefined,
+        businessProfile:
+          typeof row.business_profile === 'object' && row.business_profile !== null
+            ? (row.business_profile as Record<string, unknown>)
+            : {},
+        verificationStatus:
+          row.verification_status ?? 'UNVERIFIED',
+        verificationDetails:
+          typeof row.verification_details === 'object' && row.verification_details !== null
+            ? (row.verification_details as Record<string, unknown>)
+            : {},
       });
 
     return Entity.rehydrate(

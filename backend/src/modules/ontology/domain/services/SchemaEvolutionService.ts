@@ -7,11 +7,22 @@ import { DomainError } from '../errors/DomainError';
 @provide(SchemaEvolutionService, true)
 @injectable()
 export class SchemaEvolutionService {
+  /**
+   * Evolves an ontology to a new version increment while preserving backward compatibility checks.
+   */
   public evolve(ontology: Ontology, newVersion: number): OntologyVersion {
     if (newVersion <= ontology.version) {
-      throw new DomainError('New version must be greater than current version.');
+      throw new DomainError(
+        `Schema Evolution Error: Target version (${newVersion}) must be strictly greater than current version (${ontology.version}).`,
+      );
     }
-    // Logic to create a new OntologyVersion based on the current Ontology state
+
+    if (ontology.isArchived) {
+      throw new DomainError(
+        `Schema Evolution Error: Cannot evolve an archived ontology (${ontology.id.toString()}).`,
+      );
+    }
+
     return OntologyVersion.create({
       ontologyId: ontology.id,
       version: newVersion,

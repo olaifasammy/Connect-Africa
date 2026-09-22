@@ -599,6 +599,25 @@ CREATE INDEX IF NOT EXISTS idx_entities_attributes
 ALTER TABLE entities
     ADD COLUMN IF NOT EXISTS version INTEGER NOT NULL DEFAULT 1;
 
+-- Showcase content (GitHub-style README/MDX) & Directory Africa business profile fields
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS showcase_content TEXT;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS business_profile JSONB NOT NULL DEFAULT '{}'::jsonb;
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS verification_status TEXT NOT NULL DEFAULT 'UNVERIFIED';
+
+ALTER TABLE entities
+    ADD COLUMN IF NOT EXISTS verification_details JSONB NOT NULL DEFAULT '{}'::jsonb;
+
+CREATE INDEX IF NOT EXISTS idx_entities_verification_status
+    ON entities(verification_status);
+
+CREATE INDEX IF NOT EXISTS idx_entities_business_profile
+    ON entities USING GIN(business_profile);
+
 -- ============================================================
 -- EXISTING DATABASE COMPATIBILITY:
 -- ENTITY TYPE FK
