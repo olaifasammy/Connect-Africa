@@ -256,8 +256,26 @@ CREATE TABLE IF NOT EXISTS entity_types (
 CREATE INDEX IF NOT EXISTS idx_entity_types_ontology
     ON entity_types(ontology_id);
 
-CREATE INDEX IF NOT EXISTS idx_entity_types_name
-    ON entity_types(name);
+ALTER TABLE entity_types
+    ADD COLUMN IF NOT EXISTS display_name TEXT;
+
+ALTER TABLE entity_types
+    ADD COLUMN IF NOT EXISTS plural_display_name TEXT;
+
+ALTER TABLE entity_types
+    ADD COLUMN IF NOT EXISTS icon TEXT;
+
+ALTER TABLE entity_types
+    ADD COLUMN IF NOT EXISTS color TEXT;
+
+ALTER TABLE entity_types
+    ADD COLUMN IF NOT EXISTS namespace_uri TEXT;
+
+ALTER TABLE entity_types
+    ADD COLUMN IF NOT EXISTS parent_entity_id TEXT;
+
+ALTER TABLE entity_types
+    ADD COLUMN IF NOT EXISTS is_draft BOOLEAN NOT NULL DEFAULT FALSE;
 
 
 -- ============================================================
@@ -501,7 +519,7 @@ CREATE TABLE IF NOT EXISTS entities (
     version INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT entities_status_check
-        CHECK (status IN ('DRAFT', 'PUBLISHED', 'ARCHIVED')),
+        CHECK (status IN ('DRAFT', 'PENDING_REVIEW', 'APPROVED', 'REJECTED', 'PUBLISHED', 'ARCHIVED')),
 
     CONSTRAINT entities_attributes_object_check
         CHECK (jsonb_typeof(attributes) = 'object'),
@@ -537,6 +555,9 @@ BEGIN
             CHECK (
                 status IN (
                     'DRAFT',
+                    'PENDING_REVIEW',
+                    'APPROVED',
+                    'REJECTED',
                     'PUBLISHED',
                     'ARCHIVED'
                 )

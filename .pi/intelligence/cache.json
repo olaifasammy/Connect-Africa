@@ -5,20 +5,20 @@
     "projectName": "Connect-Africa",
     "workspace": "pro",
     "leakWarnings": [],
-    "scannedAt": "2026-09-21T22:52:51.195Z",
+    "scannedAt": "2026-10-02T13:12:11.856Z",
     "git": {
       "branch": "Main",
-      "commit": "832b8a2c5a1cb81ae2f462abe64444de0e6e7443",
+      "commit": "2b8f39bcd5e013cde0079f4855305ab8fa04716c",
       "dirty": true
     },
     "languages": {
       "Markdown": 39,
       "YAML": 2,
-      "JSON": 12,
+      "JSON": 15,
       "JavaScript": 3,
       "SQL": 2,
-      "TypeScript": 1029,
-      "TypeScript React": 44
+      "TypeScript": 1052,
+      "TypeScript React": 56
     },
     "files": [
       {
@@ -194,18 +194,18 @@
       },
       {
         "path": "backend/package.json",
-        "size": 2739,
-        "mtimeMs": 1789782569475.4424,
-        "hash": "709c648501ac7e395fc0e57d052a2b75196a2c4f3078fbad9e52e8c8f95e7165",
+        "size": 2740,
+        "mtimeMs": 1790070500743.9355,
+        "hash": "ac7d42edb8638dd4bde5a53c4215cceee1ded7ee3956fd80b228c67889a35ae7",
         "language": "JSON",
         "imports": [],
         "exports": []
       },
       {
         "path": "backend/schema.sql",
-        "size": 34470,
-        "mtimeMs": 1789737948315.474,
-        "hash": "5a1f3d7c1403034cf62d632da67cd580e2902c6cd95a59744cf3588b4d5ca827",
+        "size": 44981,
+        "mtimeMs": 1790277025907.974,
+        "hash": "d62ccd113c6a351d8d45e12115955a1e6469f01ff9c70658b5f2719ace7b66a6",
         "language": "SQL",
         "imports": [],
         "exports": []
@@ -1313,14 +1313,16 @@
       },
       {
         "path": "backend/src/modules/ai/domain/services/KnowledgeGapService.ts",
-        "size": 426,
-        "mtimeMs": 1787883183000,
-        "hash": "00bdf43ebbb8fd96742bd95607656ffcb43aabb8334c385c37ee588c5d990510",
+        "size": 1051,
+        "mtimeMs": 1790070893591.9353,
+        "hash": "005b129c373cd0d090826b4d9e09e027ff3d0927071db97df44aff027fe518cf",
         "language": "TypeScript",
         "imports": [
+          "@shared/infrastructure/database/PostgresProvider",
           "@shared/logger/Logger",
           "inversify",
-          "inversify-binding-decorators"
+          "inversify-binding-decorators",
+          "uuid"
         ],
         "exports": [
           "KnowledgeGapService"
@@ -1787,12 +1789,13 @@
       },
       {
         "path": "backend/src/modules/ai/interfaces/controllers/KnowledgeGapController.ts",
-        "size": 764,
-        "mtimeMs": 1787883183000,
-        "hash": "07319970f0fe5814106565b667ba93aee94ef154799893bafaf994b4a5f33a0a",
+        "size": 1323,
+        "mtimeMs": 1790070965955.9353,
+        "hash": "6c9a26e47cfc482e91ede048e62af8f61496dc740d91c5e2f9fef80eda4345d5",
         "language": "TypeScript",
         "imports": [
           "../../application/handlers/CreateKnowledgeGapHandler",
+          "@shared/infrastructure/database/PostgresProvider",
           "express",
           "inversify",
           "inversify-binding-decorators"
@@ -1803,15 +1806,17 @@
       },
       {
         "path": "backend/src/modules/ai/interfaces/controllers/PromptController.ts",
-        "size": 1003,
-        "mtimeMs": 1787883183000,
-        "hash": "7e0bf004edb53175a545c0b375f25f7ad2cf46f9f1c5f63e7008df666140e095",
+        "size": 1857,
+        "mtimeMs": 1790070928151.9353,
+        "hash": "44d7b4d6e4d55f83d01c27c2246d516c39fca562a6ad03c2a3cf73d8f3268bf9",
         "language": "TypeScript",
         "imports": [
           "../../application/handlers/UpdatePromptHandler",
+          "@shared/infrastructure/database/PostgresProvider",
           "express",
           "inversify",
-          "inversify-binding-decorators"
+          "inversify-binding-decorators",
+          "uuid"
         ],
         "exports": [
           "PromptController"
@@ -1819,16 +1824,18 @@
       },
       {
         "path": "backend/src/modules/ai/interfaces/controllers/ProviderController.ts",
-        "size": 1001,
-        "mtimeMs": 1787883183000,
-        "hash": "228dff7dc67d69d82dfde5250758fe60ef49dfa70670b2b8f2732164b1570ad9",
+        "size": 1752,
+        "mtimeMs": 1790070938439.9353,
+        "hash": "177d2d9bc708d2c359958f0931a9aafec23a4e8e6bac1fd429b3c518fb2abe89",
         "language": "TypeScript",
         "imports": [
           "../../application/handlers/GetProviderHealthHandler",
           "../../application/queries/GetProviderHealthQuery",
+          "@shared/infrastructure/database/PostgresProvider",
           "express",
           "inversify",
-          "inversify-binding-decorators"
+          "inversify-binding-decorators",
+          "uuid"
         ],
         "exports": [
           "ProviderController"
@@ -7021,9 +7028,9 @@
       },
       {
         "path": "backend/src/modules/entity/README.md",
-        "size": 732,
-        "mtimeMs": 1786761206000,
-        "hash": "744a529da154b34cec1243ea5ee168e5e6823451cf15b7c35a5617bac70528a9",
+        "size": 11268,
+        "mtimeMs": 1790276907263.974,
+        "hash": "43dd75a0aafe18c3d7466f113beb9cb1622367630307ddf6dd26021cf3b08466",
         "language": "Markdown",
         "imports": [],
         "exports": []
@@ -7116,6 +7123,20 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/commands/ImportEntitiesCommand.ts",
+        "size": 355,
+        "mtimeMs": 1790162081609.9634,
+        "hash": "daf62412e5819da7ff48291ecec0277c1e8a51f464409a77b7ff2e580960e85b",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/commands/ICommand"
+        ],
+        "exports": [
+          "ImportEntitiesCommand",
+          "ImportEntityItem"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/commands/MergeEntitiesCommand.ts",
         "size": 183,
         "mtimeMs": 1787938284000,
@@ -7157,6 +7178,19 @@
         "imports": [],
         "exports": [
           "RemoveAliasCommand"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/commands/ResolveEntityDuplicateCommand.ts",
+        "size": 296,
+        "mtimeMs": 1790160567501.9644,
+        "hash": "b3c40a4e4c4fcb1881222d0b02bad211b8760fc5beb4713087e3b2547c0bacdc",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/commands/ICommand"
+        ],
+        "exports": [
+          "ResolveEntityDuplicateCommand"
         ]
       },
       {
@@ -7223,9 +7257,9 @@
       },
       {
         "path": "backend/src/modules/entity/application/dto/EntityResponse.ts",
-        "size": 287,
-        "mtimeMs": 1789257314125.4766,
-        "hash": "065fb65020462fd6c1a5c05ba9e68a5562604bbd3ce108fe898fb4c6f7787323",
+        "size": 371,
+        "mtimeMs": 1790161973245.9634,
+        "hash": "0b147ed401dd751d095fb905755ad55066d49e18ce09871863e60682e7d707fe",
         "language": "TypeScript",
         "imports": [],
         "exports": [
@@ -7423,6 +7457,42 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/handlers/ExportEntitiesQueryHandler.ts",
+        "size": 2825,
+        "mtimeMs": 1790162067045.9634,
+        "hash": "85d26149e8ad9ba4d63663a1cbcbf80fc3557ef90b417b4d4eb0e59270ea2b40",
+        "language": "TypeScript",
+        "imports": [
+          "../queries/ExportEntitiesQuery",
+          "@shared/application/handlers/IQueryHandler",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "exports": [
+          "ExportEntitiesQueryHandler",
+          "ExportEntitiesResponse"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/handlers/GetEntityActivityQueryHandler.ts",
+        "size": 2113,
+        "mtimeMs": 1790162045457.9634,
+        "hash": "ee9032a3f65a60aedb33e7765de112472d878f56e0491fcd98d5c96521c5fd9d",
+        "language": "TypeScript",
+        "imports": [
+          "../queries/GetEntityActivityQuery",
+          "@shared/application/handlers/IQueryHandler",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "exports": [
+          "EntityActivityResponse",
+          "GetEntityActivityQueryHandler"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/handlers/GetEntityByIdentifierQueryHandler.ts",
         "size": 1385,
         "mtimeMs": 1788487060000,
@@ -7459,14 +7529,53 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/handlers/GetEntityDashboardSummaryQueryHandler.ts",
+        "size": 5573,
+        "mtimeMs": 1790160290429.9646,
+        "hash": "cab4ab46f88264e0830e398c12dea2e33a84ea788cea971ecdc2be7685b0a914",
+        "language": "TypeScript",
+        "imports": [
+          "../queries/GetEntityDashboardSummaryQuery",
+          "@modules/entity/domain/repositories/IEntityRepository",
+          "@modules/entity/domain/services/EntityQualityCalculator",
+          "@shared/application/handlers/IQueryHandler",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "exports": [
+          "EntityDashboardSummaryResponse",
+          "GetEntityDashboardSummaryQueryHandler"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/handlers/GetEntityDuplicatesQueryHandler.ts",
+        "size": 2415,
+        "mtimeMs": 1790160447013.9646,
+        "hash": "4f0ddd5438477c062ee11aac608a9b41ab6d06c4674856514db9b2f4b2600bcc",
+        "language": "TypeScript",
+        "imports": [
+          "../queries/GetEntityDuplicatesQuery",
+          "@shared/application/handlers/IQueryHandler",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "exports": [
+          "DuplicatePairResponse",
+          "GetEntityDuplicatesQueryHandler"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/handlers/GetEntityQueryHandler.ts",
-        "size": 1390,
-        "mtimeMs": 1788487189000,
-        "hash": "3877652f938e331e6512e098d1e33ad1b45b19d4b52b1ab089eaa91f8ab36846",
+        "size": 1307,
+        "mtimeMs": 1790162016765.9634,
+        "hash": "9c13d62a93a04b446d61e7391ade3a9069402cfaaeb92c71b509b7a762b1333d",
         "language": "TypeScript",
         "imports": [
           "@modules/entity/application/dto/EntityResponse",
           "@modules/entity/application/queries/GetEntityQuery",
+          "@modules/entity/application/services/EntityResponseHelper",
           "@modules/entity/domain/repositories/IEntityRepository",
           "@modules/entity/domain/value-objects/EntityId",
           "@shared/application/handlers/IQueryHandler",
@@ -7475,6 +7584,21 @@
         ],
         "exports": [
           "GetEntityQueryHandler"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/handlers/GetEntitySchemaQueryHandler.ts",
+        "size": 1022,
+        "mtimeMs": 1790280673927.9714,
+        "hash": "4b8d2e601710838211c07bf2ff30d062ee2fd6e4135d90108e4d556d515a2d6d",
+        "language": "TypeScript",
+        "imports": [
+          "../queries/GetEntitySchemaQuery",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "exports": [
+          "GetEntitySchemaQueryHandler"
         ]
       },
       {
@@ -7494,6 +7618,74 @@
         ],
         "exports": [
           "GetEntityVersionQueryHandler"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/handlers/GetQualityDistributionQueryHandler.ts",
+        "size": 3421,
+        "mtimeMs": 1790160369893.9646,
+        "hash": "d4b1168adedf0464c7c4208c59eb4a4f53cb56a785b74b276cb8d449a197f26f",
+        "language": "TypeScript",
+        "imports": [
+          "../queries/GetQualityDistributionQuery",
+          "@modules/entity/domain/repositories/IEntityRepository",
+          "@modules/entity/domain/services/EntityQualityCalculator",
+          "@shared/application/handlers/IQueryHandler",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "exports": [
+          "GetQualityDistributionQueryHandler",
+          "QualityDistributionResponse"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/handlers/GetVerificationQueueQueryHandler.ts",
+        "size": 5106,
+        "mtimeMs": 1790161172845.964,
+        "hash": "d23dba0aef18eb7ada314b3a9429cc52b47d864835896df6560441dac95f4529",
+        "language": "TypeScript",
+        "imports": [
+          "../dto/EntityResponse",
+          "../queries/GetVerificationQueueQuery",
+          "@shared/application/handlers/IQueryHandler",
+          "@shared/application/pagination/CursorCodec",
+          "@shared/application/pagination/PaginationTypes",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "exports": [
+          "GetVerificationQueueQueryHandler"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/handlers/ImportEntitiesCommandHandler.ts",
+        "size": 4041,
+        "mtimeMs": 1790162107797.9634,
+        "hash": "2ca1d3d23bf2f44e178db955bd478339d3cc351369786c512a440268e69bd6be",
+        "language": "TypeScript",
+        "imports": [
+          "../commands/ImportEntitiesCommand",
+          "@modules/entity/domain/entities/Entity",
+          "@modules/entity/domain/repositories/IEntityRepository",
+          "@modules/entity/domain/services/SlugGenerationService",
+          "@modules/entity/domain/value-objects/EntityId",
+          "@modules/entity/domain/value-objects/EntityMetadata",
+          "@modules/entity/domain/value-objects/EntityName",
+          "@modules/entity/domain/value-objects/EntityValueObjects",
+          "@modules/ontology/public",
+          "@shared/application/handlers/ICommandHandler",
+          "@shared/infrastructure/audit/AuditDecorator",
+          "@shared/infrastructure/queue/EventBus",
+          "inversify",
+          "inversify-binding-decorators",
+          "uuid"
+        ],
+        "exports": [
+          "ImportEntitiesCommandHandler",
+          "ImportEntitiesResponse"
         ]
       },
       {
@@ -7517,13 +7709,14 @@
       },
       {
         "path": "backend/src/modules/entity/application/handlers/ListEntitiesQueryHandler.ts",
-        "size": 1597,
-        "mtimeMs": 1788539097000,
-        "hash": "03d60d8ece5c97f2ae75e7bc15e944d2d63b53865d67cc432ae2d1d7dd3866e9",
+        "size": 1472,
+        "mtimeMs": 1790162024453.9634,
+        "hash": "75a88825a9eb02f07f1a1b0d23d62eb2c66c196b61389b737a721f633c3159d8",
         "language": "TypeScript",
         "imports": [
           "@modules/entity/application/dto/EntityResponse",
           "@modules/entity/application/queries/ListEntitiesQuery",
+          "@modules/entity/application/services/EntityResponseHelper",
           "@modules/entity/domain/repositories/IEntityRepository",
           "@shared/application/handlers/IQueryHandler",
           "@shared/application/pagination/PaginationTypes",
@@ -7621,6 +7814,28 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/handlers/ResolveEntityDuplicateCommandHandler.ts",
+        "size": 2320,
+        "mtimeMs": 1790160582469.9644,
+        "hash": "9c01bc9cafbbe4776f927856f5ea2aa55e30def02d58eda15dcf5b88165b5ede",
+        "language": "TypeScript",
+        "imports": [
+          "../commands/ResolveEntityDuplicateCommand",
+          "@modules/auth/domain/interfaces/IAuditLogger",
+          "@modules/entity/domain/events/EntityMergedEvent",
+          "@modules/entity/domain/services/IEntityMergeService",
+          "@modules/entity/domain/value-objects/EntityId",
+          "@shared/application/handlers/ICommandHandler",
+          "@shared/infrastructure/audit/AuditDecorator",
+          "@shared/infrastructure/queue/EventBus",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "exports": [
+          "ResolveEntityDuplicateCommandHandler"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/handlers/RestoreEntityCommandHandler.ts",
         "size": 1544,
         "mtimeMs": 1788536971000,
@@ -7705,6 +7920,32 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/queries/ExportEntitiesQuery.ts",
+        "size": 264,
+        "mtimeMs": 1790162057893.9634,
+        "hash": "09fcfd8393866aa01ef00588173512e729e7a6ac44301f52b363fd9a14f3c875",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/queries/IQuery"
+        ],
+        "exports": [
+          "ExportEntitiesQuery"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/queries/GetEntityActivityQuery.ts",
+        "size": 173,
+        "mtimeMs": 1790162035589.9634,
+        "hash": "1bc0b4a3d027afbec549a859ea1e723fcf2a67ae8e7b3a6dc9bf2c5b9231fd62",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/queries/IQuery"
+        ],
+        "exports": [
+          "GetEntityActivityQuery"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/queries/GetEntityByIdentifierQuery.ts",
         "size": 176,
         "mtimeMs": 1787938284000,
@@ -7731,6 +7972,32 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/queries/GetEntityDashboardSummaryQuery.ts",
+        "size": 127,
+        "mtimeMs": 1790160135933.9648,
+        "hash": "9d95865467df476eeff9f52bc5a439326e7036313a190a92b73f617201a44a8b",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/queries/IQuery"
+        ],
+        "exports": [
+          "GetEntityDashboardSummaryQuery"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/queries/GetEntityDuplicatesQuery.ts",
+        "size": 180,
+        "mtimeMs": 1790160426709.9646,
+        "hash": "3c527f82354a749f452e21e12a5dd406d6ec0d1a5969a35a4aa0352cdd7e19ec",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/queries/IQuery"
+        ],
+        "exports": [
+          "GetEntityDuplicatesQuery"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/queries/GetEntityQuery.ts",
         "size": 163,
         "mtimeMs": 1787938284000,
@@ -7744,6 +8011,17 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/queries/GetEntitySchemaQuery.ts",
+        "size": 57,
+        "mtimeMs": 1790280656863.9714,
+        "hash": "90bbcf2f9b32217da686c022e113686d46011478b3398241885dab58e7819668",
+        "language": "TypeScript",
+        "imports": [],
+        "exports": [
+          "GetEntitySchemaQuery"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/queries/GetEntityVersionQuery.ts",
         "size": 204,
         "mtimeMs": 1787938284000,
@@ -7754,6 +8032,33 @@
         ],
         "exports": [
           "GetEntityVersionQuery"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/queries/GetQualityDistributionQuery.ts",
+        "size": 124,
+        "mtimeMs": 1790160303997.9646,
+        "hash": "0511ce054274728fb5124d743807ef5be781967d89ac64d9b498f3302a3dccc1",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/queries/IQuery"
+        ],
+        "exports": [
+          "GetQualityDistributionQuery"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/queries/GetVerificationQueueQuery.ts",
+        "size": 271,
+        "mtimeMs": 1790160389329.9646,
+        "hash": "40a69ef1bed490793b7cdfa41cab978f9e5803b755a5c988a2a08dc8a5cfe10b",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/pagination/PaginationTypes",
+          "@shared/application/queries/IQuery"
+        ],
+        "exports": [
+          "GetVerificationQueueQuery"
         ]
       },
       {
@@ -7797,6 +8102,26 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/services/DirectoryService.ts",
+        "size": 8223,
+        "mtimeMs": 1790074626907.9326,
+        "hash": "85f2f7b338da644e685b3594357cba1f5fd4d8e95b6ffeedbbd68098514125b8",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators",
+          "uuid"
+        ],
+        "exports": [
+          "BusinessClaimDto",
+          "BusinessInquiryDto",
+          "BusinessProductDto",
+          "BusinessReviewDto",
+          "DirectoryService"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/services/EntityAliasService.ts",
         "size": 660,
         "mtimeMs": 1787883183000,
@@ -7811,6 +8136,24 @@
         ],
         "exports": [
           "EntityAliasService"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/services/EntityResponseHelper.ts",
+        "size": 2491,
+        "mtimeMs": 1790161992357.9634,
+        "hash": "b060953ec9074fd0467c0f6f12c6df7780373240629671d400e7c6c5bd3ca52b",
+        "language": "TypeScript",
+        "imports": [
+          "../../domain/entities/Entity",
+          "../../domain/services/EntityQualityCalculator",
+          "../dto/EntityResponse",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "exports": [
+          "EntityResponseHelper"
         ]
       },
       {
@@ -8191,6 +8534,19 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/domain/services/EntityQualityCalculator.ts",
+        "size": 1553,
+        "mtimeMs": 1790160103121.9648,
+        "hash": "30ca20c093f513e3e90b8fb596ea8832fb8e34effb3d12aba8a0dd9e8a646035",
+        "language": "TypeScript",
+        "imports": [
+          "../entities/Entity"
+        ],
+        "exports": [
+          "EntityQualityCalculator"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/domain/services/EntityVersionService.ts",
         "size": 1654,
         "mtimeMs": 1788538838000,
@@ -8282,16 +8638,17 @@
       },
       {
         "path": "backend/src/modules/entity/domain/value-objects/EntityMetadata.ts",
-        "size": 1886,
-        "mtimeMs": 1788565819000,
-        "hash": "70477a99b456b887be229819959c63ac24ee836d4d48f914558cbcd7ee13ae10",
+        "size": 3336,
+        "mtimeMs": 1790070601739.9355,
+        "hash": "221f1d56ec87d3950ae383ca3e4ac93ea50e1249fb8a9bd7769a672c62393292",
         "language": "TypeScript",
         "imports": [
           "@shared/domain/ValueObject"
         ],
         "exports": [
           "EntityMetadata",
-          "EntityMetadataAttributes"
+          "EntityMetadataAttributes",
+          "VerificationStatus"
         ]
       },
       {
@@ -8327,9 +8684,9 @@
       },
       {
         "path": "backend/src/modules/entity/infrastructure/PostgresEntityRepository.ts",
-        "size": 15366,
-        "mtimeMs": 1789445800537.9915,
-        "hash": "d700b07694a023b47ff41e77391a07c4dbaaf45c62d75dc1969aef3a7282af0e",
+        "size": 17414,
+        "mtimeMs": 1790070719763.9355,
+        "hash": "83793199f4ff4fe1ecc1d1d86d4016f309773585501fa21d7bb256cb7a937aff",
         "language": "TypeScript",
         "imports": [
           "../domain/entities/Entity",
@@ -8391,14 +8748,47 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/interfaces/DirectoryController.ts",
+        "size": 3632,
+        "mtimeMs": 1790074637419.9326,
+        "hash": "5fa250589e1138ee1ec4cbf1cdd5cd87bf88e60b84be598daea249b5e993cc89",
+        "language": "TypeScript",
+        "imports": [
+          "../application/services/DirectoryService",
+          "express",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "exports": [
+          "DirectoryController"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/interfaces/DirectoryRoutes.ts",
+        "size": 1577,
+        "mtimeMs": 1790074688239.9326,
+        "hash": "d6bea83b30536da0326f11a6b0ce3dd00f00410d0a5da4a7899ab7f696144e9b",
+        "language": "TypeScript",
+        "imports": [
+          "./DirectoryController",
+          "@shared/interfaces/http/middleware/AuthenticationMiddleware",
+          "express"
+        ],
+        "exports": [
+          "createDirectoryRoutes"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/interfaces/EntityController.ts",
-        "size": 14069,
-        "mtimeMs": 1789257210001.4766,
-        "hash": "c3026430e77dc7fa52ead854670e099c683e03ecd7ef088e2da2faae1fdb0ff3",
+        "size": 21492,
+        "mtimeMs": 1790281157979.9712,
+        "hash": "60dfd61a87b7be02fcdfc53a8831bddb3b88aaab88fda125587f936663cd6ebf",
         "language": "TypeScript",
         "imports": [
           "@modules/entity/application/commands/ApproveEntityCommand",
+          "@modules/entity/application/commands/ImportEntitiesCommand",
           "@modules/entity/application/commands/RejectEntityCommand",
+          "@modules/entity/application/commands/ResolveEntityDuplicateCommand",
           "@modules/entity/application/commands/SubmitEntityForReviewCommand",
           "@modules/entity/application/dto/EntitySearchRequest",
           "@modules/entity/application/handlers/AddAliasCommandHandler",
@@ -8407,20 +8797,36 @@
           "@modules/entity/application/handlers/CreateEntityCommandHandler",
           "@modules/entity/application/handlers/CreateEntityVersionCommandHandler",
           "@modules/entity/application/handlers/DeleteEntityCommandHandler",
+          "@modules/entity/application/handlers/ExportEntitiesQueryHandler",
+          "@modules/entity/application/handlers/GetEntityActivityQueryHandler",
           "@modules/entity/application/handlers/GetEntityByIdentifierQueryHandler",
           "@modules/entity/application/handlers/GetEntityBySlugQueryHandler",
+          "@modules/entity/application/handlers/GetEntityDashboardSummaryQueryHandler",
+          "@modules/entity/application/handlers/GetEntityDuplicatesQueryHandler",
           "@modules/entity/application/handlers/GetEntityQueryHandler",
+          "@modules/entity/application/handlers/GetEntitySchemaQueryHandler",
           "@modules/entity/application/handlers/GetEntityVersionQueryHandler",
+          "@modules/entity/application/handlers/GetQualityDistributionQueryHandler",
+          "@modules/entity/application/handlers/GetVerificationQueueQueryHandler",
+          "@modules/entity/application/handlers/ImportEntitiesCommandHandler",
           "@modules/entity/application/handlers/ListAliasesQueryHandler",
           "@modules/entity/application/handlers/ListEntitiesQueryHandler",
           "@modules/entity/application/handlers/MergeEntitiesCommandHandler",
           "@modules/entity/application/handlers/PublishEntityCommandHandler",
           "@modules/entity/application/handlers/RejectEntityCommandHandler",
           "@modules/entity/application/handlers/RemoveAliasCommandHandler",
+          "@modules/entity/application/handlers/ResolveEntityDuplicateCommandHandler",
           "@modules/entity/application/handlers/RestoreEntityCommandHandler",
           "@modules/entity/application/handlers/SearchEntitiesQueryHandler",
           "@modules/entity/application/handlers/SubmitEntityForReviewCommandHandler",
           "@modules/entity/application/handlers/UpdateEntityCommandHandler",
+          "@modules/entity/application/queries/ExportEntitiesQuery",
+          "@modules/entity/application/queries/GetEntityActivityQuery",
+          "@modules/entity/application/queries/GetEntityDashboardSummaryQuery",
+          "@modules/entity/application/queries/GetEntityDuplicatesQuery",
+          "@modules/entity/application/queries/GetEntitySchemaQuery",
+          "@modules/entity/application/queries/GetQualityDistributionQuery",
+          "@modules/entity/application/queries/GetVerificationQueueQuery",
           "@modules/entity/application/queries/ListEntitiesQuery",
           "@shared/application/pagination/PaginationTypes",
           "express",
@@ -8433,9 +8839,9 @@
       },
       {
         "path": "backend/src/modules/entity/interfaces/EntityRoutes.ts",
-        "size": 4115,
-        "mtimeMs": 1789485653346.142,
-        "hash": "c0f0c3542b18113afaec5e3e7e86eab7f1803f87a2c2cab8314ebf6c6c634f8d",
+        "size": 5348,
+        "mtimeMs": 1790281175847.9712,
+        "hash": "49222aeda2fd5b9da717cb256e78c2d494915a80c5b5bed017a4558d709fc822",
         "language": "TypeScript",
         "imports": [
           "./EntityController",
@@ -9783,9 +10189,9 @@
       },
       {
         "path": "backend/src/modules/media/application/services/MediaMetadataService.ts",
-        "size": 321,
-        "mtimeMs": 1787883183000,
-        "hash": "a955eaf9a2b9762d42862abd8d008c93fc8123dede7adc183ff5f063b530ef24",
+        "size": 821,
+        "mtimeMs": 1790071069803.935,
+        "hash": "3ff14536273cadfe845d1ee28ebf3279bc33f35b3984169b65cb8391a05cf7d4",
         "language": "TypeScript",
         "imports": [
           "../../domain/models/Media",
@@ -9793,17 +10199,19 @@
           "inversify-binding-decorators"
         ],
         "exports": [
+          "ExtractedMediaMetadata",
           "MediaMetadataService"
         ]
       },
       {
         "path": "backend/src/modules/media/application/services/MediaPermissionService.ts",
-        "size": 396,
-        "mtimeMs": 1787883183000,
-        "hash": "eedf68468a57785c7540ca2c2c9b20e52519c45a909781d18ea99778b0a47256",
+        "size": 1398,
+        "mtimeMs": 1790070872939.9353,
+        "hash": "bad7a9cd2af613de70548363b891c843d257aa505e4578fddfe4c43e4f86005f",
         "language": "TypeScript",
         "imports": [
           "@shared/domain/UniqueEntityId",
+          "@shared/infrastructure/database/PostgresProvider",
           "inversify",
           "inversify-binding-decorators"
         ],
@@ -9845,9 +10253,9 @@
       },
       {
         "path": "backend/src/modules/media/application/services/ThumbnailService.ts",
-        "size": 316,
-        "mtimeMs": 1787883183000,
-        "hash": "dfc7477e8562cae8fbb3f08fd944cf39ff34d8f9f69d1618aa532de74dfbb281",
+        "size": 871,
+        "mtimeMs": 1790070880931.9353,
+        "hash": "ec304a8ef44f64cce4a7dfe9671b6ecbec2a3545ddc105101cf0b366bd07fe7a",
         "language": "TypeScript",
         "imports": [
           "../../domain/models/Media",
@@ -9855,6 +10263,7 @@
           "inversify-binding-decorators"
         ],
         "exports": [
+          "ThumbnailGenerationResult",
           "ThumbnailService"
         ]
       },
@@ -10788,18 +11197,20 @@
       },
       {
         "path": "backend/src/modules/media/interfaces/http/middleware/MediaMiddleware.ts",
-        "size": 1852,
-        "mtimeMs": 1786761206000,
-        "hash": "dc76715f9b01b4c4774655f7bb9f7978b38be3ff6e8a4e5048ed114e9d0111d7",
+        "size": 1763,
+        "mtimeMs": 1790071190923.935,
+        "hash": "57ce1d9675e7ccd879aaed9a2d6b9df3941b025eb40f9e88b7efbda3a1dc84be",
         "language": "TypeScript",
         "imports": [
-          "@modules/media/infrastructure/processing/VirusScannerService",
+          "../../../infrastructure/processing/VirusScannerService",
+          "@bootstrap/container/container",
+          "@shared/interfaces/http/middleware/AuthenticationMiddleware",
           "express",
           "express-rate-limit"
         ],
         "exports": [
+          "MulterRequest",
           "authenticate",
-          "authorize",
           "uploadRateLimiter",
           "validateFile",
           "virusScanHook"
@@ -11368,9 +11779,9 @@
       },
       {
         "path": "backend/src/modules/ontology/application/commands/CreateEntityTypeCommand.ts",
-        "size": 190,
-        "mtimeMs": 1786761206000,
-        "hash": "10d0de22f519582788b6b371ec9dd824bf8d6c663e72540dede56ded2144df55",
+        "size": 352,
+        "mtimeMs": 1790163299357.9624,
+        "hash": "0e5628c3546e3115c3b67567f5fe98d323df3de0b08daffebbc2c9a0953be99e",
         "language": "TypeScript",
         "imports": [
           "@shared/application/commands/ICommand"
@@ -11643,9 +12054,9 @@
       },
       {
         "path": "backend/src/modules/ontology/application/handlers/CreateEntityTypeCommandHandler.ts",
-        "size": 1164,
-        "mtimeMs": 1788546213000,
-        "hash": "04aeb689915d89dd60f8d17d6af3ef7dbb53895d86792817c7a7b5f005e0bee5",
+        "size": 1898,
+        "mtimeMs": 1790163336177.9624,
+        "hash": "3d4bc70ccfb36b8658eea3c6e6f56d1330cc91ba4c53be7a59c4db362f9c2e9d",
         "language": "TypeScript",
         "imports": [
           "../commands/CreateEntityTypeCommand",
@@ -12153,9 +12564,9 @@
       },
       {
         "path": "backend/src/modules/ontology/application/services/EntityTypeService.ts",
-        "size": 4688,
-        "mtimeMs": 1788545156000,
-        "hash": "31eb9d87ad8939a846b2f7a9632565cf8035ccf314b4a5e5c97889201c1ded88",
+        "size": 5130,
+        "mtimeMs": 1790163316305.9624,
+        "hash": "dda86a19633b4a70a9d29dd4e65ddb715af4e780767929ec501578dda401c419",
         "language": "TypeScript",
         "imports": [
           "@modules/ontology/domain/entities/EntityType",
@@ -12309,9 +12720,9 @@
       },
       {
         "path": "backend/src/modules/ontology/domain/entities/EntityType.ts",
-        "size": 2703,
-        "mtimeMs": 1788544522000,
-        "hash": "670f5c152f1b7a0a106c0ddab0818d0956ffacb6378067134b0289721e552f46",
+        "size": 3944,
+        "mtimeMs": 1790163217181.9626,
+        "hash": "867420ac97c591fddaae0ecc52e8afd0712579d35f10a97426e91dd7adcf1e0c",
         "language": "TypeScript",
         "imports": [
           "../errors/DomainError",
@@ -12839,9 +13250,9 @@
       },
       {
         "path": "backend/src/modules/ontology/domain/services/SchemaEvolutionService.ts",
-        "size": 802,
-        "mtimeMs": 1787883183000,
-        "hash": "4af346fd62f6fc1735cc5762716719169f8221578a524339f1810b081551411c",
+        "size": 1100,
+        "mtimeMs": 1790070810399.9353,
+        "hash": "bc88344fd78c9987f93ea9d514406d4bb0dbacd8ca88eab0ab60bf80d022d34d",
         "language": "TypeScript",
         "imports": [
           "../entities/Ontology",
@@ -13034,9 +13445,9 @@
       },
       {
         "path": "backend/src/modules/ontology/infrastructure/PostgresEntityTypeRepository.ts",
-        "size": 3664,
-        "mtimeMs": 1788546076000,
-        "hash": "5f3852898bd33c2e292d73dbd976e8162ae48ea8de6a9cfe5020f15ba2427345",
+        "size": 4001,
+        "mtimeMs": 1790163286321.9624,
+        "hash": "1619a0bab80d9d149bd91bd7a795da1dcb938b2cd0120343a37a6b40b45d5f2b",
         "language": "TypeScript",
         "imports": [
           "../domain/entities/EntityType",
@@ -13420,17 +13831,22 @@
       },
       {
         "path": "backend/src/modules/relationship/application/services/GraphTraversalService.ts",
-        "size": 487,
-        "mtimeMs": 1787883183000,
-        "hash": "68fb0b65f2376a451a176c4f13bc41549f4a085360c1bf494e6dd0c62d9b87f9",
+        "size": 7674,
+        "mtimeMs": 1790070742015.9353,
+        "hash": "42bba7dfe09bedd7acda990c38a60048040526853d2c540bdccecd6f2ce87de8",
         "language": "TypeScript",
         "imports": [
-          "../../domain/value-objects/RelationshipValueObjects",
+          "@shared/infrastructure/database/PostgresProvider",
           "inversify",
           "inversify-binding-decorators"
         ],
         "exports": [
-          "GraphTraversalService"
+          "ConnectedEntityNode",
+          "GraphPathResult",
+          "GraphPathStep",
+          "GraphTraversalService",
+          "SubGraphEdge",
+          "SubGraphResult"
         ]
       },
       {
@@ -13607,12 +14023,14 @@
       },
       {
         "path": "backend/src/modules/relationship/domain/services/GraphConsistencyService.ts",
-        "size": 481,
-        "mtimeMs": 1787883183000,
-        "hash": "55b8bfb65051a631c3bc50c1088f3e7766e4cb5cc88a46d0c172757df62324c9",
+        "size": 1872,
+        "mtimeMs": 1790070765903.9353,
+        "hash": "472b9802e275509a7161d7a937d4346d12c1d748f4b99b623483c0abaad51e76",
         "language": "TypeScript",
         "imports": [
           "../entities/Relationship",
+          "../errors/RelationshipErrors",
+          "@shared/infrastructure/database/PostgresProvider",
           "inversify",
           "inversify-binding-decorators"
         ],
@@ -13622,12 +14040,13 @@
       },
       {
         "path": "backend/src/modules/relationship/domain/services/TemporalValidationService.ts",
-        "size": 453,
-        "mtimeMs": 1787883183000,
-        "hash": "69f5a4970f1f3a3bc2dd3ce277cf85a725767ef2744af0ce436ceac5fc0c13ba",
+        "size": 1157,
+        "mtimeMs": 1790070790163.9353,
+        "hash": "bac8a432cfd3c54c742189c3dd1582975df7e884950eed0e1e5c0de7c76a1357",
         "language": "TypeScript",
         "imports": [
           "../entities/Relationship",
+          "../errors/RelationshipErrors",
           "inversify",
           "inversify-binding-decorators"
         ],
@@ -16155,9 +16574,9 @@
       },
       {
         "path": "backend/src/shared/interfaces/http/app.ts",
-        "size": 8292,
-        "mtimeMs": 1789338721245.4634,
-        "hash": "e111c056ad17ed74facd05167f08aedc9a2cc21de7015c006876c3a44c9c6486",
+        "size": 8676,
+        "mtimeMs": 1790074752319.9326,
+        "hash": "c131c5dc8e3ab9cf1b6fbfbf28efa07fce2b24eac6903b9e6aaf29f0ef30d07c",
         "language": "TypeScript",
         "imports": [
           "@bootstrap/container/container",
@@ -16179,6 +16598,8 @@
           "@modules/audit/interfaces/routes/AuditRoutes",
           "@modules/auth/interfaces/AuthController",
           "@modules/auth/interfaces/http/routes/v1/authRoutes",
+          "@modules/entity/interfaces/DirectoryController",
+          "@modules/entity/interfaces/DirectoryRoutes",
           "@modules/entity/interfaces/EntityController",
           "@modules/entity/interfaces/EntityRoutes",
           "@modules/graph/interfaces/controllers/GraphController",
@@ -16227,15 +16648,16 @@
       },
       {
         "path": "backend/src/shared/interfaces/http/middleware/AuthenticationMiddleware.ts",
-        "size": 6397,
-        "mtimeMs": 1789258832577.999,
-        "hash": "fc47a437e372f697427ba99e7af9d7473d390a730f539bbaf3ab9366b11313f2",
+        "size": 7059,
+        "mtimeMs": 1790156531233.9673,
+        "hash": "3138ae54e1dbfb4d619d3ffe87945809275ae3f06c6e39fe431ad4616f3d6d86",
         "language": "TypeScript",
         "imports": [
           "@modules/auth/application/handlers/queries/GetCurrentUserQueryHandler",
           "@modules/auth/application/queries/GetCurrentUserQuery",
           "@modules/auth/domain/interfaces/IJwtProvider",
           "@modules/auth/domain/repositories/IApiKeyRepository",
+          "@modules/auth/domain/repositories/ISessionRepository",
           "@modules/auth/domain/value-objects/AccountStatus",
           "bcryptjs",
           "express",
@@ -16646,6 +17068,33 @@
         "mtimeMs": 1789265714863.5562,
         "hash": "fa8aac78b8be1993010b57f41000a243ecba006f6731513fe4ec91e788bf2517",
         "language": "Markdown",
+        "imports": [],
+        "exports": []
+      },
+      {
+        "path": "frontend/checkpoints/vevio-base/tokenizer.json",
+        "size": 485580,
+        "mtimeMs": 1790309739591.9507,
+        "hash": "d045db26dfcfa20759dcfdef2570338e4947a44d4e7bec1ee386638c240c2cdb",
+        "language": "JSON",
+        "imports": [],
+        "exports": []
+      },
+      {
+        "path": "frontend/checkpoints/vevio-pico/model.json",
+        "size": 885275,
+        "mtimeMs": 1790310827391.95,
+        "hash": "fad0038663188a3fee3c2f22d9b26760beaa66bc2b3b8ad43f2c97a9eb6fe4a3",
+        "language": "JSON",
+        "imports": [],
+        "exports": []
+      },
+      {
+        "path": "frontend/checkpoints/vevio-pico/tokenizer.json",
+        "size": 12279,
+        "mtimeMs": 1790309949799.9504,
+        "hash": "62d690adb1785ad063ebc468edd350c42d6fc68daa46c6e39116638bb9a68f08",
+        "language": "JSON",
         "imports": [],
         "exports": []
       },
@@ -17117,13 +17566,14 @@
       },
       {
         "path": "frontend/src/pages/admin/AdminDashboardPage.tsx",
-        "size": 4180,
-        "mtimeMs": 1789502929005.478,
-        "hash": "b04f2badffa3a9457c60fcf16d48a5e1385d32bd64a4b025071d413750b1df4f",
+        "size": 4326,
+        "mtimeMs": 1790279637699.9722,
+        "hash": "888832a24f5eea3faedf4f1ba5ee1cc12aa5f86e8b0a6948e2313e63f1a0b87c",
         "language": "TypeScript React",
         "imports": [
           "./article/ArticleAdmin",
           "./components/AdminShell",
+          "./entities/CreateNewEntityPage",
           "./entities/EntityAdmin",
           "./identity/UsersAdmin",
           "./intelligence/AIAdmin",
@@ -17244,19 +17694,65 @@
         ]
       },
       {
+        "path": "frontend/src/pages/admin/entities/CreateNewEntityPage.tsx",
+        "size": 4746,
+        "mtimeMs": 1790281316199.971,
+        "hash": "4e440658553ba03a790206ea9c30a5adf39e2439825b4f835aae93bc08b2a40f",
+        "language": "TypeScript React",
+        "imports": [
+          "../../../services/api",
+          "lucide-react",
+          "react"
+        ],
+        "exports": [
+          "CreateNewEntityPage"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/entities/EditEntityPage.tsx",
+        "size": 4218,
+        "mtimeMs": 1790278005095.9734,
+        "hash": "ba5d3f10d54f81f69ebe245af2c0397daeeb2fcd596e07211b2fdf6575a215ff",
+        "language": "TypeScript React",
+        "imports": [
+          "../../../services/api",
+          "lucide-react",
+          "react"
+        ],
+        "exports": [
+          "EditEntityPage"
+        ]
+      },
+      {
         "path": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
-        "size": 10297,
-        "mtimeMs": 1789780586519.4436,
-        "hash": "eeaa756133b6939a487333f8504520e6d3959d17181c8f98245a77590d833797",
+        "size": 10442,
+        "mtimeMs": 1790279600343.9722,
+        "hash": "27908e6fa3b20f7c742a967205f9dec1ebdf0cd39349057b43850793b7fd6a98",
         "language": "TypeScript React",
         "imports": [
           "../../../services/api",
           "../components/MetricCard",
           "lucide-react",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "exports": [
           "EntityAdmin"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/entities/SingleEntityPage.tsx",
+        "size": 3776,
+        "mtimeMs": 1790275057843.9753,
+        "hash": "f73424ea3cbe1c7cb6f2880a1b8af3196be6f35ffb201df023f845dd5234e288",
+        "language": "TypeScript React",
+        "imports": [
+          "../../../services/api",
+          "lucide-react",
+          "react"
+        ],
+        "exports": [
+          "SingleEntityPage"
         ]
       },
       {
@@ -17307,18 +17803,151 @@
       },
       {
         "path": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
-        "size": 5834,
-        "mtimeMs": 1789780646635.4436,
-        "hash": "9cd6d448eacd7663828d50a4ae7049aec75ba196b519b28cdc369aa1c6addbb5",
+        "size": 7635,
+        "mtimeMs": 1790032465255.963,
+        "hash": "5b0614391b56555ba338c6bfc452d1b2414aa6e01408e5441a302fb822fa873d",
         "language": "TypeScript React",
         "imports": [
           "../../../context/AuthContext",
-          "../../../services/api",
+          "./OntologyAuditTab",
+          "./OntologyConstraintsTab",
+          "./OntologyEntityTypesTab",
+          "./OntologyMetadataTab",
+          "./OntologyOverview",
+          "./OntologyRelationshipTypesTab",
+          "./OntologyRequiredFieldsTab",
+          "./OntologyValidationRulesTab",
+          "./OntologyVersionsTab",
           "lucide-react",
           "react"
         ],
         "exports": [
           "OntologyAdmin"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyAuditTab.tsx",
+        "size": 4049,
+        "mtimeMs": 1790032740127.9626,
+        "hash": "8c4f52ea7888e3d18c1607dce5d979ee14543d2c34f1a6e89ce01c95b0b21afd",
+        "language": "TypeScript React",
+        "imports": [
+          "lucide-react",
+          "react"
+        ],
+        "exports": [
+          "OntologyAuditTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyConstraintsTab.tsx",
+        "size": 5215,
+        "mtimeMs": 1790032227307.963,
+        "hash": "0d6aeae0d79d98bed29b95d8a2c560e9adb2ebcb245e500c9867312730871ec8",
+        "language": "TypeScript React",
+        "imports": [
+          "lucide-react",
+          "react"
+        ],
+        "exports": [
+          "OntologyConstraintsTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyEntityTypesTab.tsx",
+        "size": 7051,
+        "mtimeMs": 1790032146075.9631,
+        "hash": "5e4d8a63e41012be03478d664b670217fa44a849d843ce3d7d932cf6a809496f",
+        "language": "TypeScript React",
+        "imports": [
+          "../../../services/api",
+          "lucide-react",
+          "react"
+        ],
+        "exports": [
+          "OntologyEntityTypesTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyMetadataTab.tsx",
+        "size": 2657,
+        "mtimeMs": 1790032344927.963,
+        "hash": "a8711e3102576bc7d1e4a0e6254a630c477093afa650c863effb90f054062943",
+        "language": "TypeScript React",
+        "imports": [
+          "lucide-react"
+        ],
+        "exports": [
+          "OntologyMetadataTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyOverview.tsx",
+        "size": 24408,
+        "mtimeMs": 1790032102459.9631,
+        "hash": "7c4b603e0fc836c0fb75acec15a6a14c002ba56bf563675abee6845d807b0d03",
+        "language": "TypeScript React",
+        "imports": [
+          "../components/MetricCard",
+          "lucide-react",
+          "react"
+        ],
+        "exports": [
+          "OntologyOverview"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyRelationshipTypesTab.tsx",
+        "size": 6805,
+        "mtimeMs": 1790032186903.963,
+        "hash": "922d9507e4fc4f20824414ca36431f1a411afc9e8edc6bd6b95d8e8b85a21852",
+        "language": "TypeScript React",
+        "imports": [
+          "../../../services/api",
+          "lucide-react",
+          "react"
+        ],
+        "exports": [
+          "OntologyRelationshipTypesTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyRequiredFieldsTab.tsx",
+        "size": 3606,
+        "mtimeMs": 1790032306231.963,
+        "hash": "942b210b53071bdf82f47f89d3b11579039c61088f45d4d3d7b7f6d9e17031d0",
+        "language": "TypeScript React",
+        "imports": [
+          "lucide-react"
+        ],
+        "exports": [
+          "OntologyRequiredFieldsTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyValidationRulesTab.tsx",
+        "size": 3321,
+        "mtimeMs": 1790032266331.963,
+        "hash": "7ac5372ed1fdfe5d78bdd8b01456419fcc8875aefb94feb174ed8aade7f515cd",
+        "language": "TypeScript React",
+        "imports": [
+          "lucide-react"
+        ],
+        "exports": [
+          "OntologyValidationRulesTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyVersionsTab.tsx",
+        "size": 3751,
+        "mtimeMs": 1790032621207.9626,
+        "hash": "f385dc9d5a848475095042953e8d2db2028d160b014b5208678cf41e7b06ae9f",
+        "language": "TypeScript React",
+        "imports": [
+          "lucide-react"
+        ],
+        "exports": [
+          "OntologyVersionsTab"
         ]
       },
       {
@@ -17403,9 +18032,9 @@
       },
       {
         "path": "frontend/src/services/api.ts",
-        "size": 17965,
-        "mtimeMs": 1789749750711.4658,
-        "hash": "bcf11f7f7409da807eb3d20d2c6dbaba5a732a9e823f56b8cb33b8d9f5a9e1fb",
+        "size": 24686,
+        "mtimeMs": 1790281209503.971,
+        "hash": "f560543b1d59c6398a184194607d16f357ba6edaeb99c3aa7516ca41981f7172",
         "language": "TypeScript",
         "imports": [],
         "exports": [
@@ -18575,9 +19204,11 @@
         "path": "backend/src/modules/ai/domain/services/KnowledgeGapService.ts",
         "language": "TypeScript",
         "imports": [
+          "@shared/infrastructure/database/PostgresProvider",
           "@shared/logger/Logger",
           "inversify",
-          "inversify-binding-decorators"
+          "inversify-binding-decorators",
+          "uuid"
         ],
         "importedBy": [
           "backend/src/modules/ai/public/index.ts"
@@ -19020,6 +19651,7 @@
         "language": "TypeScript",
         "imports": [
           "../../application/handlers/CreateKnowledgeGapHandler",
+          "@shared/infrastructure/database/PostgresProvider",
           "express",
           "inversify",
           "inversify-binding-decorators"
@@ -19036,9 +19668,11 @@
         "language": "TypeScript",
         "imports": [
           "../../application/handlers/UpdatePromptHandler",
+          "@shared/infrastructure/database/PostgresProvider",
           "express",
           "inversify",
-          "inversify-binding-decorators"
+          "inversify-binding-decorators",
+          "uuid"
         ],
         "importedBy": [
           "backend/src/modules/ai/interfaces/routes/PromptRoutes.ts"
@@ -19053,9 +19687,11 @@
         "imports": [
           "../../application/handlers/GetProviderHealthHandler",
           "../../application/queries/GetProviderHealthQuery",
+          "@shared/infrastructure/database/PostgresProvider",
           "express",
           "inversify",
-          "inversify-binding-decorators"
+          "inversify-binding-decorators",
+          "uuid"
         ],
         "importedBy": [
           "backend/src/modules/ai/interfaces/routes/ProviderRoutes.ts"
@@ -24155,6 +24791,20 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/commands/ImportEntitiesCommand.ts",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/commands/ICommand"
+        ],
+        "importedBy": [
+          "backend/src/modules/entity/application/handlers/ImportEntitiesCommandHandler.ts"
+        ],
+        "exports": [
+          "ImportEntitiesCommand",
+          "ImportEntityItem"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/commands/MergeEntitiesCommand.ts",
         "language": "TypeScript",
         "imports": [],
@@ -24188,6 +24838,19 @@
         "importedBy": [],
         "exports": [
           "RemoveAliasCommand"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/commands/ResolveEntityDuplicateCommand.ts",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/commands/ICommand"
+        ],
+        "importedBy": [
+          "backend/src/modules/entity/application/handlers/ResolveEntityDuplicateCommandHandler.ts"
+        ],
+        "exports": [
+          "ResolveEntityDuplicateCommand"
         ]
       },
       {
@@ -24246,7 +24909,10 @@
         "path": "backend/src/modules/entity/application/dto/EntityResponse.ts",
         "language": "TypeScript",
         "imports": [],
-        "importedBy": [],
+        "importedBy": [
+          "backend/src/modules/entity/application/handlers/GetVerificationQueueQueryHandler.ts",
+          "backend/src/modules/entity/application/services/EntityResponseHelper.ts"
+        ],
         "exports": [
           "EntityResponse"
         ]
@@ -24422,6 +25088,38 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/handlers/ExportEntitiesQueryHandler.ts",
+        "language": "TypeScript",
+        "imports": [
+          "../queries/ExportEntitiesQuery",
+          "@shared/application/handlers/IQueryHandler",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "importedBy": [],
+        "exports": [
+          "ExportEntitiesQueryHandler",
+          "ExportEntitiesResponse"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/handlers/GetEntityActivityQueryHandler.ts",
+        "language": "TypeScript",
+        "imports": [
+          "../queries/GetEntityActivityQuery",
+          "@shared/application/handlers/IQueryHandler",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "importedBy": [],
+        "exports": [
+          "EntityActivityResponse",
+          "GetEntityActivityQueryHandler"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/handlers/GetEntityByIdentifierQueryHandler.ts",
         "language": "TypeScript",
         "imports": [
@@ -24454,11 +25152,46 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/handlers/GetEntityDashboardSummaryQueryHandler.ts",
+        "language": "TypeScript",
+        "imports": [
+          "../queries/GetEntityDashboardSummaryQuery",
+          "@modules/entity/domain/repositories/IEntityRepository",
+          "@modules/entity/domain/services/EntityQualityCalculator",
+          "@shared/application/handlers/IQueryHandler",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "importedBy": [],
+        "exports": [
+          "EntityDashboardSummaryResponse",
+          "GetEntityDashboardSummaryQueryHandler"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/handlers/GetEntityDuplicatesQueryHandler.ts",
+        "language": "TypeScript",
+        "imports": [
+          "../queries/GetEntityDuplicatesQuery",
+          "@shared/application/handlers/IQueryHandler",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "importedBy": [],
+        "exports": [
+          "DuplicatePairResponse",
+          "GetEntityDuplicatesQueryHandler"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/handlers/GetEntityQueryHandler.ts",
         "language": "TypeScript",
         "imports": [
           "@modules/entity/application/dto/EntityResponse",
           "@modules/entity/application/queries/GetEntityQuery",
+          "@modules/entity/application/services/EntityResponseHelper",
           "@modules/entity/domain/repositories/IEntityRepository",
           "@modules/entity/domain/value-objects/EntityId",
           "@shared/application/handlers/IQueryHandler",
@@ -24468,6 +25201,19 @@
         "importedBy": [],
         "exports": [
           "GetEntityQueryHandler"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/handlers/GetEntitySchemaQueryHandler.ts",
+        "language": "TypeScript",
+        "imports": [
+          "../queries/GetEntitySchemaQuery",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "importedBy": [],
+        "exports": [
+          "GetEntitySchemaQueryHandler"
         ]
       },
       {
@@ -24485,6 +25231,68 @@
         "importedBy": [],
         "exports": [
           "GetEntityVersionQueryHandler"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/handlers/GetQualityDistributionQueryHandler.ts",
+        "language": "TypeScript",
+        "imports": [
+          "../queries/GetQualityDistributionQuery",
+          "@modules/entity/domain/repositories/IEntityRepository",
+          "@modules/entity/domain/services/EntityQualityCalculator",
+          "@shared/application/handlers/IQueryHandler",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "importedBy": [],
+        "exports": [
+          "GetQualityDistributionQueryHandler",
+          "QualityDistributionResponse"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/handlers/GetVerificationQueueQueryHandler.ts",
+        "language": "TypeScript",
+        "imports": [
+          "../dto/EntityResponse",
+          "../queries/GetVerificationQueueQuery",
+          "@shared/application/handlers/IQueryHandler",
+          "@shared/application/pagination/CursorCodec",
+          "@shared/application/pagination/PaginationTypes",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "importedBy": [],
+        "exports": [
+          "GetVerificationQueueQueryHandler"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/handlers/ImportEntitiesCommandHandler.ts",
+        "language": "TypeScript",
+        "imports": [
+          "../commands/ImportEntitiesCommand",
+          "@modules/entity/domain/entities/Entity",
+          "@modules/entity/domain/repositories/IEntityRepository",
+          "@modules/entity/domain/services/SlugGenerationService",
+          "@modules/entity/domain/value-objects/EntityId",
+          "@modules/entity/domain/value-objects/EntityMetadata",
+          "@modules/entity/domain/value-objects/EntityName",
+          "@modules/entity/domain/value-objects/EntityValueObjects",
+          "@modules/ontology/public",
+          "@shared/application/handlers/ICommandHandler",
+          "@shared/infrastructure/audit/AuditDecorator",
+          "@shared/infrastructure/queue/EventBus",
+          "inversify",
+          "inversify-binding-decorators",
+          "uuid"
+        ],
+        "importedBy": [],
+        "exports": [
+          "ImportEntitiesCommandHandler",
+          "ImportEntitiesResponse"
         ]
       },
       {
@@ -24510,6 +25318,7 @@
         "imports": [
           "@modules/entity/application/dto/EntityResponse",
           "@modules/entity/application/queries/ListEntitiesQuery",
+          "@modules/entity/application/services/EntityResponseHelper",
           "@modules/entity/domain/repositories/IEntityRepository",
           "@shared/application/handlers/IQueryHandler",
           "@shared/application/pagination/PaginationTypes",
@@ -24600,6 +25409,26 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/handlers/ResolveEntityDuplicateCommandHandler.ts",
+        "language": "TypeScript",
+        "imports": [
+          "../commands/ResolveEntityDuplicateCommand",
+          "@modules/auth/domain/interfaces/IAuditLogger",
+          "@modules/entity/domain/events/EntityMergedEvent",
+          "@modules/entity/domain/services/IEntityMergeService",
+          "@modules/entity/domain/value-objects/EntityId",
+          "@shared/application/handlers/ICommandHandler",
+          "@shared/infrastructure/audit/AuditDecorator",
+          "@shared/infrastructure/queue/EventBus",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "importedBy": [],
+        "exports": [
+          "ResolveEntityDuplicateCommandHandler"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/handlers/RestoreEntityCommandHandler.ts",
         "language": "TypeScript",
         "imports": [
@@ -24676,6 +25505,32 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/queries/ExportEntitiesQuery.ts",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/queries/IQuery"
+        ],
+        "importedBy": [
+          "backend/src/modules/entity/application/handlers/ExportEntitiesQueryHandler.ts"
+        ],
+        "exports": [
+          "ExportEntitiesQuery"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/queries/GetEntityActivityQuery.ts",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/queries/IQuery"
+        ],
+        "importedBy": [
+          "backend/src/modules/entity/application/handlers/GetEntityActivityQueryHandler.ts"
+        ],
+        "exports": [
+          "GetEntityActivityQuery"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/queries/GetEntityByIdentifierQuery.ts",
         "language": "TypeScript",
         "imports": [
@@ -24698,6 +25553,32 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/queries/GetEntityDashboardSummaryQuery.ts",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/queries/IQuery"
+        ],
+        "importedBy": [
+          "backend/src/modules/entity/application/handlers/GetEntityDashboardSummaryQueryHandler.ts"
+        ],
+        "exports": [
+          "GetEntityDashboardSummaryQuery"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/queries/GetEntityDuplicatesQuery.ts",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/queries/IQuery"
+        ],
+        "importedBy": [
+          "backend/src/modules/entity/application/handlers/GetEntityDuplicatesQueryHandler.ts"
+        ],
+        "exports": [
+          "GetEntityDuplicatesQuery"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/queries/GetEntityQuery.ts",
         "language": "TypeScript",
         "imports": [
@@ -24709,6 +25590,17 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/queries/GetEntitySchemaQuery.ts",
+        "language": "TypeScript",
+        "imports": [],
+        "importedBy": [
+          "backend/src/modules/entity/application/handlers/GetEntitySchemaQueryHandler.ts"
+        ],
+        "exports": [
+          "GetEntitySchemaQuery"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/queries/GetEntityVersionQuery.ts",
         "language": "TypeScript",
         "imports": [
@@ -24717,6 +25609,33 @@
         "importedBy": [],
         "exports": [
           "GetEntityVersionQuery"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/queries/GetQualityDistributionQuery.ts",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/queries/IQuery"
+        ],
+        "importedBy": [
+          "backend/src/modules/entity/application/handlers/GetQualityDistributionQueryHandler.ts"
+        ],
+        "exports": [
+          "GetQualityDistributionQuery"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/queries/GetVerificationQueueQuery.ts",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/application/pagination/PaginationTypes",
+          "@shared/application/queries/IQuery"
+        ],
+        "importedBy": [
+          "backend/src/modules/entity/application/handlers/GetVerificationQueueQueryHandler.ts"
+        ],
+        "exports": [
+          "GetVerificationQueueQuery"
         ]
       },
       {
@@ -24754,6 +25673,26 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/application/services/DirectoryService.ts",
+        "language": "TypeScript",
+        "imports": [
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators",
+          "uuid"
+        ],
+        "importedBy": [
+          "backend/src/modules/entity/interfaces/DirectoryController.ts"
+        ],
+        "exports": [
+          "BusinessClaimDto",
+          "BusinessInquiryDto",
+          "BusinessProductDto",
+          "BusinessReviewDto",
+          "DirectoryService"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/application/services/EntityAliasService.ts",
         "language": "TypeScript",
         "imports": [
@@ -24766,6 +25705,22 @@
         "importedBy": [],
         "exports": [
           "EntityAliasService"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/application/services/EntityResponseHelper.ts",
+        "language": "TypeScript",
+        "imports": [
+          "../../domain/entities/Entity",
+          "../../domain/services/EntityQualityCalculator",
+          "../dto/EntityResponse",
+          "@shared/infrastructure/database/PostgresProvider",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "importedBy": [],
+        "exports": [
+          "EntityResponseHelper"
         ]
       },
       {
@@ -24824,6 +25779,7 @@
           "@shared/domain/UniqueEntityId"
         ],
         "importedBy": [
+          "backend/src/modules/entity/application/services/EntityResponseHelper.ts",
           "backend/src/modules/entity/domain/events/EntityApprovedEvent.ts",
           "backend/src/modules/entity/domain/events/EntityArchivedEvent.ts",
           "backend/src/modules/entity/domain/events/EntityCreatedEvent.ts",
@@ -24834,6 +25790,7 @@
           "backend/src/modules/entity/domain/events/EntityUpdatedEvent.ts",
           "backend/src/modules/entity/domain/interfaces/IEntityService.ts",
           "backend/src/modules/entity/domain/repositories/IEntityRepository.ts",
+          "backend/src/modules/entity/domain/services/EntityQualityCalculator.ts",
           "backend/src/modules/entity/domain/services/EntityVersionService.ts",
           "backend/src/modules/entity/domain/services/IEntityMergeService.ts",
           "backend/src/modules/entity/domain/services/IEntityVersionService.ts",
@@ -25148,6 +26105,19 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/domain/services/EntityQualityCalculator.ts",
+        "language": "TypeScript",
+        "imports": [
+          "../entities/Entity"
+        ],
+        "importedBy": [
+          "backend/src/modules/entity/application/services/EntityResponseHelper.ts"
+        ],
+        "exports": [
+          "EntityQualityCalculator"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/domain/services/EntityVersionService.ts",
         "language": "TypeScript",
         "imports": [
@@ -25260,7 +26230,8 @@
         ],
         "exports": [
           "EntityMetadata",
-          "EntityMetadataAttributes"
+          "EntityMetadataAttributes",
+          "VerificationStatus"
         ]
       },
       {
@@ -25363,11 +26334,42 @@
         ]
       },
       {
+        "path": "backend/src/modules/entity/interfaces/DirectoryController.ts",
+        "language": "TypeScript",
+        "imports": [
+          "../application/services/DirectoryService",
+          "express",
+          "inversify",
+          "inversify-binding-decorators"
+        ],
+        "importedBy": [
+          "backend/src/modules/entity/interfaces/DirectoryRoutes.ts"
+        ],
+        "exports": [
+          "DirectoryController"
+        ]
+      },
+      {
+        "path": "backend/src/modules/entity/interfaces/DirectoryRoutes.ts",
+        "language": "TypeScript",
+        "imports": [
+          "./DirectoryController",
+          "@shared/interfaces/http/middleware/AuthenticationMiddleware",
+          "express"
+        ],
+        "importedBy": [],
+        "exports": [
+          "createDirectoryRoutes"
+        ]
+      },
+      {
         "path": "backend/src/modules/entity/interfaces/EntityController.ts",
         "language": "TypeScript",
         "imports": [
           "@modules/entity/application/commands/ApproveEntityCommand",
+          "@modules/entity/application/commands/ImportEntitiesCommand",
           "@modules/entity/application/commands/RejectEntityCommand",
+          "@modules/entity/application/commands/ResolveEntityDuplicateCommand",
           "@modules/entity/application/commands/SubmitEntityForReviewCommand",
           "@modules/entity/application/dto/EntitySearchRequest",
           "@modules/entity/application/handlers/AddAliasCommandHandler",
@@ -25376,20 +26378,36 @@
           "@modules/entity/application/handlers/CreateEntityCommandHandler",
           "@modules/entity/application/handlers/CreateEntityVersionCommandHandler",
           "@modules/entity/application/handlers/DeleteEntityCommandHandler",
+          "@modules/entity/application/handlers/ExportEntitiesQueryHandler",
+          "@modules/entity/application/handlers/GetEntityActivityQueryHandler",
           "@modules/entity/application/handlers/GetEntityByIdentifierQueryHandler",
           "@modules/entity/application/handlers/GetEntityBySlugQueryHandler",
+          "@modules/entity/application/handlers/GetEntityDashboardSummaryQueryHandler",
+          "@modules/entity/application/handlers/GetEntityDuplicatesQueryHandler",
           "@modules/entity/application/handlers/GetEntityQueryHandler",
+          "@modules/entity/application/handlers/GetEntitySchemaQueryHandler",
           "@modules/entity/application/handlers/GetEntityVersionQueryHandler",
+          "@modules/entity/application/handlers/GetQualityDistributionQueryHandler",
+          "@modules/entity/application/handlers/GetVerificationQueueQueryHandler",
+          "@modules/entity/application/handlers/ImportEntitiesCommandHandler",
           "@modules/entity/application/handlers/ListAliasesQueryHandler",
           "@modules/entity/application/handlers/ListEntitiesQueryHandler",
           "@modules/entity/application/handlers/MergeEntitiesCommandHandler",
           "@modules/entity/application/handlers/PublishEntityCommandHandler",
           "@modules/entity/application/handlers/RejectEntityCommandHandler",
           "@modules/entity/application/handlers/RemoveAliasCommandHandler",
+          "@modules/entity/application/handlers/ResolveEntityDuplicateCommandHandler",
           "@modules/entity/application/handlers/RestoreEntityCommandHandler",
           "@modules/entity/application/handlers/SearchEntitiesQueryHandler",
           "@modules/entity/application/handlers/SubmitEntityForReviewCommandHandler",
           "@modules/entity/application/handlers/UpdateEntityCommandHandler",
+          "@modules/entity/application/queries/ExportEntitiesQuery",
+          "@modules/entity/application/queries/GetEntityActivityQuery",
+          "@modules/entity/application/queries/GetEntityDashboardSummaryQuery",
+          "@modules/entity/application/queries/GetEntityDuplicatesQuery",
+          "@modules/entity/application/queries/GetEntitySchemaQuery",
+          "@modules/entity/application/queries/GetQualityDistributionQuery",
+          "@modules/entity/application/queries/GetVerificationQueueQuery",
           "@modules/entity/application/queries/ListEntitiesQuery",
           "@shared/application/pagination/PaginationTypes",
           "express",
@@ -26749,6 +27767,7 @@
         ],
         "importedBy": [],
         "exports": [
+          "ExtractedMediaMetadata",
           "MediaMetadataService"
         ]
       },
@@ -26757,6 +27776,7 @@
         "language": "TypeScript",
         "imports": [
           "@shared/domain/UniqueEntityId",
+          "@shared/infrastructure/database/PostgresProvider",
           "inversify",
           "inversify-binding-decorators"
         ],
@@ -26809,6 +27829,7 @@
           "backend/src/modules/media/application/commands/GenerateThumbnailHandler.ts"
         ],
         "exports": [
+          "ThumbnailGenerationResult",
           "ThumbnailService"
         ]
       },
@@ -27460,7 +28481,9 @@
           "inversify",
           "inversify-binding-decorators"
         ],
-        "importedBy": [],
+        "importedBy": [
+          "backend/src/modules/media/interfaces/http/middleware/MediaMiddleware.ts"
+        ],
         "exports": [
           "VirusScanner",
           "VirusScannerService"
@@ -27702,7 +28725,9 @@
         "path": "backend/src/modules/media/interfaces/http/middleware/MediaMiddleware.ts",
         "language": "TypeScript",
         "imports": [
-          "@modules/media/infrastructure/processing/VirusScannerService",
+          "../../../infrastructure/processing/VirusScannerService",
+          "@bootstrap/container/container",
+          "@shared/interfaces/http/middleware/AuthenticationMiddleware",
           "express",
           "express-rate-limit"
         ],
@@ -27710,8 +28735,8 @@
           "backend/src/modules/media/interfaces/http/MediaRoutes.ts"
         ],
         "exports": [
+          "MulterRequest",
           "authenticate",
-          "authorize",
           "uploadRateLimiter",
           "validateFile",
           "virusScanHook"
@@ -30250,13 +31275,18 @@
         "path": "backend/src/modules/relationship/application/services/GraphTraversalService.ts",
         "language": "TypeScript",
         "imports": [
-          "../../domain/value-objects/RelationshipValueObjects",
+          "@shared/infrastructure/database/PostgresProvider",
           "inversify",
           "inversify-binding-decorators"
         ],
         "importedBy": [],
         "exports": [
-          "GraphTraversalService"
+          "ConnectedEntityNode",
+          "GraphPathResult",
+          "GraphPathStep",
+          "GraphTraversalService",
+          "SubGraphEdge",
+          "SubGraphResult"
         ]
       },
       {
@@ -30349,6 +31379,8 @@
           "backend/src/modules/relationship/application/handlers/DeleteRelationshipHandler.ts",
           "backend/src/modules/relationship/application/handlers/UpdateRelationshipHandler.ts",
           "backend/src/modules/relationship/domain/entities/Relationship.ts",
+          "backend/src/modules/relationship/domain/services/GraphConsistencyService.ts",
+          "backend/src/modules/relationship/domain/services/TemporalValidationService.ts",
           "backend/src/modules/relationship/domain/value-objects/RelationshipValueObjects.ts",
           "backend/src/modules/relationship/infrastructure/repositories/PostgresRelationshipRepository.ts",
           "backend/src/modules/relationship/interfaces/controllers/RelationshipController.ts"
@@ -30451,6 +31483,8 @@
         "language": "TypeScript",
         "imports": [
           "../entities/Relationship",
+          "../errors/RelationshipErrors",
+          "@shared/infrastructure/database/PostgresProvider",
           "inversify",
           "inversify-binding-decorators"
         ],
@@ -30464,6 +31498,7 @@
         "language": "TypeScript",
         "imports": [
           "../entities/Relationship",
+          "../errors/RelationshipErrors",
           "inversify",
           "inversify-binding-decorators"
         ],
@@ -30485,7 +31520,6 @@
           "backend/src/modules/relationship/application/handlers/CreateRelationshipHandler.ts",
           "backend/src/modules/relationship/application/handlers/DeleteRelationshipHandler.ts",
           "backend/src/modules/relationship/application/handlers/UpdateRelationshipHandler.ts",
-          "backend/src/modules/relationship/application/services/GraphTraversalService.ts",
           "backend/src/modules/relationship/domain/entities/Relationship.ts",
           "backend/src/modules/relationship/domain/entities/RelationshipEvidence.ts",
           "backend/src/modules/relationship/domain/repositories/IRelationshipEvidenceRepository.ts",
@@ -32971,6 +34005,8 @@
           "@modules/audit/interfaces/routes/AuditRoutes",
           "@modules/auth/interfaces/AuthController",
           "@modules/auth/interfaces/http/routes/v1/authRoutes",
+          "@modules/entity/interfaces/DirectoryController",
+          "@modules/entity/interfaces/DirectoryRoutes",
           "@modules/entity/interfaces/EntityController",
           "@modules/entity/interfaces/EntityRoutes",
           "@modules/graph/interfaces/controllers/GraphController",
@@ -33028,6 +34064,7 @@
           "@modules/auth/application/queries/GetCurrentUserQuery",
           "@modules/auth/domain/interfaces/IJwtProvider",
           "@modules/auth/domain/repositories/IApiKeyRepository",
+          "@modules/auth/domain/repositories/ISessionRepository",
           "@modules/auth/domain/value-objects/AccountStatus",
           "bcryptjs",
           "express",
@@ -33837,6 +34874,7 @@
         "imports": [
           "./article/ArticleAdmin",
           "./components/AdminShell",
+          "./entities/CreateNewEntityPage",
           "./entities/EntityAdmin",
           "./identity/UsersAdmin",
           "./intelligence/AIAdmin",
@@ -33943,6 +34981,7 @@
         ],
         "importedBy": [
           "frontend/src/pages/admin/entities/EntityAdmin.tsx",
+          "frontend/src/pages/admin/ontology/OntologyOverview.tsx",
           "frontend/src/pages/admin/overview/AdminOverview.tsx"
         ],
         "exports": [
@@ -33952,11 +34991,10 @@
         ]
       },
       {
-        "path": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
+        "path": "frontend/src/pages/admin/entities/CreateNewEntityPage.tsx",
         "language": "TypeScript React",
         "imports": [
           "../../../services/api",
-          "../components/MetricCard",
           "lucide-react",
           "react"
         ],
@@ -33964,7 +35002,50 @@
           "frontend/src/pages/admin/AdminDashboardPage.tsx"
         ],
         "exports": [
+          "CreateNewEntityPage"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/entities/EditEntityPage.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "../../../services/api",
+          "lucide-react",
+          "react"
+        ],
+        "importedBy": [],
+        "exports": [
+          "EditEntityPage"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "../../../services/api",
+          "../components/MetricCard",
+          "lucide-react",
+          "react",
+          "react-router-dom"
+        ],
+        "importedBy": [
+          "frontend/src/pages/admin/AdminDashboardPage.tsx"
+        ],
+        "exports": [
           "EntityAdmin"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/entities/SingleEntityPage.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "../../../services/api",
+          "lucide-react",
+          "react"
+        ],
+        "importedBy": [],
+        "exports": [
+          "SingleEntityPage"
         ]
       },
       {
@@ -34018,7 +35099,15 @@
         "language": "TypeScript React",
         "imports": [
           "../../../context/AuthContext",
-          "../../../services/api",
+          "./OntologyAuditTab",
+          "./OntologyConstraintsTab",
+          "./OntologyEntityTypesTab",
+          "./OntologyMetadataTab",
+          "./OntologyOverview",
+          "./OntologyRelationshipTypesTab",
+          "./OntologyRequiredFieldsTab",
+          "./OntologyValidationRulesTab",
+          "./OntologyVersionsTab",
           "lucide-react",
           "react"
         ],
@@ -34027,6 +35116,131 @@
         ],
         "exports": [
           "OntologyAdmin"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyAuditTab.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "lucide-react",
+          "react"
+        ],
+        "importedBy": [
+          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx"
+        ],
+        "exports": [
+          "OntologyAuditTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyConstraintsTab.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "lucide-react",
+          "react"
+        ],
+        "importedBy": [
+          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx"
+        ],
+        "exports": [
+          "OntologyConstraintsTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyEntityTypesTab.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "../../../services/api",
+          "lucide-react",
+          "react"
+        ],
+        "importedBy": [
+          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx"
+        ],
+        "exports": [
+          "OntologyEntityTypesTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyMetadataTab.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "lucide-react"
+        ],
+        "importedBy": [
+          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx"
+        ],
+        "exports": [
+          "OntologyMetadataTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyOverview.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "../components/MetricCard",
+          "lucide-react",
+          "react"
+        ],
+        "importedBy": [
+          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx"
+        ],
+        "exports": [
+          "OntologyOverview"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyRelationshipTypesTab.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "../../../services/api",
+          "lucide-react",
+          "react"
+        ],
+        "importedBy": [
+          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx"
+        ],
+        "exports": [
+          "OntologyRelationshipTypesTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyRequiredFieldsTab.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "lucide-react"
+        ],
+        "importedBy": [
+          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx"
+        ],
+        "exports": [
+          "OntologyRequiredFieldsTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyValidationRulesTab.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "lucide-react"
+        ],
+        "importedBy": [
+          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx"
+        ],
+        "exports": [
+          "OntologyValidationRulesTab"
+        ]
+      },
+      {
+        "path": "frontend/src/pages/admin/ontology/OntologyVersionsTab.tsx",
+        "language": "TypeScript React",
+        "imports": [
+          "lucide-react"
+        ],
+        "importedBy": [
+          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx"
+        ],
+        "exports": [
+          "OntologyVersionsTab"
         ]
       },
       {
@@ -34126,11 +35340,15 @@
           "frontend/src/pages/account/AccountSettingsPage.tsx",
           "frontend/src/pages/account/UserAccountCenterPage.tsx",
           "frontend/src/pages/admin/article/ArticleAdmin.tsx",
+          "frontend/src/pages/admin/entities/CreateNewEntityPage.tsx",
+          "frontend/src/pages/admin/entities/EditEntityPage.tsx",
           "frontend/src/pages/admin/entities/EntityAdmin.tsx",
+          "frontend/src/pages/admin/entities/SingleEntityPage.tsx",
           "frontend/src/pages/admin/identity/UsersAdmin.tsx",
           "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
           "frontend/src/pages/admin/observability/AuditAdmin.tsx",
-          "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
+          "frontend/src/pages/admin/ontology/OntologyEntityTypesTab.tsx",
+          "frontend/src/pages/admin/ontology/OntologyRelationshipTypesTab.tsx",
           "frontend/src/pages/admin/overview/AdminOverview.tsx",
           "frontend/src/pages/admin/overview/RecentEntitiesTable.tsx"
         ],
@@ -34665,10 +35883,12 @@
         "backend/src/modules/entity/application/commands/CreateEntityCommand.ts",
         "backend/src/modules/entity/application/commands/CreateEntityVersionCommand.ts",
         "backend/src/modules/entity/application/commands/DeleteEntityCommand.ts",
+        "backend/src/modules/entity/application/commands/ImportEntitiesCommand.ts",
         "backend/src/modules/entity/application/commands/MergeEntitiesCommand.ts",
         "backend/src/modules/entity/application/commands/PublishEntityCommand.ts",
         "backend/src/modules/entity/application/commands/RejectEntityCommand.ts",
         "backend/src/modules/entity/application/commands/RemoveAliasCommand.ts",
+        "backend/src/modules/entity/application/commands/ResolveEntityDuplicateCommand.ts",
         "backend/src/modules/entity/application/commands/RestoreEntityCommand.ts",
         "backend/src/modules/entity/application/commands/SubmitEntityForReviewCommand.ts",
         "backend/src/modules/entity/application/commands/UpdateEntityCommand.ts",
@@ -34685,28 +35905,46 @@
         "backend/src/modules/entity/application/handlers/CreateEntityCommandHandler.ts",
         "backend/src/modules/entity/application/handlers/CreateEntityVersionCommandHandler.ts",
         "backend/src/modules/entity/application/handlers/DeleteEntityCommandHandler.ts",
+        "backend/src/modules/entity/application/handlers/ExportEntitiesQueryHandler.ts",
+        "backend/src/modules/entity/application/handlers/GetEntityActivityQueryHandler.ts",
         "backend/src/modules/entity/application/handlers/GetEntityByIdentifierQueryHandler.ts",
         "backend/src/modules/entity/application/handlers/GetEntityBySlugQueryHandler.ts",
+        "backend/src/modules/entity/application/handlers/GetEntityDashboardSummaryQueryHandler.ts",
+        "backend/src/modules/entity/application/handlers/GetEntityDuplicatesQueryHandler.ts",
         "backend/src/modules/entity/application/handlers/GetEntityQueryHandler.ts",
+        "backend/src/modules/entity/application/handlers/GetEntitySchemaQueryHandler.ts",
         "backend/src/modules/entity/application/handlers/GetEntityVersionQueryHandler.ts",
+        "backend/src/modules/entity/application/handlers/GetQualityDistributionQueryHandler.ts",
+        "backend/src/modules/entity/application/handlers/GetVerificationQueueQueryHandler.ts",
+        "backend/src/modules/entity/application/handlers/ImportEntitiesCommandHandler.ts",
         "backend/src/modules/entity/application/handlers/ListAliasesQueryHandler.ts",
         "backend/src/modules/entity/application/handlers/ListEntitiesQueryHandler.ts",
         "backend/src/modules/entity/application/handlers/MergeEntitiesCommandHandler.ts",
         "backend/src/modules/entity/application/handlers/PublishEntityCommandHandler.ts",
         "backend/src/modules/entity/application/handlers/RejectEntityCommandHandler.ts",
         "backend/src/modules/entity/application/handlers/RemoveAliasCommandHandler.ts",
+        "backend/src/modules/entity/application/handlers/ResolveEntityDuplicateCommandHandler.ts",
         "backend/src/modules/entity/application/handlers/RestoreEntityCommandHandler.ts",
         "backend/src/modules/entity/application/handlers/SearchEntitiesQueryHandler.ts",
         "backend/src/modules/entity/application/handlers/SubmitEntityForReviewCommandHandler.ts",
         "backend/src/modules/entity/application/handlers/UpdateEntityCommandHandler.ts",
+        "backend/src/modules/entity/application/queries/ExportEntitiesQuery.ts",
+        "backend/src/modules/entity/application/queries/GetEntityActivityQuery.ts",
         "backend/src/modules/entity/application/queries/GetEntityByIdentifierQuery.ts",
         "backend/src/modules/entity/application/queries/GetEntityBySlugQuery.ts",
+        "backend/src/modules/entity/application/queries/GetEntityDashboardSummaryQuery.ts",
+        "backend/src/modules/entity/application/queries/GetEntityDuplicatesQuery.ts",
         "backend/src/modules/entity/application/queries/GetEntityQuery.ts",
+        "backend/src/modules/entity/application/queries/GetEntitySchemaQuery.ts",
         "backend/src/modules/entity/application/queries/GetEntityVersionQuery.ts",
+        "backend/src/modules/entity/application/queries/GetQualityDistributionQuery.ts",
+        "backend/src/modules/entity/application/queries/GetVerificationQueueQuery.ts",
         "backend/src/modules/entity/application/queries/ListAliasesQuery.ts",
         "backend/src/modules/entity/application/queries/ListEntitiesQuery.ts",
         "backend/src/modules/entity/application/queries/SearchEntitiesQuery.ts",
+        "backend/src/modules/entity/application/services/DirectoryService.ts",
         "backend/src/modules/entity/application/services/EntityAliasService.ts",
+        "backend/src/modules/entity/application/services/EntityResponseHelper.ts",
         "backend/src/modules/entity/application/services/EntityService.ts",
         "backend/src/modules/entity/application/services/EntityVersionService.ts",
         "backend/src/modules/entity/application/services/ai/EntityAiIntegrationService.ts",
@@ -34732,6 +35970,7 @@
         "backend/src/modules/entity/domain/repositories/IEntityRepository.ts",
         "backend/src/modules/entity/domain/repositories/IEntityVersionRepository.ts",
         "backend/src/modules/entity/domain/services/EntityMergeService.ts",
+        "backend/src/modules/entity/domain/services/EntityQualityCalculator.ts",
         "backend/src/modules/entity/domain/services/EntityVersionService.ts",
         "backend/src/modules/entity/domain/services/IEntityMergeService.ts",
         "backend/src/modules/entity/domain/services/IEntityVersionService.ts",
@@ -34744,6 +35983,8 @@
         "backend/src/modules/entity/infrastructure/PostgresEntityRepository.ts",
         "backend/src/modules/entity/infrastructure/persistence/PostgresEntityAliasRepository.ts",
         "backend/src/modules/entity/infrastructure/persistence/PostgresEntityVersionRepository.ts",
+        "backend/src/modules/entity/interfaces/DirectoryController.ts",
+        "backend/src/modules/entity/interfaces/DirectoryRoutes.ts",
         "backend/src/modules/entity/interfaces/EntityController.ts",
         "backend/src/modules/entity/interfaces/EntityRoutes.ts",
         "backend/src/modules/entity/public/index.ts",
@@ -35271,6 +36512,9 @@
         "frontend/.oxlintrc.json",
         "frontend/ColorSpecs.md",
         "frontend/README.md",
+        "frontend/checkpoints/vevio-base/tokenizer.json",
+        "frontend/checkpoints/vevio-pico/model.json",
+        "frontend/checkpoints/vevio-pico/tokenizer.json",
         "frontend/package-lock.json",
         "frontend/package.json",
         "frontend/postcss.config.js",
@@ -35309,11 +36553,23 @@
         "frontend/src/pages/admin/components/AdminShell.tsx",
         "frontend/src/pages/admin/components/AdminSidebar.tsx",
         "frontend/src/pages/admin/components/MetricCard.tsx",
+        "frontend/src/pages/admin/entities/CreateNewEntityPage.tsx",
+        "frontend/src/pages/admin/entities/EditEntityPage.tsx",
         "frontend/src/pages/admin/entities/EntityAdmin.tsx",
+        "frontend/src/pages/admin/entities/SingleEntityPage.tsx",
         "frontend/src/pages/admin/identity/UsersAdmin.tsx",
         "frontend/src/pages/admin/intelligence/AIAdmin.tsx",
         "frontend/src/pages/admin/observability/AuditAdmin.tsx",
         "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
+        "frontend/src/pages/admin/ontology/OntologyAuditTab.tsx",
+        "frontend/src/pages/admin/ontology/OntologyConstraintsTab.tsx",
+        "frontend/src/pages/admin/ontology/OntologyEntityTypesTab.tsx",
+        "frontend/src/pages/admin/ontology/OntologyMetadataTab.tsx",
+        "frontend/src/pages/admin/ontology/OntologyOverview.tsx",
+        "frontend/src/pages/admin/ontology/OntologyRelationshipTypesTab.tsx",
+        "frontend/src/pages/admin/ontology/OntologyRequiredFieldsTab.tsx",
+        "frontend/src/pages/admin/ontology/OntologyValidationRulesTab.tsx",
+        "frontend/src/pages/admin/ontology/OntologyVersionsTab.tsx",
         "frontend/src/pages/admin/overview/AdminOverview.tsx",
         "frontend/src/pages/admin/overview/QuickActionsPanel.tsx",
         "frontend/src/pages/admin/overview/RecentActivityPanel.tsx",
@@ -37663,6 +38919,71 @@
           "type": "import"
         },
         {
+          "from": "backend/src/modules/entity/application/handlers/ExportEntitiesQueryHandler.ts",
+          "to": "backend/src/modules/entity/application/queries/ExportEntitiesQuery.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/application/handlers/GetEntityActivityQueryHandler.ts",
+          "to": "backend/src/modules/entity/application/queries/GetEntityActivityQuery.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/application/handlers/GetEntityDashboardSummaryQueryHandler.ts",
+          "to": "backend/src/modules/entity/application/queries/GetEntityDashboardSummaryQuery.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/application/handlers/GetEntityDuplicatesQueryHandler.ts",
+          "to": "backend/src/modules/entity/application/queries/GetEntityDuplicatesQuery.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/application/handlers/GetEntitySchemaQueryHandler.ts",
+          "to": "backend/src/modules/entity/application/queries/GetEntitySchemaQuery.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/application/handlers/GetQualityDistributionQueryHandler.ts",
+          "to": "backend/src/modules/entity/application/queries/GetQualityDistributionQuery.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/application/handlers/GetVerificationQueueQueryHandler.ts",
+          "to": "backend/src/modules/entity/application/dto/EntityResponse.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/application/handlers/GetVerificationQueueQueryHandler.ts",
+          "to": "backend/src/modules/entity/application/queries/GetVerificationQueueQuery.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/application/handlers/ImportEntitiesCommandHandler.ts",
+          "to": "backend/src/modules/entity/application/commands/ImportEntitiesCommand.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/application/handlers/ResolveEntityDuplicateCommandHandler.ts",
+          "to": "backend/src/modules/entity/application/commands/ResolveEntityDuplicateCommand.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/application/services/EntityResponseHelper.ts",
+          "to": "backend/src/modules/entity/domain/entities/Entity.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/application/services/EntityResponseHelper.ts",
+          "to": "backend/src/modules/entity/domain/services/EntityQualityCalculator.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/application/services/EntityResponseHelper.ts",
+          "to": "backend/src/modules/entity/application/dto/EntityResponse.ts",
+          "type": "import"
+        },
+        {
           "from": "backend/src/modules/entity/application/services/EntityService.ts",
           "to": "backend/src/modules/entity/domain/interfaces/IEntityService.ts",
           "type": "import"
@@ -37843,6 +39164,11 @@
           "type": "import"
         },
         {
+          "from": "backend/src/modules/entity/domain/services/EntityQualityCalculator.ts",
+          "to": "backend/src/modules/entity/domain/entities/Entity.ts",
+          "type": "import"
+        },
+        {
           "from": "backend/src/modules/entity/domain/services/EntityVersionService.ts",
           "to": "backend/src/modules/entity/domain/entities/Entity.ts",
           "type": "import"
@@ -37925,6 +39251,16 @@
         {
           "from": "backend/src/modules/entity/infrastructure/PostgresEntityRepository.ts",
           "to": "backend/src/modules/entity/domain/value-objects/EntityValueObjects.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/interfaces/DirectoryController.ts",
+          "to": "backend/src/modules/entity/application/services/DirectoryService.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/entity/interfaces/DirectoryRoutes.ts",
+          "to": "backend/src/modules/entity/interfaces/DirectoryController.ts",
           "type": "import"
         },
         {
@@ -38960,6 +40296,11 @@
         {
           "from": "backend/src/modules/media/interfaces/http/MediaRoutes.ts",
           "to": "backend/src/modules/media/interfaces/http/middleware/MediaMiddleware.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/media/interfaces/http/middleware/MediaMiddleware.ts",
+          "to": "backend/src/modules/media/infrastructure/processing/VirusScannerService.ts",
           "type": "import"
         },
         {
@@ -40008,11 +41349,6 @@
           "type": "import"
         },
         {
-          "from": "backend/src/modules/relationship/application/services/GraphTraversalService.ts",
-          "to": "backend/src/modules/relationship/domain/value-objects/RelationshipValueObjects.ts",
-          "type": "import"
-        },
-        {
           "from": "backend/src/modules/relationship/application/services/RelationshipWeightingService.ts",
           "to": "backend/src/modules/relationship/domain/interfaces/IRelationshipWeightingService.ts",
           "type": "import"
@@ -40073,8 +41409,18 @@
           "type": "import"
         },
         {
+          "from": "backend/src/modules/relationship/domain/services/GraphConsistencyService.ts",
+          "to": "backend/src/modules/relationship/domain/errors/RelationshipErrors.ts",
+          "type": "import"
+        },
+        {
           "from": "backend/src/modules/relationship/domain/services/TemporalValidationService.ts",
           "to": "backend/src/modules/relationship/domain/entities/Relationship.ts",
+          "type": "import"
+        },
+        {
+          "from": "backend/src/modules/relationship/domain/services/TemporalValidationService.ts",
+          "to": "backend/src/modules/relationship/domain/errors/RelationshipErrors.ts",
           "type": "import"
         },
         {
@@ -41469,6 +42815,11 @@
         },
         {
           "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "to": "frontend/src/pages/admin/entities/CreateNewEntityPage.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/AdminDashboardPage.tsx",
           "to": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
           "type": "import"
         },
@@ -41538,6 +42889,16 @@
           "type": "import"
         },
         {
+          "from": "frontend/src/pages/admin/entities/CreateNewEntityPage.tsx",
+          "to": "frontend/src/services/api.ts",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/entities/EditEntityPage.tsx",
+          "to": "frontend/src/services/api.ts",
+          "type": "import"
+        },
+        {
           "from": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
           "to": "frontend/src/services/api.ts",
           "type": "import"
@@ -41545,6 +42906,11 @@
         {
           "from": "frontend/src/pages/admin/entities/EntityAdmin.tsx",
           "to": "frontend/src/pages/admin/components/MetricCard.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/entities/SingleEntityPage.tsx",
+          "to": "frontend/src/services/api.ts",
           "type": "import"
         },
         {
@@ -41574,6 +42940,61 @@
         },
         {
           "from": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
+          "to": "frontend/src/pages/admin/ontology/OntologyAuditTab.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
+          "to": "frontend/src/pages/admin/ontology/OntologyConstraintsTab.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
+          "to": "frontend/src/pages/admin/ontology/OntologyEntityTypesTab.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
+          "to": "frontend/src/pages/admin/ontology/OntologyMetadataTab.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
+          "to": "frontend/src/pages/admin/ontology/OntologyOverview.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
+          "to": "frontend/src/pages/admin/ontology/OntologyRelationshipTypesTab.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
+          "to": "frontend/src/pages/admin/ontology/OntologyRequiredFieldsTab.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
+          "to": "frontend/src/pages/admin/ontology/OntologyValidationRulesTab.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/ontology/OntologyAdmin.tsx",
+          "to": "frontend/src/pages/admin/ontology/OntologyVersionsTab.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/ontology/OntologyEntityTypesTab.tsx",
+          "to": "frontend/src/services/api.ts",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/ontology/OntologyOverview.tsx",
+          "to": "frontend/src/pages/admin/components/MetricCard.tsx",
+          "type": "import"
+        },
+        {
+          "from": "frontend/src/pages/admin/ontology/OntologyRelationshipTypesTab.tsx",
           "to": "frontend/src/services/api.ts",
           "type": "import"
         },
@@ -41619,6 +43040,6 @@
     "added": [],
     "changed": [],
     "deleted": [],
-    "unchanged": 1131
+    "unchanged": 1169
   }
 }

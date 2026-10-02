@@ -10,6 +10,13 @@ export interface EntityTypeProps {
   ontologyId: OntologyId;
   name: string;
   description: string;
+  displayName?: string;
+  pluralDisplayName?: string;
+  icon?: string;
+  color?: string;
+  namespaceUri?: string;
+  parentEntityId?: string;
+  isDraft?: boolean;
 }
 
 export class EntityType extends AggregateRoot<EntityTypeProps> {
@@ -79,6 +86,13 @@ export class EntityType extends AggregateRoot<EntityTypeProps> {
   public update(
     name: string,
     description: string,
+    displayName?: string,
+    pluralDisplayName?: string,
+    icon?: string,
+    color?: string,
+    namespaceUri?: string,
+    parentEntityId?: string,
+    isDraft?: boolean,
   ): void {
     const normalizedName = name?.trim();
 
@@ -97,6 +111,13 @@ export class EntityType extends AggregateRoot<EntityTypeProps> {
     this.props.name = normalizedName;
     this.props.description =
       description?.trim() ?? '';
+    this.props.displayName = displayName?.trim() || undefined;
+    this.props.pluralDisplayName = pluralDisplayName?.trim() || undefined;
+    this.props.icon = icon?.trim() || undefined;
+    this.props.color = color?.trim() || undefined;
+    this.props.namespaceUri = namespaceUri?.trim() || undefined;
+    this.props.parentEntityId = parentEntityId?.trim() || undefined;
+    this.props.isDraft = isDraft ?? false;
 
     this.addDomainEvent(
       new EntityTypeUpdatedEvent(this.id),
@@ -117,8 +138,32 @@ export class EntityType extends AggregateRoot<EntityTypeProps> {
     return this.props.name;
   }
 
-  get description(): string {
-    return this.props.description;
+  get displayName(): string | undefined {
+    return this.props.displayName;
+  }
+
+  get pluralDisplayName(): string | undefined {
+    return this.props.pluralDisplayName;
+  }
+
+  get icon(): string | undefined {
+    return this.props.icon;
+  }
+
+  get color(): string | undefined {
+    return this.props.color;
+  }
+
+  get namespaceUri(): string | undefined {
+    return this.props.namespaceUri;
+  }
+
+  get parentEntityId(): string | undefined {
+    return this.props.parentEntityId;
+  }
+
+  get isDraft(): boolean {
+    return this.props.isDraft ?? false;
   }
 
   get ontologyId(): OntologyId {

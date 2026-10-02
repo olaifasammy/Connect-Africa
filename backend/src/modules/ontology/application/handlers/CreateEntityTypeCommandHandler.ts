@@ -24,13 +24,20 @@ export class CreateEntityTypeCommandHandler
     command: CreateEntityTypeCommand,
     userId?: string,
     ipAddress?: string,
-  ): Promise<EntityTypeDto> {
+  ): Promise<EntityTypeDto & { displayName?: string; pluralDisplayName?: string; icon?: string; color?: string; namespaceUri?: string; parentEntityId?: string; isDraft?: boolean }> {
     const entityType =
       await this.entityTypeService.createEntityType(
         command.ontologyId,
         {
           name: command.name,
           description: command.description,
+          displayName: command.displayName,
+          pluralDisplayName: command.pluralDisplayName,
+          icon: command.icon,
+          color: command.color,
+          namespaceUri: command.namespaceUri,
+          parentEntityId: command.parentEntityId,
+          isDraft: command.isDraft,
         },
         userId,
         ipAddress,
@@ -40,6 +47,13 @@ export class CreateEntityTypeCommandHandler
       id: entityType.id.toString(),
       name: entityType.name,
       description: entityType.description,
+      displayName: entityType.displayName,
+      pluralDisplayName: entityType.pluralDisplayName,
+      icon: entityType.icon,
+      color: entityType.color,
+      namespaceUri: entityType.namespaceUri,
+      parentEntityId: entityType.parentEntityId,
+      isDraft: entityType.isDraft,
     };
   }
 }

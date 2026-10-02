@@ -189,6 +189,10 @@ export const aiAdminApi = {
 };
 
 export const auditApi = {
+
+  getSchema: async (): Promise<Record<string, unknown>> => {
+    return await api.get('/entity/schema');
+  },
   list: async () => {
     const response = await api.get('/audit');
     const data = unwrapData<any>(response);
@@ -217,6 +221,10 @@ export const authAdminApi = {
 };
 
 export const ontologyApi = {
+
+  getSchema: async (): Promise<Record<string, unknown>> => {
+    return await api.get('/entity/schema');
+  },
   list: async () => {
     const response = await api.get('/ontology');
     const data = unwrapData<any>(response);
@@ -234,6 +242,10 @@ export const ontologyApi = {
   },
 };
 export const entityApi = {
+
+  getSchema: async (): Promise<Record<string, unknown>> => {
+    return await api.get('/entity/schema');
+  },
   list: async (limit = 10): Promise<EntitySummary[]> => {
     const response = await api.get(`/entity?limit=${limit}&strategy=offset`);
     const data = unwrapData<any>(response);
@@ -247,6 +259,165 @@ export const entityApi = {
       createdAt: e.createdAt,
       updatedAt: e.updatedAt || e.createdAt,
     }));
+  },
+
+  get: async (id: string): Promise<EntitySummary | null> => {
+    const response = await api.get(`/entity/${encodeURIComponent(id)}`);
+    const data = unwrapData<any>(response);
+    if (!data || typeof data !== 'object') return null;
+    return {
+      id: String(data.id || data._id),
+      name: data.name || data.title || 'Untitled entity',
+      slug: data.slug || data.id,
+      type: data.type || data.entityType || 'Entity',
+      description: data.description || data.summary || null,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt || data.createdAt,
+    };
+  },
+
+  getBySlug: async (slug: string): Promise<EntitySummary | null> => {
+    const response = await api.get(`/entity/slug/${encodeURIComponent(slug)}`);
+    const data = unwrapData<any>(response);
+    if (!data || typeof data !== 'object') return null;
+    return {
+      id: String(data.id || data._id),
+      name: data.name || data.title || 'Untitled entity',
+      slug: data.slug || data.id,
+      type: data.type || data.entityType || 'Entity',
+      description: data.description || data.summary || null,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt || data.createdAt,
+    };
+  },
+
+  getByIdentifier: async (identifier: string): Promise<EntitySummary | null> => {
+    const response = await api.get(`/entity/identifier/${encodeURIComponent(identifier)}`);
+    const data = unwrapData<any>(response);
+    if (!data || typeof data !== 'object') return null;
+    return {
+      id: String(data.id || data._id),
+      name: data.name || data.title || 'Untitled entity',
+      slug: data.slug || data.id,
+      type: data.type || data.entityType || 'Entity',
+      description: data.description || data.summary || null,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt || data.createdAt,
+    };
+  },
+
+  create: async (dto: Record<string, unknown>): Promise<{ success: boolean }> => {
+    return await api.post('/entity', dto);
+  },
+
+  update: async (id: string, dto: Record<string, unknown>): Promise<{ success: boolean }> => {
+    return await api.put(`/entity/${encodeURIComponent(id)}`, dto);
+  },
+
+  delete: async (id: string): Promise<{ success: boolean }> => {
+    return await api.delete(`/entity/${encodeURIComponent(id)}`);
+  },
+
+  search: async (term: string): Promise<EntitySummary[]> => {
+    const response = await api.post('/entity/search', { query: term });
+    const data = unwrapData<any>(response);
+    const items = Array.isArray(data) ? data : (data?.results || data?.items || []);
+    return items.map((e: any) => ({
+      id: String(e.id || e._id),
+      name: e.name || e.title || 'Untitled entity',
+      slug: e.slug || e.id,
+      type: e.type || e.entityType || 'Entity',
+      description: e.description || e.summary || null,
+      createdAt: e.createdAt,
+      updatedAt: e.updatedAt || e.createdAt,
+    }));
+  },
+
+  export: async (format: 'json' | 'csv' = 'json', status?: string, type?: string): Promise<{ data: string; contentType: string; fileName: string }> => {
+    const params = new URLSearchParams({ format });
+    if (status) params.append('status', status);
+    if (type) params.append('type', type);
+    const response = await api.get(`/entity/export?${params.toString()}`);
+    return unwrapData<any>(response);
+  },
+
+  import: async (items: Record<string, unknown>[]): Promise<{ success: boolean; data: unknown }> => {
+    return await api.post('/entity/import', { items });
+  },
+
+  getDashboardSummary: async (): Promise<Record<string, unknown>> => {
+    return await api.get('/entity/dashboard/summary');
+  },
+
+  getQualityDistribution: async (): Promise<Record<string, unknown>> => {
+    return await api.get('/entity/quality/distribution');
+  },
+
+  getVerificationQueue: async (limit = 20): Promise<Record<string, unknown>> => {
+    return await api.get(`/entity/verification-queue?limit=${limit}`);
+  },
+
+  getDuplicates: async (threshold = 0.4): Promise<Record<string, unknown>> => {
+    return await api.get(`/entity/duplicates?threshold=${threshold}`);
+  },
+
+  resolveDuplicate: async (payload: Record<string, unknown>): Promise<{ success: boolean }> => {
+    return await api.post('/entity/resolve-duplicate', payload);
+  },
+
+  getActivity: async (limit = 20): Promise<Record<string, unknown>> => {
+    return await api.get(`/entity/activity?limit=${limit}`);
+  },
+
+  getAliases: async (id: string): Promise<Record<string, unknown>> => {
+    return await api.get(`/entity/${encodeURIComponent(id)}/aliases`);
+  },
+
+  addAlias: async (id: string, alias: string): Promise<{ success: boolean }> => {
+    return await api.post(`/entity/${encodeURIComponent(id)}/alias`, { alias });
+  },
+
+  removeAlias: async (id: string, alias: string): Promise<{ success: boolean }> => {
+    return await request(`/entity/${encodeURIComponent(id)}/alias`, {
+      method: 'DELETE',
+      body: JSON.stringify({ alias }),
+    });
+  },
+
+  getVersion: async (id: string, versionId: string): Promise<Record<string, unknown>> => {
+    return await api.get(`/entity/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`);
+  },
+
+  createVersion: async (id: string): Promise<{ success: boolean }> => {
+    return await api.post(`/entity/${encodeURIComponent(id)}/version`);
+  },
+
+  publish: async (id: string): Promise<{ success: boolean }> => {
+    return await api.post(`/entity/${encodeURIComponent(id)}/publish`);
+  },
+
+  archive: async (id: string): Promise<{ success: boolean }> => {
+    return await api.post(`/entity/${encodeURIComponent(id)}/archive`);
+  },
+
+  restore: async (id: string): Promise<{ success: boolean }> => {
+    return await api.post(`/entity/${encodeURIComponent(id)}/restore`);
+  },
+
+  submitForReview: async (id: string): Promise<{ success: boolean }> => {
+    return await api.post(`/entity/${encodeURIComponent(id)}/submit`);
+  },
+
+  approve: async (id: string): Promise<{ success: boolean }> => {
+    return await api.post(`/entity/${encodeURIComponent(id)}/approve`);
+  },
+
+  reject: async (id: string): Promise<{ success: boolean }> => {
+    return await api.post(`/entity/${encodeURIComponent(id)}/reject`);
+  },
+
+  merge: async (sourceId: string, targetId: string): Promise<{ success: boolean }> => {
+    return await api.post('/entity/merge', { sourceId, targetId });
   },
 };
 
@@ -438,6 +609,10 @@ export interface ApiKeyItem {
 }
 
 export const apiKeyApi = {
+
+  getSchema: async (): Promise<Record<string, unknown>> => {
+    return await api.get('/entity/schema');
+  },
   list: async (): Promise<ApiKeyItem[]> => {
     const response = await api.get('/auth/api-keys');
     const data = unwrapData<any>(response);

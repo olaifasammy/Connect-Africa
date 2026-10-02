@@ -161,6 +161,13 @@ export class PostgresEntityTypeRepository
         ),
         name: row.name,
         description: row.description ?? '',
+        displayName: row.display_name ?? undefined,
+        pluralDisplayName: row.plural_display_name ?? undefined,
+        icon: row.icon ?? undefined,
+        color: row.color ?? undefined,
+        namespaceUri: row.namespace_uri ?? undefined,
+        parentEntityId: row.parent_entity_id ?? undefined,
+        isDraft: row.is_draft,
       },
       new UniqueEntityId(row.id),
     );

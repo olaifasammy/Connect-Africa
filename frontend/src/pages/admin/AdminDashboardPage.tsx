@@ -7,6 +7,7 @@ import { UsersAdmin } from './identity/UsersAdmin';
 import { AuditAdmin } from './observability/AuditAdmin';
 import { AIAdmin } from './intelligence/AIAdmin';
 import { EntityAdmin } from './entities/EntityAdmin';
+import { CreateNewEntityPage } from './entities/CreateNewEntityPage';
 import { Shield } from 'lucide-react';
 
 function ModuleView({ title, description }: { title: string; description: string }) {
@@ -46,6 +47,7 @@ export function AdminDashboardPage() {
       <Routes>
         <Route path="/" element={<AdminOverview />} />
         <Route path="/entities" element={<EntityAdmin />} />
+        <Route path="/entities/create" element={<CreateNewEntityPage />} />
         <Route
           path="/relationships"
           element={<ModuleView title="Relationship Management" description="Inspect graph edge topologies, weighted connections, and dependencies." />}

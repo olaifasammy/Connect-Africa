@@ -6,6 +6,7 @@ import { ListEntitiesQuery } from '@modules/entity/application/queries/ListEntit
 import { IEntityRepository } from '@modules/entity/domain/repositories/IEntityRepository';
 import { EntityResponse } from '@modules/entity/application/dto/EntityResponse';
 import { PaginatedResult } from '@shared/application/pagination/PaginationTypes';
+import { EntityResponseHelper } from '@modules/entity/application/services/EntityResponseHelper';
 
 export interface ListEntitiesResponse {
   items: EntityResponse[];
@@ -20,6 +21,8 @@ export class ListEntitiesQueryHandler
   constructor(
     @inject('IEntityRepository')
     private readonly entityRepository: IEntityRepository,
+    @inject(EntityResponseHelper)
+    private readonly responseHelper: EntityResponseHelper,
   ) {}
 
   async handle(
@@ -30,19 +33,10 @@ export class ListEntitiesQueryHandler
         query.pagination,
       );
 
+    const enrichedItems = await this.responseHelper.enrich(result.items);
+
     return {
-      items: result.items.map((entity) => ({
-        id: entity.entityId.value,
-        name: entity.name.value,
-        type: entity.type,
-        slug: entity.metadata.slug!,
-        description: entity.metadata.description,
-        source: entity.metadata.source,
-        tags: entity.metadata.tags,
-        status: entity.status,
-        createdAt: entity.createdAt,
-        updatedAt: entity.updatedAt,
-      })),
+      items: enrichedItems,
       pagination: result.pagination,
     };
   }

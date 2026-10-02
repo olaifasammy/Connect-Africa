@@ -6,6 +6,7 @@ import { GetEntityQuery } from '@modules/entity/application/queries/GetEntityQue
 import { EntityId } from '@modules/entity/domain/value-objects/EntityId';
 import { IEntityRepository } from '@modules/entity/domain/repositories/IEntityRepository';
 import { EntityResponse } from '@modules/entity/application/dto/EntityResponse';
+import { EntityResponseHelper } from '@modules/entity/application/services/EntityResponseHelper';
 
 @provide(GetEntityQueryHandler, true)
 @injectable()
@@ -15,6 +16,8 @@ export class GetEntityQueryHandler
   constructor(
     @inject('IEntityRepository')
     private readonly entityRepository: IEntityRepository,
+    @inject(EntityResponseHelper)
+    private readonly responseHelper: EntityResponseHelper,
   ) {}
 
   async handle(
@@ -28,17 +31,7 @@ export class GetEntityQueryHandler
       throw new Error('Entity not found');
     }
 
-    return {
-      id: entity.entityId.value,
-      name: entity.name.value,
-      type: entity.type,
-      slug: entity.metadata.slug!,
-      description: entity.metadata.description,
-      source: entity.metadata.source,
-      tags: entity.metadata.tags,
-      status: entity.status,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
-    };
+    const enriched = await this.responseHelper.enrich([entity]);
+    return enriched[0];
   }
 }

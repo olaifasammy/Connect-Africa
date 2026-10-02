@@ -24,6 +24,10 @@ import {
   IApiKeyRepository,
 } from '@modules/auth/domain/repositories/IApiKeyRepository';
 
+import {
+  ISessionRepository,
+} from '@modules/auth/domain/repositories/ISessionRepository';
+
 import bcrypt from 'bcryptjs';
 
 import {
@@ -52,6 +56,10 @@ export class AuthenticationMiddleware {
     @inject('IApiKeyRepository')
     private readonly apiKeyRepository:
       IApiKeyRepository,
+
+    @inject('ISessionRepository')
+    private readonly sessionRepository:
+      ISessionRepository,
   ) {}
 
   authenticate =
@@ -157,6 +165,26 @@ export class AuthenticationMiddleware {
       }
 
       try {
+        const sessionUserId =
+          await this.sessionRepository.getSessionUserId(
+            token,
+          );
+
+        if (!sessionUserId) {
+          res.status(401).json({
+            success: false,
+            errors: [
+              {
+                code:
+                  'SESSION_REVOKED',
+                message:
+                  'Session has been revoked or expired.',
+              },
+            ],
+          });
+          return;
+        }
+
         const userId =
           this.jwtProvider.verifyToken(
             token,

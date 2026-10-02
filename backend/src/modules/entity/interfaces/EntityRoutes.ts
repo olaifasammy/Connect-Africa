@@ -125,6 +125,54 @@ export const createEntityRoutes = (
   );
 
   router.get(
+    '/dashboard/summary',
+    authorize(Permission.ENTITY_READ),
+    (req, res) => controller.getDashboardSummary(req, res),
+  );
+
+  router.get(
+    '/quality/distribution',
+    authorize(Permission.ENTITY_READ),
+    (req, res) => controller.getQualityDistribution(req, res),
+  );
+
+  router.get(
+    '/verification-queue',
+    authorize(Permission.ENTITY_READ),
+    (req, res) => controller.getVerificationQueue(req, res),
+  );
+
+  router.get(
+    '/duplicates',
+    authorize(Permission.ENTITY_READ),
+    (req, res) => controller.getDuplicates(req, res),
+  );
+
+  router.post(
+    '/resolve-duplicate',
+    authorize(Permission.ENTITY_WRITE),
+    (req, res) => controller.resolveDuplicate(req, res),
+  );
+
+  router.get(
+    '/activity',
+    authorize(Permission.ENTITY_READ),
+    (req, res) => controller.getActivity(req, res),
+  );
+
+  router.get(
+    '/export',
+    authorize(Permission.ENTITY_READ),
+    (req, res) => controller.exportEntities(req, res),
+  );
+
+  router.post(
+    '/import',
+    authorize(Permission.ENTITY_CREATE),
+    (req, res) => controller.importEntities(req, res),
+  );
+
+  router.get(
     '/:id',
     authorize(Permission.ENTITY_READ),
     (req, res) => controller.get(req, res),
@@ -152,6 +200,13 @@ export const createEntityRoutes = (
     '/:id/versions/:versionId',
     authorize(Permission.ENTITY_VERSION_READ),
     (req, res) => controller.getVersion(req, res),
+  );
+
+
+  router.get(
+    '/schema',
+    authorize(Permission.ENTITY_READ),
+    (req, res) => controller.getSchema(req, res),
   );
 
   return router;

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Layers3,
   CheckCircle2,
@@ -44,6 +45,7 @@ export function EntityAdmin() {
   const [selectedStatus, setSelectedStatus] = useState('All Statuses');
   const [selectedQuality, setSelectedQuality] = useState('All Quality');
   const [activeTab, setActiveTab] = useState('All Entities');
+  const navigate = useNavigate();
 
   const handleReset = () => {
     setSearchTerm('');
@@ -117,6 +119,7 @@ export function EntityAdmin() {
 
           <button
             type="button"
+            onClick={() => navigate('/admin/entities/create')}
             className="ca-btn-primary px-4 py-2 text-xs font-mono uppercase tracking-wider"
           >
             <Plus className="h-4 w-4" />

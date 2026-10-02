@@ -9,4 +9,6 @@ export interface EntityResponse {
   status: 'DRAFT' | 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'PUBLISHED' | 'ARCHIVED';
   createdAt: Date;
   updatedAt: Date;
+  qualityScore?: number;
+  updatedBy?: { displayName: string; avatarUrl?: string };
 }

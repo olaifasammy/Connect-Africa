@@ -32,6 +32,13 @@ export class EntityTypeService {
     dto: {
       name: string;
       description: string;
+      displayName?: string;
+      pluralDisplayName?: string;
+      icon?: string;
+      color?: string;
+      namespaceUri?: string;
+      parentEntityId?: string;
+      isDraft?: boolean;
     },
     userId?: string,
     ipAddress?: string,
@@ -57,6 +64,13 @@ export class EntityTypeService {
         ontologyId: normalizedOntologyId,
         name: dto.name,
         description: dto.description,
+        displayName: dto.displayName,
+        pluralDisplayName: dto.pluralDisplayName,
+        icon: dto.icon,
+        color: dto.color,
+        namespaceUri: dto.namespaceUri,
+        parentEntityId: dto.parentEntityId,
+        isDraft: dto.isDraft,
       });
 
     EntityTypeValidator.validate({

@@ -833,3 +833,25 @@
 {"level":"info","message":"BullMQ EventBus initialized.","timestamp":"2026-09-22T09:37:54.287Z"}
 {"level":"info","message":"BullMQ worker connection ready.","timestamp":"2026-09-22T09:37:54.903Z"}
 {"action":"VERIFY_EMAIL","ipAddress":"127.0.0.1","level":"info","message":"AUDIT_LOG","resource":"AUTH","status":"SUCCESS","timestamp":"2026-09-22T09:37:52.590Z","user":"f22e7ff5-b5c8-4171-abb7-7f708fc20a20"}
+{"address":"127.0.0.1","code":"ECONNREFUSED","errno":-111,"level":"warn","message":"Failed to connect to PostgreSQL during initialization: connect ECONNREFUSED 127.0.0.1:5432","port":5432,"stack":"Error: connect ECONNREFUSED 127.0.0.1:5432\n    at /data/data/com.termux/files/home/pro/projects/Connect-Africa/backend/node_modules/pg-pool/index.js:45:11\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async PostgresProvider.connect (/data/data/com.termux/files/home/pro/projects/Connect-Africa/backend/dist/shared/infrastructure/database/PostgresProvider.js:40:13)\n    at async BootstrapService.run (/data/data/com.termux/files/home/pro/projects/Connect-Africa/backend/dist/bootstrap/startup/BootstrapService.js:19:13)\n    at async bootstrap (/data/data/com.termux/files/home/pro/projects/Connect-Africa/backend/dist/index.js:57:24)","syscall":"connect","timestamp":"2026-09-24T19:17:43.814Z"}
+{"level":"warn","message":"Redis cache warning (degraded mode):","timestamp":"2026-09-24T19:17:43.927Z"}
+{"level":"warn","message":"Redis health check failed (degraded mode): Connection is closed.","stack":"Error: Connection is closed.\n    at close (/data/data/com.termux/files/home/pro/projects/Connect-Africa/backend/node_modules/ioredis/built/redis/event_handler.js:214:25)\n    at Socket.<anonymous> (/data/data/com.termux/files/home/pro/projects/Connect-Africa/backend/node_modules/ioredis/built/redis/event_handler.js:190:20)\n    at Object.onceWrapper (node:events:631:26)\n    at Socket.emit (node:events:509:28)\n    at TCP.<anonymous> (node:net:351:12)","timestamp":"2026-09-24T19:17:43.933Z"}
+{"level":"info","message":"BullMQ EventBus initialized.","timestamp":"2026-09-24T19:17:43.973Z"}
+{"attempt":1,"component":"Queue","error":"connect ECONNREFUSED 127.0.0.1:6379","level":"warn","maxAttempts":3,"message":"BullMQ Queue infrastructure error.","stack":"Error: connect ECONNREFUSED 127.0.0.1:6379\n    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)","timestamp":"2026-09-24T19:17:44.616Z"}
+{"level":"info","message":"BullMQ EventBus initialized.","timestamp":"2026-09-24T19:18:35.589Z"}
+{"level":"info","message":"BullMQ worker connection ready.","timestamp":"2026-09-24T19:18:36.287Z"}
+{"action":"TOKEN_GENERATION","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"ACCESS","status":"SUCCESS","timestamp":"2026-09-24T19:19:45.905Z","user":"user-admin-001"}
+{"action":"TOKEN_GENERATION","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"REFRESH","status":"SUCCESS","timestamp":"2026-09-24T19:19:45.914Z","user":"user-admin-001"}
+{"action":"SESSION_CREATED","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"SESSION","status":"SUCCESS","timestamp":"2026-09-24T19:19:45.948Z","user":"user-admin-001"}
+{"level":"info","message":"Processing job: UserLoggedInEvent","timestamp":"2026-09-24T19:19:46.000Z"}
+{"level":"info","message":"Processing job: AuditLogRequestedEvent","timestamp":"2026-09-24T19:19:46.048Z"}
+{"action":"TOKEN_GENERATION","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"ACCESS","status":"SUCCESS","timestamp":"2026-09-24T19:37:18.396Z","user":"user-admin-001"}
+{"action":"TOKEN_GENERATION","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"REFRESH","status":"SUCCESS","timestamp":"2026-09-24T19:37:18.401Z","user":"user-admin-001"}
+{"action":"SESSION_CREATED","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"SESSION","status":"SUCCESS","timestamp":"2026-09-24T19:37:18.407Z","user":"user-admin-001"}
+{"level":"info","message":"Processing job: UserLoggedInEvent","timestamp":"2026-09-24T19:37:18.419Z"}
+{"level":"info","message":"Processing job: AuditLogRequestedEvent","timestamp":"2026-09-24T19:37:18.429Z"}
+{"action":"TOKEN_GENERATION","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"ACCESS","status":"SUCCESS","timestamp":"2026-09-24T20:05:19.001Z","user":"user-admin-001"}
+{"action":"TOKEN_GENERATION","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"REFRESH","status":"SUCCESS","timestamp":"2026-09-24T20:05:19.005Z","user":"user-admin-001"}
+{"action":"SESSION_CREATED","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"SESSION","status":"SUCCESS","timestamp":"2026-09-24T20:05:19.012Z","user":"user-admin-001"}
+{"level":"info","message":"Processing job: UserLoggedInEvent","timestamp":"2026-09-24T20:05:19.021Z"}
+{"level":"info","message":"Processing job: AuditLogRequestedEvent","timestamp":"2026-09-24T20:05:19.032Z"}

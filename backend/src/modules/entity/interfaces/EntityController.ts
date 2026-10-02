@@ -17,6 +17,9 @@ import { GetEntityByIdentifierQueryHandler } from '@modules/entity/application/h
 import { GetEntityBySlugQueryHandler } from '@modules/entity/application/handlers/GetEntityBySlugQueryHandler';
 import { ListEntitiesQueryHandler } from '@modules/entity/application/handlers/ListEntitiesQueryHandler';
 import { ListEntitiesQuery } from '@modules/entity/application/queries/ListEntitiesQuery';
+import { GetEntitySchemaQueryHandler } from '@modules/entity/application/handlers/GetEntitySchemaQueryHandler';
+import { GetEntitySchemaQuery } from '@modules/entity/application/queries/GetEntitySchemaQuery';
+
 import { SearchEntitiesQueryHandler } from '@modules/entity/application/handlers/SearchEntitiesQueryHandler';
 import { ListAliasesQueryHandler } from '@modules/entity/application/handlers/ListAliasesQueryHandler';
 import { GetEntityVersionQueryHandler } from '@modules/entity/application/handlers/GetEntityVersionQueryHandler';
@@ -26,7 +29,25 @@ import { RejectEntityCommandHandler } from '@modules/entity/application/handlers
 import { SubmitEntityForReviewCommand } from '@modules/entity/application/commands/SubmitEntityForReviewCommand';
 import { ApproveEntityCommand } from '@modules/entity/application/commands/ApproveEntityCommand';
 import { RejectEntityCommand } from '@modules/entity/application/commands/RejectEntityCommand';
+import { ResolveEntityDuplicateCommand } from '@modules/entity/application/commands/ResolveEntityDuplicateCommand';
 import { EntitySearchRequest } from '@modules/entity/application/dto/EntitySearchRequest';
+
+import { GetEntityDashboardSummaryQuery } from '@modules/entity/application/queries/GetEntityDashboardSummaryQuery';
+import { GetEntityDashboardSummaryQueryHandler } from '@modules/entity/application/handlers/GetEntityDashboardSummaryQueryHandler';
+import { GetQualityDistributionQuery } from '@modules/entity/application/queries/GetQualityDistributionQuery';
+import { GetQualityDistributionQueryHandler } from '@modules/entity/application/handlers/GetQualityDistributionQueryHandler';
+import { GetVerificationQueueQuery } from '@modules/entity/application/queries/GetVerificationQueueQuery';
+import { GetVerificationQueueQueryHandler } from '@modules/entity/application/handlers/GetVerificationQueueQueryHandler';
+import { GetEntityDuplicatesQuery } from '@modules/entity/application/queries/GetEntityDuplicatesQuery';
+import { GetEntityDuplicatesQueryHandler } from '@modules/entity/application/handlers/GetEntityDuplicatesQueryHandler';
+import { ResolveEntityDuplicateCommandHandler } from '@modules/entity/application/handlers/ResolveEntityDuplicateCommandHandler';
+
+import { GetEntityActivityQuery } from '@modules/entity/application/queries/GetEntityActivityQuery';
+import { GetEntityActivityQueryHandler } from '@modules/entity/application/handlers/GetEntityActivityQueryHandler';
+import { ExportEntitiesQuery } from '@modules/entity/application/queries/ExportEntitiesQuery';
+import { ExportEntitiesQueryHandler } from '@modules/entity/application/handlers/ExportEntitiesQueryHandler';
+import { ImportEntitiesCommand } from '@modules/entity/application/commands/ImportEntitiesCommand';
+import { ImportEntitiesCommandHandler } from '@modules/entity/application/handlers/ImportEntitiesCommandHandler';
 
 import {
   PaginationRequest,
@@ -56,6 +77,15 @@ export class EntityController {
     private readonly submitForReviewHandler: SubmitEntityForReviewCommandHandler,
     private readonly approveHandler: ApproveEntityCommandHandler,
     private readonly rejectHandler: RejectEntityCommandHandler,
+    private readonly getDashboardSummaryHandler: GetEntityDashboardSummaryQueryHandler,
+    private readonly getQualityDistributionHandler: GetQualityDistributionQueryHandler,
+    private readonly getVerificationQueueHandler: GetVerificationQueueQueryHandler,
+    private readonly getDuplicatesHandler: GetEntityDuplicatesQueryHandler,
+    private readonly resolveDuplicateHandler: ResolveEntityDuplicateCommandHandler,
+    private readonly getEntityActivityHandler: GetEntityActivityQueryHandler,
+    private readonly exportEntitiesHandler: ExportEntitiesQueryHandler,
+    private readonly importEntitiesHandler: ImportEntitiesCommandHandler,
+    private readonly getSchemaHandler: GetEntitySchemaQueryHandler,
   ) {}
 
   async get(
@@ -574,4 +604,178 @@ export class EntityController {
     await this.rejectHandler.handle(new RejectEntityCommand(id, userId));
     res.status(200).json({ success: true });
   }
+
+  async getDashboardSummary(req: Request, res: Response): Promise<void> {
+    const result = await this.getDashboardSummaryHandler.handle(
+      new GetEntityDashboardSummaryQuery()
+    );
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  }
+
+  async getQualityDistribution(req: Request, res: Response): Promise<void> {
+    const result = await this.getQualityDistributionHandler.handle(
+      new GetQualityDistributionQuery()
+    );
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  }
+
+  async getVerificationQueue(req: Request, res: Response): Promise<void> {
+    const query = req.query as unknown as {
+      strategy?: 'offset' | 'cursor';
+      page?: number;
+      limit?: number;
+      cursor?: string;
+    };
+
+    let pagination: PaginationRequest;
+
+    if (query.strategy === 'cursor') {
+      pagination = {
+        strategy: 'cursor',
+        limit: query.limit ? Number(query.limit) : 20,
+        ...(query.cursor ? { cursor: query.cursor } : {}),
+      };
+    } else {
+      pagination = {
+        strategy: 'offset',
+        page: query.page ? Number(query.page) : 1,
+        limit: query.limit ? Number(query.limit) : 20,
+      };
+    }
+
+    const result = await this.getVerificationQueueHandler.handle(
+      new GetVerificationQueueQuery(pagination)
+    );
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  }
+
+  async getDuplicates(req: Request, res: Response): Promise<void> {
+    const threshold = req.query.threshold ? Number(req.query.threshold) : 0.4;
+    const result = await this.getDuplicatesHandler.handle(
+      new GetEntityDuplicatesQuery(threshold)
+    );
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  }
+
+  async resolveDuplicate(req: Request, res: Response): Promise<void> {
+    const userId = req.user?.id;
+    if (!userId) {
+      res.status(401).json({
+        success: false,
+        errors: [{ code: 'UNAUTHORIZED', message: 'User authentication is required.' }],
+      });
+      return;
+    }
+
+    const { sourceEntityId, duplicateEntityId, action } = req.body;
+
+    if (!sourceEntityId || !duplicateEntityId || !action) {
+      res.status(400).json({
+        success: false,
+        errors: [{ code: 'BAD_REQUEST', message: 'Missing required parameters.' }],
+      });
+      return;
+    }
+
+    if (action !== 'MERGE' && action !== 'DISMISS') {
+      res.status(400).json({
+        success: false,
+        errors: [{ code: 'BAD_REQUEST', message: 'Invalid action.' }],
+      });
+      return;
+    }
+
+    await this.resolveDuplicateHandler.handle(
+      new ResolveEntityDuplicateCommand(sourceEntityId, duplicateEntityId, action),
+      userId,
+      req.ip || ''
+    );
+
+    res.status(200).json({
+      success: true,
+    });
+  }
+
+  async getActivity(req: Request, res: Response): Promise<void> {
+    const limit = req.query.limit ? Number(req.query.limit) : 20;
+    const result = await this.getEntityActivityHandler.handle(
+      new GetEntityActivityQuery(limit)
+    );
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  }
+
+  async exportEntities(req: Request, res: Response): Promise<void> {
+    const format = (req.query.format as 'json' | 'csv') || 'json';
+    const status = req.query.status as string | undefined;
+    const type = req.query.type as string | undefined;
+
+    const result = await this.exportEntitiesHandler.handle(
+      new ExportEntitiesQuery(format, status, type)
+    );
+
+    res.setHeader('Content-Type', result.contentType);
+    res.setHeader('Content-Disposition', `attachment; filename="${result.fileName}"`);
+    res.status(200).send(result.data);
+  }
+
+  async importEntities(req: Request, res: Response): Promise<void> {
+    const userId = req.user?.id;
+    if (!userId) {
+      res.status(401).json({
+        success: false,
+        errors: [{ code: 'UNAUTHORIZED', message: 'User authentication is required.' }],
+      });
+      return;
+    }
+
+    const items = req.body.items || req.body;
+    if (!Array.isArray(items)) {
+      res.status(400).json({
+        success: false,
+        errors: [{ code: 'BAD_REQUEST', message: 'Invalid payload: items array is required.' }],
+      });
+      return;
+    }
+
+    const result = await this.importEntitiesHandler.handle(
+      new ImportEntitiesCommand(items),
+      userId,
+      req.ip || ''
+    );
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  }
+
+
+  async getSchema(req: Request, res: Response): Promise<void> {
+    const result = await this.getSchemaHandler.handle(new GetEntitySchemaQuery());
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  }
+
 }
