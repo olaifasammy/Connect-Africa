@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft,
-  Plus,
-  Trash2,
   Loader2,
   Check,
   Image as ImageIcon,
@@ -11,46 +9,45 @@ import {
   Heading,
   List,
   Quote,
-  ArrowDown,
-  ArrowUp,
   AlertCircle,
   Sparkles,
+  BookOpen,
+  Eye,
+  Edit3,
 } from 'lucide-react';
 import { articleApi, api, entityApi, type EntitySummary } from '../../../services/api';
-
-interface ContentBlock {
-  type: 'paragraph' | 'heading' | 'blockquote' | 'list' | 'image' | 'map';
-  text?: string;
-  level?: 2 | 3;
-  items?: string[];
-  url?: string;
-  caption?: string;
-  align?: 'left' | 'center' | 'right';
-  size?: 'small' | 'medium' | 'full';
-  title?: string;
-  description?: string;
-  location?: string;
-}
 
 export function ArticleEditorPage() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const isEditing = Boolean(id);
+
   const [entities, setEntities] = useState<EntitySummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [previewMode, setPreviewMode] = useState(false);
 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Archival Research');
   const [summary, setSummary] = useState('');
   const [entityId, setEntityId] = useState('');
   const [tags, setTags] = useState('Policy, Archive, Heritage');
-  const [blocks, setBlocks] = useState<ContentBlock[]>([
-    { type: 'paragraph', text: 'Enter introductory paragraph text here...' },
-  ]);
+  const [markdownContent, setMarkdownContent] = useState(
+`## Introduction & Historical Context
+Enter your historical analysis, research findings, and comprehensive documentation here. You can write fluidly just like a professional encyclopedia or digital archive.
 
-  const isEditing = Boolean(id);
+> "The archive is not a static repository of the past, but a living foundation for future innovation."
+
+### Key Themes & Methodologies
+- Accelerated investment in renewable energy corridors and cross-border connectivity.
+- Enhanced multi-lateral cooperation and open-access scholarly citation networks.
+- Strong institutional commitment to sustainable economic diversification and archival digitization.`
+  );
+
+  const errorRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     let active = true;
@@ -68,18 +65,25 @@ export function ArticleEditorPage() {
             setTitle(found.title);
             setCategory(found.category || 'Archival Research');
             setSummary(found.description || '');
-            let parsedBlocks: ContentBlock[] = [];
-            try {
-              if (typeof found.content === 'string') {
+            if (typeof found.content === 'string') {
+              try {
                 const json = JSON.parse(found.content);
-                if (Array.isArray(json)) parsedBlocks = json;
-              } else if (Array.isArray(found.content)) {
-                parsedBlocks = found.content;
+                if (Array.isArray(json)) {
+                  // Convert blocks back to markdown text for smooth editing
+                  const md = json.map((b: any) => {
+                    if (b.type === 'heading') return `\n\n### ${b.text}`;
+                    if (b.type === 'blockquote') return `\n\n> "${b.text}"`;
+                    if (b.type === 'list' && Array.isArray(b.items)) return `\n\n- ${b.items.join('\n- ')}`;
+                    return `\n\n${b.text || b.description || ''}`;
+                  }).join('');
+                  setMarkdownContent(md.trim());
+                } else {
+                  setMarkdownContent(found.content);
+                }
+              } catch {
+                setMarkdownContent(found.content || found.description || '');
               }
-            } catch {
-              parsedBlocks = [{ type: 'paragraph', text: String(found.content || found.description || '') }];
             }
-            if (parsedBlocks.length > 0) setBlocks(parsedBlocks);
           }
         } else if (entityData && entityData.length > 0) {
           setEntityId(entityData[0].id);
@@ -97,54 +101,84 @@ export function ArticleEditorPage() {
     };
   }, [id, isEditing]);
 
-  const addBlock = (type: ContentBlock['type']) => {
-    let newBlock: ContentBlock = { type };
-    if (type === 'paragraph') newBlock.text = '';
-    if (type === 'heading') { newBlock.text = ''; newBlock.level = 2; }
-    if (type === 'blockquote') newBlock.text = '';
-    if (type === 'list') newBlock.items = ['First point', 'Second point'];
-    if (type === 'image') { newBlock.url = '/images/africa.svg'; newBlock.caption = 'Figure caption'; newBlock.align = 'center'; newBlock.size = 'medium'; }
-    if (type === 'map') { newBlock.title = 'Geographic Corridor'; newBlock.description = 'Mapping regional trade networks'; newBlock.location = 'EAC Region'; }
-    
-    setBlocks([...blocks, newBlock]);
-  };
-
-  const removeBlock = (index: number) => {
-    setBlocks(blocks.filter((_, i) => i !== index));
-  };
-
-  const moveBlock = (index: number, direction: 'up' | 'down') => {
-    const target = direction === 'up' ? index - 1 : index + 1;
-    if (target < 0 || target >= blocks.length) return;
-    const updated = [...blocks];
-    const temp = updated[index];
-    updated[index] = updated[target];
-    updated[target] = temp;
-    setBlocks(updated);
-  };
-
-  const updateBlock = (index: number, updatedProps: Partial<ContentBlock>) => {
-    const updated = [...blocks];
-    updated[index] = { ...updated[index], ...updatedProps };
-    setBlocks(updated);
+  const insertSnippet = (snippet: string) => {
+    if (!editorRef.current) return;
+    const el = editorRef.current;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const text = el.value;
+    const updated = text.substring(0, start) + snippet + text.substring(end);
+    setMarkdownContent(updated);
+    setTimeout(() => {
+      el.focus();
+      el.setSelectionRange(start + snippet.length, start + snippet.length);
+    }, 50);
   };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !summary.trim()) {
-      setError('Article Title and Summary are required.');
+    setError(null);
+    setSuccess(null);
+
+    // Validation checks with pointer feedback
+    if (!title.trim()) {
+      setError('Validation Error: Article title is required. Please enter a valid publication title.');
+      errorRef.current?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    if (!summary.trim()) {
+      setError('Validation Error: Summary/Abstract is required to index this publication.');
+      errorRef.current?.scrollIntoView({ behavior: 'smooth' });
       return;
     }
     if (!isEditing && !entityId) {
-      setError('An article must be connected to a knowledge graph entity.');
+      setError('Validation Error: Every article must be connected to a knowledge graph entity.');
+      errorRef.current?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    if (!markdownContent.trim() || markdownContent.trim().length < 20) {
+      setError('Validation Error: Article body content is too short. Please provide comprehensive scholarly text.');
+      errorRef.current?.scrollIntoView({ behavior: 'smooth' });
       return;
     }
 
     setSaving(true);
-    setError(null);
-    setSuccess(null);
 
     try {
+      // Parse markdown into structured blocks for backend schema compatibility
+      const lines = markdownContent.split('\n');
+      const blocks: any[] = [];
+      let currentPara = '';
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('## ')) {
+          if (currentPara) { blocks.push({ type: 'paragraph', text: currentPara.trim() }); currentPara = ''; }
+          blocks.push({ type: 'heading', level: 2, text: trimmed.replace('## ', '') });
+        } else if (trimmed.startsWith('### ')) {
+          if (currentPara) { blocks.push({ type: 'paragraph', text: currentPara.trim() }); currentPara = ''; }
+          blocks.push({ type: 'heading', level: 3, text: trimmed.replace('### ', '') });
+        } else if (trimmed.startsWith('> ')) {
+          if (currentPara) { blocks.push({ type: 'paragraph', text: currentPara.trim() }); currentPara = ''; }
+          blocks.push({ type: 'blockquote', text: trimmed.replace('> ', '').replace(/"/g, '') });
+        } else if (trimmed.startsWith('- ')) {
+          if (currentPara) { blocks.push({ type: 'paragraph', text: currentPara.trim() }); currentPara = ''; }
+          const lastBlock = blocks[blocks.length - 1];
+          if (lastBlock && lastBlock.type === 'list') {
+            lastBlock.items.push(trimmed.replace('- ', ''));
+          } else {
+            blocks.push({ type: 'list', items: [trimmed.replace('- ', '')] });
+          }
+        } else if (trimmed === '') {
+          if (currentPara) { blocks.push({ type: 'paragraph', text: currentPara.trim() }); currentPara = ''; }
+        } else {
+          currentPara += (currentPara ? ' ' : '') + trimmed;
+        }
+      }
+      if (currentPara) {
+        blocks.push({ type: 'paragraph', text: currentPara.trim() });
+      }
+
       const payload: Record<string, unknown> = {
         title: title.trim(),
         summary: summary.trim(),
@@ -156,17 +190,18 @@ export function ArticleEditorPage() {
       if (!isEditing) {
         payload.entityId = entityId;
         await api.post('/article', payload);
-        setSuccess('Article successfully created and published to the graph!');
+        setSuccess('Success: Article published to knowledge graph successfully! Redirecting...');
       } else {
         await api.put(`/article/${id}`, payload);
-        setSuccess('Article successfully updated!');
+        setSuccess('Success: Article changes saved successfully! Redirecting...');
       }
 
       setTimeout(() => {
         navigate('/admin/article');
-      }, 1200);
+      }, 1500);
     } catch (err: any) {
-      setError(err.message || 'Failed to save article record.');
+      setError(`Publishing Failed: ${err.message || 'Unable to save article record to backend.'}`);
+      errorRef.current?.scrollIntoView({ behavior: 'smooth' });
     } finally {
       setSaving(false);
     }
@@ -176,13 +211,13 @@ export function ArticleEditorPage() {
     return (
       <div className="flex min-h-[50vh] items-center justify-center font-mono text-xs text-text-muted">
         <Loader2 className="mr-2 h-5 w-5 animate-spin text-[var(--accent-teal)]" />
-        Loading article editor workspace...
+        Loading Wikipedia-grade master editor workspace...
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-10 font-sans pb-32 pt-6 px-4 sm:px-6">
+    <div className="mx-auto max-w-5xl space-y-10 font-sans pb-32 pt-6 px-4 sm:px-6" ref={errorRef}>
       {/* Top Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-stone/10 pb-6 gap-4">
         <div className="flex items-center gap-4">
@@ -195,7 +230,7 @@ export function ArticleEditorPage() {
             <ArrowLeft size={18} />
           </button>
           <div>
-            <p className="ca-eyebrow">Enterprise Studio</p>
+            <p className="ca-eyebrow">Wikipedia & Medium Master Editor</p>
             <h1 className="font-serif text-3xl font-bold tracking-tight text-text-main sm:text-4xl">
               {isEditing ? 'Edit Publication' : 'Author Publication'}
             </h1>
@@ -205,10 +240,11 @@ export function ArticleEditorPage() {
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={() => navigate('/admin/article')}
-            className="ca-btn-outline px-5 py-3 text-xs font-mono uppercase tracking-wider"
+            onClick={() => setPreviewMode(!previewMode)}
+            className="ca-btn-outline px-4 py-3 text-xs font-mono uppercase tracking-wider flex items-center gap-2"
           >
-            Cancel
+            {previewMode ? <Edit3 size={14} /> : <Eye size={14} />}
+            {previewMode ? 'Editor' : 'Preview'}
           </button>
           <button
             type="button"
@@ -224,14 +260,14 @@ export function ArticleEditorPage() {
       </div>
 
       {error && (
-        <div role="alert" className="ca-msg-error p-4 text-xs flex items-center gap-3">
-          <AlertCircle size={16} className="shrink-0 text-clay" />
-          <span>{error}</span>
+        <div role="alert" className="ca-msg-error p-4 text-xs flex items-center gap-3 animate-pulse">
+          <AlertCircle size={18} className="shrink-0 text-clay" />
+          <span className="font-medium">{error}</span>
         </div>
       )}
 
       {success && (
-        <div role="status" className="ca-msg-success p-4 text-xs">
+        <div role="status" className="ca-msg-success p-4 text-xs font-semibold">
           {success}
         </div>
       )}
@@ -332,213 +368,63 @@ export function ArticleEditorPage() {
           </div>
         </section>
 
-        {/* DYNAMIC CONTENT CANVAS (EXPANSIVE & BORDERLESS) */}
+        {/* MASTER WIKIPEDIA-GRADE RICH TEXT WORKSPACE */}
         <section className="space-y-6 pt-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-stone/10 pb-4 gap-4">
             <div>
               <h2 className="font-serif text-xl font-bold text-text-main">
-                Dynamic Content Canvas
+                Master Publication Editor
               </h2>
               <p className="mt-1 text-xs text-text-muted">
-                Compose expansive body content with paragraphs, headings, blockquotes, media, and interactive maps.
+                Write fluently with markdown or use quick insertion tools for headings, quotes, lists, media, and maps.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-2 font-mono text-xs">
-              <button type="button" onClick={() => addBlock('paragraph')} className="ca-btn-outline px-3 py-2">
-                + Paragraph
-              </button>
-              <button type="button" onClick={() => addBlock('heading')} className="ca-btn-outline px-3 py-2">
+              <button type="button" onClick={() => insertSnippet('\n\n## Section Heading\n')} className="ca-btn-outline px-3 py-2">
                 <Heading size={14} className="inline mr-1" /> Heading
               </button>
-              <button type="button" onClick={() => addBlock('blockquote')} className="ca-btn-outline px-3 py-2">
+              <button type="button" onClick={() => insertSnippet('\n\n> "Inspirational quote or epigraph here..."\n')} className="ca-btn-outline px-3 py-2">
                 <Quote size={14} className="inline mr-1" /> Quote
               </button>
-              <button type="button" onClick={() => addBlock('list')} className="ca-btn-outline px-3 py-2">
+              <button type="button" onClick={() => insertSnippet('\n\n- First point\n- Second point\n')} className="ca-btn-outline px-3 py-2">
                 <List size={14} className="inline mr-1" /> List
               </button>
-              <button type="button" onClick={() => addBlock('image')} className="ca-btn-outline px-3 py-2">
+              <button type="button" onClick={() => insertSnippet('\n\n[Figure: /images/africa.svg | Caption: Continental Map]\n')} className="ca-btn-outline px-3 py-2">
                 <ImageIcon size={14} className="inline mr-1" /> Image
               </button>
-              <button type="button" onClick={() => addBlock('map')} className="ca-btn-outline px-3 py-2">
+              <button type="button" onClick={() => insertSnippet('\n\n[Map: Trans-Sahara Trade Network | Region: Sahel & West Africa]\n')} className="ca-btn-outline px-3 py-2">
                 <MapPin size={14} className="inline mr-1" /> Map
               </button>
             </div>
           </div>
 
-          <div className="space-y-8">
-            {blocks.map((block, idx) => (
-              <div key={idx} className="group relative border-b border-stone/15 pb-8 last:border-b-0">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--accent-teal)]">
-                    Block 0{idx + 1} — {block.type}
-                  </span>
-                  <div className="flex items-center gap-1.5 font-mono text-xs opacity-60 group-hover:opacity-100 transition-opacity">
-                    <button
-                      type="button"
-                      onClick={() => moveBlock(idx, 'up')}
-                      disabled={idx === 0}
-                      className="p-1 rounded text-stone hover:text-text-main disabled:opacity-20 transition"
-                      title="Move Up"
-                    >
-                      <ArrowUp size={14} />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => moveBlock(idx, 'down')}
-                      disabled={idx === blocks.length - 1}
-                      className="p-1 rounded text-stone hover:text-text-main disabled:opacity-20 transition"
-                      title="Move Down"
-                    >
-                      <ArrowDown size={14} />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => removeBlock(idx)}
-                      className="p-1 rounded text-clay hover:text-[var(--accent-terracotta)] transition ml-2"
-                      title="Delete Block"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                </div>
-
-                {block.type === 'paragraph' && (
-                  <div>
-                    <textarea
-                      rows={6}
-                      value={block.text || ''}
-                      onChange={(e) => updateBlock(idx, { text: e.target.value })}
-                      placeholder="Write expansive paragraph text here..."
-                      className="w-full bg-transparent font-serif text-lg leading-relaxed text-text-main placeholder:text-stone/30 outline-none resize-y min-h-[140px]"
-                    />
-                  </div>
-                )}
-
-                {block.type === 'heading' && (
-                  <div className="grid gap-4 sm:grid-cols-[160px_1fr] items-center">
-                    <select
-                      value={block.level || 2}
-                      onChange={(e) => updateBlock(idx, { level: Number(e.target.value) as 2 | 3 })}
-                      className="ca-input py-3 text-xs font-mono"
-                    >
-                      <option value={2}>Heading 2 (H2)</option>
-                      <option value={3}>Heading 3 (H3)</option>
-                    </select>
-                    <input
-                      type="text"
-                      value={block.text || ''}
-                      onChange={(e) => updateBlock(idx, { text: e.target.value })}
-                      placeholder="Section heading title..."
-                      className="w-full bg-transparent font-serif text-2xl font-bold text-text-main placeholder:text-stone/30 outline-none border-b border-stone/20 pb-2 focus:border-[var(--accent-teal)]"
-                    />
-                  </div>
-                )}
-
-                {block.type === 'blockquote' && (
-                  <div>
-                    <textarea
-                      rows={3}
-                      value={block.text || ''}
-                      onChange={(e) => updateBlock(idx, { text: e.target.value })}
-                      placeholder="Enter inspiring quotation or archival excerpt..."
-                      className="w-full bg-transparent font-serif italic text-xl leading-relaxed text-text-main placeholder:text-stone/30 outline-none border-l-2 border-[var(--accent-amber)] pl-4 py-2"
-                    />
-                  </div>
-                )}
-
-                {block.type === 'list' && (
-                  <div>
-                    <textarea
-                      rows={5}
-                      value={(block.items || []).join('\n')}
-                      onChange={(e) => updateBlock(idx, { items: e.target.value.split('\n') })}
-                      placeholder="Enter bullet items (one per line)..."
-                      className="w-full bg-transparent font-serif text-base leading-relaxed text-text-main placeholder:text-stone/30 outline-none resize-y p-3 rounded-xl border border-stone/20 bg-surface"
-                    />
-                  </div>
-                )}
-
-                {block.type === 'image' && (
-                  <div className="space-y-4 rounded-xl border border-stone/20 bg-surface p-6 shadow-sm">
-                    <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[var(--accent-amber)]">
-                      <ImageIcon size={16} /> Image / Media Block
-                    </div>
-                    <input
-                      type="text"
-                      value={block.url || ''}
-                      onChange={(e) => updateBlock(idx, { url: e.target.value })}
-                      placeholder="Image URL (e.g. /images/africa.svg or external link)..."
-                      className="ca-input text-xs font-mono py-3"
-                    />
-                    <div className="grid gap-4 sm:grid-cols-3">
-                      <div className="sm:col-span-2">
-                        <input
-                          type="text"
-                          value={block.caption || ''}
-                          onChange={(e) => updateBlock(idx, { caption: e.target.value })}
-                          placeholder="Figure caption & citation..."
-                          className="ca-input text-xs py-3"
-                        />
-                      </div>
-                      <div>
-                        <select
-                          value={block.align || 'center'}
-                          onChange={(e) => updateBlock(idx, { align: e.target.value as any })}
-                          className="ca-input text-xs py-3"
-                        >
-                          <option value="left">Align Left</option>
-                          <option value="center">Align Center</option>
-                          <option value="right">Align Right</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {block.type === 'map' && (
-                  <div className="space-y-4 rounded-xl border border-[var(--accent-teal)]/30 bg-[var(--accent-teal)]/5 p-6 shadow-sm">
-                    <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[var(--accent-teal)]">
-                      <MapPin size={16} /> Interactive Geospatial Map Block
-                    </div>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <input
-                        type="text"
-                        value={block.title || ''}
-                        onChange={(e) => updateBlock(idx, { title: e.target.value })}
-                        placeholder="Map Title..."
-                        className="ca-input text-sm font-bold py-3 bg-surface"
-                      />
-                      <input
-                        type="text"
-                        value={block.location || ''}
-                        onChange={(e) => updateBlock(idx, { location: e.target.value })}
-                        placeholder="Geographic Region / Zone..."
-                        className="ca-input text-xs font-mono py-3 bg-surface"
-                      />
-                    </div>
-                    <input
-                      type="text"
-                      value={block.description || ''}
-                      onChange={(e) => updateBlock(idx, { description: e.target.value })}
-                      placeholder="Short geospatial description..."
-                      className="ca-input text-xs py-3 bg-surface"
-                    />
-                  </div>
-                )}
+          {previewMode ? (
+            <div className="rounded-2xl border border-stone/20 bg-surface p-8 shadow-sm min-h-[400px] font-serif text-lg leading-relaxed text-text-main space-y-6">
+              <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-teal)] border-b border-stone/10 pb-3">
+                <BookOpen size={16} /> Live Encyclopedia Preview Mode
               </div>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-center pt-8">
-            <button
-              type="button"
-              onClick={() => addBlock('paragraph')}
-              className="ca-btn-secondary px-8 py-3.5 text-xs font-mono uppercase tracking-wider"
-            >
-              <Plus size={16} /> Add Content Block
-            </button>
-          </div>
+              <div className="whitespace-pre-line">
+                {markdownContent || 'No content provided yet.'}
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-stone/20 bg-surface p-6 shadow-sm">
+              <textarea
+                ref={editorRef}
+                rows={18}
+                required
+                value={markdownContent}
+                onChange={(e) => setMarkdownContent(e.target.value)}
+                placeholder="Write your article in fluent Markdown / text..."
+                className="w-full bg-transparent font-serif text-lg leading-relaxed text-text-main placeholder:text-stone/30 outline-none resize-y admin-scrollbar"
+              />
+              <div className="mt-4 flex items-center justify-between border-t border-stone/10 pt-3 font-mono text-[10px] uppercase tracking-wider text-text-muted">
+                <span>Markdown Syntax Supported (## Heading, &gt; Quote, - List)</span>
+                <span>{markdownContent.length} characters</span>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* BOTTOM SUBMIT BAR */}
@@ -557,7 +443,7 @@ export function ArticleEditorPage() {
           >
             {saving && <Loader2 className="h-4 w-4 animate-spin" />}
             <Check size={18} />
-            {isEditing ? 'Save Changes' : 'Publish Dynamic Article'}
+            {isEditing ? 'Save Changes' : 'Publish Article'}
           </button>
         </div>
       </form>
