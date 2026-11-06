@@ -164,6 +164,8 @@ Enter your historical analysis, research findings, and comprehensive documentati
         type: newEntityType,
         description: newEntityDesc.trim() || undefined,
         attributes: {},
+        source: 'Article Studio',
+        tags: [],
       };
       await entityApi.create(payload);
       
@@ -177,9 +179,9 @@ Enter your historical analysis, research findings, and comprehensive documentati
       setIsCreateEntityOpen(false);
       setNewEntityName('');
       setNewEntityDesc('');
-      setSuccess('Knowledge graph entity created and connected successfully!');
+      setSuccess('Knowledge graph entity created and connected successfully via backend pipeline!');
     } catch (err: any) {
-      setError(err.message || 'Failed to create new entity on the fly.');
+      setError(err.message || 'Failed to create new entity in the database.');
     } finally {
       setCreatingEntity(false);
     }
@@ -535,7 +537,7 @@ Enter your historical analysis, research findings, and comprehensive documentati
                         onClick={() => setIsCreateEntityOpen(true)}
                         className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[var(--accent-teal)] hover:underline"
                       >
-                        <Plus size={14} /> Create New Entity on the Fly
+                        <Plus size={14} /> Create New
                       </button>
                     </div>
                   </div>
