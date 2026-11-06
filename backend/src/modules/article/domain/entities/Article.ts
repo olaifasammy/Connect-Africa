@@ -104,7 +104,7 @@ export class Article extends AggregateRoot<ArticleProps> {
       | 'content'
       | 'language'
       | 'authorId'
-    >,
+    > & { entityId: UniqueEntityId },
     id?: UniqueEntityId,
   ): Article {
     const now = new Date();
@@ -116,7 +116,7 @@ export class Article extends AggregateRoot<ArticleProps> {
         createdAt: now,
         updatedAt: now,
         version: 1,
-        entityLinks: [],
+        entityLinks: [new EntityLink(props.entityId)],
         relationshipLinks: [],
         citations: [],
         mediaLinks: [],

@@ -10,7 +10,7 @@ import {
   Check,
   Edit3,
 } from 'lucide-react';
-import { articleApi, api } from '../../../services/api';
+import { articleApi, api, entityApi, type EntitySummary } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
 
 interface ArticleItem {
@@ -27,6 +27,7 @@ interface ArticleItem {
 export function ArticleAdmin() {
   const { isAdmin } = useAuth();
   const [articles, setArticles] = useState<ArticleItem[]>([]);
+  const [entities, setEntities] = useState<EntitySummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [actionError, setActionError] = useState<string | null>(null);
@@ -39,15 +40,20 @@ export function ArticleAdmin() {
   const [category, setCategory] = useState('Archival Research');
   const [summary, setSummary] = useState('');
   const [bodyContent, setBodyContent] = useState('');
+  const [entityId, setEntityId] = useState('');
   const [tags, setTags] = useState('Policy, Archive, Heritage');
   const [saving, setSaving] = useState(false);
 
-  const fetchArticles = async () => {
+  const fetchArticlesAndEntities = async () => {
     setLoading(true);
     setActionError(null);
     try {
-      const data = await articleApi.getLatest(100);
-      const mapped: ArticleItem[] = (data || []).map((a) => ({
+      const [articleData, entityData] = await Promise.all([
+        articleApi.getLatest(100),
+        entityApi.list(100).catch(() => []),
+      ]);
+
+      const mapped: ArticleItem[] = (articleData || []).map((a) => ({
         id: a.id,
         title: a.title,
         slug: a.slug,
@@ -58,15 +64,16 @@ export function ArticleAdmin() {
         updatedAt: a.updatedAt,
       }));
       setArticles(mapped);
+      setEntities(entityData || []);
     } catch (err: any) {
-      setActionError(err.message || 'Failed to fetch articles');
+      setActionError(err.message || 'Failed to fetch studio data');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    void fetchArticles();
+    void fetchArticlesAndEntities();
   }, []);
 
   const openCreateModal = () => {
@@ -75,6 +82,7 @@ export function ArticleAdmin() {
     setCategory('Archival Research');
     setSummary('');
     setBodyContent('');
+    setEntityId(entities[0]?.id || '');
     setTags('Policy, Archive, Heritage');
     setIsModalOpen(true);
   };
@@ -85,6 +93,7 @@ export function ArticleAdmin() {
     setCategory(art.category || 'Archival Research');
     setSummary(art.description || '');
     setBodyContent(art.content || '');
+    setEntityId(entities[0]?.id || '');
     setTags('Policy, Archive, Heritage');
     setIsModalOpen(true);
   };
@@ -96,12 +105,17 @@ export function ArticleAdmin() {
       return;
     }
 
+    if (!editingId && !entityId) {
+      setActionError('An article must be connected to a knowledge entity.');
+      return;
+    }
+
     setSaving(true);
     setActionError(null);
     setActionSuccess(null);
 
     try {
-      const payload = {
+      const payload: Record<string, unknown> = {
         title: title.trim(),
         summary: summary.trim(),
         content: bodyContent.trim() || summary.trim(),
@@ -109,16 +123,17 @@ export function ArticleAdmin() {
         tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
       };
 
-      if (editingId) {
+      if (!editingId) {
+        payload.entityId = entityId;
+        await api.post('/article', payload);
+        setActionSuccess('Article successfully created and linked to entity.');
+      } else {
         await api.put(`/article/${editingId}`, payload);
         setActionSuccess('Article successfully updated.');
-      } else {
-        await api.post('/article', payload);
-        setActionSuccess('Article successfully created.');
       }
 
       setIsModalOpen(false);
-      await fetchArticles();
+      await fetchArticlesAndEntities();
     } catch (err: any) {
       setActionError(err.message || 'Failed to save article.');
     } finally {
@@ -135,7 +150,7 @@ export function ArticleAdmin() {
     try {
       await api.delete(`/article/${id}`);
       setActionSuccess('Article successfully deleted.');
-      await fetchArticles();
+      await fetchArticlesAndEntities();
     } catch (err: any) {
       setActionError(err.message || 'Failed to delete article. Insufficient permissions.');
     }
@@ -155,7 +170,7 @@ export function ArticleAdmin() {
             Content & Article Studio
           </h1>
           <p className="mt-1 text-xs text-text-muted">
-            Author, review, publish, and govern knowledge articles across Connect Africa.
+            Author, review, publish, and govern knowledge articles connected to the graph across Connect Africa.
           </p>
         </div>
 
@@ -322,6 +337,30 @@ export function ArticleAdmin() {
                   className="ca-input"
                 />
               </div>
+
+              {!editingId && (
+                <div>
+                  <label className="mb-2 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
+                    Connected Knowledge Entity *
+                  </label>
+                  <select
+                    value={entityId}
+                    onChange={(e) => setEntityId(e.target.value)}
+                    required
+                    className="ca-input"
+                  >
+                    <option value="">Select target knowledge entity...</option>
+                    {entities.map((ent) => (
+                      <option key={ent.id} value={ent.id}>
+                        {ent.name} ({ent.type})
+                      </option>
+                    ))}
+                  </select>
+                  <p className="mt-1 font-mono text-[10px] text-text-muted">
+                    Every article must be anchored to an entity in the knowledge graph.
+                  </p>
+                </div>
+              )}
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>

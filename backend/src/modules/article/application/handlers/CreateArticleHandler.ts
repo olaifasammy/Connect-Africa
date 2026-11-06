@@ -72,6 +72,8 @@ export class CreateArticleHandler {
           command.content,
         authorId:
           command.authorId,
+        entityId:
+          command.entityId,
         language:
           command.language,
         slug:
@@ -151,11 +153,9 @@ export class CreateArticleHandler {
           },
           {
             key:
-              'revision',
+              'entityId',
             value:
-              String(
-                revision.version,
-              ),
+              command.entityId.toString(),
           },
         ],
       }),

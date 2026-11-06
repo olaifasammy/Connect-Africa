@@ -84,8 +84,18 @@ export class ArticleController {
         res.status(401).json({ success: false, error: 'Unauthorized' });
         return;
     }
-    const { title, summary, content } = req.body;
-    const command = new CreateArticleCommand(title, summary, content, new UniqueEntityId(userId));
+    const { title, summary, content, entityId } = req.body;
+    if (!entityId) {
+        res.status(400).json({ success: false, error: 'Article must be connected to a knowledge entity' });
+        return;
+    }
+    const command = new CreateArticleCommand(
+      title,
+      summary,
+      content,
+      new UniqueEntityId(userId),
+      new UniqueEntityId(entityId)
+    );
     const articleId = await this.createArticleHandler.handle(command);
     this.track('create');
     res.status(201).json({ id: articleId });

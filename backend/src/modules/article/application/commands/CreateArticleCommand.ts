@@ -6,6 +6,7 @@ export class CreateArticleCommand {
     public readonly summary: string,
     public readonly content: string,
     public readonly authorId: UniqueEntityId,
+    public readonly entityId: UniqueEntityId,
     public readonly language: string = 'en'
   ) {}
 }

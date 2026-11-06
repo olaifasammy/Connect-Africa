@@ -4,7 +4,7 @@ export const CreateArticleSchema = z.object({
   title: z.string().min(5).max(255),
   summary: z.string().min(10).max(500),
   content: z.string().min(50),
-  authorId: z.string().uuid(),
+  entityId: z.string().min(1),
 });
 
 export const UpdateArticleSchema = z.object({
