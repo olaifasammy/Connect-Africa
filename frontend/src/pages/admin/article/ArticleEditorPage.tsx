@@ -14,6 +14,7 @@ import {
   ArrowDown,
   ArrowUp,
   AlertCircle,
+  Sparkles,
 } from 'lucide-react';
 import { articleApi, api, entityApi, type EntitySummary } from '../../../services/api';
 
@@ -34,8 +35,6 @@ interface ContentBlock {
 export function ArticleEditorPage() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const isEditing = Boolean(id);
-
   const [entities, setEntities] = useState<EntitySummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -50,6 +49,8 @@ export function ArticleEditorPage() {
   const [blocks, setBlocks] = useState<ContentBlock[]>([
     { type: 'paragraph', text: 'Enter introductory paragraph text here...' },
   ]);
+
+  const isEditing = Boolean(id);
 
   useEffect(() => {
     let active = true;
@@ -181,8 +182,9 @@ export function ArticleEditorPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8 font-sans pb-24 pt-4">
-      <div className="flex items-center justify-between border-b border-stone/10 pb-6">
+    <div className="mx-auto max-w-5xl space-y-10 font-sans pb-32 pt-6 px-4 sm:px-6">
+      {/* Top Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-stone/10 pb-6 gap-4">
         <div className="flex items-center gap-4">
           <button
             type="button"
@@ -194,8 +196,8 @@ export function ArticleEditorPage() {
           </button>
           <div>
             <p className="ca-eyebrow">Enterprise Studio</p>
-            <h1 className="font-serif text-3xl font-bold tracking-tight text-text-main">
-              {isEditing ? 'Edit Dynamic Publication' : 'Author Dynamic Publication'}
+            <h1 className="font-serif text-3xl font-bold tracking-tight text-text-main sm:text-4xl">
+              {isEditing ? 'Edit Publication' : 'Author Publication'}
             </h1>
           </div>
         </div>
@@ -204,7 +206,7 @@ export function ArticleEditorPage() {
           <button
             type="button"
             onClick={() => navigate('/admin/article')}
-            className="ca-btn-outline px-5 py-2.5 text-xs font-mono uppercase tracking-wider"
+            className="ca-btn-outline px-5 py-3 text-xs font-mono uppercase tracking-wider"
           >
             Cancel
           </button>
@@ -212,10 +214,10 @@ export function ArticleEditorPage() {
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="ca-btn-primary px-6 py-2.5 text-xs font-mono uppercase tracking-wider flex items-center gap-2"
+            className="ca-btn-primary px-8 py-3 text-xs font-mono uppercase tracking-wider flex items-center gap-2"
           >
             {saving && <Loader2 className="h-4 w-4 animate-spin" />}
-            <Check size={15} />
+            <Check size={16} />
             {isEditing ? 'Save Changes' : 'Publish Article'}
           </button>
         </div>
@@ -234,14 +236,15 @@ export function ArticleEditorPage() {
         </div>
       )}
 
-      <form onSubmit={handleSave} className="space-y-8">
+      <form onSubmit={handleSave} className="space-y-12">
         {/* METADATA SECTION */}
-        <div className="ca-card bg-surface p-8 shadow-sm space-y-6">
-          <h2 className="font-serif text-xl font-bold text-text-main border-b border-stone/10 pb-3">
-            Publication Metadata & Entity Anchor
-          </h2>
+        <section className="space-y-6">
+          <div className="border-b border-stone/10 pb-3 flex items-center gap-2">
+            <Sparkles size={16} className="text-[var(--accent-teal)]" />
+            <h2 className="font-serif text-xl font-bold text-text-main">Metadata & Entity Anchor</h2>
+          </div>
 
-          <div className="space-y-5">
+          <div className="space-y-6">
             <div>
               <label className="mb-2 block font-mono text-xs font-bold uppercase tracking-widest text-text-muted">
                 Article Title *
@@ -251,8 +254,8 @@ export function ArticleEditorPage() {
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g., Renewable Energy Infrastructure in East Africa"
-                className="ca-input font-serif text-xl py-3.5"
+                placeholder="Enter title..."
+                className="w-full bg-transparent font-serif text-3xl sm:text-4xl font-bold text-text-main placeholder:text-stone/30 outline-none border-b border-stone/20 pb-4 focus:border-[var(--accent-teal)] transition"
               />
             </div>
 
@@ -265,7 +268,7 @@ export function ArticleEditorPage() {
                   value={entityId}
                   onChange={(e) => setEntityId(e.target.value)}
                   required
-                  className="ca-input py-3"
+                  className="ca-input py-3.5 text-sm"
                 >
                   <option value="">Select target knowledge graph entity...</option>
                   {entities.map((ent) => (
@@ -288,7 +291,7 @@ export function ArticleEditorPage() {
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="ca-input py-3"
+                  className="ca-input py-3.5 text-sm"
                 >
                   <option value="Archival Research">Archival Research</option>
                   <option value="Infrastructure">Infrastructure</option>
@@ -308,7 +311,7 @@ export function ArticleEditorPage() {
                   value={tags}
                   onChange={(e) => setTags(e.target.value)}
                   placeholder="Policy, Archive, Heritage"
-                  className="ca-input py-3"
+                  className="ca-input py-3.5 text-sm"
                 />
               </div>
             </div>
@@ -323,21 +326,21 @@ export function ArticleEditorPage() {
                 value={summary}
                 onChange={(e) => setSummary(e.target.value)}
                 placeholder="Provide a concise scholarly abstract..."
-                className="ca-input resize-none p-3.5 font-sans"
+                className="ca-input resize-none p-4 font-sans text-sm leading-relaxed"
               />
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* DYNAMIC CONTENT BLOCKS BUILDER */}
-        <div className="ca-card bg-surface p-8 shadow-sm space-y-6">
+        {/* DYNAMIC CONTENT CANVAS (EXPANSIVE & BORDERLESS) */}
+        <section className="space-y-6 pt-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-stone/10 pb-4 gap-4">
             <div>
               <h2 className="font-serif text-xl font-bold text-text-main">
                 Dynamic Content Canvas
               </h2>
               <p className="mt-1 text-xs text-text-muted">
-                Compose your publication with rich paragraphs, headings, blockquotes, media, and interactive maps.
+                Compose expansive body content with paragraphs, headings, blockquotes, media, and interactive maps.
               </p>
             </div>
 
@@ -363,19 +366,19 @@ export function ArticleEditorPage() {
             </div>
           </div>
 
-          <div className="space-y-5">
+          <div className="space-y-8">
             {blocks.map((block, idx) => (
-              <div key={idx} className="rounded-2xl border border-stone/20 bg-canvas p-6 relative transition group hover:border-[var(--accent-teal)]/40 shadow-sm">
-                <div className="flex items-center justify-between border-b border-stone/10 pb-3 mb-4">
-                  <span className="font-mono text-xs font-bold uppercase tracking-widest text-[var(--accent-teal)]">
+              <div key={idx} className="group relative border-b border-stone/15 pb-8 last:border-b-0">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--accent-teal)]">
                     Block 0{idx + 1} — {block.type}
                   </span>
-                  <div className="flex items-center gap-1.5 font-mono text-xs">
+                  <div className="flex items-center gap-1.5 font-mono text-xs opacity-60 group-hover:opacity-100 transition-opacity">
                     <button
                       type="button"
                       onClick={() => moveBlock(idx, 'up')}
                       disabled={idx === 0}
-                      className="p-1.5 rounded-lg border border-stone/20 text-stone hover:text-text-main disabled:opacity-30 transition"
+                      className="p-1 rounded text-stone hover:text-text-main disabled:opacity-20 transition"
                       title="Move Up"
                     >
                       <ArrowUp size={14} />
@@ -384,7 +387,7 @@ export function ArticleEditorPage() {
                       type="button"
                       onClick={() => moveBlock(idx, 'down')}
                       disabled={idx === blocks.length - 1}
-                      className="p-1.5 rounded-lg border border-stone/20 text-stone hover:text-text-main disabled:opacity-30 transition"
+                      className="p-1 rounded text-stone hover:text-text-main disabled:opacity-20 transition"
                       title="Move Down"
                     >
                       <ArrowDown size={14} />
@@ -392,7 +395,7 @@ export function ArticleEditorPage() {
                     <button
                       type="button"
                       onClick={() => removeBlock(idx)}
-                      className="p-1.5 rounded-lg border border-clay/30 bg-clay/10 text-clay hover:bg-clay hover:text-white transition ml-2"
+                      className="p-1 rounded text-clay hover:text-[var(--accent-terracotta)] transition ml-2"
                       title="Delete Block"
                     >
                       <Trash2 size={14} />
@@ -402,118 +405,91 @@ export function ArticleEditorPage() {
 
                 {block.type === 'paragraph' && (
                   <div>
-                    <label className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                      Paragraph Body Text
-                    </label>
                     <textarea
-                      rows={4}
+                      rows={6}
                       value={block.text || ''}
                       onChange={(e) => updateBlock(idx, { text: e.target.value })}
-                      placeholder="Write paragraph content with professional editorial tone..."
-                      className="ca-input font-serif text-base leading-relaxed p-4"
+                      placeholder="Write expansive paragraph text here..."
+                      className="w-full bg-transparent font-serif text-lg leading-relaxed text-text-main placeholder:text-stone/30 outline-none resize-y min-h-[140px]"
                     />
                   </div>
                 )}
 
                 {block.type === 'heading' && (
-                  <div className="grid gap-4 sm:grid-cols-[160px_1fr]">
-                    <div>
-                      <label className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                        Heading Level
-                      </label>
-                      <select
-                        value={block.level || 2}
-                        onChange={(e) => updateBlock(idx, { level: Number(e.target.value) as 2 | 3 })}
-                        className="ca-input py-3 text-xs"
-                      >
-                        <option value={2}>Heading 2 (H2)</option>
-                        <option value={3}>Heading 3 (H3)</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                        Heading Title
-                      </label>
-                      <input
-                        type="text"
-                        value={block.text || ''}
-                        onChange={(e) => updateBlock(idx, { text: e.target.value })}
-                        placeholder="Section title..."
-                        className="ca-input font-serif font-bold text-lg py-3"
-                      />
-                    </div>
+                  <div className="grid gap-4 sm:grid-cols-[160px_1fr] items-center">
+                    <select
+                      value={block.level || 2}
+                      onChange={(e) => updateBlock(idx, { level: Number(e.target.value) as 2 | 3 })}
+                      className="ca-input py-3 text-xs font-mono"
+                    >
+                      <option value={2}>Heading 2 (H2)</option>
+                      <option value={3}>Heading 3 (H3)</option>
+                    </select>
+                    <input
+                      type="text"
+                      value={block.text || ''}
+                      onChange={(e) => updateBlock(idx, { text: e.target.value })}
+                      placeholder="Section heading title..."
+                      className="w-full bg-transparent font-serif text-2xl font-bold text-text-main placeholder:text-stone/30 outline-none border-b border-stone/20 pb-2 focus:border-[var(--accent-teal)]"
+                    />
                   </div>
                 )}
 
                 {block.type === 'blockquote' && (
                   <div>
-                    <label className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                      Quotation / Epigraph
-                    </label>
                     <textarea
                       rows={3}
                       value={block.text || ''}
                       onChange={(e) => updateBlock(idx, { text: e.target.value })}
-                      placeholder="Enter powerful quote or archival excerpt..."
-                      className="ca-input font-serif italic text-base p-4"
+                      placeholder="Enter inspiring quotation or archival excerpt..."
+                      className="w-full bg-transparent font-serif italic text-xl leading-relaxed text-text-main placeholder:text-stone/30 outline-none border-l-2 border-[var(--accent-amber)] pl-4 py-2"
                     />
                   </div>
                 )}
 
                 {block.type === 'list' && (
                   <div>
-                    <label className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                      Bullet Items (one per line)
-                    </label>
                     <textarea
-                      rows={4}
+                      rows={5}
                       value={(block.items || []).join('\n')}
                       onChange={(e) => updateBlock(idx, { items: e.target.value.split('\n') })}
-                      placeholder="First point&#10;Second point&#10;Third point"
-                      className="ca-input text-sm font-serif p-4 leading-relaxed"
+                      placeholder="Enter bullet items (one per line)..."
+                      className="w-full bg-transparent font-serif text-base leading-relaxed text-text-main placeholder:text-stone/30 outline-none resize-y p-3 rounded-xl border border-stone/20 bg-surface"
                     />
                   </div>
                 )}
 
                 {block.type === 'image' && (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                        Image / Asset URL
-                      </label>
-                      <input
-                        type="text"
-                        value={block.url || ''}
-                        onChange={(e) => updateBlock(idx, { url: e.target.value })}
-                        placeholder="/images/africa.svg or external asset URL..."
-                        className="ca-input text-xs font-mono py-3"
-                      />
+                  <div className="space-y-4 rounded-xl border border-stone/20 bg-surface p-6 shadow-sm">
+                    <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[var(--accent-amber)]">
+                      <ImageIcon size={16} /> Image / Media Block
                     </div>
+                    <input
+                      type="text"
+                      value={block.url || ''}
+                      onChange={(e) => updateBlock(idx, { url: e.target.value })}
+                      placeholder="Image URL (e.g. /images/africa.svg or external link)..."
+                      className="ca-input text-xs font-mono py-3"
+                    />
                     <div className="grid gap-4 sm:grid-cols-3">
                       <div className="sm:col-span-2">
-                        <label className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                          Figure Caption
-                        </label>
                         <input
                           type="text"
                           value={block.caption || ''}
                           onChange={(e) => updateBlock(idx, { caption: e.target.value })}
-                          placeholder="Figure 1: Description of visual evidence..."
+                          placeholder="Figure caption & citation..."
                           className="ca-input text-xs py-3"
                         />
                       </div>
                       <div>
-                        <label className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                          Alignment
-                        </label>
                         <select
                           value={block.align || 'center'}
                           onChange={(e) => updateBlock(idx, { align: e.target.value as any })}
                           className="ca-input text-xs py-3"
                         >
-                          <option value="left">Left</option>
-                          <option value="center">Center</option>
-                          <option value="right">Right</option>
+                          <option value="left">Align Left</option>
+                          <option value="center">Align Center</option>
+                          <option value="right">Align Right</option>
                         </select>
                       </div>
                     </div>
@@ -521,78 +497,66 @@ export function ArticleEditorPage() {
                 )}
 
                 {block.type === 'map' && (
-                  <div className="space-y-4">
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                          Geospatial Map Title
-                        </label>
-                        <input
-                          type="text"
-                          value={block.title || ''}
-                          onChange={(e) => updateBlock(idx, { title: e.target.value })}
-                          placeholder="e.g. Trans-Sahara Trade Network"
-                          className="ca-input text-sm font-bold py-3"
-                        />
-                      </div>
-                      <div>
-                        <label className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                          Geographic Zone / Location
-                        </label>
-                        <input
-                          type="text"
-                          value={block.location || ''}
-                          onChange={(e) => updateBlock(idx, { location: e.target.value })}
-                          placeholder="e.g. Sahel & West Africa"
-                          className="ca-input text-xs font-mono py-3"
-                        />
-                      </div>
+                  <div className="space-y-4 rounded-xl border border-[var(--accent-teal)]/30 bg-[var(--accent-teal)]/5 p-6 shadow-sm">
+                    <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[var(--accent-teal)]">
+                      <MapPin size={16} /> Interactive Geospatial Map Block
                     </div>
-                    <div>
-                      <label className="mb-1.5 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                        Geospatial Description
-                      </label>
+                    <div className="grid gap-4 sm:grid-cols-2">
                       <input
                         type="text"
-                        value={block.description || ''}
-                        onChange={(e) => updateBlock(idx, { description: e.target.value })}
-                        placeholder="Description of the geographical context..."
-                        className="ca-input text-xs py-3"
+                        value={block.title || ''}
+                        onChange={(e) => updateBlock(idx, { title: e.target.value })}
+                        placeholder="Map Title..."
+                        className="ca-input text-sm font-bold py-3 bg-surface"
+                      />
+                      <input
+                        type="text"
+                        value={block.location || ''}
+                        onChange={(e) => updateBlock(idx, { location: e.target.value })}
+                        placeholder="Geographic Region / Zone..."
+                        className="ca-input text-xs font-mono py-3 bg-surface"
                       />
                     </div>
+                    <input
+                      type="text"
+                      value={block.description || ''}
+                      onChange={(e) => updateBlock(idx, { description: e.target.value })}
+                      placeholder="Short geospatial description..."
+                      className="ca-input text-xs py-3 bg-surface"
+                    />
                   </div>
                 )}
               </div>
             ))}
           </div>
 
-          <div className="flex items-center justify-center pt-4">
+          <div className="flex items-center justify-center pt-8">
             <button
               type="button"
               onClick={() => addBlock('paragraph')}
-              className="ca-btn-secondary px-6 py-3 text-xs font-mono uppercase tracking-wider"
+              className="ca-btn-secondary px-8 py-3.5 text-xs font-mono uppercase tracking-wider"
             >
-              <Plus size={14} /> Add Another Block
+              <Plus size={16} /> Add Content Block
             </button>
           </div>
-        </div>
+        </section>
 
         {/* BOTTOM SUBMIT BAR */}
-        <div className="flex items-center justify-end gap-4 border-t border-stone/10 pt-6">
+        <div className="flex items-center justify-end gap-4 border-t border-stone/10 pt-8">
           <button
             type="button"
             onClick={() => navigate('/admin/article')}
-            className="ca-btn-outline px-6 py-3 text-xs font-mono uppercase tracking-wider"
+            className="ca-btn-outline px-8 py-3.5 text-xs font-mono uppercase tracking-wider"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="ca-btn-primary px-8 py-3 text-xs font-mono uppercase tracking-wider flex items-center gap-2"
+            className="ca-btn-primary px-10 py-3.5 text-xs font-mono uppercase tracking-wider flex items-center gap-2"
           >
             {saving && <Loader2 className="h-4 w-4 animate-spin" />}
-            <Check size={16} />
+            <Check size={18} />
             {isEditing ? 'Save Changes' : 'Publish Dynamic Article'}
           </button>
         </div>
