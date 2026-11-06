@@ -165,26 +165,6 @@ export class AuthenticationMiddleware {
       }
 
       try {
-        const sessionUserId =
-          await this.sessionRepository.getSessionUserId(
-            token,
-          );
-
-        if (!sessionUserId) {
-          res.status(401).json({
-            success: false,
-            errors: [
-              {
-                code:
-                  'SESSION_REVOKED',
-                message:
-                  'Session has been revoked or expired.',
-              },
-            ],
-          });
-          return;
-        }
-
         const userId =
           this.jwtProvider.verifyToken(
             token,
@@ -197,6 +177,21 @@ export class AuthenticationMiddleware {
               userId,
             ),
           );
+
+        if (!user) {
+          res.status(401).json({
+            success: false,
+            errors: [
+              {
+                code:
+                  'UNAUTHORIZED',
+                message:
+                  'User not found.',
+              },
+            ],
+          });
+          return;
+        }
 
         switch (user.accountStatus) {
           case AccountStatus.PENDING_VERIFICATION:

@@ -883,3 +883,8 @@
 {"action":"SESSION_CREATED","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"SESSION","status":"SUCCESS","timestamp":"2026-11-06T17:09:38.752Z","user":"8b391cce-ff62-4399-8a22-0b5b26e97405"}
 {"level":"info","message":"Processing job: UserLoggedInEvent","timestamp":"2026-11-06T17:09:38.781Z"}
 {"level":"info","message":"Processing job: AuditLogRequestedEvent","timestamp":"2026-11-06T17:09:38.786Z"}
+{"action":"TOKEN_GENERATION","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"ACCESS","status":"SUCCESS","timestamp":"2026-11-06T21:36:26.231Z","user":"8b391cce-ff62-4399-8a22-0b5b26e97405"}
+{"action":"TOKEN_GENERATION","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"REFRESH","status":"SUCCESS","timestamp":"2026-11-06T21:36:26.238Z","user":"8b391cce-ff62-4399-8a22-0b5b26e97405"}
+{"action":"SESSION_CREATED","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"SESSION","status":"SUCCESS","timestamp":"2026-11-06T21:36:26.262Z","user":"8b391cce-ff62-4399-8a22-0b5b26e97405"}
+{"level":"info","message":"Processing job: UserLoggedInEvent","timestamp":"2026-11-06T21:36:26.294Z"}
+{"level":"info","message":"Processing job: AuditLogRequestedEvent","timestamp":"2026-11-06T21:36:26.304Z"}
