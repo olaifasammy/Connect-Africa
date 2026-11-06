@@ -20,11 +20,13 @@ async function request(endpoint: string, options: RequestInit = {}) {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(
+    const errorMsg =
       data.message ||
-        data.error ||
-        'An error occurred during API request',
-    );
+      data.error ||
+      (Array.isArray(data.errors) && data.errors[0]?.message) ||
+      (data.errors && typeof data.errors === 'object' && (data.errors.message || Object.values(data.errors)[0])) ||
+      'An error occurred during API request';
+    throw new Error(typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg));
   }
 
   return data;
