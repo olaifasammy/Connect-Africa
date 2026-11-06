@@ -9,6 +9,13 @@ import {
   X,
   Check,
   Edit3,
+  Image as ImageIcon,
+  MapPin,
+  Heading,
+  List,
+  Quote,
+  ArrowDown,
+  ArrowUp,
 } from 'lucide-react';
 import { articleApi, api, entityApi, type EntitySummary } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
@@ -19,9 +26,23 @@ interface ArticleItem {
   slug: string;
   category?: string;
   description?: string;
-  content?: string;
+  content?: string | any[];
   createdAt?: string;
   updatedAt?: string;
+}
+
+interface ContentBlock {
+  type: 'paragraph' | 'heading' | 'blockquote' | 'list' | 'image' | 'map';
+  text?: string;
+  level?: 2 | 3;
+  items?: string[];
+  url?: string;
+  caption?: string;
+  align?: 'left' | 'center' | 'right';
+  size?: 'small' | 'medium' | 'full';
+  title?: string;
+  description?: string;
+  location?: string;
 }
 
 export function ArticleAdmin() {
@@ -39,9 +60,9 @@ export function ArticleAdmin() {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Archival Research');
   const [summary, setSummary] = useState('');
-  const [bodyContent, setBodyContent] = useState('');
   const [entityId, setEntityId] = useState('');
   const [tags, setTags] = useState('Policy, Archive, Heritage');
+  const [blocks, setBlocks] = useState<ContentBlock[]>([]);
   const [saving, setSaving] = useState(false);
 
   const fetchArticlesAndEntities = async () => {
@@ -81,9 +102,11 @@ export function ArticleAdmin() {
     setTitle('');
     setCategory('Archival Research');
     setSummary('');
-    setBodyContent('');
     setEntityId(entities[0]?.id || '');
     setTags('Policy, Archive, Heritage');
+    setBlocks([
+      { type: 'paragraph', text: 'Enter introductory paragraph text here...' },
+    ]);
     setIsModalOpen(true);
   };
 
@@ -92,10 +115,58 @@ export function ArticleAdmin() {
     setTitle(art.title);
     setCategory(art.category || 'Archival Research');
     setSummary(art.description || '');
-    setBodyContent(art.content || '');
     setEntityId(entities[0]?.id || '');
     setTags('Policy, Archive, Heritage');
+    
+    // Parse content blocks if JSON array, or wrap string in paragraph
+    let parsedBlocks: ContentBlock[] = [];
+    try {
+      if (typeof art.content === 'string') {
+        const json = JSON.parse(art.content);
+        if (Array.isArray(json)) parsedBlocks = json;
+      } else if (Array.isArray(art.content)) {
+        parsedBlocks = art.content;
+      }
+    } catch {
+      parsedBlocks = [{ type: 'paragraph', text: String(art.content || art.description || '') }];
+    }
+    if (parsedBlocks.length === 0) {
+      parsedBlocks = [{ type: 'paragraph', text: '' }];
+    }
+    setBlocks(parsedBlocks);
     setIsModalOpen(true);
+  };
+
+  const addBlock = (type: ContentBlock['type']) => {
+    let newBlock: ContentBlock = { type };
+    if (type === 'paragraph') newBlock.text = '';
+    if (type === 'heading') { newBlock.text = ''; newBlock.level = 2; }
+    if (type === 'blockquote') newBlock.text = '';
+    if (type === 'list') newBlock.items = ['First point', 'Second point'];
+    if (type === 'image') { newBlock.url = '/images/africa.svg'; newBlock.caption = 'Figure caption'; newBlock.align = 'center'; newBlock.size = 'medium'; }
+    if (type === 'map') { newBlock.title = 'Geographic Corridor'; newBlock.description = 'Mapping regional trade networks'; newBlock.location = 'EAC Region'; }
+    
+    setBlocks([...blocks, newBlock]);
+  };
+
+  const removeBlock = (index: number) => {
+    setBlocks(blocks.filter((_, i) => i !== index));
+  };
+
+  const moveBlock = (index: number, direction: 'up' | 'down') => {
+    const target = direction === 'up' ? index - 1 : index + 1;
+    if (target < 0 || target >= blocks.length) return;
+    const updated = [...blocks];
+    const temp = updated[index];
+    updated[index] = updated[target];
+    updated[target] = temp;
+    setBlocks(updated);
+  };
+
+  const updateBlock = (index: number, updatedProps: Partial<ContentBlock>) => {
+    const updated = [...blocks];
+    updated[index] = { ...updated[index], ...updatedProps };
+    setBlocks(updated);
   };
 
   const handleSaveArticle = async (e: React.FormEvent) => {
@@ -118,7 +189,7 @@ export function ArticleAdmin() {
       const payload: Record<string, unknown> = {
         title: title.trim(),
         summary: summary.trim(),
-        content: bodyContent.trim() || summary.trim(),
+        content: JSON.stringify(blocks), // Dynamic blocks stored as structured JSON
         category: category.trim(),
         tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
       };
@@ -170,7 +241,7 @@ export function ArticleAdmin() {
             Content & Article Studio
           </h1>
           <p className="mt-1 text-xs text-text-muted">
-            Author, review, publish, and govern knowledge articles connected to the graph across Connect Africa.
+            Author dynamic publications with custom blocks, maps, images, and entity links.
           </p>
         </div>
 
@@ -306,13 +377,13 @@ export function ArticleAdmin() {
         )}
       </div>
 
-      {/* ARTICLE CREATION / EDITING MODAL */}
+      {/* ARTICLE CREATION / EDITING MODAL WITH DYNAMIC BLOCK EDITOR */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-3xl rounded-2xl border border-stone/20 bg-surface p-6 shadow-2xl max-h-[90vh] overflow-y-auto admin-scrollbar">
+          <div className="w-full max-w-4xl rounded-2xl border border-stone/20 bg-surface p-6 shadow-2xl max-h-[92vh] overflow-y-auto admin-scrollbar">
             <div className="flex items-center justify-between border-b border-stone/10 pb-4">
               <h2 className="font-serif text-2xl font-bold text-text-main">
-                {editingId ? 'Edit Article Record' : 'Create New Article Record'}
+                {editingId ? 'Edit Dynamic Article' : 'Author New Dynamic Article'}
               </h2>
               <button
                 type="button"
@@ -323,7 +394,7 @@ export function ArticleAdmin() {
               </button>
             </div>
 
-            <form onSubmit={handleSaveArticle} className="mt-6 space-y-5 font-sans">
+            <form onSubmit={handleSaveArticle} className="mt-6 space-y-6 font-sans">
               <div>
                 <label className="mb-2 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
                   Article Title *
@@ -334,7 +405,7 @@ export function ArticleAdmin() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g., Renewable Energy Infrastructure in East Africa"
-                  className="ca-input"
+                  className="ca-input font-serif text-lg"
                 />
               </div>
 
@@ -356,9 +427,6 @@ export function ArticleAdmin() {
                       </option>
                     ))}
                   </select>
-                  <p className="mt-1 font-mono text-[10px] text-text-muted">
-                    Every article must be anchored to an entity in the knowledge graph.
-                  </p>
                 </div>
               )}
 
@@ -400,26 +468,174 @@ export function ArticleAdmin() {
                   Summary / Abstract *
                 </label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   required
                   value={summary}
                   onChange={(e) => setSummary(e.target.value)}
-                  placeholder="Provide a concise summary of the publication..."
+                  placeholder="Provide a concise summary..."
                   className="ca-input resize-none"
                 />
               </div>
 
-              <div>
-                <label className="mb-2 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                  Body Content / Paragraphs
-                </label>
-                <textarea
-                  rows={8}
-                  value={bodyContent}
-                  onChange={(e) => setBodyContent(e.target.value)}
-                  placeholder="Enter full article body text, headings, or structured notes..."
-                  className="ca-input font-serif text-base"
-                />
+              {/* DYNAMIC CONTENT BLOCKS BUILDER */}
+              <div className="border-t border-stone/10 pt-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="font-serif text-lg font-bold text-text-main">Dynamic Content Blocks</h3>
+                    <p className="text-xs text-text-muted">Add, reorder, and style paragraphs, headings, media, and maps.</p>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                    <button type="button" onClick={() => addBlock('paragraph')} className="ca-btn-outline px-2.5 py-1.5">
+                      + Paragraph
+                    </button>
+                    <button type="button" onClick={() => addBlock('heading')} className="ca-btn-outline px-2.5 py-1.5">
+                      <Heading size={12} className="inline mr-1" /> Heading
+                    </button>
+                    <button type="button" onClick={() => addBlock('blockquote')} className="ca-btn-outline px-2.5 py-1.5">
+                      <Quote size={12} className="inline mr-1" /> Quote
+                    </button>
+                    <button type="button" onClick={() => addBlock('list')} className="ca-btn-outline px-2.5 py-1.5">
+                      <List size={12} className="inline mr-1" /> List
+                    </button>
+                    <button type="button" onClick={() => addBlock('image')} className="ca-btn-outline px-2.5 py-1.5">
+                      <ImageIcon size={12} className="inline mr-1" /> Image
+                    </button>
+                    <button type="button" onClick={() => addBlock('map')} className="ca-btn-outline px-2.5 py-1.5">
+                      <MapPin size={12} className="inline mr-1" /> Map
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  {blocks.map((block, idx) => (
+                    <div key={idx} className="rounded-xl border border-stone/20 bg-canvas p-4 relative group">
+                      <div className="flex items-center justify-between border-b border-stone/10 pb-2 mb-3">
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--accent-teal)]">
+                          Block {idx + 1}: {block.type}
+                        </span>
+                        <div className="flex items-center gap-1 font-mono text-xs">
+                          <button type="button" onClick={() => moveBlock(idx, 'up')} disabled={idx === 0} className="p-1 text-stone hover:text-text-main disabled:opacity-30">
+                            <ArrowUp size={14} />
+                          </button>
+                          <button type="button" onClick={() => moveBlock(idx, 'down')} disabled={idx === blocks.length - 1} className="p-1 text-stone hover:text-text-main disabled:opacity-30">
+                            <ArrowDown size={14} />
+                          </button>
+                          <button type="button" onClick={() => removeBlock(idx)} className="p-1 text-clay hover:text-[var(--accent-terracotta)] ml-2">
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </div>
+
+                      {block.type === 'paragraph' && (
+                        <textarea
+                          rows={3}
+                          value={block.text || ''}
+                          onChange={(e) => updateBlock(idx, { text: e.target.value })}
+                          placeholder="Paragraph text..."
+                          className="ca-input font-serif text-sm"
+                        />
+                      )}
+
+                      {block.type === 'heading' && (
+                        <div className="grid gap-3 sm:grid-cols-[120px_1fr]">
+                          <select
+                            value={block.level || 2}
+                            onChange={(e) => updateBlock(idx, { level: Number(e.target.value) as 2 | 3 })}
+                            className="ca-input text-xs"
+                          >
+                            <option value={2}>Heading 2</option>
+                            <option value={3}>Heading 3</option>
+                          </select>
+                          <input
+                            type="text"
+                            value={block.text || ''}
+                            onChange={(e) => updateBlock(idx, { text: e.target.value })}
+                            placeholder="Heading title..."
+                            className="ca-input font-serif font-bold text-sm"
+                          />
+                        </div>
+                      )}
+
+                      {block.type === 'blockquote' && (
+                        <textarea
+                          rows={2}
+                          value={block.text || ''}
+                          onChange={(e) => updateBlock(idx, { text: e.target.value })}
+                          placeholder="Inspirational or cited quote..."
+                          className="ca-input font-serif italic text-sm"
+                        />
+                      )}
+
+                      {block.type === 'list' && (
+                        <textarea
+                          rows={3}
+                          value={(block.items || []).join('\n')}
+                          onChange={(e) => updateBlock(idx, { items: e.target.value.split('\n') })}
+                          placeholder="Enter list items (one per line)..."
+                          className="ca-input text-xs font-serif"
+                        />
+                      )}
+
+                      {block.type === 'image' && (
+                        <div className="space-y-3">
+                          <input
+                            type="text"
+                            value={block.url || ''}
+                            onChange={(e) => updateBlock(idx, { url: e.target.value })}
+                            placeholder="Image URL (e.g. /images/africa.svg)..."
+                            className="ca-input text-xs font-mono"
+                          />
+                          <div className="grid gap-3 sm:grid-cols-3">
+                            <input
+                              type="text"
+                              value={block.caption || ''}
+                              onChange={(e) => updateBlock(idx, { caption: e.target.value })}
+                              placeholder="Figure caption..."
+                              className="ca-input text-xs sm:col-span-2"
+                            />
+                            <select
+                              value={block.align || 'center'}
+                              onChange={(e) => updateBlock(idx, { align: e.target.value as any })}
+                              className="ca-input text-xs"
+                            >
+                              <option value="left">Align Left</option>
+                              <option value="center">Align Center</option>
+                              <option value="right">Align Right</option>
+                            </select>
+                          </div>
+                        </div>
+                      )}
+
+                      {block.type === 'map' && (
+                        <div className="space-y-3">
+                          <div className="grid gap-3 sm:grid-cols-2">
+                            <input
+                              type="text"
+                              value={block.title || ''}
+                              onChange={(e) => updateBlock(idx, { title: e.target.value })}
+                              placeholder="Map Title..."
+                              className="ca-input text-xs font-bold"
+                            />
+                            <input
+                              type="text"
+                              value={block.location || ''}
+                              onChange={(e) => updateBlock(idx, { location: e.target.value })}
+                              placeholder="Geographic Region / Zone..."
+                              className="ca-input text-xs font-mono"
+                            />
+                          </div>
+                          <input
+                            type="text"
+                            value={block.description || ''}
+                            onChange={(e) => updateBlock(idx, { description: e.target.value })}
+                            placeholder="Short geospatial description..."
+                            className="ca-input text-xs"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="flex items-center justify-end gap-3 border-t border-stone/10 pt-4">
@@ -438,7 +654,7 @@ export function ArticleAdmin() {
                 >
                   {saving && <Loader2 className="h-4 w-4 animate-spin" />}
                   <Check size={14} />
-                  {editingId ? 'Update Record' : 'Publish Article'}
+                  {editingId ? 'Update Dynamic Record' : 'Publish Dynamic Article'}
                 </button>
               </div>
             </form>
