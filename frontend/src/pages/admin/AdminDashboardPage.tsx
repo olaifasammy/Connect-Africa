@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { AdminShell } from './components/AdminShell';
 import { AdminOverview } from './overview/AdminOverview';
 import { ArticleAdmin } from './article/ArticleAdmin';
+import { ArticleEditorPage } from './article/ArticleEditorPage';
 import { OntologyAdmin } from './ontology/OntologyAdmin';
 import { UsersAdmin } from './identity/UsersAdmin';
 import { AuditAdmin } from './observability/AuditAdmin';
@@ -54,6 +55,8 @@ export function AdminDashboardPage() {
         />
         <Route path="/ontology" element={<OntologyAdmin />} />
         <Route path="/article" element={<ArticleAdmin />} />
+        <Route path="/article/create" element={<ArticleEditorPage />} />
+        <Route path="/article/edit/:id" element={<ArticleEditorPage />} />
         <Route
           path="/sources"
           element={<ModuleView title="Source Citations & Ingestion" description="Manage crawler inputs, reference citations, and data sources." />}
