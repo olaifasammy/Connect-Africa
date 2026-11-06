@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft,
   Loader2,
-  Check,
   Image as ImageIcon,
   MapPin,
   Heading,
@@ -14,12 +13,16 @@ import {
   BookOpen,
   Eye,
   Edit3,
+  Send,
+  ShieldCheck,
 } from 'lucide-react';
 import { articleApi, api, entityApi, type EntitySummary } from '../../../services/api';
+import { useAuth } from '../../../context/AuthContext';
 
 export function ArticleEditorPage() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { isAdmin } = useAuth();
   const isEditing = Boolean(id);
 
   const [entities, setEntities] = useState<EntitySummary[]>([]);
@@ -114,18 +117,17 @@ Enter your historical analysis, research findings, and comprehensive documentati
     }, 50);
   };
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleWorkflowAction = async (action: 'draft' | 'submit' | 'publish') => {
     setError(null);
     setSuccess(null);
 
     if (!title.trim()) {
-      setError('Validation Error: Article title is required. Please enter a valid publication title.');
+      setError('Validation Error: Article title is required.');
       errorRef.current?.scrollIntoView({ behavior: 'smooth' });
       return;
     }
     if (!summary.trim()) {
-      setError('Validation Error: Summary/Abstract is required to index this publication.');
+      setError('Validation Error: Summary/Abstract is required.');
       errorRef.current?.scrollIntoView({ behavior: 'smooth' });
       return;
     }
@@ -135,7 +137,7 @@ Enter your historical analysis, research findings, and comprehensive documentati
       return;
     }
     if (!markdownContent.trim() || markdownContent.trim().length < 20) {
-      setError('Validation Error: Article body content is too short. Please provide comprehensive scholarly text.');
+      setError('Validation Error: Article body content is too short.');
       errorRef.current?.scrollIntoView({ behavior: 'smooth' });
       return;
     }
@@ -182,22 +184,38 @@ Enter your historical analysis, research findings, and comprehensive documentati
         content: JSON.stringify(blocks),
         category: category.trim(),
         tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
+        expectedVersion: 1,
       };
+
+      let targetId = id;
 
       if (!isEditing) {
         payload.entityId = entityId;
-        await api.post('/article', payload);
-        setSuccess('Success: Article published to knowledge graph successfully! Redirecting...');
+        const res = await api.post('/article', payload);
+        targetId = res.id;
       } else {
         await api.put(`/article/${id}`, payload);
-        setSuccess('Success: Article changes saved successfully! Redirecting...');
+      }
+
+      if (action === 'submit' && targetId) {
+        await api.post(`/article/${targetId}/submit`, {});
+        setSuccess('Workflow Status: Article successfully submitted for review.');
+      } else if (action === 'publish' && targetId) {
+        try { await api.post(`/article/${targetId}/submit`, {}); } catch {}
+        if (isAdmin) {
+          try { await api.post(`/article/${targetId}/approve`, {}); } catch {}
+        }
+        await api.post(`/article/${targetId}/publish`, {});
+        setSuccess('Workflow Status: Article successfully approved & published to knowledge graph!');
+      } else {
+        setSuccess('Workflow Status: Article draft saved successfully.');
       }
 
       setTimeout(() => {
         navigate('/admin/article');
       }, 1500);
     } catch (err: any) {
-      setError(`Publishing Failed: ${err.message || 'Unable to save article record to backend.'}`);
+      setError(`Workflow Execution Failed: ${err.message || 'Backend transaction rejected.'}`);
       errorRef.current?.scrollIntoView({ behavior: 'smooth' });
     } finally {
       setSaving(false);
@@ -283,31 +301,49 @@ Enter your historical analysis, research findings, and comprehensive documentati
             <ArrowLeft size={18} />
           </button>
           <div>
-            <p className="ca-eyebrow">Enterprise Studio</p>
+            <p className="ca-eyebrow">Enterprise Lifecycle Studio</p>
             <h1 className="font-serif text-3xl font-bold tracking-tight text-text-main sm:text-4xl">
               {isEditing ? 'Edit Publication' : 'Author Publication'}
             </h1>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
           <button
             type="button"
             onClick={() => setPreviewMode(!previewMode)}
-            className="ca-btn-outline px-4 py-3 text-xs font-mono uppercase tracking-wider flex items-center gap-2"
+            className="ca-btn-outline px-4 py-2.5 uppercase tracking-wider flex items-center gap-2"
           >
             {previewMode ? <Edit3 size={14} /> : <Eye size={14} />}
             {previewMode ? 'Editor' : 'Preview'}
           </button>
+
           <button
             type="button"
-            onClick={handleSave}
+            onClick={() => handleWorkflowAction('draft')}
             disabled={saving}
-            className="ca-btn-primary px-8 py-3 text-xs font-mono uppercase tracking-wider flex items-center gap-2"
+            className="ca-btn-outline px-4 py-2.5 uppercase tracking-wider"
+          >
+            Save Draft
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleWorkflowAction('submit')}
+            disabled={saving}
+            className="ca-btn-secondary px-4 py-2.5 uppercase tracking-wider flex items-center gap-1.5"
+          >
+            <Send size={13} /> Submit for Review
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleWorkflowAction('publish')}
+            disabled={saving}
+            className="ca-btn-primary px-5 py-2.5 uppercase tracking-wider flex items-center gap-1.5"
           >
             {saving && <Loader2 className="h-4 w-4 animate-spin" />}
-            <Check size={16} />
-            {isEditing ? 'Save Changes' : 'Publish Article'}
+            <ShieldCheck size={14} /> Publish
           </button>
         </div>
       </div>
@@ -325,7 +361,7 @@ Enter your historical analysis, research findings, and comprehensive documentati
         </div>
       )}
 
-      <form onSubmit={handleSave} className="space-y-12">
+      <div className="space-y-12">
         {/* METADATA SECTION */}
         <section className="space-y-6">
           <div className="border-b border-stone/10 pb-3 flex items-center gap-2">
@@ -484,26 +520,45 @@ Enter your historical analysis, research findings, and comprehensive documentati
           )}
         </section>
 
-        {/* BOTTOM SUBMIT BAR */}
-        <div className="flex items-center justify-end gap-4 border-t border-stone/10 pt-8">
+        {/* BOTTOM WORKFLOW BAR */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-stone/10 pt-8">
           <button
             type="button"
             onClick={() => navigate('/admin/article')}
-            className="ca-btn-outline px-8 py-3.5 text-xs font-mono uppercase tracking-wider"
+            className="ca-btn-outline px-8 py-3.5 text-xs font-mono uppercase tracking-wider w-full sm:w-auto"
           >
-            Cancel
+            Cancel / Back
           </button>
-          <button
-            type="submit"
-            disabled={saving}
-            className="ca-btn-primary px-10 py-3.5 text-xs font-mono uppercase tracking-wider flex items-center gap-2"
-          >
-            {saving && <Loader2 className="h-4 w-4 animate-spin" />}
-            <Check size={18} />
-            {isEditing ? 'Save Changes' : 'Publish Article'}
-          </button>
+          
+          <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-end">
+            <button
+              type="button"
+              onClick={() => handleWorkflowAction('draft')}
+              disabled={saving}
+              className="ca-btn-outline px-6 py-3.5 text-xs font-mono uppercase tracking-wider flex-1 sm:flex-initial"
+            >
+              Save Draft
+            </button>
+            <button
+              type="button"
+              onClick={() => handleWorkflowAction('submit')}
+              disabled={saving}
+              className="ca-btn-secondary px-6 py-3.5 text-xs font-mono uppercase tracking-wider flex-1 sm:flex-initial flex items-center justify-center gap-1.5"
+            >
+              <Send size={13} /> Submit for Review
+            </button>
+            <button
+              type="button"
+              onClick={() => handleWorkflowAction('publish')}
+              disabled={saving}
+              className="ca-btn-primary px-8 py-3.5 text-xs font-mono uppercase tracking-wider flex-1 sm:flex-initial flex items-center justify-center gap-1.5"
+            >
+              {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+              <ShieldCheck size={14} /> Publish Now
+            </button>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
