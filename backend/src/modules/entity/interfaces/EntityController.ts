@@ -258,13 +258,18 @@ export class EntityController {
       return;
     }
 
-    await this.createHandler.handle({
+    const entityId = await this.createHandler.handle({
       dto: req.body,
       userId,
     });
 
     res.status(201).json({
       success: true,
+      data: {
+        id: entityId,
+        name: req.body.name,
+        type: req.body.type,
+      },
     });
   }
 

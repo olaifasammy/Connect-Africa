@@ -40,7 +40,7 @@ export class CreateEntityCommandHandler
   implements
     ICommandHandler<
       CreateEntityCommand,
-      void
+      string
     >
 {
   constructor(
@@ -68,7 +68,7 @@ export class CreateEntityCommandHandler
     command: CreateEntityCommand,
     userId?: string,
     ipAddress?: string,
-  ): Promise<void> {
+  ): Promise<string> {
     const {
       name,
       type,
@@ -130,12 +130,11 @@ export class CreateEntityCommandHandler
       );
     }
 
+    const entityId = new UniqueEntityId().toString();
+
     const entity =
       Entity.create(
-        EntityId.create(
-          new UniqueEntityId()
-            .toString(),
-        ),
+        EntityId.create(entityId),
         entityName,
         typeId,
         EntityMetadata.create({
@@ -161,5 +160,7 @@ export class CreateEntityCommandHandler
     }
 
     entity.clearDomainEvents();
+
+    return entityId;
   }
 }

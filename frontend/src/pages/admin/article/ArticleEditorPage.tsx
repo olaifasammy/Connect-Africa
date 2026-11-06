@@ -168,27 +168,30 @@ Enter your historical analysis, research findings, and comprehensive documentati
         source: 'Article Studio',
         tags: [],
       };
-      await entityApi.create(payload);
-      
-      const results = await entityApi.search(newEntityName.trim());
-      const created = results.find((e) => e.name?.toLowerCase() === newEntityName.trim().toLowerCase()) || results[0];
+      const res = await entityApi.create(payload);
+      const createdId = res?.id || res?.data?.id;
 
-      if (created) {
-        selectEntity(created);
+      if (createdId) {
+        selectEntity({
+          id: createdId,
+          name: newEntityName.trim(),
+          type: newEntityType,
+          description: newEntityDesc.trim(),
+        });
 
         // Apply publication lifecycle workflow for the entity
         if (publishImmediately && isAdmin) {
           try {
-            await api.post(`/entity/${created.id}/publish`, {});
-            setSuccess(`Success: Entity "${created.name}" created and published immediately with confirmation.`);
+            await api.post(`/entity/${createdId}/publish`, {});
+            setSuccess(`Success: Entity "${newEntityName.trim()}" created and published immediately with confirmation.`);
           } catch {
-            await api.post(`/entity/${created.id}/submit`, {});
+            await api.post(`/entity/${createdId}/submit`, {});
             setSuccess(`Entity created and submitted for review (In Review).`);
           }
         } else {
           try {
-            await api.post(`/entity/${created.id}/submit`, {});
-            setSuccess(`Success: Entity "${created.name}" created and flagged as "In Review" for editors & admins.`);
+            await api.post(`/entity/${createdId}/submit`, {});
+            setSuccess(`Success: Entity "${newEntityName.trim()}" created and flagged as "In Review" for editors & admins.`);
           } catch {}
         }
       }

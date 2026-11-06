@@ -306,7 +306,7 @@ export const entityApi = {
     };
   },
 
-  create: async (dto: Record<string, unknown>): Promise<{ success: boolean }> => {
+  create: async (dto: Record<string, unknown>): Promise<any> => {
     return await api.post('/entity', dto);
   },
 
