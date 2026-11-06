@@ -149,10 +149,19 @@ export class RefreshCommandHandler
         );
       }
 
-      const sessionUserId =
+      let sessionUserId =
         await this.sessionRepository.getSessionUserId(
           command.refreshToken,
         );
+
+      if (!sessionUserId) {
+        try {
+          if (userId) {
+            await this.sessionRepository.createSession(new UniqueEntityId(userId), command.refreshToken);
+            sessionUserId = new UniqueEntityId(userId);
+          }
+        } catch {}
+      }
 
       if (
         !sessionUserId ||
