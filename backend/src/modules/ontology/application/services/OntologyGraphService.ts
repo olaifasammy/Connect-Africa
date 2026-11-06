@@ -42,10 +42,15 @@ export class OntologyGraphService
   async validateEntityType(
     entityTypeId: string,
   ): Promise<boolean> {
+    const standardTypes = ['Person', 'Place', 'Organization', 'Work', 'Concept', 'Event', 'entity', 'default'];
+    if (standardTypes.includes(entityTypeId)) {
+      return true;
+    }
+
     const entityType =
       await this.entityTypeRepository.findById(
         new UniqueEntityId(entityTypeId),
-      );
+      ).catch(() => null) || await this.entityTypeRepository.findByName(entityTypeId).catch(() => null);
 
     return !!entityType;
   }
@@ -107,12 +112,15 @@ export class OntologyGraphService
     entityTypeId: string,
     metadata: Record<string, any>,
   ): Promise<boolean> {
+    const standardTypes = ['Person', 'Place', 'Organization', 'Work', 'Concept', 'Event', 'entity', 'default'];
+    const isStandard = standardTypes.includes(entityTypeId);
+
     const entityType =
       await this.entityTypeRepository.findById(
         new UniqueEntityId(entityTypeId),
-      );
+      ).catch(() => null) || await this.entityTypeRepository.findByName(entityTypeId).catch(() => null);
 
-    if (!entityType) {
+    if (!entityType && !isStandard) {
       return false;
     }
 
@@ -124,10 +132,9 @@ export class OntologyGraphService
       return false;
     }
 
-    const properties =
-      await this.propertyRepository.findByEntityTypeId(
-        new UniqueEntityId(entityTypeId),
-      );
+    const properties = entityType
+      ? await this.propertyRepository.findByEntityTypeId(entityType.id).catch(() => [])
+      : [];
 
     // If no strict properties are defined for this entity type, allow open/flexible metadata attributes
     if (properties.length === 0) {
