@@ -69,9 +69,8 @@ Enter your historical analysis, research findings, and comprehensive documentati
               try {
                 const json = JSON.parse(found.content);
                 if (Array.isArray(json)) {
-                  // Convert blocks back to markdown text for smooth editing
                   const md = json.map((b: any) => {
-                    if (b.type === 'heading') return `\n\n### ${b.text}`;
+                    if (b.type === 'heading') return `\n\n## ${b.text}`;
                     if (b.type === 'blockquote') return `\n\n> "${b.text}"`;
                     if (b.type === 'list' && Array.isArray(b.items)) return `\n\n- ${b.items.join('\n- ')}`;
                     return `\n\n${b.text || b.description || ''}`;
@@ -120,7 +119,6 @@ Enter your historical analysis, research findings, and comprehensive documentati
     setError(null);
     setSuccess(null);
 
-    // Validation checks with pointer feedback
     if (!title.trim()) {
       setError('Validation Error: Article title is required. Please enter a valid publication title.');
       errorRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -145,7 +143,6 @@ Enter your historical analysis, research findings, and comprehensive documentati
     setSaving(true);
 
     try {
-      // Parse markdown into structured blocks for backend schema compatibility
       const lines = markdownContent.split('\n');
       const blocks: any[] = [];
       let currentPara = '';
@@ -207,11 +204,67 @@ Enter your historical analysis, research findings, and comprehensive documentati
     }
   };
 
+  const renderRichPreview = () => {
+    const lines = markdownContent.split('\n');
+    const elements: React.ReactNode[] = [];
+    let listItems: string[] = [];
+
+    const flushList = () => {
+      if (listItems.length > 0) {
+        elements.push(
+          <ul key={elements.length} className="list-disc pl-6 space-y-2 font-serif text-lg my-4 text-text-main">
+            {listItems.map((li, i) => <li key={i}>{li}</li>)}
+          </ul>
+        );
+        listItems = [];
+      }
+    };
+
+    lines.forEach((line, idx) => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('## ')) {
+        flushList();
+        elements.push(
+          <h2 key={idx} className="font-serif text-3xl font-bold tracking-tight text-text-main mt-8 mb-4">
+            {trimmed.replace('## ', '')}
+          </h2>
+        );
+      } else if (trimmed.startsWith('### ')) {
+        flushList();
+        elements.push(
+          <h3 key={idx} className="font-serif text-2xl font-bold tracking-tight text-text-main mt-6 mb-3">
+            {trimmed.replace('### ', '')}
+          </h3>
+        );
+      } else if (trimmed.startsWith('> ')) {
+        flushList();
+        elements.push(
+          <blockquote key={idx} className="border-l-2 border-[var(--accent-amber)] pl-6 py-2 my-6 font-serif italic text-xl text-text-muted">
+            {trimmed.replace('> ', '').replace(/"/g, '')}
+          </blockquote>
+        );
+      } else if (trimmed.startsWith('- ')) {
+        listItems.push(trimmed.replace('- ', ''));
+      } else if (trimmed === '') {
+        flushList();
+      } else {
+        flushList();
+        elements.push(
+          <p key={idx} className="font-serif text-lg leading-relaxed text-text-main mb-4">
+            {trimmed}
+          </p>
+        );
+      }
+    });
+    flushList();
+    return elements;
+  };
+
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center font-mono text-xs text-text-muted">
         <Loader2 className="mr-2 h-5 w-5 animate-spin text-[var(--accent-teal)]" />
-        Loading Wikipedia-grade master editor workspace...
+        Loading master editor workspace...
       </div>
     );
   }
@@ -230,7 +283,7 @@ Enter your historical analysis, research findings, and comprehensive documentati
             <ArrowLeft size={18} />
           </button>
           <div>
-            <p className="ca-eyebrow">Wikipedia & Medium Master Editor</p>
+            <p className="ca-eyebrow">Enterprise Studio</p>
             <h1 className="font-serif text-3xl font-bold tracking-tight text-text-main sm:text-4xl">
               {isEditing ? 'Edit Publication' : 'Author Publication'}
             </h1>
@@ -400,13 +453,17 @@ Enter your historical analysis, research findings, and comprehensive documentati
           </div>
 
           {previewMode ? (
-            <div className="rounded-2xl border border-stone/20 bg-surface p-8 shadow-sm min-h-[400px] font-serif text-lg leading-relaxed text-text-main space-y-6">
-              <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-teal)] border-b border-stone/10 pb-3">
+            <div className="rounded-2xl border border-stone/20 bg-surface p-8 shadow-sm min-h-[400px]">
+              <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-teal)] border-b border-stone/10 pb-3 mb-6">
                 <BookOpen size={16} /> Live Encyclopedia Preview Mode
               </div>
-              <div className="whitespace-pre-line">
-                {markdownContent || 'No content provided yet.'}
-              </div>
+              <article className="max-w-2xl mx-auto">
+                <h1 className="font-serif text-4xl font-bold text-text-main mb-4">{title || 'Untitled Article'}</h1>
+                <p className="font-serif text-xl italic text-text-muted mb-8">{summary || 'No summary provided.'}</p>
+                <div className="space-y-4">
+                  {renderRichPreview()}
+                </div>
+              </article>
             </div>
           ) : (
             <div className="rounded-2xl border border-stone/20 bg-surface p-6 shadow-sm">
