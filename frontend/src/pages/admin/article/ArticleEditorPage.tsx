@@ -15,9 +15,14 @@ import {
   Edit3,
   Send,
   ShieldCheck,
+  Search,
+  Plus,
+  X,
 } from 'lucide-react';
 import { articleApi, api, entityApi, type EntitySummary } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
+
+const ENTITY_TYPES = ['Person', 'Place', 'Organization', 'Work', 'Concept', 'Event'];
 
 export function ArticleEditorPage() {
   const navigate = useNavigate();
@@ -25,12 +30,24 @@ export function ArticleEditorPage() {
   const { isAdmin } = useAuth();
   const isEditing = Boolean(id);
 
-  const [entities, setEntities] = useState<EntitySummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
+
+  // Entity Autocomplete State
+  const [entityQuery, setEntityQuery] = useState('');
+  const [entitySuggestions, setEntitySuggestions] = useState<EntitySummary[]>([]);
+  const [selectedEntity, setSelectedEntity] = useState<EntitySummary | null>(null);
+  const [searchingEntities, setSearchingEntities] = useState(false);
+
+  // Quick Create Entity Modal State
+  const [isCreateEntityOpen, setIsCreateEntityOpen] = useState(false);
+  const [newEntityName, setNewEntityName] = useState('');
+  const [newEntityType, setNewEntityType] = useState('Person');
+  const [newEntityDesc, setNewEntityDesc] = useState('');
+  const [creatingEntity, setCreatingEntity] = useState(false);
 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Archival Research');
@@ -57,10 +74,6 @@ Enter your historical analysis, research findings, and comprehensive documentati
     const loadData = async () => {
       setLoading(true);
       try {
-        const entityData = await entityApi.list(100).catch(() => []);
-        if (!active) return;
-        setEntities(entityData || []);
-
         if (isEditing && id) {
           const articles = await articleApi.getLatest(100);
           const found = articles.find((a) => a.id === id);
@@ -87,8 +100,6 @@ Enter your historical analysis, research findings, and comprehensive documentati
               }
             }
           }
-        } else if (entityData && entityData.length > 0) {
-          setEntityId(entityData[0].id);
         }
       } catch (err: any) {
         if (active) setError(err.message || 'Failed to initialize editor workspace.');
@@ -102,6 +113,77 @@ Enter your historical analysis, research findings, and comprehensive documentati
       active = false;
     };
   }, [id, isEditing]);
+
+  // Debounced Entity Search
+  useEffect(() => {
+    if (!entityQuery.trim() || entityQuery.trim().length < 2) {
+      setEntitySuggestions([]);
+      return;
+    }
+
+    let cancelled = false;
+    const timer = window.setTimeout(async () => {
+      setSearchingEntities(true);
+      try {
+        const results = await entityApi.search(entityQuery.trim());
+        if (!cancelled) {
+          setEntitySuggestions(results.slice(0, 8));
+        }
+      } catch {
+        if (!cancelled) {
+          setEntitySuggestions([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setSearchingEntities(false);
+        }
+      }
+    }, 250);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [entityQuery]);
+
+  const selectEntity = (ent: EntitySummary) => {
+    setSelectedEntity(ent);
+    setEntityId(ent.id);
+    setEntityQuery('');
+    setEntitySuggestions([]);
+  };
+
+  const handleQuickCreateEntity = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newEntityName.trim()) return;
+
+    setCreatingEntity(true);
+    try {
+      const payload = {
+        name: newEntityName.trim(),
+        type: newEntityType,
+        description: newEntityDesc.trim() || undefined,
+        attributes: {},
+      };
+      await entityApi.create(payload);
+      
+      const results = await entityApi.search(newEntityName.trim());
+      const created = results.find((e) => e.name?.toLowerCase() === newEntityName.trim().toLowerCase()) || results[0];
+
+      if (created) {
+        selectEntity(created);
+      }
+
+      setIsCreateEntityOpen(false);
+      setNewEntityName('');
+      setNewEntityDesc('');
+      setSuccess('Knowledge graph entity created and connected successfully!');
+    } catch (err: any) {
+      setError(err.message || 'Failed to create new entity on the fly.');
+    } finally {
+      setCreatingEntity(false);
+    }
+  };
 
   const insertSnippet = (snippet: string) => {
     if (!editorRef.current) return;
@@ -385,26 +467,79 @@ Enter your historical analysis, research findings, and comprehensive documentati
             </div>
 
             {!isEditing && (
-              <div>
+              <div className="relative">
                 <label className="mb-2 block font-mono text-xs font-bold uppercase tracking-widest text-text-muted">
-                  Connected Knowledge Entity *
+                  Connected Knowledge Entity (Search Millions) *
                 </label>
-                <select
-                  value={entityId}
-                  onChange={(e) => setEntityId(e.target.value)}
-                  required
-                  className="ca-input py-3.5 text-sm"
-                >
-                  <option value="">Select target knowledge graph entity...</option>
-                  {entities.map((ent) => (
-                    <option key={ent.id} value={ent.id}>
-                      {ent.name} ({ent.type})
-                    </option>
-                  ))}
-                </select>
-                <p className="mt-1.5 font-mono text-[10px] text-text-muted">
-                  Mandatory domain rule: Every article must be anchored to a knowledge graph entity.
-                </p>
+
+                {selectedEntity ? (
+                  <div className="flex items-center justify-between rounded-xl border border-[var(--accent-teal)]/40 bg-[var(--accent-teal)]/5 p-3.5">
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-lg bg-[var(--accent-teal)]/20 text-[var(--accent-teal)] flex items-center justify-center font-bold text-xs font-mono">
+                        {selectedEntity.type?.charAt(0) || 'E'}
+                      </div>
+                      <div>
+                        <p className="font-serif font-bold text-sm text-text-main">{selectedEntity.name}</p>
+                        <p className="font-mono text-[10px] uppercase text-text-muted">{selectedEntity.type} · ID: {selectedEntity.id}</p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => { setSelectedEntity(null); setEntityId(''); }}
+                      className="text-xs font-mono text-stone hover:text-text-main underline"
+                    >
+                      Change Entity
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="relative flex items-center">
+                      <Search className="absolute left-3.5 text-stone" size={16} />
+                      <input
+                        type="text"
+                        value={entityQuery}
+                        onChange={(e) => setEntityQuery(e.target.value)}
+                        placeholder="Type to search millions of entities (e.g. Mansa Musa, Timbuktu)..."
+                        className="ca-input pl-10 py-3.5 text-sm"
+                      />
+                      {searchingEntities && (
+                        <Loader2 className="absolute right-3.5 animate-spin text-[var(--accent-teal)]" size={16} />
+                      )}
+                    </div>
+
+                    {entitySuggestions.length > 0 && (
+                      <div className="absolute left-0 right-0 top-full z-20 mt-2 max-h-64 overflow-y-auto rounded-xl border border-stone/20 bg-surface shadow-xl font-sans">
+                        {entitySuggestions.map((ent) => (
+                          <button
+                            key={ent.id}
+                            type="button"
+                            onClick={() => selectEntity(ent)}
+                            className="flex w-full items-center justify-between px-4 py-3 text-left transition hover:bg-stone/10 border-b border-stone/10 last:border-0"
+                          >
+                            <div>
+                              <p className="font-serif font-bold text-sm text-text-main">{ent.name}</p>
+                              <p className="font-mono text-[10px] text-text-muted">{ent.description || ent.type}</p>
+                            </div>
+                            <span className="ca-badge-emerald shrink-0">{ent.type}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="mt-3 flex items-center justify-between">
+                      <p className="font-mono text-[10px] text-text-muted">
+                        Every article must be anchored to an entity in the knowledge graph.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setIsCreateEntityOpen(true)}
+                        className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[var(--accent-teal)] hover:underline"
+                      >
+                        <Plus size={14} /> Create New Entity on the Fly
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -559,6 +694,86 @@ Enter your historical analysis, research findings, and comprehensive documentati
           </div>
         </div>
       </div>
+
+      {/* QUICK CREATE ENTITY MODAL */}
+      {isCreateEntityOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg rounded-2xl border border-stone/20 bg-surface p-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-stone/10 pb-4">
+              <h3 className="font-serif text-xl font-bold text-text-main">Create New Knowledge Entity</h3>
+              <button
+                type="button"
+                onClick={() => setIsCreateEntityOpen(false)}
+                className="rounded-lg p-2 text-text-muted hover:bg-stone/10 hover:text-text-main"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleQuickCreateEntity} className="mt-6 space-y-4 font-sans">
+              <div>
+                <label className="mb-2 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
+                  Entity Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newEntityName}
+                  onChange={(e) => setNewEntityName(e.target.value)}
+                  placeholder="e.g. Queen Amina of Zazzau"
+                  className="ca-input py-3"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
+                  Entity Type *
+                </label>
+                <select
+                  value={newEntityType}
+                  onChange={(e) => setNewEntityType(e.target.value)}
+                  className="ca-input py-3"
+                >
+                  {ENTITY_TYPES.map((t) => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="mb-2 block font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
+                  Short Description
+                </label>
+                <textarea
+                  rows={3}
+                  value={newEntityDesc}
+                  onChange={(e) => setNewEntityDesc(e.target.value)}
+                  placeholder="Brief historical context or definition..."
+                  className="ca-input resize-none p-3 text-xs"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 border-t border-stone/10 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsCreateEntityOpen(false)}
+                  className="ca-btn-outline px-5 py-2 text-xs font-mono uppercase tracking-wider"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={creatingEntity}
+                  className="ca-btn-primary px-6 py-2 text-xs font-mono uppercase tracking-wider flex items-center gap-2"
+                >
+                  {creatingEntity && <Loader2 className="h-4 w-4 animate-spin" />}
+                  <Plus size={14} /> Create & Connect
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
