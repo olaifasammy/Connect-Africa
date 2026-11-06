@@ -47,6 +47,7 @@ export function ArticleEditorPage() {
   const [newEntityName, setNewEntityName] = useState('');
   const [newEntityType, setNewEntityType] = useState('Person');
   const [newEntityDesc, setNewEntityDesc] = useState('');
+  const [publishImmediately, setPublishImmediately] = useState(isAdmin);
   const [creatingEntity, setCreatingEntity] = useState(false);
 
   const [title, setTitle] = useState('');
@@ -174,12 +175,27 @@ Enter your historical analysis, research findings, and comprehensive documentati
 
       if (created) {
         selectEntity(created);
+
+        // Apply publication lifecycle workflow for the entity
+        if (publishImmediately && isAdmin) {
+          try {
+            await api.post(`/entity/${created.id}/publish`, {});
+            setSuccess(`Success: Entity "${created.name}" created and published immediately with confirmation.`);
+          } catch {
+            await api.post(`/entity/${created.id}/submit`, {});
+            setSuccess(`Entity created and submitted for review (In Review).`);
+          }
+        } else {
+          try {
+            await api.post(`/entity/${created.id}/submit`, {});
+            setSuccess(`Success: Entity "${created.name}" created and flagged as "In Review" for editors & admins.`);
+          } catch {}
+        }
       }
 
       setIsCreateEntityOpen(false);
       setNewEntityName('');
       setNewEntityDesc('');
-      setSuccess('Knowledge graph entity created and connected successfully via backend pipeline!');
     } catch (err: any) {
       setError(err.message || 'Failed to create new entity in the database.');
     } finally {
@@ -754,6 +770,21 @@ Enter your historical analysis, research findings, and comprehensive documentati
                   className="ca-input resize-none p-3 text-xs"
                 />
               </div>
+
+              {isAdmin && (
+                <div className="flex items-center gap-3 pt-2">
+                  <input
+                    type="checkbox"
+                    id="publish-immediately"
+                    checked={publishImmediately}
+                    onChange={(e) => setPublishImmediately(e.target.checked)}
+                    className="h-4 w-4 rounded border-stone/30 accent-[var(--accent-teal)]"
+                  />
+                  <label htmlFor="publish-immediately" className="font-sans text-xs text-text-main cursor-pointer">
+                    Publish entity immediately with confirmation toast
+                  </label>
+                </div>
+              )}
 
               <div className="flex items-center justify-end gap-3 border-t border-stone/10 pt-4">
                 <button
