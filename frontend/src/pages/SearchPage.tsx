@@ -4,7 +4,6 @@ import {
   ChevronLeft,
   ChevronRight,
   FileText,
-  Filter,
   LoaderCircle,
   Network,
   Search as SearchIcon,
@@ -58,15 +57,6 @@ const resourceIcons: Record<ResourceType, typeof Network> = {
   source: BookOpen,
   ontology: Network,
   user: UserRound,
-};
-
-const resourceBadgeStyles: Record<ResourceType, string> = {
-  entity: 'ca-badge-emerald',
-  article: 'ca-badge-gold',
-  relationship: 'ca-badge-clay',
-  source: 'ca-badge-stone',
-  ontology: 'ca-badge-clay',
-  user: 'ca-badge-stone',
 };
 
 export function SearchPage() {
@@ -246,22 +236,7 @@ export function SearchPage() {
     setSearchParams(params);
   };
 
-  const setTypeFilter = (value: ResourceType | '') => {
-    setResourceType(value);
-    setPage(1);
-
-    const params = new URLSearchParams();
-
-    if (activeQuery) {
-      params.set('q', activeQuery);
-    }
-
-    if (value) {
-      params.set('resourceType', value);
-    }
-
-    setSearchParams(params);
-  };
+  /* setTypeFilter removed */
 
   const changePage = (nextPage: number) => {
     if (nextPage < 1 || nextPage > totalPages) return;
@@ -278,29 +253,29 @@ export function SearchPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-72px)] bg-scholar-canvas bg-canvas text-text-main font-sans transition-colors duration-300">
-      <section className="border-b border-stone/20 bg-surface/50 py-12 sm:py-16 lg:py-20">
+    <div className="min-h-[calc(100vh-72px)] bg-canvas text-text-main font-sans transition-colors duration-300">
+      <section className="border-b border-stone/10 py-12 sm:py-16">
         <div className="ca-container">
           <div className="max-w-4xl">
             <p className="ca-eyebrow">Universal Knowledge Index</p>
 
-            <h1 className="mt-2 font-serif text-3xl font-bold tracking-tight text-text-main sm:text-5xl">
-              Search African Knowledge Entities
+            <h1 className="mt-2 font-serif text-4xl font-bold tracking-tight text-text-main sm:text-6xl">
+              Search the Archives.
             </h1>
 
-            <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-text-muted sm:text-base">
-              Query across entities, research articles, ontological relationships, primary sources, and historical metadata.
+            <p className="mt-6 max-w-2xl font-sans text-lg text-text-muted">
+              Query across historical entities, research articles, ontological relationships, and primary metadata.
             </p>
 
-            <form onSubmit={submitSearch} className="relative mt-8">
-              <div className="flex items-center rounded-xl border border-stone/30 bg-surface p-2 shadow-scholar backdrop-blur-xl transition focus-within:border-gold">
-                <SearchIcon className="ml-3 shrink-0 text-stone" size={20} />
+            <form onSubmit={submitSearch} className="relative mt-10">
+              <div className="flex items-center border-b border-stone/20 bg-transparent transition focus-within:border-text-main">
+                <SearchIcon className="shrink-0 text-stone/40" size={20} strokeWidth={1.5} />
 
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search an entity, place, person, institution, culture..."
-                  className="min-w-0 flex-1 bg-transparent px-3 py-2 font-sans text-sm text-text-main outline-none placeholder:text-stone/50 sm:text-base"
+                  placeholder="Search entities, places, people, trade routes..."
+                  className="min-w-0 flex-1 bg-transparent px-4 py-4 font-serif text-xl text-text-main outline-none placeholder:text-stone/30 sm:text-2xl"
                   autoFocus
                 />
 
@@ -308,27 +283,20 @@ export function SearchPage() {
                   <button
                     type="button"
                     onClick={clearSearch}
-                    className="rounded-lg p-2 text-stone transition hover:bg-stone/10 hover:text-text-main"
+                    className="p-2 text-stone/40 transition hover:text-text-main"
                     aria-label="Clear search"
                   >
-                    <X size={16} />
+                    <X size={20} />
                   </button>
                 )}
-
-                <button
-                  type="submit"
-                  className="ca-btn-primary px-5 py-2.5 text-xs uppercase tracking-wider"
-                >
-                  Search Index
-                </button>
               </div>
 
               {(suggestions.length > 0 || suggestionsLoading) && query.trim().length >= 2 && (
-                <div className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-xl border border-stone/20 bg-surface shadow-scholar font-sans">
+                <div className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-xl border border-stone/10 bg-canvas shadow-xl font-sans">
                   {suggestionsLoading ? (
-                    <div className="flex items-center gap-2 px-4 py-3 text-xs text-text-muted">
-                      <LoaderCircle className="h-4 w-4 animate-spin text-gold" />
-                      Searching index suggestions...
+                    <div className="flex items-center gap-3 px-6 py-4 font-mono text-[10px] uppercase tracking-widest text-text-muted">
+                      <LoaderCircle className="h-4 w-4 animate-spin" />
+                      Searching index...
                     </div>
                   ) : (
                     suggestions.slice(0, 6).map((suggestion) => (
@@ -336,9 +304,9 @@ export function SearchPage() {
                         key={suggestion}
                         type="button"
                         onClick={() => selectSuggestion(suggestion)}
-                        className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-text-main transition hover:bg-stone/10"
+                        className="flex w-full items-center gap-4 px-6 py-4 text-left font-serif text-lg text-text-main transition hover:bg-stone/5"
                       >
-                        <SearchIcon size={15} className="text-stone" />
+                        <SearchIcon size={16} className="text-stone/30" strokeWidth={1.5} />
                         {suggestion}
                       </button>
                     ))
@@ -350,74 +318,37 @@ export function SearchPage() {
         </div>
       </section>
 
-      <section className="ca-container py-10 lg:py-12">
-        <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
-          <aside className="font-sans">
-            <div className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-text-muted">
-              <Filter size={14} className="text-gold" />
-              Filter Domain
-            </div>
-
-            <div className="mt-4 space-y-1">
-              <button
-                type="button"
-                onClick={() => setTypeFilter('')}
-                className={`w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition ${
-                  !resourceType
-                    ? 'bg-emerald-900/10 text-emerald-900 dark:text-gold font-bold'
-                    : 'text-text-muted hover:bg-stone/10 hover:text-text-main'
-                }`}
-              >
-                All Knowledge
-              </button>
-
-              {resourceTypes.map((type) => (
-                <button
-                  key={type.value}
-                  type="button"
-                  onClick={() => setTypeFilter(type.value)}
-                  className={`w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition ${
-                    resourceType === type.value
-                      ? 'bg-emerald-900/10 text-emerald-900 dark:text-gold font-bold'
-                      : 'text-text-muted hover:bg-stone/10 hover:text-text-main'
-                  }`}
-                >
-                  {type.label}
-                </button>
-              ))}
-            </div>
-          </aside>
-
-          <div className="min-w-0">
-            {!hasQuery ? (
-              <div className="ca-card border-dashed border-stone/30 bg-surface/50 px-6 py-16 text-center">
-                <SearchIcon className="mx-auto text-stone" size={32} />
-                <h2 className="mt-4 font-serif text-xl font-bold text-text-main">
-                  Search Connect Africa Knowledge Base
+      <section className="ca-container py-12">
+        <div className="max-w-4xl">
+          {!hasQuery ? (
+              <div className="py-20 text-center">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-stone/10 text-text-muted">
+                  <SearchIcon size={32} strokeWidth={1} />
+                </div>
+                <h2 className="mt-8 font-serif text-3xl font-bold text-text-main">
+                  Awaiting query.
                 </h2>
-                <p className="mx-auto mt-2 max-w-md font-sans text-sm text-text-muted">
-                  Begin typing an entity name, historical polity, ruler, trade route, or cultural context.
+                <p className="mx-auto mt-4 max-w-md font-sans text-lg text-text-muted">
+                  Begin typing an entity name, historical polity, ruler, or trade route to query the knowledge graph.
                 </p>
               </div>
             ) : (
               <>
-                <div className="flex flex-col justify-between gap-4 border-b border-stone/20 pb-5 sm:flex-row sm:items-center">
+                <div className="flex flex-col justify-between gap-6 border-b border-stone/10 pb-8 sm:flex-row sm:items-end">
                   <div>
-                    <p className="font-mono text-xs text-text-muted">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
                       {loading
                         ? 'Searching index...'
-                        : `${response?.total ?? 0} record${
-                            response?.total === 1 ? '' : 's'
-                          } found`}
-                    </p>
+                        : `${response?.total ?? 0} records found`}
+                    </span>
 
-                    <h2 className="mt-1 font-serif text-xl font-bold text-text-main">
+                    <h2 className="mt-2 font-serif text-4xl font-bold text-text-main">
                       "{activeQuery}"
                     </h2>
                   </div>
 
-                  <label className="flex items-center gap-2 font-mono text-xs text-text-muted">
-                    <ArrowUpDown size={14} className="text-stone" />
+                  <div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
+                    <ArrowUpDown size={12} />
                     <select
                       value={sortBy}
                       onChange={(event) => {
@@ -429,72 +360,75 @@ export function SearchPage() {
                             | 'dateCreated',
                         );
                       }}
-                      className="rounded-lg border border-stone/20 bg-surface px-3 py-1.5 font-sans text-xs text-text-main outline-none focus:border-gold"
+                      className="bg-transparent font-bold uppercase outline-none focus:text-text-main transition-colors"
                     >
-                      <option value="relevance">Sort by Relevance</option>
-                      <option value="alphabetical">Alphabetical</option>
-                      <option value="dateCreated">Newest First</option>
+                      <option value="relevance">Relevance</option>
+                      <option value="alphabetical">Alpha</option>
+                      <option value="dateCreated">Newest</option>
                     </select>
-                  </label>
+                  </div>
                 </div>
 
                 {error && (
-                  <div className="mt-6 ca-msg-error">
+                  <div className="mt-10 ca-msg-error">
                     {error}
                   </div>
                 )}
 
                 {loading && !response && (
-                  <div className="flex items-center justify-center py-20 font-sans text-sm text-text-muted">
-                    <LoaderCircle className="mr-3 animate-spin text-gold" size={20} />
-                    Querying African Knowledge Graph Index...
+                  <div className="flex flex-col items-center justify-center py-24 font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
+                    <LoaderCircle className="mb-4 animate-spin" size={24} />
+                    Querying Index...
                   </div>
                 )}
 
                 {!loading && !error && response && response.results.length === 0 && (
-                  <div className="ca-card border-dashed border-stone/30 bg-surface/50 px-6 py-16 text-center">
-                    <Sparkles className="mx-auto text-stone" size={28} />
-                    <h2 className="mt-4 font-serif text-lg font-bold text-text-main">
-                      No Records Found
+                  <div className="py-20 text-center">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-stone/10 text-text-muted">
+                      <Sparkles size={32} strokeWidth={1} />
+                    </div>
+                    <h2 className="mt-8 font-serif text-3xl font-bold text-text-main">
+                      No records found.
                     </h2>
-                    <p className="mt-2 font-sans text-sm text-text-muted">
-                      Try adjusting search keywords or clearing resource filters.
+                    <p className="mt-4 font-sans text-lg text-text-muted">
+                      Try adjusting your keywords or clearing domain filters.
                     </p>
                   </div>
                 )}
 
-                <div className="mt-6 space-y-4">
+                <div className="divide-y divide-stone/10">
                   {response?.results.map((result) => {
                     const Icon = resourceIcons[result.resourceType];
-                    const badgeClass = resourceBadgeStyles[result.resourceType];
 
                     return (
                       <article
                         key={`${result.resourceType}-${result.id}`}
-                        className="ca-card-hover group"
+                        className="group py-10 transition-colors"
                       >
-                        <div className="flex gap-4">
-                          <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-stone/20 bg-canvas text-emerald-900 dark:text-gold">
-                            <Icon size={18} />
+                        <div className="flex gap-8">
+                          <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-stone/10 text-text-main transition group-hover:border-text-main">
+                            <Icon size={18} strokeWidth={1.5} />
                           </div>
 
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-3">
-                              <span className={badgeClass}>
+                              <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
                                 {result.resourceType}
                               </span>
 
-                              <span className="font-mono text-[10px] text-text-muted">
-                                Score: {result.score.toFixed(3)}
+                              <span className="h-1 w-1 rounded-full bg-stone/20" />
+
+                              <span className="font-mono text-[10px] uppercase tracking-widest text-text-muted/60">
+                                REL: {result.score.toFixed(3)}
                               </span>
                             </div>
 
-                            <h3 className="mt-2 font-serif text-lg font-bold text-text-main group-hover:text-emerald-900 dark:group-hover:text-gold transition">
+                            <h3 className="mt-3 font-serif text-3xl font-bold text-text-main transition group-hover:text-text-muted sm:text-4xl">
                               {result.title}
                             </h3>
 
                             {result.snippet && (
-                              <p className="mt-2 max-w-3xl font-sans text-xs leading-relaxed text-text-muted">
+                              <p className="mt-4 max-w-4xl font-sans text-base leading-relaxed text-text-muted lg:text-lg">
                                 {result.snippet}
                               </p>
                             )}
@@ -506,35 +440,34 @@ export function SearchPage() {
                 </div>
 
                 {response && response.results.length > 0 && totalPages > 1 && (
-                  <div className="mt-8 flex items-center justify-between border-t border-stone/20 pt-5 font-mono text-xs">
+                  <div className="mt-12 flex items-center justify-between border-t border-stone/10 pt-10 font-mono text-[10px] font-bold uppercase tracking-widest">
                     <button
                       type="button"
                       disabled={page <= 1}
                       onClick={() => changePage(page - 1)}
-                      className="ca-btn-outline px-3 py-1.5"
+                      className="flex items-center gap-2 text-text-muted transition hover:text-text-main disabled:opacity-30"
                     >
-                      <ChevronLeft size={15} />
-                      Previous
+                      <ChevronLeft size={14} />
+                      Prev
                     </button>
 
                     <span className="text-text-muted">
-                      Page {page} of {totalPages}
+                      {page} / {totalPages}
                     </span>
 
                     <button
                       type="button"
                       disabled={page >= totalPages}
                       onClick={() => changePage(page + 1)}
-                      className="ca-btn-outline px-3 py-1.5"
+                      className="flex items-center gap-2 text-text-muted transition hover:text-text-main disabled:opacity-30"
                     >
                       Next
-                      <ChevronRight size={15} />
+                      <ChevronRight size={14} />
                     </button>
                   </div>
                 )}
               </>
             )}
-          </div>
         </div>
       </section>
     </div>

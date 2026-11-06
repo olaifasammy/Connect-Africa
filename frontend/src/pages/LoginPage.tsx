@@ -44,59 +44,48 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-ink text-cloud">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-32 top-20 h-96 w-96 rounded-full bg-emerald/10 blur-3xl" />
-        <div className="absolute -right-32 bottom-0 h-[32rem] w-[32rem] rounded-full bg-gold/5 blur-3xl" />
-      </div>
-
-      <div className="relative mx-auto flex min-h-screen w-full max-w-6xl items-center px-5 py-12 sm:px-8">
-        <div className="grid w-full overflow-hidden rounded-3xl border border-white/[0.08] bg-forest/80 shadow-soft lg:grid-cols-[1.05fr_0.95fr]">
-          <section className="hidden border-r border-white/[0.06] p-10 lg:flex lg:flex-col lg:justify-between xl:p-14">
+    <div className="relative min-h-screen bg-canvas text-text-main font-sans transition-colors duration-300">
+      <div className="relative mx-auto flex min-h-screen w-full max-w-5xl items-center px-5 py-12 sm:px-8">
+        <div className="grid w-full overflow-hidden rounded-2xl border border-stone/10 bg-surface shadow-lg lg:grid-cols-[1fr_1fr]">
+          <section className="hidden border-r border-stone/10 p-10 lg:flex lg:flex-col lg:justify-between xl:p-12">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sage">
-                CONNECT-AFRICA
-              </p>
+              <p className="ca-eyebrow">Connect-Africa</p>
 
-              <h1 className="mt-12 max-w-xl text-5xl font-semibold leading-[1.05] tracking-tight text-cloud xl:text-6xl">
-                Africa,
-                <br />
-                connected.
+              <h1 className="mt-8 font-serif text-4xl font-bold tracking-tight text-text-main sm:text-5xl">
+                Africa, connected.
               </h1>
 
-              <p className="mt-7 max-w-lg text-base leading-7 text-mist">
-                Return to a knowledge platform built around entities,
-                relationships, evidence, and discovery.
+              <p className="mt-6 font-sans text-base leading-relaxed text-text-muted">
+                Return to a knowledge platform built around entities, relationships, evidence, and discovery.
               </p>
             </div>
 
-            <div className="flex items-start gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.025] p-4">
-              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald" />
+            <div className="flex items-start gap-3 rounded-xl border border-stone/10 bg-stone/5 p-4">
+              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-text-main" />
               <div>
-                <p className="text-sm font-medium text-cloud">
-                  Your account remains yours
+                <p className="text-xs font-bold text-text-main">
+                  Your account remains secure
                 </p>
-                <p className="mt-1 text-xs leading-5 text-mist">
-                  Personal activity and account controls are protected behind
-                  authenticated access.
+                <p className="mt-1 font-sans text-xs text-text-muted">
+                  Personal activity and account controls are protected behind authenticated access.
                 </p>
               </div>
             </div>
           </section>
 
-          <section className="p-6 sm:p-10 xl:p-14">
+          <section className="p-6 sm:p-10 xl:p-12">
             <div className="mx-auto max-w-md">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald/20 bg-brand text-emerald shadow-glow">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-stone/10 bg-stone/5 text-text-main">
                 <LogIn className="h-5 w-5" />
               </div>
 
-              <p className="ca-eyebrow mt-8">Account access</p>
+              <p className="ca-eyebrow mt-8">Account Access</p>
 
-              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-cloud">
+              <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight text-text-main">
                 Welcome back.
               </h2>
 
-              <p className="mt-3 text-sm leading-6 text-mist">
+              <p className="mt-2 font-sans text-sm text-text-muted">
                 Sign in to continue your knowledge trail.
               </p>
 
@@ -116,9 +105,9 @@ export const LoginPage: React.FC = () => {
                 <div>
                   <label
                     htmlFor="login-email"
-                    className="mb-2 block text-sm font-medium text-cloud"
+                    className="mb-2 block font-sans text-xs font-bold uppercase tracking-widest text-text-muted"
                   >
-                    Email address
+                    Email Address
                   </label>
                   <input
                     id="login-email"
@@ -127,7 +116,7 @@ export const LoginPage: React.FC = () => {
                     autoComplete="email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
-                    className="w-full rounded-xl border border-white/[0.08] bg-ink/80 px-4 py-3 text-sm text-cloud outline-none transition placeholder:text-mist/60 focus:border-emerald/50 focus:ring-2 focus:ring-emerald/10"
+                    className="ca-input"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -136,14 +125,14 @@ export const LoginPage: React.FC = () => {
                   <div className="mb-2 flex items-center justify-between gap-4">
                     <label
                       htmlFor="login-password"
-                      className="block text-sm font-medium text-cloud"
+                      className="block font-sans text-xs font-bold uppercase tracking-widest text-text-muted"
                     >
                       Password
                     </label>
 
                     <Link
                       to="/reset-password"
-                      className="text-xs font-medium text-sage transition hover:text-cloud"
+                      className="font-mono text-xs text-text-muted transition hover:text-text-main"
                     >
                       Forgot password?
                     </Link>
@@ -157,7 +146,7 @@ export const LoginPage: React.FC = () => {
                       autoComplete="current-password"
                       value={password}
                       onChange={(event) => setPassword(event.target.value)}
-                      className="w-full rounded-xl border border-white/[0.08] bg-ink/80 px-4 py-3 pr-12 text-sm text-cloud outline-none transition placeholder:text-mist/60 focus:border-emerald/50 focus:ring-2 focus:ring-emerald/10"
+                      className="ca-input pr-12"
                       placeholder="Enter your password"
                     />
 
@@ -165,7 +154,7 @@ export const LoginPage: React.FC = () => {
                       type="button"
                       onClick={() => setShowPassword((visible) => !visible)}
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
-                      className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-mist transition hover:bg-white/[0.05] hover:text-cloud"
+                      className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-stone transition hover:text-text-main"
                     >
                       {showPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -179,10 +168,10 @@ export const LoginPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading || redirecting}
-                  className="ca-btn-primary group flex w-full items-center justify-center gap-2 py-3 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="ca-btn-primary group flex w-full items-center justify-center gap-2 py-3"
                 >
                   {(loading || redirecting) && (
-                    <Loader2 className="h-4 w-4 animate-spin text-ink" />
+                    <Loader2 className="h-4 w-4 animate-spin text-white" />
                   )}
                   {loading
                     ? 'Signing in…'
@@ -195,11 +184,11 @@ export const LoginPage: React.FC = () => {
                 </button>
               </form>
 
-              <div className="mt-8 border-t border-white/[0.06] pt-6 text-center text-sm text-mist">
+              <div className="mt-8 border-t border-stone/10 pt-6 text-center font-sans text-sm text-text-muted">
                 Don't have an account?{' '}
                 <Link
                   to="/register"
-                  className="font-medium text-sage transition hover:text-cloud"
+                  className="font-bold text-text-main transition hover:underline"
                 >
                   Create one
                 </Link>
@@ -207,7 +196,7 @@ export const LoginPage: React.FC = () => {
 
               <Link
                 to="/"
-                className="mt-5 block text-center text-xs text-mist/70 transition hover:text-mist"
+                className="mt-4 block text-center font-mono text-[10px] uppercase tracking-widest text-stone/60 transition hover:text-text-main"
               >
                 Return to Connect-Africa
               </Link>

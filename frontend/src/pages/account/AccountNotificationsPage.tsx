@@ -1,11 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  AlertCircle,
   ArrowLeft,
   Bell,
   Check,
-  CheckCheck,
   ExternalLink,
   Loader2,
   Trash2,
@@ -49,18 +47,6 @@ const notificationTypeLabel = (type: string): string => {
   }
 };
 
-const notificationTypeBadgeClass = (type: string): string => {
-  switch (type) {
-    case 'SECURITY':
-      return 'ca-badge-clay';
-    case 'KNOWLEDGE_UPDATE':
-    case 'ARTICLE_PUBLISHED':
-      return 'ca-badge-gold';
-    default:
-      return 'ca-badge-emerald';
-  }
-};
-
 interface NotificationRowProps {
   notification: Notification;
   busy: boolean;
@@ -87,58 +73,57 @@ const NotificationRow: React.FC<NotificationRowProps> = ({
 
   return (
     <article
-      className={`group relative border-b border-stone/15 px-5 py-4 transition last:border-b-0 sm:px-7 ${
-        notification.isRead ? 'bg-transparent' : 'bg-gold/5'
+      className={`group relative border-b border-stone/10 px-5 py-8 transition last:border-b-0 sm:px-7 ${
+        notification.isRead ? 'bg-transparent' : 'bg-stone/5'
       }`}
     >
       {!notification.isRead && (
         <span
-          className="absolute left-2 top-6 h-2 w-2 rounded-full bg-gold"
+          className="absolute left-2 top-10 h-2 w-2 rounded-full bg-text-main"
           aria-label="Unread"
         />
       )}
 
-      <div className="flex items-start gap-4">
-        <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stone/20 bg-surface text-gold">
-          <Bell className="h-4 w-4" />
+      <div className="flex items-start gap-6">
+        <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-stone/10 text-text-main">
+          <Bell className="h-5 w-5" />
         </div>
 
-        <div className="min-w-0 flex-1 font-sans">
-          <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
             <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="font-serif text-base font-bold text-text-main">
+              <div className="flex flex-wrap items-center gap-3">
+                <h2 className="font-serif text-2xl font-bold leading-tight text-text-main">
                   {notification.title}
                 </h2>
 
-                <span className={notificationTypeBadgeClass(notification.type)}>
+                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
                   {notificationTypeLabel(notification.type)}
                 </span>
               </div>
 
-              <p className="mt-1 text-xs leading-relaxed text-text-muted">
+              <p className="mt-3 text-base leading-relaxed text-text-muted max-w-3xl">
                 {notification.content}
               </p>
             </div>
 
             <time
               dateTime={notification.createdAt}
-              className="shrink-0 font-mono text-xs text-text-muted"
+              className="shrink-0 font-mono text-[10px] uppercase tracking-widest text-text-muted"
             >
               {formatNotificationDate(notification.createdAt)}
             </time>
           </div>
 
-          <div className="mt-3 flex flex-wrap items-center gap-2 font-mono text-xs">
+          <div className="mt-6 flex flex-wrap items-center gap-4">
             {notification.targetUrl && (
               <button
                 type="button"
                 onClick={handleOpen}
                 disabled={busy}
-                className="ca-btn-outline px-2.5 py-1 text-xs"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone/10 text-text-muted transition hover:border-text-main hover:text-text-main"
               >
-                <ExternalLink className="h-3.5 w-3.5 text-gold" />
-                Open Entry
+                <ExternalLink size={16} />
               </button>
             )}
 
@@ -147,14 +132,13 @@ const NotificationRow: React.FC<NotificationRowProps> = ({
                 type="button"
                 onClick={() => onRead(notification)}
                 disabled={busy}
-                className="ca-btn-outline px-2.5 py-1 text-xs"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone/10 text-text-muted transition hover:border-text-main hover:text-text-main"
               >
                 {busy ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <Check className="h-3.5 w-3.5" />
+                  <Check size={16} />
                 )}
-                Mark Read
               </button>
             )}
 
@@ -162,14 +146,13 @@ const NotificationRow: React.FC<NotificationRowProps> = ({
               type="button"
               onClick={() => onDelete(notification)}
               disabled={busy}
-              className="ca-btn-outline px-2.5 py-1 text-xs text-clay"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone/10 text-text-muted transition hover:border-clay hover:text-clay"
             >
               {busy ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <Trash2 className="h-3.5 w-3.5" />
+                <Trash2 size={16} />
               )}
-              Remove
             </button>
           </div>
         </div>
@@ -288,94 +271,82 @@ export const AccountNotificationsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-scholar-canvas bg-canvas pb-20 pt-10 text-text-main font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-canvas pb-24 pt-8 text-text-main font-sans transition-colors duration-300">
       <div className="ca-container">
         <Link
           to="/account"
-          className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-emerald-900 dark:text-gold hover:underline"
+          className="group inline-flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-widest text-text-muted hover:text-text-main transition-colors"
         >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Account Center
+          <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
+          Workspace
         </Link>
 
-        <section className="mt-6 ca-card bg-surface shadow-scholar p-0">
-          <div className="border-b border-stone/20 px-6 py-6 sm:px-8">
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-gold/30 bg-gold/10 text-gold">
-                    <Bell className="h-6 w-6" />
-                  </div>
-
-                  <div>
-                    <p className="ca-eyebrow">Account Dispatch</p>
-                    <h1 className="mt-1 font-serif text-3xl font-bold text-text-main">
-                      Notifications
-                    </h1>
-                  </div>
-                </div>
-
-                <p className="mt-2 font-sans text-sm text-text-muted">
-                  Important dispatches and activity associated with your account.
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleMarkAll}
-                disabled={unreadCount === 0 || markingAll || loading}
-                className="ca-btn-outline px-4 py-2 text-xs font-mono"
-              >
-                {markingAll ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <CheckCheck className="h-4 w-4 text-gold" />
-                )}
-                Mark All Read
-              </button>
+        <header className="mt-12 border-b border-stone/10 pb-10">
+          <div className="mb-6 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-stone/10 text-text-main">
+              <Bell className="h-6 w-6" />
             </div>
+
+            <button
+              type="button"
+              onClick={handleMarkAll}
+              disabled={unreadCount === 0 || markingAll || loading}
+              className="rounded-full border border-stone/10 px-6 py-2 text-xs font-bold uppercase tracking-widest transition hover:border-text-main"
+            >
+              {markingAll ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                'Mark All Read'
+              )}
+            </button>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 border-b border-stone/15 px-6 py-3 font-mono text-xs">
-            {[
-              ['all', 'All'],
-              ['unread', `Unread${unreadCount ? ` (${unreadCount})` : ''}`],
-              ['system', 'System Alerts'],
-            ].map(([value, label]) => (
-              <button
-                key={value}
-                type="button"
-                onClick={() => setFilter(value as 'all' | 'unread' | 'system')}
-                className={`rounded-md px-3 py-1.5 font-semibold transition ${
-                  filter === value
-                    ? 'bg-emerald-900 text-white dark:bg-emerald-500 dark:text-ink'
-                    : 'text-text-muted hover:bg-stone/10 hover:text-text-main'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+          <p className="ca-eyebrow">Account Dispatch</p>
+
+          <h1 className="mt-2 font-serif text-4xl font-bold text-text-main sm:text-5xl lg:text-6xl">
+            Notifications.
+          </h1>
+
+          <p className="mt-6 max-w-xl font-sans text-lg text-text-muted">
+            Important dispatches and activity logs associated with your account within the knowledge archive.
+          </p>
+        </header>
+
+        <div className="mt-10 flex flex-wrap items-center gap-6 border-b border-stone/10 pb-4 font-mono text-[10px] uppercase tracking-widest">
+          {[
+            ['all', 'All'],
+            ['unread', `Unread (${unreadCount})`],
+            ['system', 'System Alerts'],
+          ].map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setFilter(value as 'all' | 'unread' | 'system')}
+              className={`transition ${
+                filter === value
+                  ? 'text-text-main underline decoration-text-main decoration-2 underline-offset-8'
+                  : 'text-text-muted hover:text-text-main'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {error && (
+          <div className="mt-10 ca-msg-error">
+            {error}
           </div>
+        )}
 
-          {error && (
-            <div className="border-b border-clay/30 bg-clay/10 px-6 py-4">
-              <div className="flex items-start gap-3">
-                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-clay" />
-                <div className="min-w-0 font-sans text-xs text-clay">
-                  <p className="font-bold">Notification Dispatch Warning</p>
-                  <p className="mt-0.5">{error}</p>
-                </div>
-              </div>
-            </div>
-          )}
-
+        <section className="mt-12">
           {loading ? (
-            <div className="flex min-h-[250px] items-center justify-center font-mono text-xs text-text-muted">
-              <Loader2 className="mr-2 h-4 w-4 animate-spin text-gold" />
-              Loading notifications inbox...
+            <div className="flex min-h-[250px] items-center justify-center font-mono text-[10px] uppercase tracking-widest text-text-muted">
+              <Loader2 className="mr-3 h-4 w-4 animate-spin" />
+              Loading archives...
             </div>
           ) : filteredNotifications.length > 0 ? (
-            <div>
+            <div className="divide-y divide-stone/10">
               {filteredNotifications.map((notification) => (
                 <NotificationRow
                   key={notification.id}
@@ -388,13 +359,15 @@ export const AccountNotificationsPage: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="flex min-h-[250px] flex-col items-center justify-center px-6 py-12 text-center">
-              <Bell className="h-8 w-8 text-gold" />
-              <h2 className="mt-3 font-serif text-lg font-bold text-text-main">
-                {filter === 'unread' ? 'All Caught Up' : 'No Notifications'}
+            <div className="flex min-h-[400px] flex-col items-center justify-center px-6 py-12 text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-stone/10 text-text-muted">
+                <Bell className="h-8 w-8" strokeWidth={1} />
+              </div>
+              <h2 className="mt-8 font-serif text-3xl font-bold text-text-main">
+                {filter === 'unread' ? 'Archives are clear.' : 'No notifications.'}
               </h2>
-              <p className="mt-1 font-sans text-xs text-text-muted">
-                Activity alerts and system dispatches will appear here.
+              <p className="mt-4 font-sans text-lg text-text-muted max-w-md mx-auto">
+                Activity alerts and system dispatches will appear here as the platform expands.
               </p>
             </div>
           )}

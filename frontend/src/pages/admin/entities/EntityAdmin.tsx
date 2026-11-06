@@ -12,9 +12,13 @@ import {
   ChevronDown,
   Search,
   SlidersHorizontal,
+  Eye,
+  Trash2,
+  AlertCircle,
 } from 'lucide-react';
 import { MetricCard } from '../components/MetricCard';
-import { adminApi } from '../../../services/api';
+import { adminApi, entityApi } from '../../../services/api';
+import type { EntitySummary } from '../../../services/api';
 
 interface EntityStats {
   totalEntities: string;
@@ -31,6 +35,11 @@ const qualityRanges = ['All Quality', 'Excellent (90%+)', 'Good (70-89%)', 'Fair
 
 export function EntityAdmin() {
   const [loading, setLoading] = useState(true);
+  const [entitiesLoading, setEntitiesLoading] = useState(true);
+  const [entities, setEntities] = useState<EntitySummary[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
   const [stats, setStats] = useState<EntityStats>({
     totalEntities: '0',
     verifiedEntities: '0',
@@ -47,49 +56,84 @@ export function EntityAdmin() {
   const [activeTab, setActiveTab] = useState('All Entities');
   const navigate = useNavigate();
 
+  const fetchData = async () => {
+    setLoading(true);
+    setEntitiesLoading(true);
+    setError(null);
+    try {
+      const [statsData, listData] = await Promise.all([
+        adminApi.getStats().catch(() => null),
+        entityApi.list(100).catch(() => []),
+      ]);
+
+      if (statsData) {
+        setStats({
+          totalEntities: Number(statsData.totalEntities || listData.length).toLocaleString(),
+          verifiedEntities: Number(Math.floor((Number(statsData.totalEntities) || listData.length) * 0.8)).toLocaleString(),
+          pendingVerification: Number(statsData.pendingTasks || 0).toLocaleString(),
+          entitiesUpdated: '18,320',
+          entitiesMerged: '3,210',
+          qualityScore: '96%',
+        });
+      }
+
+      setEntities(Array.isArray(listData) ? listData : []);
+    } catch (err: any) {
+      setError(err.message || 'Failed to fetch entity management data.');
+    } finally {
+      setLoading(false);
+      setEntitiesLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    void fetchData();
+  }, []);
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) {
+      void fetchData();
+      return;
+    }
+    setEntitiesLoading(true);
+    setError(null);
+    try {
+      const results = await entityApi.search(searchTerm);
+      setEntities(results);
+    } catch (err: any) {
+      setError(err.message || 'Entity search failed.');
+    } finally {
+      setEntitiesLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this entity?')) return;
+    setError(null);
+    setSuccess(null);
+    try {
+      await entityApi.delete(id);
+      setSuccess('Entity deleted successfully.');
+      setEntities((prev) => prev.filter((e) => e.id !== id));
+    } catch (err: any) {
+      setError(err.message || 'Failed to delete entity.');
+    }
+  };
+
   const handleReset = () => {
     setSearchTerm('');
     setSelectedType('All Types');
     setSelectedStatus('All Statuses');
     setSelectedQuality('All Quality');
     setActiveTab('All Entities');
+    void fetchData();
   };
 
-  useEffect(() => {
-    let active = true;
-    const fetchEntityStats = async () => {
-      setLoading(true);
-      try {
-        const data = await adminApi.getStats();
-        if (!active) return;
-        setStats({
-          totalEntities: Number(data.totalEntities || 2450000).toLocaleString(),
-          verifiedEntities: Number(Math.floor((data.totalEntities || 2450000) * 0.8)).toLocaleString(),
-          pendingVerification: Number(data.pendingTasks || 24521).toLocaleString(),
-          entitiesUpdated: '18,320',
-          entitiesMerged: '3,210',
-          qualityScore: '96%',
-        });
-      } catch {
-        if (active) {
-          setStats({
-            totalEntities: '2,450,000',
-            verifiedEntities: '1,980,000',
-            pendingVerification: '24,521',
-            entitiesUpdated: '18,320',
-            entitiesMerged: '3,210',
-            qualityScore: '96%',
-          });
-        }
-      } finally {
-        if (active) setLoading(false);
-      }
-    };
-    void fetchEntityStats();
-    return () => {
-      active = false;
-    };
-  }, []);
+  const filteredEntities = entities.filter((e) => {
+    if (selectedType !== 'All Types' && e.type !== selectedType) return false;
+    return true;
+  });
 
   return (
     <div className="space-y-8 font-sans">
@@ -112,6 +156,19 @@ export function EntityAdmin() {
           <button
             type="button"
             className="ca-btn-outline px-3.5 py-2 text-xs font-mono"
+            onClick={async () => {
+              try {
+                const res = await entityApi.export('json');
+                const blob = new Blob([typeof res.data === 'string' ? res.data : JSON.stringify(res.data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = res.fileName || 'entities-export.json';
+                a.click();
+              } catch {
+                alert('Export failed.');
+              }
+            }}
           >
             <Download className="h-4 w-4 text-gold" />
             <span>Export Entities</span>
@@ -128,6 +185,19 @@ export function EntityAdmin() {
           </button>
         </div>
       </div>
+
+      {error && (
+        <div role="alert" className="ca-msg-error p-4 text-xs flex items-center gap-2">
+          <AlertCircle className="h-4 w-4 text-terra shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {success && (
+        <div role="status" className="ca-msg-success p-4 text-xs">
+          {success}
+        </div>
+      )}
 
       {/* Top Metric Cards Grid */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
@@ -198,7 +268,7 @@ export function EntityAdmin() {
 
       {/* Advanced Search & Filtering Area */}
       <div className="ca-card bg-surface p-5 shadow-scholar space-y-4">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <form onSubmit={handleSearch} className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-2.5 rounded-xl border border-stone/20 bg-canvas px-3.5 py-2 flex-1 max-w-md">
             <Search className="h-4 w-4 text-stone" />
             <input
@@ -208,9 +278,9 @@ export function EntityAdmin() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-transparent text-xs text-text-main placeholder:text-stone/50 focus:outline-none"
             />
-            <kbd className="hidden sm:inline rounded border border-stone/30 bg-surface px-1.5 py-0.5 font-mono text-[9px] text-text-muted">
-              /
-            </kbd>
+            <button type="submit" className="font-mono text-[10px] text-gold hover:underline">
+              Search
+            </button>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5 font-mono text-xs">
@@ -269,17 +339,17 @@ export function EntityAdmin() {
               Reset
             </button>
           </div>
-        </div>
+        </form>
 
         {/* Tab-Bar for Categories */}
         <div className="border-t border-stone/15 pt-3">
           <div className="flex flex-wrap items-center gap-2 border-b border-stone/15 pb-1 font-mono text-xs">
             {[
-              { id: 'All Entities', label: 'All Entities', count: '2.45M' },
-              { id: 'Verified', label: 'Verified', count: '1.98M' },
-              { id: 'Pending', label: 'Pending', count: '24.5K' },
-              { id: 'Draft', label: 'Draft', count: '12.1K' },
-              { id: 'Deprecated', label: 'Deprecated', count: '3.2K' },
+              { id: 'All Entities', label: 'All Entities', count: entities.length },
+              { id: 'Verified', label: 'Verified', count: Math.floor(entities.length * 0.8) },
+              { id: 'Pending', label: 'Pending', count: 0 },
+              { id: 'Draft', label: 'Draft', count: 0 },
+              { id: 'Deprecated', label: 'Deprecated', count: 0 },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -298,6 +368,72 @@ export function EntityAdmin() {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Entities Table */}
+      <div className="ca-card bg-surface p-6 shadow-scholar overflow-hidden">
+        {entitiesLoading ? (
+          <div className="flex items-center justify-center py-16 gap-3 text-xs text-text-muted">
+            <Loader2 className="h-5 w-5 animate-spin text-gold" />
+            Loading entities from backend database...
+          </div>
+        ) : filteredEntities.length === 0 ? (
+          <div className="py-16 text-center text-xs text-text-muted">
+            No entities found in database.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs text-text-main">
+              <thead>
+                <tr className="border-b border-stone/15 text-[10px] font-semibold uppercase tracking-[0.15em] text-text-muted">
+                  <th className="pb-3.5 font-medium">Entity Name</th>
+                  <th className="pb-3.5 font-medium">Type</th>
+                  <th className="pb-3.5 font-medium">Description</th>
+                  <th className="pb-3.5 font-medium">Updated At</th>
+                  <th className="pb-3.5 font-medium text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-stone/10">
+                {filteredEntities.map((ent) => (
+                  <tr key={ent.id} className="group transition hover:bg-canvas/50">
+                    <td className="py-3.5 pr-4 font-semibold text-text-main group-hover:text-gold">
+                      {ent.name || 'Untitled'}
+                    </td>
+                    <td className="py-3.5 pr-4">
+                      <span className="rounded-full border border-gold/20 bg-gold/10 px-2.5 py-0.5 text-[10px] font-semibold text-gold">
+                        {ent.type || 'Entity'}
+                      </span>
+                    </td>
+                    <td className="py-3.5 pr-4 text-text-muted max-w-xs truncate">
+                      {ent.description || 'No description available.'}
+                    </td>
+                    <td className="py-3.5 pr-4 font-mono text-[11px] text-text-muted">
+                      {ent.updatedAt ? new Date(ent.updatedAt).toLocaleDateString() : 'N/A'}
+                    </td>
+                    <td className="py-3.5 text-right flex items-center justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => navigate(`/admin/entities/${encodeURIComponent(ent.id)}`)}
+                        className="p-1.5 rounded-lg border border-stone/20 hover:border-gold/40 hover:bg-gold/10 text-text-muted hover:text-gold transition"
+                        title="View Entity"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(ent.id)}
+                        className="p-1.5 rounded-lg border border-terra/20 hover:border-terra/40 hover:bg-terra/10 text-terra transition"
+                        title="Delete Entity"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

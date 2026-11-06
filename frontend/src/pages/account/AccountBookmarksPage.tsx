@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
+  ArrowRight,
   Bookmark,
   BookmarkX,
-  ExternalLink,
   LoaderCircle,
-  Search,
 } from 'lucide-react';
 import {
   articleActivityApi,
@@ -68,134 +67,125 @@ export const AccountBookmarksPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-scholar-canvas bg-canvas pb-20 pt-10 text-text-main font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-canvas pb-24 pt-8 text-text-main font-sans transition-colors duration-300">
       <div className="ca-container">
         <Link
           to="/account"
-          className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-emerald-900 dark:text-gold hover:underline"
+          className="group inline-flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-widest text-text-muted hover:text-text-main transition-colors"
         >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Account Center
+          <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
+          Workspace
         </Link>
 
-        <header className="mt-8 max-w-3xl">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-gold/30 bg-gold/10 text-gold">
-            <Bookmark className="h-6 w-6" />
-          </div>
-
-          <p className="ca-eyebrow mt-6">Knowledge Shelf</p>
-
-          <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h1 className="font-serif text-3xl font-bold text-text-main sm:text-4xl">
-                Bookmarks
-              </h1>
-
-              <p className="mt-2 font-sans text-sm text-text-muted">
-                Articles and knowledge entries saved to your personal shelf.
-              </p>
+        <header className="mt-12 border-b border-stone/10 pb-10">
+          <div className="mb-6 flex items-center justify-between gap-6">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-stone/10 text-text-main">
+              <Bookmark className="h-6 w-6" />
             </div>
 
             {!loading && bookmarks.length > 0 && (
-              <span className="font-mono text-xs text-text-muted">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-text-muted">
                 {bookmarks.length}{' '}
-                {bookmarks.length === 1 ? 'saved article' : 'saved articles'}
+                {bookmarks.length === 1 ? 'record' : 'records'}
               </span>
             )}
           </div>
+
+          <p className="ca-eyebrow">Knowledge Shelf</p>
+
+          <h1 className="mt-2 font-serif text-4xl font-bold text-text-main sm:text-5xl lg:text-6xl">
+            Bookmarks.
+          </h1>
+
+          <p className="mt-6 max-w-xl font-sans text-lg text-text-muted">
+            Your personal collection of significant articles and research entries curated during your exploration.
+          </p>
         </header>
 
         {error && (
-          <div className="mt-6 ca-msg-error">
+          <div className="mt-10 ca-msg-error">
             {error}
           </div>
         )}
 
-        <section className="mt-8">
+        <section className="mt-16">
           {loading ? (
-            <div className="flex min-h-64 items-center justify-center font-mono text-xs text-text-muted ca-card">
-              <LoaderCircle className="mr-2 h-4 w-4 animate-spin text-gold" />
-              Loading saved bookmarks...
+            <div className="flex min-h-64 items-center justify-center font-mono text-[10px] uppercase tracking-widest text-text-muted">
+              <LoaderCircle className="mr-3 h-4 w-4 animate-spin" />
+              Loading archives...
             </div>
           ) : bookmarks.length === 0 ? (
-            <div className="ca-card border-dashed border-stone/30 bg-surface/50 px-6 py-14 text-center sm:px-10">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl border border-stone/20 bg-surface text-gold">
-                <BookmarkX className="h-6 w-6" />
+            <div className="max-w-xl mx-auto py-20 text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-stone/10 text-text-muted">
+                <BookmarkX className="h-8 w-8" strokeWidth={1} />
               </div>
 
-              <h2 className="mt-4 font-serif text-xl font-bold text-text-main">
-                Your Knowledge Shelf is Empty
+              <h2 className="mt-8 font-serif text-3xl font-bold text-text-main">
+                The shelf is empty.
               </h2>
 
-              <p className="mx-auto mt-2 max-w-xl font-sans text-xs text-text-muted">
-                Save research publications and articles while exploring Connect Africa.
+              <p className="mt-4 font-sans text-lg text-text-muted leading-relaxed">
+                As you explore the knowledge graph, bookmark records to build your personal library of African history and culture.
               </p>
 
               <Link
                 to="/search"
-                className="mt-6 ca-btn-primary inline-flex text-xs"
+                className="mt-10 inline-flex rounded-full bg-text-main px-8 py-3 text-sm font-medium text-white transition hover:bg-stone/80"
               >
-                <Search className="h-4 w-4" />
                 Explore Knowledge
               </Link>
             </div>
           ) : (
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="divide-y divide-stone/10 border-t border-stone/10">
               {bookmarks.map((article) => (
                 <article
                   key={article.id}
-                  className="ca-card-hover group flex flex-col justify-between"
+                  className="group flex flex-col justify-between py-10 transition-colors sm:flex-row sm:items-start"
                 >
-                  <div>
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        {article.category && (
-                          <span className="ca-badge-clay">
-                            {article.category}
-                          </span>
-                        )}
-
-                        <Link
-                          to={`/articles/${encodeURIComponent(article.slug)}`}
-                          className="mt-2 block"
-                        >
-                          <h2 className="font-serif text-lg font-bold text-text-main group-hover:text-emerald-900 dark:group-hover:text-gold transition">
-                            {article.title}
-                          </h2>
-                        </Link>
-                      </div>
-
-                      <Bookmark className="mt-1 h-5 w-5 shrink-0 text-gold fill-gold/20" />
+                  <div className="min-w-0 flex-1 pr-8">
+                    <div className="flex items-center gap-3">
+                      {article.category && (
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
+                          {article.category}
+                        </span>
+                      )}
                     </div>
 
+                    <Link
+                      to={`/articles/${encodeURIComponent(article.slug)}`}
+                      className="mt-3 block font-serif text-3xl font-bold leading-tight text-text-main transition hover:text-text-muted"
+                    >
+                      {article.title}
+                    </Link>
+
                     {article.description && (
-                      <p className="mt-3 line-clamp-3 font-sans text-xs leading-relaxed text-text-muted">
+                      <p className="mt-4 line-clamp-2 font-sans text-base leading-relaxed text-text-muted max-w-3xl">
                         {article.description}
                       </p>
                     )}
                   </div>
 
-                  <div className="mt-6 flex items-center justify-between gap-3 border-t border-stone/15 pt-4 font-mono text-xs">
+                  <div className="mt-8 flex items-center gap-4 sm:mt-0 sm:shrink-0">
                     <Link
                       to={`/articles/${encodeURIComponent(article.slug)}`}
-                      className="ca-article-link inline-flex items-center gap-1.5"
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone/10 text-text-muted transition hover:border-text-main hover:text-text-main"
+                      title="Read Article"
                     >
-                      Open Article
-                      <ExternalLink className="h-3.5 w-3.5" />
+                      <ArrowRight size={18} />
                     </Link>
 
                     <button
                       type="button"
                       onClick={() => void removeBookmark(article.id)}
                       disabled={removingId === article.id}
-                      className="ca-btn-outline px-2.5 py-1 text-xs text-clay"
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone/10 text-text-muted transition hover:border-clay hover:text-clay"
+                      title="Remove Bookmark"
                     >
                       {removingId === article.id ? (
-                        <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
+                        <LoaderCircle className="h-4 w-4 animate-spin" />
                       ) : (
-                        <BookmarkX className="h-3.5 w-3.5" />
+                        <BookmarkX size={18} />
                       )}
-                      Remove
                     </button>
                   </div>
                 </article>

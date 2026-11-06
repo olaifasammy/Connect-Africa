@@ -855,3 +855,26 @@
 {"action":"SESSION_CREATED","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"SESSION","status":"SUCCESS","timestamp":"2026-09-24T20:05:19.012Z","user":"user-admin-001"}
 {"level":"info","message":"Processing job: UserLoggedInEvent","timestamp":"2026-09-24T20:05:19.021Z"}
 {"level":"info","message":"Processing job: AuditLogRequestedEvent","timestamp":"2026-09-24T20:05:19.032Z"}
+{"action":"VERIFY_EMAIL","ipAddress":"127.0.0.1","level":"info","message":"AUDIT_LOG","resource":"AUTH","status":"SUCCESS","timestamp":"2026-10-30T09:18:42.540Z","user":"b5773fff-676f-4ccb-a5fa-b4cc0489d2d9"}
+{"action":"VERIFY_EMAIL","ipAddress":"127.0.0.1","level":"info","message":"AUDIT_LOG","resource":"AUTH","status":"FAILURE","timestamp":"2026-10-30T09:18:42.723Z","user":"invalid-id"}
+{"level":"info","message":"BullMQ EventBus initialized.","timestamp":"2026-10-30T09:57:27.118Z"}
+{"level":"info","message":"BullMQ EventBus initialized.","timestamp":"2026-10-30T09:58:10.993Z"}
+{"level":"info","message":"BullMQ worker connection ready.","timestamp":"2026-10-30T09:58:11.217Z"}
+{"level":"info","message":"BullMQ EventBus initialized.","timestamp":"2026-10-30T10:09:53.855Z"}
+{"level":"info","message":"BullMQ worker connection ready.","timestamp":"2026-10-30T10:09:54.073Z"}
+{"action":"TOKEN_GENERATION","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"ACCESS","status":"SUCCESS","timestamp":"2026-10-30T10:14:01.603Z","user":"8b391cce-ff62-4399-8a22-0b5b26e97405"}
+{"action":"TOKEN_GENERATION","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"REFRESH","status":"SUCCESS","timestamp":"2026-10-30T10:14:01.607Z","user":"8b391cce-ff62-4399-8a22-0b5b26e97405"}
+{"action":"SESSION_CREATED","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"SESSION","status":"SUCCESS","timestamp":"2026-10-30T10:14:01.629Z","user":"8b391cce-ff62-4399-8a22-0b5b26e97405"}
+{"level":"info","message":"Processing job: UserLoggedInEvent","timestamp":"2026-10-30T10:14:01.644Z"}
+{"level":"info","message":"Processing job: AuditLogRequestedEvent","timestamp":"2026-10-30T10:14:01.658Z"}
+{"level":"warn","message":"Redis cache warning (degraded mode):","timestamp":"2026-11-06T10:52:05.759Z"}
+{"level":"warn","message":"Redis health check failed (degraded mode): Connection is closed.","stack":"Error: Connection is closed.\n    at close (/data/data/com.termux/files/home/Connect-Africa/backend/node_modules/ioredis/built/redis/event_handler.js:214:25)\n    at Socket.<anonymous> (/data/data/com.termux/files/home/Connect-Africa/backend/node_modules/ioredis/built/redis/event_handler.js:190:20)\n    at Socket.wrapper (node:events:639:12)\n    at Socket.emit (node:events:514:28)\n    at TCP.<anonymous> (node:net:362:12)","timestamp":"2026-11-06T10:52:05.766Z"}
+{"level":"info","message":"BullMQ EventBus initialized.","timestamp":"2026-11-06T10:52:05.777Z"}
+{"attempt":1,"component":"Worker","error":"connect ECONNREFUSED 127.0.0.1:6379","level":"warn","maxAttempts":3,"message":"BullMQ Worker infrastructure error.","stack":"Error: connect ECONNREFUSED 127.0.0.1:6379\n    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)","timestamp":"2026-11-06T10:52:05.962Z"}
+{"level":"info","message":"BullMQ EventBus initialized.","timestamp":"2026-11-06T10:59:38.096Z"}
+{"level":"info","message":"BullMQ worker connection ready.","timestamp":"2026-11-06T10:59:38.329Z"}
+{"action":"TOKEN_GENERATION","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"ACCESS","status":"SUCCESS","timestamp":"2026-11-06T11:16:19.846Z","user":"8b391cce-ff62-4399-8a22-0b5b26e97405"}
+{"action":"TOKEN_GENERATION","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"REFRESH","status":"SUCCESS","timestamp":"2026-11-06T11:16:19.851Z","user":"8b391cce-ff62-4399-8a22-0b5b26e97405"}
+{"action":"SESSION_CREATED","ipAddress":"unknown","level":"info","message":"AUDIT_LOG","resource":"SESSION","status":"SUCCESS","timestamp":"2026-11-06T11:16:19.878Z","user":"8b391cce-ff62-4399-8a22-0b5b26e97405"}
+{"level":"info","message":"Processing job: UserLoggedInEvent","timestamp":"2026-11-06T11:16:19.916Z"}
+{"level":"info","message":"Processing job: AuditLogRequestedEvent","timestamp":"2026-11-06T11:16:19.945Z"}

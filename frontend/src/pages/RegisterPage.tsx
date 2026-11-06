@@ -65,29 +65,19 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-ink text-cloud">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute right-[-10rem] top-[-8rem] h-[32rem] w-[32rem] rounded-full bg-emerald/10 blur-3xl" />
-        <div className="absolute bottom-[-12rem] left-[-8rem] h-[30rem] w-[30rem] rounded-full bg-terracotta/5 blur-3xl" />
-      </div>
-
-      <div className="relative mx-auto flex min-h-screen w-full max-w-6xl items-center px-5 py-12 sm:px-8">
-        <div className="grid w-full overflow-hidden rounded-3xl border border-white/[0.08] bg-forest/80 shadow-soft lg:grid-cols-[0.9fr_1.1fr]">
-          <section className="hidden border-r border-white/[0.06] p-10 lg:flex lg:flex-col lg:justify-between xl:p-14">
+    <div className="relative min-h-screen bg-canvas text-text-main font-sans transition-colors duration-300">
+      <div className="relative mx-auto flex min-h-screen w-full max-w-5xl items-center px-5 py-12 sm:px-8">
+        <div className="grid w-full overflow-hidden rounded-2xl border border-stone/10 bg-surface shadow-lg lg:grid-cols-[0.9fr_1.1fr]">
+          <section className="hidden border-r border-stone/10 p-10 lg:flex lg:flex-col lg:justify-between xl:p-12">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sage">
-                CONNECT-AFRICA
-              </p>
+              <p className="ca-eyebrow">Connect-Africa</p>
 
-              <h1 className="mt-12 max-w-md text-5xl font-semibold leading-[1.05] tracking-tight text-cloud xl:text-6xl">
-                Build your
-                <br />
-                knowledge trail.
+              <h1 className="mt-8 font-serif text-4xl font-bold tracking-tight text-text-main sm:text-5xl">
+                Build your knowledge trail.
               </h1>
 
-              <p className="mt-7 max-w-md text-base leading-7 text-mist">
-                Create an account to keep track of the knowledge you discover
-                across people, places, cultures, institutions, and history.
+              <p className="mt-6 font-sans text-base leading-relaxed text-text-muted">
+                Create an account to keep track of the knowledge you discover across people, places, cultures, institutions, and history.
               </p>
             </div>
 
@@ -97,9 +87,9 @@ export const RegisterPage: React.FC = () => {
                 'Return to your reading history',
                 'Keep your searches within reach',
               ].map((item) => (
-                <div key={item} className="flex items-center gap-3 text-sm text-mist">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald/10 text-emerald">
-                    <Check className="h-3.5 w-3.5" />
+                <div key={item} className="flex items-center gap-3 font-sans text-xs text-text-muted">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full border border-stone/20 bg-stone/5 text-text-main">
+                    <Check className="h-3 w-3" />
                   </span>
                   {item}
                 </div>
@@ -107,68 +97,65 @@ export const RegisterPage: React.FC = () => {
             </div>
           </section>
 
-          <section className="p-6 sm:p-10 xl:p-14">
+          <section className="p-6 sm:p-10 xl:p-12">
             <div className="mx-auto max-w-lg">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald/20 bg-brand text-emerald shadow-glow">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-stone/10 bg-stone/5 text-text-main">
                 <UserPlus className="h-5 w-5" />
               </div>
 
-              <p className="ca-eyebrow mt-8">Create account</p>
+              <p className="ca-eyebrow mt-8">Create Account</p>
 
-              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-cloud">
+              <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight text-text-main">
                 Join Connect-Africa.
               </h2>
 
-              <p className="mt-3 text-sm leading-6 text-mist">
-                Create your personal space for discovering African knowledge.
+              <p className="mt-2 font-sans text-sm text-text-muted">
+                Begin your personal scholarly archive.
               </p>
 
               {error && (
-                <div
-                  role="alert"
-                  className="mt-6 rounded-2xl border border-red-400/20 bg-red-500/[0.08] px-4 py-3 text-sm leading-6 text-red-200"
-                >
+                <div role="alert" className="ca-msg-error mt-6">
                   {error}
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-                <div className="grid gap-5 sm:grid-cols-2">
+              <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label
-                      htmlFor="register-first-name"
-                      className="mb-2 block text-sm font-medium text-cloud"
+                      htmlFor="register-firstname"
+                      className="mb-2 block font-sans text-xs font-bold uppercase tracking-widest text-text-muted"
                     >
-                      First name
+                      First Name
                     </label>
                     <input
-                      id="register-first-name"
+                      id="register-firstname"
                       type="text"
                       required
                       autoComplete="given-name"
                       value={firstName}
                       onChange={(event) => setFirstName(event.target.value)}
-                      className="w-full rounded-xl border border-white/[0.08] bg-ink/80 px-4 py-3 text-sm text-cloud outline-none transition placeholder:text-mist/60 focus:border-emerald/50 focus:ring-2 focus:ring-emerald/10"
-                      placeholder="First name"
+                      className="ca-input"
+                      placeholder="Amina"
                     />
                   </div>
 
                   <div>
                     <label
-                      htmlFor="register-last-name"
-                      className="mb-2 block text-sm font-medium text-cloud"
+                      htmlFor="register-lastname"
+                      className="mb-2 block font-sans text-xs font-bold uppercase tracking-widest text-text-muted"
                     >
-                      Last name
+                      Last Name
                     </label>
                     <input
-                      id="register-last-name"
+                      id="register-lastname"
                       type="text"
                       required
                       autoComplete="family-name"
                       value={lastName}
                       onChange={(event) => setLastName(event.target.value)}
-                      className="w-full rounded-xl border border-white/[0.08] bg-ink/80 px-4 py-3 text-sm text-cloud outline-none transition placeholder:text-mist/60 focus:border-emerald/50 focus:ring-2 focus:ring-emerald/10"
-                      placeholder="Last name"
+                      className="ca-input"
+                      placeholder="Diallo"
                     />
                   </div>
                 </div>
@@ -176,9 +163,9 @@ export const RegisterPage: React.FC = () => {
                 <div>
                   <label
                     htmlFor="register-email"
-                    className="mb-2 block text-sm font-medium text-cloud"
+                    className="mb-2 block font-sans text-xs font-bold uppercase tracking-widest text-text-muted"
                   >
-                    Email address
+                    Email Address
                   </label>
                   <input
                     id="register-email"
@@ -187,7 +174,7 @@ export const RegisterPage: React.FC = () => {
                     autoComplete="email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
-                    className="w-full rounded-xl border border-white/[0.08] bg-ink/80 px-4 py-3 text-sm text-cloud outline-none transition placeholder:text-mist/60 focus:border-emerald/50 focus:ring-2 focus:ring-emerald/10"
+                    className="ca-input"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -195,7 +182,7 @@ export const RegisterPage: React.FC = () => {
                 <div>
                   <label
                     htmlFor="register-password"
-                    className="mb-2 block text-sm font-medium text-cloud"
+                    className="mb-2 block font-sans text-xs font-bold uppercase tracking-widest text-text-muted"
                   >
                     Password
                   </label>
@@ -205,19 +192,18 @@ export const RegisterPage: React.FC = () => {
                       id="register-password"
                       type={showPassword ? 'text' : 'password'}
                       required
-                      minLength={8}
                       autoComplete="new-password"
                       value={password}
                       onChange={(event) => setPassword(event.target.value)}
-                      className="w-full rounded-xl border border-white/[0.08] bg-ink/80 px-4 py-3 pr-12 text-sm text-cloud outline-none transition placeholder:text-mist/60 focus:border-emerald/50 focus:ring-2 focus:ring-emerald/10"
-                      placeholder="Create a secure password"
+                      className="ca-input pr-12"
+                      placeholder="At least 8 characters"
                     />
 
                     <button
                       type="button"
                       onClick={() => setShowPassword((visible) => !visible)}
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
-                      className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-mist transition hover:bg-white/[0.05] hover:text-cloud"
+                      className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-stone transition hover:text-text-main"
                     >
                       {showPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -227,42 +213,54 @@ export const RegisterPage: React.FC = () => {
                     </button>
                   </div>
 
-                  <div className="mt-3 grid gap-2 text-xs sm:grid-cols-3">
-                    {[
-                      ['8+ characters', passwordChecks.length],
-                      ['A letter', passwordChecks.letter],
-                      ['A number', passwordChecks.number],
-                    ].map(([label, valid]) => (
-                      <div
-                        key={String(label)}
-                        className={`flex items-center gap-2 ${
-                          valid ? 'text-emerald' : 'text-mist'
-                        }`}
-                      >
-                        <Check className="h-3.5 w-3.5" />
-                        {label}
-                      </div>
-                    ))}
+                  <div className="mt-3 flex flex-wrap gap-3 font-mono text-[10px] uppercase tracking-widest text-text-muted">
+                    <span
+                      className={
+                        passwordChecks.length
+                          ? 'text-[var(--accent-teal)] font-bold'
+                          : ''
+                      }
+                    >
+                      ✓ 8+ chars
+                    </span>
+                    <span
+                      className={
+                        passwordChecks.letter
+                          ? 'text-[var(--accent-teal)] font-bold'
+                          : ''
+                      }
+                    >
+                      ✓ Letter
+                    </span>
+                    <span
+                      className={
+                        passwordChecks.number
+                          ? 'text-[var(--accent-teal)] font-bold'
+                          : ''
+                      }
+                    >
+                      ✓ Number
+                    </span>
                   </div>
                 </div>
 
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="group flex w-full items-center justify-center gap-2 rounded-xl bg-emerald px-5 py-3 text-sm font-semibold text-ink transition hover:bg-sage disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={loading || !passwordReady}
+                  className="ca-btn-primary group flex w-full items-center justify-center gap-2 py-3 mt-6"
                 >
-                  {loading ? 'Creating account…' : 'Create account'}
+                  {loading ? 'Creating account…' : 'Create Account'}
                   {!loading && (
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   )}
                 </button>
               </form>
 
-              <div className="mt-8 border-t border-white/[0.06] pt-6 text-center text-sm text-mist">
+              <div className="mt-8 border-t border-stone/10 pt-6 text-center font-sans text-sm text-text-muted">
                 Already have an account?{' '}
                 <Link
                   to="/login"
-                  className="font-medium text-sage transition hover:text-cloud"
+                  className="font-bold text-text-main transition hover:underline"
                 >
                   Sign in
                 </Link>
@@ -270,7 +268,7 @@ export const RegisterPage: React.FC = () => {
 
               <Link
                 to="/"
-                className="mt-5 block text-center text-xs text-mist/70 transition hover:text-mist"
+                className="mt-4 block text-center font-mono text-[10px] uppercase tracking-widest text-stone/60 transition hover:text-text-main"
               >
                 Return to Connect-Africa
               </Link>

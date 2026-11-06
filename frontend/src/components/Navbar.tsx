@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import {
-  ChevronDown,
   LogIn,
   LogOut,
   Menu,
@@ -34,155 +33,97 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-stone/20 bg-surface/90 backdrop-blur-xl transition-colors duration-300">
+    <header className="sticky top-0 z-50 border-b border-stone/10 bg-surface/90 backdrop-blur-xl transition-colors duration-300">
       <nav className="ca-container">
-        <div className="flex h-[72px] items-center justify-between">
+        <div className="flex h-16 items-center justify-between">
           <Link
             to="/"
             onClick={closeMobile}
             className="group flex items-center gap-3"
           >
-            <img
-              src="/images/africa.svg"
-              alt="Connect-Africa Logo"
-              className="h-7 w-7 object-contain transition-all duration-300 group-hover:scale-105"
-              style={{ filter: 'invert(70%) sepia(30%) saturate(1200%) hue-rotate(345deg) brightness(90%)' }}
-            />
-
-            <span className="font-serif text-base font-bold tracking-widest text-emerald-900 dark:text-emerald-400 transition-all duration-300 group-hover:text-gold">
-              CONNECT-AFRICA
+            <div className="flex h-6 w-6 items-center justify-center transition-transform duration-300 group-hover:scale-110">
+              <img
+                src="/images/africa.svg"
+                alt=""
+                className="h-full w-full object-contain brightness-0 transition-all duration-300 dark:invert"
+              />
+            </div>
+            <span className="font-serif text-xl font-bold tracking-tight text-text-main transition-all duration-300 group-hover:text-text-muted">
+              Connect-Africa
             </span>
           </Link>
 
-          <div className="hidden items-center gap-1 lg:flex font-sans">
+          <div className="hidden items-center gap-1 md:flex font-sans">
             <Link
-              to="/"
-              className="rounded-lg px-4 py-2 text-sm font-medium text-text-main transition hover:bg-stone/10"
+              to="/articles"
+              className="px-4 py-2 text-sm font-medium text-text-muted transition hover:text-text-main"
             >
-              Explore
+              Archive
             </Link>
 
             <Link
               to="/articles"
-              className="flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-text-muted transition hover:bg-stone/10 hover:text-text-main"
-            >
-              Knowledge
-              <ChevronDown className="h-3.5 w-3.5 opacity-50" />
-            </Link>
-
-            <Link
-              to="/articles"
-              className="rounded-lg px-4 py-2 text-sm font-medium text-text-muted transition hover:bg-stone/10 hover:text-text-main"
+              className="px-4 py-2 text-sm font-medium text-text-muted transition hover:text-text-main"
             >
               Graph
             </Link>
-
-            <Link
-              to="/articles"
-              className="rounded-lg px-4 py-2 text-sm font-medium text-text-muted transition hover:bg-stone/10 hover:text-text-main"
-            >
-              Research
-            </Link>
           </div>
 
-          <div className="hidden items-center gap-2 md:flex font-sans">
-            <Link
-              to="/search"
-              className="flex items-center gap-2 rounded-lg border border-stone/20 bg-canvas/60 px-3 py-2 text-sm text-text-muted transition hover:border-gold hover:text-text-main"
-            >
-              <Search className="h-4 w-4" />
-              <span>Search</span>
-              <kbd className="hidden rounded border border-stone/30 px-1.5 py-0.5 font-mono text-[10px] text-text-muted lg:inline">
-                /
-              </kbd>
-            </Link>
-
-            {/* Theme Switcher Toggle */}
+          <div className="hidden items-center gap-5 md:flex font-sans">
             <button
               type="button"
               onClick={toggleTheme}
-              className="rounded-lg border border-stone/20 p-2 text-text-muted transition hover:border-gold hover:bg-stone/10 hover:text-text-main"
-              title={`Switch to ${resolvedTheme === 'light' ? 'Dark' : 'Parchment Light'} mode`}
+              className="p-2 text-text-muted transition hover:text-text-main"
               aria-label="Toggle theme"
             >
               {resolvedTheme === 'light' ? (
-                <Moon className="h-4 w-4 text-emerald-900" />
+                <Moon className="h-4 w-4" />
               ) : (
-                <Sun className="h-4 w-4 text-gold" />
+                <Sun className="h-4 w-4" />
               )}
             </button>
 
+            <Link
+              to="/search"
+              className="text-text-muted transition hover:text-text-main"
+              aria-label="Search"
+            >
+              <Search className="h-5 w-5" strokeWidth={1.5} />
+            </Link>
+
             {isAuthenticated ? (
-              <div className="ml-2 flex items-center gap-1 border-l border-stone/20 pl-3">
-                {!isAccountPage && (
-                  <Link
-                    to="/account"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-muted transition hover:bg-stone/10 hover:text-text-main"
-                  >
-                    <User className="h-4 w-4" />
-                    <span className="hidden xl:inline">
-                      {user?.firstName || 'Account'}
-                    </span>
-                  </Link>
-                )}
-
-                {isAdmin && (
-                  <Link
-                    to="/admin"
-                    className="rounded-lg p-2 text-gold transition hover:bg-gold/10"
-                    title="Administration"
-                  >
-                    <Shield className="h-4 w-4" />
-                  </Link>
-                )}
-
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="rounded-lg p-2 text-text-muted transition hover:bg-stone/10 hover:text-text-main"
-                  title="Sign out"
+              <div className="flex items-center gap-4">
+                <Link
+                  to="/account"
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-text-main text-[10px] font-bold text-white uppercase"
                 >
-                  <LogOut className="h-4 w-4" />
-                </button>
+                  {user?.firstName?.charAt(0) || 'U'}
+                </Link>
               </div>
             ) : (
-              <div className="ml-2 flex items-center gap-1 border-l border-stone/20 pl-3">
+              <div className="flex items-center gap-5">
                 <Link
                   to="/login"
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-text-muted transition hover:text-text-main"
+                  className="text-sm font-medium text-text-muted transition hover:text-text-main"
                 >
-                  <LogIn className="h-4 w-4" />
                   Sign in
                 </Link>
 
                 <Link
                   to="/register"
-                  className="ca-btn-primary"
+                  className="rounded-full bg-text-main px-5 py-2 text-sm font-medium text-white transition hover:bg-stone/80"
                 >
-                  Join
+                  Get Started
                 </Link>
               </div>
             )}
           </div>
 
-          <div className="flex items-center gap-2 md:hidden">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="rounded-lg border border-stone/20 p-2 text-text-muted transition hover:bg-stone/10"
-              aria-label="Toggle theme"
-            >
-              {resolvedTheme === 'light' ? (
-                <Moon className="h-4 w-4 text-emerald-900" />
-              ) : (
-                <Sun className="h-4 w-4 text-gold" />
-              )}
-            </button>
-
+          <div className="flex items-center gap-1 md:hidden">
             <button
               type="button"
               onClick={() => setMobileOpen((open) => !open)}
-              className="rounded-lg border border-stone/20 p-2 text-text-muted transition hover:bg-stone/10 hover:text-text-main"
+              className="p-2 text-text-muted transition hover:text-text-main"
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             >
               {mobileOpen ? (
@@ -195,8 +136,26 @@ export const Navbar: React.FC = () => {
         </div>
 
         {mobileOpen && (
-          <div className="border-t border-stone/20 py-4 md:hidden font-sans">
+          <div className="border-t border-stone/10 py-4 md:hidden font-sans">
             <div className="flex flex-col gap-1">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="flex items-center gap-2 rounded-lg px-3 py-3 text-left text-sm text-text-muted hover:bg-stone/10 hover:text-text-main"
+              >
+                {resolvedTheme === 'light' ? (
+                  <>
+                    <Moon className="h-4 w-4" />
+                    Dark Mode
+                  </>
+                ) : (
+                  <>
+                    <Sun className="h-4 w-4" />
+                    Light Mode
+                  </>
+                )}
+              </button>
+
               <Link
                 to="/"
                 onClick={closeMobile}
@@ -221,15 +180,7 @@ export const Navbar: React.FC = () => {
                 Graph
               </Link>
 
-              <Link
-                to="/articles"
-                onClick={closeMobile}
-                className="rounded-lg px-3 py-3 text-sm font-medium text-text-muted hover:bg-stone/10 hover:text-text-main"
-              >
-                Research
-              </Link>
-
-              <div className="my-2 border-t border-stone/20" />
+              <div className="my-2 border-t border-stone/10" />
 
               <Link
                 to="/search"
@@ -257,7 +208,7 @@ export const Navbar: React.FC = () => {
                     <Link
                       to="/admin"
                       onClick={closeMobile}
-                      className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm text-gold hover:bg-gold/10"
+                      className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm text-[var(--accent-amber)] hover:bg-[var(--accent-amber)]/10"
                     >
                       <Shield className="h-4 w-4" />
                       Administration

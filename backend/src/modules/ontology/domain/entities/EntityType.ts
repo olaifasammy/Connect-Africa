@@ -134,6 +134,10 @@ export class EntityType extends AggregateRoot<EntityTypeProps> {
     return this._id;
   }
 
+  get description(): string {
+    return this.props.description;
+  }
+
   get name(): string {
     return this.props.name;
   }

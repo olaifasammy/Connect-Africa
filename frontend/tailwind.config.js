@@ -8,22 +8,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        // "The Scholar" Core Tokens
-        parchment: '#FDF6E3',
+        // Neutral Refined Palette
+        parchment: '#FFFFFF',
         paper: '#FFFFFF',
-        ink: '#121619',
-        stone: '#78716C',
+        ink: '#1A1A1A',
+        stone: '#6B6B6B',
         emerald: {
-          DEFAULT: '#064E3B',
-          900: '#064E3B',
-          700: '#047857',
-          100: '#D1FAE5',
+          DEFAULT: '#1A1A1A',
+          900: '#1A1A1A',
+          700: '#404040',
+          100: '#F2F2F2',
         },
         gold: {
-          DEFAULT: '#C9A86A',
-          savanna: '#C9A86A',
+          DEFAULT: '#1A1A1A',
+          savanna: '#1A1A1A',
         },
-        clay: '#A1624D',
+        clay: '#1A1A1A',
 
         // Semantic CSS Variable Extensions
         canvas: 'var(--bg-canvas)',

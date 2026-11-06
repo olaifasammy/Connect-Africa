@@ -12,6 +12,13 @@ interface EntityTypeRow {
   ontology_id: string;
   name: string;
   description: string | null;
+  display_name: string | null;
+  plural_display_name: string | null;
+  icon: string | null;
+  color: string | null;
+  namespace_uri: string | null;
+  parent_entity_id: string | null;
+  is_draft: boolean;
 }
 
 @provide('IEntityTypeRepository', true)
@@ -32,20 +39,41 @@ export class PostgresEntityTypeRepository
           id,
           ontology_id,
           name,
-          description
+          description,
+          display_name,
+          plural_display_name,
+          icon,
+          color,
+          namespace_uri,
+          parent_entity_id,
+          is_draft
         )
-        VALUES ($1, $2, $3, $4)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         ON CONFLICT (id) DO UPDATE
         SET
           ontology_id = EXCLUDED.ontology_id,
           name = EXCLUDED.name,
-          description = EXCLUDED.description
+          description = EXCLUDED.description,
+          display_name = EXCLUDED.display_name,
+          plural_display_name = EXCLUDED.plural_display_name,
+          icon = EXCLUDED.icon,
+          color = EXCLUDED.color,
+          namespace_uri = EXCLUDED.namespace_uri,
+          parent_entity_id = EXCLUDED.parent_entity_id,
+          is_draft = EXCLUDED.is_draft
       `,
       [
         entityType.id.toString(),
         entityType.ontologyId.toString(),
         entityType.name,
         entityType.description,
+        entityType.displayName ?? null,
+        entityType.pluralDisplayName ?? null,
+        entityType.icon ?? null,
+        entityType.color ?? null,
+        entityType.namespaceUri ?? null,
+        entityType.parentEntityId ?? null,
+        entityType.isDraft,
       ],
     );
   }
@@ -60,7 +88,14 @@ export class PostgresEntityTypeRepository
             id,
             ontology_id,
             name,
-            description
+            description,
+            display_name,
+            plural_display_name,
+            icon,
+            color,
+            namespace_uri,
+            parent_entity_id,
+            is_draft
           FROM entity_types
           WHERE id = $1
           LIMIT 1
@@ -93,7 +128,14 @@ export class PostgresEntityTypeRepository
             id,
             ontology_id,
             name,
-            description
+            description,
+            display_name,
+            plural_display_name,
+            icon,
+            color,
+            namespace_uri,
+            parent_entity_id,
+            is_draft
           FROM entity_types
           WHERE name = $1
           ORDER BY id ASC
@@ -119,7 +161,14 @@ export class PostgresEntityTypeRepository
             id,
             ontology_id,
             name,
-            description
+            description,
+            display_name,
+            plural_display_name,
+            icon,
+            color,
+            namespace_uri,
+            parent_entity_id,
+            is_draft
           FROM entity_types
           WHERE ontology_id = $1
           ORDER BY name ASC, id ASC

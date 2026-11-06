@@ -3,42 +3,31 @@
 @tailwind utilities;
 
 :root {
-  /* Font Family Definitions */
   --font-serif: 'Lora', 'Instrument Serif', Georgia, serif;
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Base Light - "The Scholar" Parchment & Ink System */
-  --bg-canvas: #FDF6E3;        /* Parchment */
-  --bg-surface: #FFFFFF;       /* Paper */
-  --text-primary: #121619;     /* Ink */
-  --text-secondary: #78716C;   /* Stone */
-  --border-subtle: rgba(120, 113, 108, 0.2);
+  --bg-canvas: #FFFFFF;
+  --bg-surface: #FFFFFF;
+  --text-primary: #1A1A1A;
+  --text-secondary: #6B6B6B;
+  --border-subtle: rgba(0, 0, 0, 0.08);
 
-  /* Primary - Emerald Depth */
-  --emerald-900: #064E3B;
-  --emerald-700: #047857;
-  --emerald-100: #D1FAE5;
-  --color-primary: var(--emerald-900);
-  --color-primary-hover: var(--emerald-700);
-
-  /* Accents - Gold & Clay */
-  --savanna-gold: #C9A86A;
-  --clay-accent: #A1624D;
+  --accent-amber: #D97706;
+  --accent-teal: #0D9488;
+  --accent-terracotta: #C2410C;
 }
 
-/* Dark Mode Adaptation Tokens */
 [data-theme="dark"] {
-  --bg-canvas: #121619;        /* Dark Ink */
-  --bg-surface: #1E2328;       /* Dark Surface Charcoal */
-  --text-primary: #FDF6E3;     /* Light Parchment */
-  --text-secondary: #A8A29E;   /* Light Stone */
-  --border-subtle: rgba(253, 246, 227, 0.12);
+  --bg-canvas: #0F0F0F;
+  --bg-surface: #171717;
+  --text-primary: #F3F4F6;
+  --text-secondary: #9CA3AF;
+  --border-subtle: rgba(255, 255, 255, 0.1);
 
-  /* Lightened Emerald for readability on dark surfaces */
-  --color-primary: #34D399;
-  --color-primary-hover: #6EE7B7;
-  --emerald-100: #064E3B;
+  --accent-amber: #FBBF24;
+  --accent-teal: #2DD4BF;
+  --accent-terracotta: #FB923C;
 }
 
 html {
@@ -61,12 +50,8 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Background Texture for Parchment Canvas (Lightweight CSS Gradient Overlay for Peak Performance) */
 .bg-scholar-canvas {
   background-color: var(--bg-canvas);
-  background-image: 
-    radial-gradient(circle at 50% 0%, rgba(201, 168, 106, 0.08), transparent 50%),
-    radial-gradient(circle at 0% 100%, rgba(6, 78, 59, 0.04), transparent 40%);
 }
 
 button,
@@ -82,116 +67,237 @@ a {
 }
 
 ::selection {
-  background: rgba(6, 78, 59, 0.25);
+  background: rgba(13, 148, 136, 0.25);
   color: var(--text-primary);
 }
 
 [data-theme="dark"] ::selection {
-  background: rgba(52, 211, 153, 0.35);
+  background: rgba(45, 212, 191, 0.35);
   color: var(--text-primary);
 }
 
 @layer components {
-  /* Layout Containers */
   .ca-container {
-    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
   }
 
   .ca-eyebrow {
-    @apply font-mono text-xs font-semibold uppercase tracking-[0.18em] text-gold;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent-teal);
   }
 
   .ca-surface {
-    @apply border border-stone/20 bg-surface;
+    border: 1px solid var(--border-subtle);
+    background-color: var(--bg-surface);
   }
 
   .ca-surface-hover {
-    @apply transition duration-300 hover:border-gold hover:bg-surface;
+    transition: all 0.3s ease;
+  }
+  .ca-surface-hover:hover {
+    border-color: var(--accent-amber);
+    background-color: var(--bg-surface);
   }
 
-  /* Scholarly Links with Savanna Gold Underline */
   .ca-link,
   .ca-article-link {
-    @apply font-medium text-text-main underline decoration-gold decoration-1 underline-offset-4 transition-colors hover:text-emerald-900 dark:hover:text-gold hover:decoration-emerald-900 dark:hover:decoration-gold;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: rgba(120, 113, 108, 0.3);
+    text-underline-offset: 4px;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  }
+  .ca-link:hover,
+  .ca-article-link:hover {
+    color: var(--accent-teal);
+    text-decoration-color: var(--accent-teal);
   }
 
-  /* Reusable Buttons */
   .ca-btn-primary {
-    @apply flex items-center justify-center gap-2 rounded-xl bg-emerald-900 dark:bg-emerald-500 dark:text-ink px-5 py-2.5 font-sans text-sm font-semibold text-white transition-all duration-200 hover:bg-emerald-700 dark:hover:bg-emerald-400 active:scale-[0.98] disabled:opacity-50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    background-color: #1A1A1A;
+    color: #FFFFFF;
+    padding: 0.625rem 1.25rem;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  [data-theme="dark"] .ca-btn-primary {
+    background-color: #F3F4F6;
+    color: #0F0F0F;
+  }
+  .ca-btn-primary:hover {
+    background-color: var(--accent-teal);
+    color: #FFFFFF;
+  }
+  .ca-btn-primary:active {
+    transform: scale(0.98);
+  }
+  .ca-btn-primary:disabled {
+    opacity: 0.5;
   }
 
   .ca-btn-secondary {
-    @apply flex items-center justify-center gap-2 rounded-xl border border-emerald-900 dark:border-emerald-400 bg-transparent px-5 py-2.5 font-sans text-sm font-semibold text-emerald-900 dark:text-emerald-300 transition-all duration-200 hover:bg-emerald-100/50 dark:hover:bg-emerald-900/40 active:scale-[0.98] disabled:opacity-50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(120, 113, 108, 0.3);
+    background-color: transparent;
+    color: var(--text-primary);
+    padding: 0.625rem 1.25rem;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  .ca-btn-secondary:hover {
+    border-color: var(--accent-teal);
+    color: var(--accent-teal);
+  }
+  .ca-btn-secondary:active {
+    transform: scale(0.98);
   }
 
   .ca-btn-outline {
-    @apply flex items-center justify-center gap-2 rounded-xl border border-stone/30 bg-surface px-5 py-2.5 font-sans text-sm font-medium text-text-main transition-all duration-200 hover:border-gold hover:text-gold active:scale-[0.98] disabled:opacity-50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(120, 113, 108, 0.3);
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    padding: 0.625rem 1.25rem;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  .ca-btn-outline:hover {
+    border-color: var(--accent-amber);
+    color: var(--accent-amber);
+  }
+  .ca-btn-outline:active {
+    transform: scale(0.98);
   }
 
   .ca-btn-danger {
-    @apply flex items-center justify-center gap-2 rounded-xl bg-clay px-5 py-2.5 font-sans text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98] disabled:opacity-50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    background-color: var(--accent-terracotta);
+    color: #FFFFFF;
+    padding: 0.625rem 1.25rem;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  .ca-btn-danger:hover {
+    opacity: 0.9;
   }
 
-  /* Form Inputs */
-  .ca-input,
-  .ca-input-dark,
-  .ca-input-light {
-    @apply w-full rounded-xl border border-stone/20 bg-surface px-4 py-2.5 font-sans text-sm text-text-main outline-none placeholder:text-stone/50 transition focus:border-gold focus:ring-1 focus:ring-gold/30;
+  .ca-input {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(120, 113, 108, 0.25);
+    background-color: var(--bg-surface);
+    padding: 0.625rem 1rem;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+  .ca-input:focus {
+    border-color: var(--accent-teal);
   }
 
-  /* Cards Hierarchy */
   .ca-card {
-    @apply relative overflow-hidden rounded-xl border border-stone/20 bg-surface p-6 shadow-scholar transition-all duration-300;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-subtle);
+    background-color: var(--bg-surface);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
   }
 
   .ca-card-hover {
-    @apply ca-card hover:-translate-y-0.5 hover:border-gold hover:shadow-md;
+    @apply ca-card;
+  }
+  .ca-card-hover:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-teal);
+    box-shadow: 0 4px 20px -2px rgba(13, 148, 136, 0.1);
   }
 
-  .ca-card-gold {
-    @apply relative overflow-hidden rounded-xl border border-gold/40 bg-surface p-6 shadow-scholar transition-all duration-300 hover:-translate-y-0.5 hover:border-gold;
-  }
-
-  .ca-card-emerald {
-    @apply relative overflow-hidden rounded-xl border border-emerald-900/30 bg-surface p-6 shadow-scholar transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-900;
-  }
-
-  .ca-card-glass {
-    @apply relative overflow-hidden rounded-xl border border-stone/20 bg-surface/80 p-6 backdrop-blur-xl transition-all duration-300 hover:border-gold;
-  }
-
-  /* Alert / Message Cards */
-  .ca-msg-success {
-    @apply flex items-center gap-3 rounded-xl border border-emerald-900/30 dark:border-emerald-400/40 bg-emerald-100/40 dark:bg-emerald-900/40 px-4 py-3 font-sans text-sm text-emerald-900 dark:text-emerald-300 shadow-sm;
-  }
-
-  .ca-msg-gold {
-    @apply flex items-center gap-3 rounded-xl border border-gold/40 bg-gold/10 px-4 py-3 font-sans text-sm text-text-main shadow-sm;
-  }
-
-  .ca-msg-error {
-    @apply flex items-center gap-3 rounded-xl border border-clay/30 bg-clay/10 px-4 py-3 font-sans text-sm text-clay shadow-sm;
-  }
-
-  /* Provenance & Category Badges */
   .ca-badge-gold {
-    @apply inline-flex items-center rounded-md border border-gold/30 bg-gold/10 px-2.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-gold;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(217, 119, 6, 0.3);
+    background-color: rgba(217, 119, 6, 0.1);
+    padding: 0.125rem 0.625rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-amber);
   }
 
   .ca-badge-emerald {
-    @apply inline-flex items-center rounded-md border border-emerald-900/30 dark:border-emerald-400/40 bg-emerald-100/50 dark:bg-emerald-900/50 px-2.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-emerald-900 dark:text-emerald-300;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(13, 148, 136, 0.3);
+    background-color: rgba(13, 148, 136, 0.1);
+    padding: 0.125rem 0.625rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-teal);
   }
 
   .ca-badge-clay {
-    @apply inline-flex items-center rounded-md border border-clay/30 bg-clay/10 px-2.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-clay;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(194, 65, 12, 0.3);
+    background-color: rgba(194, 65, 12, 0.1);
+    padding: 0.125rem 0.625rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-terracotta);
   }
 
-  .ca-badge-stone,
-  .ca-badge-sage {
-    @apply inline-flex items-center rounded-md border border-stone/30 bg-stone/10 px-2.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-stone;
+  .ca-badge-stone {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(120, 113, 108, 0.3);
+    background-color: rgba(120, 113, 108, 0.1);
+    padding: 0.125rem 0.625rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
   }
 
-  /* Admin Scrollbar */
   .admin-scrollbar::-webkit-scrollbar {
     width: 5px;
   }
@@ -203,6 +309,6 @@ a {
     border-radius: 9999px;
   }
   .admin-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(6, 78, 59, 0.5);
+    background: rgba(13, 148, 136, 0.5);
   }
 }
