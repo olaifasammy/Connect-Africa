@@ -21,6 +21,10 @@ import { EntityTypeId } from '@modules/entity/domain/value-objects/EntityValueOb
 
 import { IEntityRepository } from '@modules/entity/domain/repositories/IEntityRepository';
 
+import { IEntityTypeRepository } from '@modules/ontology/domain/repositories/IEntityTypeRepository';
+import { EntityType } from '@modules/ontology/domain/entities/EntityType';
+import { OntologyId } from '@modules/ontology/domain/value-objects/OntologyId';
+
 import { UniqueEntityId } from '@shared/domain/UniqueEntityId';
 
 import { EventBus } from '@shared/infrastructure/queue/EventBus';
@@ -47,6 +51,10 @@ export class CreateEntityCommandHandler
     @inject('IEntityRepository')
     private readonly entityRepository:
       IEntityRepository,
+
+    @inject('IEntityTypeRepository')
+    private readonly entityTypeRepository:
+      IEntityTypeRepository,
 
     @inject('IOntologyGraphService')
     private readonly ontologyGraphService:
@@ -80,6 +88,27 @@ export class CreateEntityCommandHandler
 
     const typeId =
       EntityTypeId.create(type);
+
+    // Ensure entity type exists in database entity_types to satisfy foreign key constraint
+    try {
+      const existing = await this.entityTypeRepository.findById(
+        new UniqueEntityId(typeId.value),
+      );
+      if (!existing) {
+        const defaultOntologyId = new UniqueEntityId().toString();
+        const newType = EntityType.create(
+          {
+            ontologyId: OntologyId.create(defaultOntologyId),
+            name: typeId.value,
+            description: `${typeId.value} entity type`,
+          },
+          new UniqueEntityId(typeId.value),
+        );
+        await this.entityTypeRepository.save(newType);
+      }
+    } catch {
+      // Proceed even if auto-registration encounters race condition
+    }
 
     const isValidType =
       await this.ontologyGraphService
